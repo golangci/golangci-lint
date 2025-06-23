@@ -1,7 +1,7 @@
 [
   {
     "name": "gci",
-    "desc": "Checks if code and import statements are formatted, with additional rules.",
+    "desc": "Checks if import statements are deterministically sorted.",
     "Groups": null,
     "loadMode": 8199,
     "originalURL": "https://github.com/daixiang0/gci",
