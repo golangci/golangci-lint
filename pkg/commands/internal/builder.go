@@ -2,6 +2,8 @@ package internal
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/base64"
 	"fmt"
 	"io"
 	"os"
@@ -11,6 +13,8 @@ import (
 	"strings"
 	"time"
 	"unicode"
+
+	"golang.org/x/mod/sumdb/dirhash"
 
 	"github.com/golangci/golangci-lint/v2/pkg/logutils"
 )
@@ -173,15 +177,17 @@ func (b Builder) goModTidy(ctx context.Context) error {
 }
 
 func (b Builder) goBuild(ctx context.Context, binaryName string) error {
-	now := time.Now().UTC()
+	version, err := b.createVersion(b.cfg.Version)
+	if err != nil {
+		return fmt.Errorf("custom version: %w", err)
+	}
+
+	b.log.Infof("version: %s", version)
 
 	//nolint:gosec // the variable is sanitized.
 	cmd := exec.CommandContext(ctx, "go", "build",
 		"-ldflags",
-		fmt.Sprintf(
-			"-s -w -X 'main.version=%s' -X 'main.date=%s'",
-			createVersion(b.cfg.Version, now), now.String(),
-		),
+		fmt.Sprintf("-s -w -X 'main.version=%s' -X 'main.date=%s'", version, time.Now().UTC().String()),
 		"-o", binaryName,
 		"./cmd/golangci-lint",
 	)
@@ -243,8 +249,28 @@ func (b Builder) getBinaryName() string {
 	return name
 }
 
-func createVersion(orig string, now time.Time) string {
-	return fmt.Sprintf("%s-custom-gcl-%d", sanitizeVersion(orig), now.UnixNano())
+func (b Builder) createVersion(orig string) (string, error) {
+	hash := sha256.New()
+
+	for _, plugin := range b.cfg.Plugins {
+		if plugin.Path == "" {
+			continue
+		}
+
+		dh, err := dirhash.HashDir(plugin.Path, "", dirhash.DefaultHash)
+		if err != nil {
+			return "", fmt.Errorf("hash plugin directory: %w", err)
+		}
+
+		b.log.Infof("%s: %s", plugin.Path, dh)
+
+		hash.Write([]byte(dh))
+	}
+
+	return fmt.Sprintf("%s-custom-gcl-%s",
+		sanitizeVersion(orig),
+		sanitizeVersion(base64.URLEncoding.EncodeToString(hash.Sum(nil))),
+	), nil
 }
 
 func sanitizeVersion(v string) string {
