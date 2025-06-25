@@ -167,7 +167,7 @@ func _() {
 
 	// transactions
 
-	tx, _ := db.Begin()
+	tx, _ := db.Begin()               // want `\(\*database/sql\.DB\)\.Begin must not be called. use \(\*database/sql\.DB\)\.BeginTx`
 	tx.Exec("select * from testdata") // want `\(\*database/sql\.Tx\)\.Exec must not be called. use \(\*database/sql\.Tx\)\.ExecContext`
 	tx.ExecContext(ctx, "select * from testdata")
 
