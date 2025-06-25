@@ -2,8 +2,10 @@ package internal
 
 import (
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func Test_sanitizeVersion(t *testing.T) {
@@ -53,4 +55,13 @@ func Test_sanitizeVersion(t *testing.T) {
 			assert.Equal(t, test.expected, v)
 		})
 	}
+}
+
+func Test_createVersion(t *testing.T) {
+	parse, err := time.Parse(time.RFC3339Nano, "2010-02-04T21:00:57.123456789+08:00")
+	require.NoError(t, err)
+
+	version := createVersion("1.2.3", parse)
+
+	assert.Equal(t, "1.2.3-custom-gcl-1265288457123456789", version)
 }

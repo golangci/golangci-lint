@@ -173,12 +173,14 @@ func (b Builder) goModTidy(ctx context.Context) error {
 }
 
 func (b Builder) goBuild(ctx context.Context, binaryName string) error {
+	now := time.Now().UTC()
+
 	//nolint:gosec // the variable is sanitized.
 	cmd := exec.CommandContext(ctx, "go", "build",
 		"-ldflags",
 		fmt.Sprintf(
-			"-s -w -X 'main.version=%s-custom-gcl' -X 'main.date=%s'",
-			sanitizeVersion(b.cfg.Version), time.Now().UTC().String(),
+			"-s -w -X 'main.version=%s' -X 'main.date=%s'",
+			createVersion(b.cfg.Version, now), now.String(),
 		),
 		"-o", binaryName,
 		"./cmd/golangci-lint",
@@ -239,6 +241,10 @@ func (b Builder) getBinaryName() string {
 	}
 
 	return name
+}
+
+func createVersion(orig string, now time.Time) string {
+	return fmt.Sprintf("%s-custom-gcl-%d", sanitizeVersion(orig), now.UnixNano())
 }
 
 func sanitizeVersion(v string) string {
