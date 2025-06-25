@@ -7,6 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/golangci/golangci-lint/v2/internal/cache"
 	"github.com/golangci/golangci-lint/v2/pkg/commands/internal"
 	"github.com/golangci/golangci-lint/v2/pkg/logutils"
 )
@@ -55,6 +56,14 @@ func (c *customCommand) preRunE(_ *cobra.Command, _ []string) error {
 }
 
 func (c *customCommand) runE(cmd *cobra.Command, _ []string) error {
+	// Clear cache before building custom version
+	cacheDir := cache.DefaultDir()
+	if err := os.RemoveAll(cacheDir); err != nil {
+		c.log.Warnf("Failed to clear cache: %v", err)
+	} else {
+		c.log.Infof("Cache cleared: %s", cacheDir)
+	}
+
 	tmp, err := os.MkdirTemp(os.TempDir(), "custom-gcl")
 	if err != nil {
 		return fmt.Errorf("create temporary directory: %w", err)
