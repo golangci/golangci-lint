@@ -744,7 +744,7 @@
   },
   {
     "name": "perfsprint",
-    "desc": "Checks that fmt.Sprintf can be replaced with a faster alternative.",
+    "desc": "Checks if fmt.Sprintf and the like can be replaced with a faster alternative.\nSome autofixes made by this linter may need followup import fixups, see the goimports formatter.",
     "Groups": null,
     "loadMode": 8767,
     "originalURL": "https://github.com/catenacyber/perfsprint",
