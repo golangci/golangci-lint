@@ -51,6 +51,7 @@ jobs:
         os: [ubuntu-latest, ubuntu-24.04-arm, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
+      - uses: sigstore/cosign-installer@v3
       - uses: actions/checkout@v4
       - name: Check installation script
         run: cat ./install.sh | sh -s -- -d -b "./install-golangci-lint"
