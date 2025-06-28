@@ -30,5 +30,5 @@ func NewV5(settings *config.WSLv5Settings) *goanalysis.Linter {
 	return goanalysis.
 		NewLinterFromAnalyzer(wsl.NewAnalyzer(conf)).
 		WithVersion(5). //nolint:mnd // It's the linter version.
-		WithLoadMode(goanalysis.LoadModeSyntax)
+		WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
