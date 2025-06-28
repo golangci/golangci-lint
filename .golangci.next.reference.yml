@@ -126,6 +126,7 @@ linters:
     - whitespace
     - wrapcheck
     - wsl
+    - wsl_v5
     - zerologlint
 
   # Disable specific linters.
@@ -236,6 +237,7 @@ linters:
     - whitespace
     - wrapcheck
     - wsl
+    - wsl_v5
     - zerologlint
 
   # All available settings of specific linters.
@@ -3911,6 +3913,61 @@ linters:
       # https://github.com/bombsimon/wsl/blob/HEAD/doc/configuration.md#force-short-decl-cuddling
       # Default: false
       force-short-decl-cuddling: true
+
+    wsl_v5:
+      # Allow cuddling a variable if it's used first in the immediate following
+      # block, even if the statement with the block doesn't use the variable
+      # Default: true
+      allow-first-in-block: true
+
+      # Same as above, but allows cuddling if the variable is used anywhere in
+      # the following (or nested) block
+      # Default: false
+      allow-whole-block: false
+
+      # If a block contains more than this number of lines the branch statement
+      # need to be separated by a whitespace
+      # Default: 2
+      branch-max-lines: 2
+
+      # If set to a non negative number, case blocks needs to end with a
+      # whitespace if exceeding this number
+      # Default: 0
+      case-max-lines: 0
+
+      # Preset with checks. Can be `all`, `none`, `default` or empty
+      # Default: ""
+      default: ~
+
+      # Enabled checks. Will be additive to any preset.
+      # Default: None
+      enable:
+        - append
+        - assign
+        - branch
+        - decl
+        - defer
+        - err
+        - expr
+        - for
+        - go
+        - if
+        - inc-dec
+        - label
+        - range
+        - return
+        - select
+        - send
+        - switch
+        - type-switch
+        - leading-whitespace
+        - trailing-whitespace
+
+      # Disable checks. Will be subtractive to any preset.
+      # Default: None
+      disable:
+        - assign-exclusive
+        - assign-expr
 
     # The custom section can be used to define linter plugins to be loaded at runtime.
     # See README documentation for more info.

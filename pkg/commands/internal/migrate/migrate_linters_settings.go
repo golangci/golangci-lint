@@ -100,7 +100,7 @@ func toAsasalintSettings(old versionone.AsasalintSettings) versiontwo.AsasalintS
 }
 
 func toBiDiChkSettings(old versionone.BiDiChkSettings) versiontwo.BiDiChkSettings {
-	// The values are true be default, but the default are defined after the configuration loading.
+	// The values are true be default, but the defaults are defined after the configuration loading.
 	// So the serialization doesn't have good results, but it's complex to do better.
 	return versiontwo.BiDiChkSettings{
 		LeftToRightEmbedding:     old.LeftToRightEmbedding,
@@ -998,8 +998,8 @@ func toWrapcheckSettings(old versionone.WrapcheckSettings) versiontwo.WrapcheckS
 	}
 }
 
-func toWSLSettings(old versionone.WSLSettings) versiontwo.WSLSettings {
-	return versiontwo.WSLSettings{
+func toWSLSettings(old versionone.WSLSettings) versiontwo.WSLv4Settings {
+	return versiontwo.WSLv4Settings{
 		StrictAppend:                     old.StrictAppend,
 		AllowAssignAndCallCuddle:         old.AllowAssignAndCallCuddle,
 		AllowAssignAndAnythingCuddle:     old.AllowAssignAndAnythingCuddle,
