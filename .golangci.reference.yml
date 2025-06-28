@@ -20,6 +20,7 @@ linters:
 
   # Enable specific linter.
   enable:
+    - arangolint
     - asasalint
     - asciicheck
     - bidichk
@@ -35,6 +36,7 @@ linters:
     - dupl
     - dupword
     - durationcheck
+    - embeddedstructfieldcheck
     - err113
     - errcheck
     - errchkjson
@@ -89,6 +91,7 @@ linters:
     - nilnil
     - nlreturn
     - noctx
+    - noinlineerr
     - nolintlint
     - nonamedreturns
     - nosprintfhostport
@@ -123,10 +126,12 @@ linters:
     - whitespace
     - wrapcheck
     - wsl
+    - wsl_v5
     - zerologlint
 
-  # Disable specific linter.
+  # Disable specific linters.
   disable:
+    - arangolint
     - asasalint
     - asciicheck
     - bidichk
@@ -142,6 +147,7 @@ linters:
     - dupl
     - dupword
     - durationcheck
+    - embeddedstructfieldcheck
     - err113
     - errcheck
     - errchkjson
@@ -196,6 +202,7 @@ linters:
     - nilnil
     - nlreturn
     - noctx
+    - noinlineerr
     - nolintlint
     - nonamedreturns
     - nosprintfhostport
@@ -230,6 +237,7 @@ linters:
     - whitespace
     - wrapcheck
     - wsl
+    - wsl_v5
     - zerologlint
 
   # All available settings of specific linters.
@@ -383,6 +391,11 @@ linters:
       ignore:
         - "0C0C"
 
+    embeddedstructfieldcheck:
+      # Checks that sync.Mutex and sync.RWMutex are not used as embedded fields.
+      # Default: false
+      forbid-mutex: true
+
     errcheck:
       # Report about not checking of errors in type assertions: `a := b.(MyStruct)`.
       # Such cases aren't reported by default.
@@ -405,6 +418,10 @@ linters:
         - io/ioutil.ReadFile
         - io.Copy(*bytes.Buffer)
         - io.Copy(os.Stdout)
+
+      # Display function signature instead of selector.
+      # Default: false
+      verbose: true
 
     errchkjson:
       # With check-error-free-encoding set to true, errchkjson does warn about errors
@@ -541,6 +558,9 @@ linters:
       # Checks if the exported methods of a structure are placed before the non-exported ones.
       # Default: true
       struct-method: false
+      # Checks if the constructors and/or structure methods are sorted alphabetically.
+      # Default: false
+      alphabetical: true
 
     funlen:
       # Checks the number of lines in a function.
@@ -1295,6 +1315,9 @@ linters:
       # Forbid the use of the `exclude` directives.
       # Default: false
       exclude-forbidden: true
+      # Forbid the use of the `ignore` directives (>= go1.25).
+      # Default: false
+      ignore-forbidden: true
       # Forbid the use of the `toolchain` directive.
       # Default: false
       toolchain-forbidden: true
@@ -1599,6 +1622,8 @@ linters:
         - findcall
         # Report assembly that clobbers the frame pointer before saving it.
         - framepointer
+        # Check format of addresses passed to net.Dial.
+        - hostport
         # Report using Go 1.22 enhanced ServeMux patterns in older Go versions.
         - httpmux
         # Check for mistakes using HTTP responses.
@@ -1682,6 +1707,7 @@ linters:
         - fieldalignment
         - findcall
         - framepointer
+        - hostport
         - httpmux
         - httpresponse
         - ifaceassert
@@ -1776,6 +1802,7 @@ linters:
         - identical # Identifies interfaces in the same package that have identical method sets.
         - unused # Identifies interfaces that are not used anywhere in the same package where the interface is defined.
         - opaque # Identifies functions that return interfaces, but the actual returned value is always a single concrete implementation.
+        - unexported # Identifies interfaces that are not exported but are used in exported functions or methods.
       settings:
         unused:
           # List of packages path to exclude from the check.
@@ -2302,11 +2329,12 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
-            - - "call-chain"
-              - "loop"
-              - "method-call"
-              - "recover"
-              - "return"
+            - "call-chain"
+            - "loop"
+            - "method-call"
+            - "recover"
+            - "immediate-recover"
+            - "return"
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#dot-imports
         - name: dot-imports
           severity: warning
@@ -2568,7 +2596,7 @@ linters:
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#redundant-test-main-exit
+        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#redundant-test-main-exit
         - name: redundant-test-main-exit
           severity: warning
           disabled: false
@@ -2608,6 +2636,11 @@ linters:
           exclude: [""]
           arguments:
             - "preserve-scope"
+        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#time-date
+        - name: time-date
+          severity: warning
+          disabled: false
+          exclude: [""]
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#time-equal
         - name: time-equal
           severity: warning
@@ -2648,6 +2681,11 @@ linters:
           arguments:
             - "fmt.Printf"
             - "myFunction"
+        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#unnecessary-format
+        - name: unnecessary-format
+          severity: warning
+          disabled: false
+          exclude: [""]
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#unnecessary-stmt
         - name: unnecessary-stmt
           severity: warning
@@ -2679,6 +2717,11 @@ linters:
           exclude: [""]
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#use-errors-new
         - name: use-errors-new
+          severity: warning
+          disabled: false
+          exclude: [""]
+        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#use-fmt-print
+        - name: use-fmt-print
           severity: warning
           disabled: false
           exclude: [""]
@@ -2812,6 +2855,7 @@ linters:
       http-status-code-whitelist: [ "200", "400", "404", "500" ]
       # SAxxxx checks in https://staticcheck.dev/docs/configuration/options/#checks
       # Example (to disable some checks): [ "all", "-SA1000", "-SA1001"]
+      # Run `GL_DEBUG=staticcheck golangci-lint run --enable=staticcheck` to see all available checks and enabled by config checks.
       # Default: ["all", "-ST1000", "-ST1003", "-ST1016", "-ST1020", "-ST1021", "-ST1022"]
       checks:
         # Invalid regular expression.
@@ -3595,6 +3639,9 @@ linters:
       # Suggest the use of http.StatusXX.
       # Default: true
       http-status-code: false
+      # Suggest the use of time.Month in time.Date.
+      # Default: false
+      time-date-month: true
       # Suggest the use of time.Weekday.String().
       # Default: true
       time-weekday: true
@@ -3644,13 +3691,13 @@ linters:
 
       # Enable/disable `context.Background()` detections.
       # Disabled if Go < 1.24.
-      # Default: true
-      context-background: false
+      # Default: false
+      context-background: true
 
       # Enable/disable `context.TODO()` detections.
       # Disabled if Go < 1.24.
-      # Default: true
-      context-todo: false
+      # Default: false
+      context-todo: true
 
     unconvert:
       # Remove conversions that force intermediate rounding.
@@ -3867,6 +3914,93 @@ linters:
       # Default: false
       force-short-decl-cuddling: true
 
+    wsl_v5:
+      # Allow cuddling a variable if it's used first in the immediate following block,
+      # even if the statement with the block doesn't use the variable.
+      # https://github.com/bombsimon/wsl/tree/main?tab=readme-ov-file#configuration
+      # Default: true
+      allow-first-in-block: false
+
+      # Same as above,
+      # but allows cuddling if the variable is used anywhere in the following (or nested) block.
+      # https://github.com/bombsimon/wsl/tree/main?tab=readme-ov-file#configuration
+      # Default: false
+      allow-whole-block: true
+
+      # If a block contains more than this number of lines,
+      # the branch statement needs to be separated by whitespace.
+      # https://github.com/bombsimon/wsl/tree/main?tab=readme-ov-file#configuration
+      # Default: 2
+      branch-max-lines: 4
+
+      # If set to a non-negative number,
+      # case blocks need to end with whitespace if exceeding this number
+      # https://github.com/bombsimon/wsl/tree/main?tab=readme-ov-file#configuration
+      # Default: 0
+      case-max-lines: 2
+
+      # Default checks to use.
+      # Can be `all`, `none`, `default` or empty.
+      # https://github.com/bombsimon/wsl/tree/main?tab=readme-ov-file#checks-and-configuration
+      # Default: ""
+      default: all
+
+      # Enabled checks.
+      # Will be additive to any presets.
+      # https://github.com/bombsimon/wsl/tree/main?tab=readme-ov-file#checks-and-configuration
+      # Default: []
+      enable:
+        - assign
+        - branch
+        - decl
+        - defer
+        - expr
+        - for
+        - go
+        - if
+        - inc-dec
+        - label
+        - range
+        - return
+        - select
+        - send
+        - switch
+        - type-switch
+        - append
+        - assign-exclusive
+        - assign-expr
+        - err
+        - leading-whitespace
+        - trailing-whitespace
+
+      # Disable checks.
+      # Will be subtractive to any preset.
+      # https://github.com/bombsimon/wsl/tree/main?tab=readme-ov-file#checks-and-configuration
+      # Default: []
+      disable:
+        - assign
+        - branch
+        - decl
+        - defer
+        - expr
+        - for
+        - go
+        - if
+        - inc-dec
+        - label
+        - range
+        - return
+        - select
+        - send
+        - switch
+        - type-switch
+        - append
+        - assign-exclusive
+        - assign-expr
+        - err
+        - leading-whitespace
+        - trailing-whitespace
+
     # The custom section can be used to define linter plugins to be loaded at runtime.
     # See README documentation for more info.
     custom:
@@ -3970,6 +4104,7 @@ formatters:
     - gofumpt
     - goimports
     - golines
+    - swaggo
 
   # Formatters settings.
   settings:
@@ -4066,6 +4201,7 @@ formatters:
     # Default: lax
     generated: strict
     # Which file paths to exclude.
+    # This option is ignored when using `--stdin` as the path is unknown.
     # Default: []
     paths:
       - ".*\\.my\\.go$"
