@@ -194,6 +194,9 @@
     },
     "v2.1": {
       "TargetVersion": "v2.1.6"
+    },
+    "v2.2": {
+      "TargetVersion": "v2.2.0"
     }
   }
 }
