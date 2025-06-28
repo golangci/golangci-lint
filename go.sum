@@ -100,8 +100,6 @@ github.com/blizzy78/varnamelen v0.8.0 h1:oqSblyuQvFsW1hbBHh1zfwrKe3kcSj0rnXkKzsQ
 github.com/blizzy78/varnamelen v0.8.0/go.mod h1:V9TzQZ4fLJ1DSrjVDfl89H7aMnTvKkApdHeyESmyR7k=
 github.com/bombsimon/wsl/v4 v4.7.0 h1:1Ilm9JBPRczjyUs6hvOPKvd7VL1Q++PL8M0SXBDf+jQ=
 github.com/bombsimon/wsl/v4 v4.7.0/go.mod h1:uV/+6BkffuzSAVYD+yGyld1AChO7/EuLrCF/8xTiapg=
-github.com/bombsimon/wsl/v5 v5.0.0-rc2 h1:4pE+3ge8WG658J0mJl0jyS9QekDfnvRGTn+2JD8sRFA=
-github.com/bombsimon/wsl/v5 v5.0.0-rc2/go.mod h1:Gp8lD04z27wm3FANIUPZycXp+8huVsn0oxc+n4qfV9I=
 github.com/bombsimon/wsl/v5 v5.0.0 h1:pWxP6X11o/YeF9eBVGXvS7L0FLEbHWm2kJJJGH6SeDQ=
 github.com/bombsimon/wsl/v5 v5.0.0/go.mod h1:Gp8lD04z27wm3FANIUPZycXp+8huVsn0oxc+n4qfV9I=
 github.com/breml/bidichk v0.3.3 h1:WSM67ztRusf1sMoqH6/c4OBCUlRVTKq+CbSeo0R17sE=
