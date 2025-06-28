@@ -1,5 +1,15 @@
 [
   {
+    "name": "arangolint",
+    "desc": "opinionated best practices for arangodb client",
+    "Groups": null,
+    "loadMode": 8767,
+    "originalURL": "https://github.com/Crocmagnon/arangolint",
+    "internal": false,
+    "isSlow": true,
+    "since": "v2.2.0"
+  },
+  {
     "name": "asasalint",
     "desc": "check for pass []any as any in variadic func(...any)",
     "Groups": null,
@@ -133,7 +143,7 @@
   },
   {
     "name": "dupword",
-    "desc": "checks for duplicate words in the source code",
+    "desc": "Checks for duplicate words in the source code",
     "Groups": null,
     "loadMode": 8199,
     "originalURL": "https://github.com/Abirdcfly/dupword",
@@ -151,6 +161,16 @@
     "internal": false,
     "isSlow": true,
     "since": "v1.37.0"
+  },
+  {
+    "name": "embeddedstructfieldcheck",
+    "desc": "Embedded types should be at the top of the field list of a struct, and there must be an empty line separating embedded fields from regular fields.",
+    "Groups": null,
+    "loadMode": 8199,
+    "originalURL": "https://github.com/manuelarte/embeddedstructfieldcheck",
+    "internal": false,
+    "isSlow": false,
+    "since": "v2.2.0"
   },
   {
     "name": "errcheck",
@@ -186,7 +206,7 @@
   },
   {
     "name": "errorlint",
-    "desc": "errorlint is a linter for that can be used to find code that will cause problems with the error wrapping scheme introduced in Go 1.13.",
+    "desc": "Find code that can cause problems with the error wrapping scheme introduced in Go 1.13.",
     "Groups": null,
     "loadMode": 8767,
     "originalURL": "https://github.com/polyfloyd/go-errorlint",
@@ -238,7 +258,7 @@
   },
   {
     "name": "forcetypeassert",
-    "desc": "finds forced type assertions",
+    "desc": "Find forced type assertions",
     "Groups": null,
     "loadMode": 8767,
     "originalURL": "https://github.com/gostaticanalysis/forcetypeassert",
@@ -391,7 +411,7 @@
   },
   {
     "name": "err113",
-    "desc": "Go linter to check the errors handling expressions",
+    "desc": "Check errors handling expressions",
     "Groups": null,
     "loadMode": 8767,
     "originalURL": "https://github.com/Djarvur/go-err113",
@@ -402,7 +422,7 @@
   },
   {
     "name": "goheader",
-    "desc": "Checks if file header matches to pattern",
+    "desc": "Check if file header matches to pattern",
     "Groups": null,
     "loadMode": 8199,
     "originalURL": "https://github.com/denis-tingaikin/go-header",
@@ -433,7 +453,7 @@
   },
   {
     "name": "gomodguard",
-    "desc": "Allow and block list linter for direct Go module dependencies. This is different from depguard where there are different block types for example version constraints and module recommendations.",
+    "desc": "Allow and blocklist linter for direct Go module dependencies. This is different from depguard where there are different block types for example version constraints and module recommendations.",
     "Groups": null,
     "loadMode": 8199,
     "originalURL": "https://github.com/ryancurrah/gomodguard",
@@ -600,7 +620,7 @@
   },
   {
     "name": "makezero",
-    "desc": "Finds slice declarations with non-zero initial length",
+    "desc": "Find slice declarations with non-zero initial length",
     "Groups": null,
     "loadMode": 8767,
     "originalURL": "https://github.com/ashanbrown/makezero",
@@ -663,7 +683,7 @@
   },
   {
     "name": "nilerr",
-    "desc": "Finds the code that returns nil even if it checks that the error is not nil.",
+    "desc": "Find the code that returns nil even if it checks that the error is not nil.",
     "Groups": null,
     "loadMode": 8767,
     "originalURL": "https://github.com/gostaticanalysis/nilerr",
@@ -693,7 +713,7 @@
   },
   {
     "name": "nlreturn",
-    "desc": "nlreturn checks for a new line before return and branch statements to increase code clarity",
+    "desc": "Checks for a new line before return and branch statements to increase code clarity",
     "Groups": null,
     "loadMode": 8199,
     "originalURL": "https://github.com/ssgreg/nlreturn",
@@ -704,13 +724,23 @@
   },
   {
     "name": "noctx",
-    "desc": "Finds sending http request without context.Context",
+    "desc": "Detects function and method with missing usage of context.Context",
     "Groups": null,
     "loadMode": 8767,
     "originalURL": "https://github.com/sonatard/noctx",
     "internal": false,
     "isSlow": true,
     "since": "v1.28.0"
+  },
+  {
+    "name": "noinlineerr",
+    "desc": "Disallows inline error handling (`if err := ...; err != nil {`)",
+    "Groups": null,
+    "loadMode": 8767,
+    "originalURL": "https://github.com/AlwxSin/noinlineerr",
+    "internal": false,
+    "isSlow": true,
+    "since": "v2.2.0"
   },
   {
     "name": "nonamedreturns",
@@ -755,7 +785,7 @@
   },
   {
     "name": "prealloc",
-    "desc": "Finds slice declarations that could potentially be pre-allocated",
+    "desc": "Find slice declarations that could potentially be pre-allocated",
     "Groups": null,
     "loadMode": 8199,
     "originalURL": "https://github.com/alexkohler/prealloc",
@@ -1065,7 +1095,23 @@
     "internal": false,
     "canAutoFix": true,
     "isSlow": false,
-    "since": "v1.20.0"
+    "since": "v1.20.0",
+    "deprecation": {
+      "since": "v2.2.0",
+      "message": "new major version.",
+      "replacement": "wsl_v5"
+    }
+  },
+  {
+    "name": "wsl_v5",
+    "desc": "add or remove empty lines",
+    "Groups": null,
+    "loadMode": 8767,
+    "originalURL": "https://github.com/bombsimon/wsl",
+    "internal": false,
+    "canAutoFix": true,
+    "isSlow": true,
+    "since": "v2.2.0"
   },
   {
     "name": "zerologlint",

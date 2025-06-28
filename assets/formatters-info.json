@@ -1,7 +1,7 @@
 [
   {
     "name": "gci",
-    "desc": "Checks if code and import statements are formatted, with additional rules.",
+    "desc": "Check if code and import statements are formatted, with additional rules.",
     "Groups": null,
     "loadMode": 8199,
     "originalURL": "https://github.com/daixiang0/gci",
@@ -12,7 +12,7 @@
   },
   {
     "name": "gofmt",
-    "desc": "Checks if the code is formatted according to 'gofmt' command.",
+    "desc": "Check if the code is formatted according to 'gofmt' command.",
     "Groups": null,
     "loadMode": 8199,
     "originalURL": "https://pkg.go.dev/cmd/gofmt",
@@ -23,7 +23,7 @@
   },
   {
     "name": "gofumpt",
-    "desc": "Checks if code and import statements are formatted, with additional rules.",
+    "desc": "Check if code and import statements are formatted, with additional rules.",
     "Groups": null,
     "loadMode": 8199,
     "originalURL": "https://github.com/mvdan/gofumpt",
@@ -53,5 +53,16 @@
     "canAutoFix": true,
     "isSlow": false,
     "since": "v1.20.0"
+  },
+  {
+    "name": "swaggo",
+    "desc": "Check if swaggo comments are formatted",
+    "Groups": null,
+    "loadMode": 8199,
+    "originalURL": "https://github.com/swaggo/swaggo",
+    "internal": false,
+    "canAutoFix": true,
+    "isSlow": false,
+    "since": "v2.2.0"
   }
 ]

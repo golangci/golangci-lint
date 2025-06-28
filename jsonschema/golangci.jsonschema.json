@@ -539,6 +539,7 @@
         "fieldalignment",
         "findcall",
         "framepointer",
+        "hostport",
         "httpmux",
         "httpresponse",
         "ifaceassert",
@@ -637,6 +638,7 @@
         "string-of-int",
         "struct-tag",
         "superfluous-else",
+        "time-date",
         "time-equal",
         "time-naming",
         "unchecked-type-assertion",
@@ -644,12 +646,14 @@
         "unexported-naming",
         "unexported-return",
         "unhandled-error",
+        "unnecessary-format",
         "unnecessary-stmt",
         "unreachable-code",
         "unused-parameter",
         "unused-receiver",
         "use-any",
         "use-errors-new",
+        "use-fmt-print",
         "useless-break",
         "var-declaration",
         "var-naming",
@@ -660,7 +664,8 @@
       "enum": [
         "identical",
         "unused",
-        "opaque"
+        "opaque",
+        "unexported"
       ]
     },
     "tagliatelle-cases": {
@@ -678,6 +683,32 @@
         "upperSnake",
         "lower",
         "header"
+      ]
+    },
+    "wsl-checks": {
+      "enum": [
+        "assign",
+        "branch",
+        "decl",
+        "defer",
+        "expr",
+        "for",
+        "go",
+        "if",
+        "inc-dec",
+        "label",
+        "range",
+        "return",
+        "select",
+        "send",
+        "switch",
+        "type-switch",
+        "append",
+        "assign-exclusive",
+        "assign-expr",
+        "err",
+        "leading-whitespace",
+        "trailing-whitespace"
       ]
     },
     "relative-path-modes": {
@@ -717,6 +748,7 @@
       "anyOf": [
         {
           "enum": [
+            "arangolint",
             "asasalint",
             "asciicheck",
             "bidichk",
@@ -732,6 +764,7 @@
             "dupl",
             "dupword",
             "durationcheck",
+            "embeddedstructfieldcheck",
             "errcheck",
             "errchkjson",
             "errname",
@@ -787,6 +820,7 @@
             "nilnil",
             "nlreturn",
             "noctx",
+            "noinlineerr",
             "nolintlint",
             "nonamedreturns",
             "nosprintfhostport",
@@ -821,6 +855,7 @@
             "whitespace",
             "wrapcheck",
             "wsl",
+            "wsl_v5",
             "zerologlint"
           ]
         },
@@ -836,7 +871,8 @@
         "gofmt",
         "gofumpt",
         "goimports",
-        "golines"
+        "golines",
+        "swaggo"
       ]
     },
     "settings": {
@@ -1085,6 +1121,17 @@
             }
           }
         },
+        "embeddedstructfieldcheckSettings": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "forbid-mutex": {
+              "description": "Checks that sync.Mutex and sync.RWMutex are not used as embedded fields.",
+              "type": "boolean",
+              "default": false
+            }
+          }
+        },
         "errcheckSettings": {
           "type": "object",
           "additionalProperties": false,
@@ -1109,6 +1156,11 @@
             },
             "disable-default-exclusions": {
               "description": "To disable the errcheck built-in exclude list",
+              "type": "boolean",
+              "default": false
+            },
+            "verbose": {
+              "description": "Display function signature instead of selector",
               "type": "boolean",
               "default": false
             }
@@ -1317,6 +1369,11 @@
               "description": "Checks if the exported methods of a structure are placed before the non-exported ones.",
               "type": "boolean",
               "default": true
+            },
+            "alphabetical": {
+              "description": "Checks if the constructors and/or structure methods are sorted alphabetically.",
+              "type": "boolean",
+              "default": false
             }
           }
         },
@@ -1971,6 +2028,11 @@
             },
             "exclude-forbidden": {
               "description": "Forbid the use of the `exclude` directives.",
+              "type": "boolean",
+              "default": false
+            },
+            "ignore-forbidden": {
+              "description": "Forbid the use of the `ignore` directives. (>= go1.25)",
               "type": "boolean",
               "default": false
             },
@@ -3702,6 +3764,11 @@
               "type": "boolean",
               "default": false
             },
+            "time-date-month": {
+              "description": "Suggest the use of time.Month in time.Date.",
+              "type": "boolean",
+              "default": false
+            },
             "crypto-hash": {
               "description": "Suggest the use of crypto.Hash.String().",
               "type": "boolean",
@@ -3735,11 +3802,11 @@
           "properties": {
             "context-background": {
               "type": "boolean",
-              "default": true
+              "default": false
             },
             "context-todo": {
               "type": "boolean",
-              "default": true
+              "default": false
             },
             "os-chdir": {
               "type": "boolean",
@@ -4050,6 +4117,44 @@
             }
           }
         },
+        "wslSettingsV5": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "allow-first-in-block": {
+              "type": "boolean",
+              "default": true
+            },
+            "allow-whole-block": {
+              "type": "boolean",
+              "default": false
+            },
+            "branch-max-lines": {
+              "type": "integer",
+              "default": 2
+            },
+            "case-max-lines": {
+              "type": "integer",
+              "default": 0
+            },
+            "default": {
+              "enum": ["all", "none", "default", ""],
+              "default": "default"
+            },
+            "enable": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/wsl-checks"
+              }
+            },
+            "disable": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/wsl-checks"
+              }
+            }
+          }
+        },
         "copyloopvarSettings": {
           "type": "object",
           "additionalProperties": false,
@@ -4342,6 +4447,9 @@
             "dupl": {
               "$ref": "#/definitions/settings/definitions/duplSettings"
             },
+            "embeddedstructfieldcheck": {
+              "$ref": "#/definitions/settings/definitions/embeddedstructfieldcheckSettings"
+            },
             "errcheck": {
               "$ref": "#/definitions/settings/definitions/errcheckSettings"
             },
@@ -4548,6 +4656,9 @@
             },
             "wsl": {
               "$ref": "#/definitions/settings/definitions/wslSettings"
+            },
+            "wsl_v5": {
+              "$ref": "#/definitions/settings/definitions/wslSettingsV5"
             },
             "copyloopvar": {
               "$ref": "#/definitions/settings/definitions/copyloopvarSettings"
