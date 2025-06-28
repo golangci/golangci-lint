@@ -1,9 +1,11 @@
 package linter
 
 import (
+	"bytes"
 	"fmt"
 
 	"golang.org/x/tools/go/packages"
+	"gopkg.in/yaml.v3"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 )
@@ -20,10 +22,11 @@ const (
 )
 
 type Deprecation struct {
-	Since       string
-	Message     string
-	Replacement string
-	Level       DeprecationLevel
+	Since            string
+	Message          string
+	Replacement      string
+	Level            DeprecationLevel
+	ConfigSuggestion func() (string, error)
 }
 
 type Config struct {
@@ -119,22 +122,26 @@ func (lc *Config) WithSince(version string) *Config {
 	return lc
 }
 
-func (lc *Config) Deprecated(message, version, replacement string, level DeprecationLevel) *Config {
+func (lc *Config) Deprecated(message, version string, level DeprecationLevel, opts ...func(*Deprecation)) *Config {
 	lc.Deprecation = &Deprecation{
-		Since:       version,
-		Message:     message,
-		Replacement: replacement,
-		Level:       level,
+		Since:   version,
+		Message: message,
+		Level:   level,
 	}
+
+	for _, opt := range opts {
+		opt(lc.Deprecation)
+	}
+
 	return lc
 }
 
-func (lc *Config) DeprecatedWarning(message, version, replacement string) *Config {
-	return lc.Deprecated(message, version, replacement, DeprecationWarning)
+func (lc *Config) DeprecatedWarning(message, version string, opts ...func(*Deprecation)) *Config {
+	return lc.Deprecated(message, version, DeprecationWarning, opts...)
 }
 
-func (lc *Config) DeprecatedError(message, version, replacement string) *Config {
-	return lc.Deprecated(message, version, replacement, DeprecationError)
+func (lc *Config) DeprecatedError(message, version string, opts ...func(*Deprecation)) *Config {
+	return lc.Deprecated(message, version, DeprecationError, opts...)
 }
 
 func (lc *Config) IsDeprecated() bool {
@@ -158,6 +165,45 @@ func (lc *Config) WithNoopFallback(cfg *config.Config, cond func(cfg *config.Con
 	}
 
 	return lc
+}
+
+func Replacement[T any](replacement string, mgr func(T) any, data T) func(*Deprecation) {
+	return func(d *Deprecation) {
+		if replacement == "" {
+			return
+		}
+
+		d.Replacement = replacement
+
+		if mgr == nil {
+			return
+		}
+
+		d.ConfigSuggestion = func() (string, error) {
+			buf := bytes.NewBuffer([]byte{})
+
+			encoder := yaml.NewEncoder(buf)
+			encoder.SetIndent(2)
+
+			suggestion := map[string]any{
+				"linters": map[string]any{
+					"enable": []string{
+						d.Replacement,
+					},
+					"settings": map[string]any{
+						d.Replacement: mgr(data),
+					},
+				},
+			}
+
+			err := encoder.Encode(suggestion)
+			if err != nil {
+				return "", fmt.Errorf("%s: invalid configuration: %w", d.Replacement, err)
+			}
+
+			return buf.String(), nil
+		}
+	}
 }
 
 func IsGoLowerThanGo122() func(cfg *config.Config) error {
