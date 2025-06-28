@@ -3,7 +3,7 @@
 // TODO(ldez) the linter doesn't support cgo.
 
 //golangcitest:args -Ewsl
-//golangcitest:config_path testdata/wsl.yml
+//golangcitest:config_path testdata/wsl_v4.yml
 package testdata
 
 /*

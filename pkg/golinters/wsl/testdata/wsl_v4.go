@@ -1,5 +1,5 @@
 //golangcitest:args -Ewsl
-//golangcitest:config_path testdata/wsl.yml
+//golangcitest:config_path testdata/wsl_v4.yml
 package testdata
 
 import (

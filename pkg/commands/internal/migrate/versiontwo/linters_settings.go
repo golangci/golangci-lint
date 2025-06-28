@@ -5,84 +5,86 @@ package versiontwo
 type LintersSettings struct {
 	FormatterSettings `yaml:"-,omitempty" toml:"-,multiline,omitempty"`
 
-	Asasalint       AsasalintSettings       `yaml:"asasalint,omitempty" toml:"asasalint,multiline,omitempty"`
-	BiDiChk         BiDiChkSettings         `yaml:"bidichk,omitempty" toml:"bidichk,multiline,omitempty"`
-	CopyLoopVar     CopyLoopVarSettings     `yaml:"copyloopvar,omitempty" toml:"copyloopvar,multiline,omitempty"`
-	Cyclop          CyclopSettings          `yaml:"cyclop,omitempty" toml:"cyclop,multiline,omitempty"`
-	Decorder        DecorderSettings        `yaml:"decorder,omitempty" toml:"decorder,multiline,omitempty"`
-	Depguard        DepGuardSettings        `yaml:"depguard,omitempty" toml:"depguard,multiline,omitempty"`
-	Dogsled         DogsledSettings         `yaml:"dogsled,omitempty" toml:"dogsled,multiline,omitempty"`
-	Dupl            DuplSettings            `yaml:"dupl,omitempty" toml:"dupl,multiline,omitempty"`
-	DupWord         DupWordSettings         `yaml:"dupword,omitempty" toml:"dupword,multiline,omitempty"`
-	Errcheck        ErrcheckSettings        `yaml:"errcheck,omitempty" toml:"errcheck,multiline,omitempty"`
-	ErrChkJSON      ErrChkJSONSettings      `yaml:"errchkjson,omitempty" toml:"errchkjson,multiline,omitempty"`
-	ErrorLint       ErrorLintSettings       `yaml:"errorlint,omitempty" toml:"errorlint,multiline,omitempty"`
-	Exhaustive      ExhaustiveSettings      `yaml:"exhaustive,omitempty" toml:"exhaustive,multiline,omitempty"`
-	Exhaustruct     ExhaustructSettings     `yaml:"exhaustruct,omitempty" toml:"exhaustruct,multiline,omitempty"`
-	Fatcontext      FatcontextSettings      `yaml:"fatcontext,omitempty" toml:"fatcontext,multiline,omitempty"`
-	Forbidigo       ForbidigoSettings       `yaml:"forbidigo,omitempty" toml:"forbidigo,multiline,omitempty"`
-	FuncOrder       FuncOrderSettings       `yaml:"funcorder,omitempty" toml:"funcorder,multiline,omitempty"`
-	Funlen          FunlenSettings          `yaml:"funlen,omitempty" toml:"funlen,multiline,omitempty"`
-	GinkgoLinter    GinkgoLinterSettings    `yaml:"ginkgolinter,omitempty" toml:"ginkgolinter,multiline,omitempty"`
-	Gocognit        GocognitSettings        `yaml:"gocognit,omitempty" toml:"gocognit,multiline,omitempty"`
-	GoChecksumType  GoChecksumTypeSettings  `yaml:"gochecksumtype,omitempty" toml:"gochecksumtype,multiline,omitempty"`
-	Goconst         GoConstSettings         `yaml:"goconst,omitempty" toml:"goconst,multiline,omitempty"`
-	Gocritic        GoCriticSettings        `yaml:"gocritic,omitempty" toml:"gocritic,multiline,omitempty"`
-	Gocyclo         GoCycloSettings         `yaml:"gocyclo,omitempty" toml:"gocyclo,multiline,omitempty"`
-	Godot           GodotSettings           `yaml:"godot,omitempty" toml:"godot,multiline,omitempty"`
-	Godox           GodoxSettings           `yaml:"godox,omitempty" toml:"godox,multiline,omitempty"`
-	Goheader        GoHeaderSettings        `yaml:"goheader,omitempty" toml:"goheader,multiline,omitempty"`
-	GoModDirectives GoModDirectivesSettings `yaml:"gomoddirectives,omitempty" toml:"gomoddirectives,multiline,omitempty"`
-	Gomodguard      GoModGuardSettings      `yaml:"gomodguard,omitempty" toml:"gomodguard,multiline,omitempty"`
-	Gosec           GoSecSettings           `yaml:"gosec,omitempty" toml:"gosec,multiline,omitempty"`
-	Gosmopolitan    GosmopolitanSettings    `yaml:"gosmopolitan,omitempty" toml:"gosmopolitan,multiline,omitempty"`
-	Govet           GovetSettings           `yaml:"govet,omitempty" toml:"govet,multiline,omitempty"`
-	Grouper         GrouperSettings         `yaml:"grouper,omitempty" toml:"grouper,multiline,omitempty"`
-	Iface           IfaceSettings           `yaml:"iface,omitempty" toml:"iface,multiline,omitempty"`
-	ImportAs        ImportAsSettings        `yaml:"importas,omitempty" toml:"importas,multiline,omitempty"`
-	Inamedparam     INamedParamSettings     `yaml:"inamedparam,omitempty" toml:"inamedparam,multiline,omitempty"`
-	InterfaceBloat  InterfaceBloatSettings  `yaml:"interfacebloat,omitempty" toml:"interfacebloat,multiline,omitempty"`
-	Ireturn         IreturnSettings         `yaml:"ireturn,omitempty" toml:"ireturn,multiline,omitempty"`
-	Lll             LllSettings             `yaml:"lll,omitempty" toml:"lll,multiline,omitempty"`
-	LoggerCheck     LoggerCheckSettings     `yaml:"loggercheck,omitempty" toml:"loggercheck,multiline,omitempty"`
-	MaintIdx        MaintIdxSettings        `yaml:"maintidx,omitempty" toml:"maintidx,multiline,omitempty"`
-	Makezero        MakezeroSettings        `yaml:"makezero,omitempty" toml:"makezero,multiline,omitempty"`
-	Misspell        MisspellSettings        `yaml:"misspell,omitempty" toml:"misspell,multiline,omitempty"`
-	Mnd             MndSettings             `yaml:"mnd,omitempty" toml:"mnd,multiline,omitempty"`
-	MustTag         MustTagSettings         `yaml:"musttag,omitempty" toml:"musttag,multiline,omitempty"`
-	Nakedret        NakedretSettings        `yaml:"nakedret,omitempty" toml:"nakedret,multiline,omitempty"`
-	Nestif          NestifSettings          `yaml:"nestif,omitempty" toml:"nestif,multiline,omitempty"`
-	NilNil          NilNilSettings          `yaml:"nilnil,omitempty" toml:"nilnil,multiline,omitempty"`
-	Nlreturn        NlreturnSettings        `yaml:"nlreturn,omitempty" toml:"nlreturn,multiline,omitempty"`
-	NoLintLint      NoLintLintSettings      `yaml:"nolintlint,omitempty" toml:"nolintlint,multiline,omitempty"`
-	NoNamedReturns  NoNamedReturnsSettings  `yaml:"nonamedreturns,omitempty" toml:"nonamedreturns,multiline,omitempty"`
-	ParallelTest    ParallelTestSettings    `yaml:"paralleltest,omitempty" toml:"paralleltest,multiline,omitempty"`
-	PerfSprint      PerfSprintSettings      `yaml:"perfsprint,omitempty" toml:"perfsprint,multiline,omitempty"`
-	Prealloc        PreallocSettings        `yaml:"prealloc,omitempty" toml:"prealloc,multiline,omitempty"`
-	Predeclared     PredeclaredSettings     `yaml:"predeclared,omitempty" toml:"predeclared,multiline,omitempty"`
-	Promlinter      PromlinterSettings      `yaml:"promlinter,omitempty" toml:"promlinter,multiline,omitempty"`
-	ProtoGetter     ProtoGetterSettings     `yaml:"protogetter,omitempty" toml:"protogetter,multiline,omitempty"`
-	Reassign        ReassignSettings        `yaml:"reassign,omitempty" toml:"reassign,multiline,omitempty"`
-	Recvcheck       RecvcheckSettings       `yaml:"recvcheck,omitempty" toml:"recvcheck,multiline,omitempty"`
-	Revive          ReviveSettings          `yaml:"revive,omitempty" toml:"revive,multiline,omitempty"`
-	RowsErrCheck    RowsErrCheckSettings    `yaml:"rowserrcheck,omitempty" toml:"rowserrcheck,multiline,omitempty"`
-	SlogLint        SlogLintSettings        `yaml:"sloglint,omitempty" toml:"sloglint,multiline,omitempty"`
-	Spancheck       SpancheckSettings       `yaml:"spancheck,omitempty" toml:"spancheck,multiline,omitempty"`
-	Staticcheck     StaticCheckSettings     `yaml:"staticcheck,omitempty" toml:"staticcheck,multiline,omitempty"`
-	TagAlign        TagAlignSettings        `yaml:"tagalign,omitempty" toml:"tagalign,multiline,omitempty"`
-	Tagliatelle     TagliatelleSettings     `yaml:"tagliatelle,omitempty" toml:"tagliatelle,multiline,omitempty"`
-	Testifylint     TestifylintSettings     `yaml:"testifylint,omitempty" toml:"testifylint,multiline,omitempty"`
-	Testpackage     TestpackageSettings     `yaml:"testpackage,omitempty" toml:"testpackage,multiline,omitempty"`
-	Thelper         ThelperSettings         `yaml:"thelper,omitempty" toml:"thelper,multiline,omitempty"`
-	Unconvert       UnconvertSettings       `yaml:"unconvert,omitempty" toml:"unconvert,multiline,omitempty"`
-	Unparam         UnparamSettings         `yaml:"unparam,omitempty" toml:"unparam,multiline,omitempty"`
-	Unused          UnusedSettings          `yaml:"unused,omitempty" toml:"unused,multiline,omitempty"`
-	UseStdlibVars   UseStdlibVarsSettings   `yaml:"usestdlibvars,omitempty" toml:"usestdlibvars,multiline,omitempty"`
-	UseTesting      UseTestingSettings      `yaml:"usetesting,omitempty" toml:"usetesting,multiline,omitempty"`
-	Varnamelen      VarnamelenSettings      `yaml:"varnamelen,omitempty" toml:"varnamelen,multiline,omitempty"`
-	Whitespace      WhitespaceSettings      `yaml:"whitespace,omitempty" toml:"whitespace,multiline,omitempty"`
-	Wrapcheck       WrapcheckSettings       `yaml:"wrapcheck,omitempty" toml:"wrapcheck,multiline,omitempty"`
-	WSL             WSLSettings             `yaml:"wsl,omitempty" toml:"wsl,multiline,omitempty"`
+	Asasalint                AsasalintSettings                `yaml:"asasalint,omitempty" toml:"asasalint,multiline,omitempty"`
+	BiDiChk                  BiDiChkSettings                  `yaml:"bidichk,omitempty" toml:"bidichk,multiline,omitempty"`
+	CopyLoopVar              CopyLoopVarSettings              `yaml:"copyloopvar,omitempty" toml:"copyloopvar,multiline,omitempty"`
+	Cyclop                   CyclopSettings                   `yaml:"cyclop,omitempty" toml:"cyclop,multiline,omitempty"`
+	Decorder                 DecorderSettings                 `yaml:"decorder,omitempty" toml:"decorder,multiline,omitempty"`
+	Depguard                 DepGuardSettings                 `yaml:"depguard,omitempty" toml:"depguard,multiline,omitempty"`
+	Dogsled                  DogsledSettings                  `yaml:"dogsled,omitempty" toml:"dogsled,multiline,omitempty"`
+	Dupl                     DuplSettings                     `yaml:"dupl,omitempty" toml:"dupl,multiline,omitempty"`
+	DupWord                  DupWordSettings                  `yaml:"dupword,omitempty" toml:"dupword,multiline,omitempty"`
+	EmbeddedStructFieldCheck EmbeddedStructFieldCheckSettings `yaml:"embeddedstructfieldcheck,omitempty" toml:"embeddedstructfieldcheck,multiline,omitempty"`
+	Errcheck                 ErrcheckSettings                 `yaml:"errcheck,omitempty" toml:"errcheck,multiline,omitempty"`
+	ErrChkJSON               ErrChkJSONSettings               `yaml:"errchkjson,omitempty" toml:"errchkjson,multiline,omitempty"`
+	ErrorLint                ErrorLintSettings                `yaml:"errorlint,omitempty" toml:"errorlint,multiline,omitempty"`
+	Exhaustive               ExhaustiveSettings               `yaml:"exhaustive,omitempty" toml:"exhaustive,multiline,omitempty"`
+	Exhaustruct              ExhaustructSettings              `yaml:"exhaustruct,omitempty" toml:"exhaustruct,multiline,omitempty"`
+	Fatcontext               FatcontextSettings               `yaml:"fatcontext,omitempty" toml:"fatcontext,multiline,omitempty"`
+	Forbidigo                ForbidigoSettings                `yaml:"forbidigo,omitempty" toml:"forbidigo,multiline,omitempty"`
+	FuncOrder                FuncOrderSettings                `yaml:"funcorder,omitempty" toml:"funcorder,multiline,omitempty"`
+	Funlen                   FunlenSettings                   `yaml:"funlen,omitempty" toml:"funlen,multiline,omitempty"`
+	GinkgoLinter             GinkgoLinterSettings             `yaml:"ginkgolinter,omitempty" toml:"ginkgolinter,multiline,omitempty"`
+	Gocognit                 GocognitSettings                 `yaml:"gocognit,omitempty" toml:"gocognit,multiline,omitempty"`
+	GoChecksumType           GoChecksumTypeSettings           `yaml:"gochecksumtype,omitempty" toml:"gochecksumtype,multiline,omitempty"`
+	Goconst                  GoConstSettings                  `yaml:"goconst,omitempty" toml:"goconst,multiline,omitempty"`
+	Gocritic                 GoCriticSettings                 `yaml:"gocritic,omitempty" toml:"gocritic,multiline,omitempty"`
+	Gocyclo                  GoCycloSettings                  `yaml:"gocyclo,omitempty" toml:"gocyclo,multiline,omitempty"`
+	Godot                    GodotSettings                    `yaml:"godot,omitempty" toml:"godot,multiline,omitempty"`
+	Godox                    GodoxSettings                    `yaml:"godox,omitempty" toml:"godox,multiline,omitempty"`
+	Goheader                 GoHeaderSettings                 `yaml:"goheader,omitempty" toml:"goheader,multiline,omitempty"`
+	GoModDirectives          GoModDirectivesSettings          `yaml:"gomoddirectives,omitempty" toml:"gomoddirectives,multiline,omitempty"`
+	Gomodguard               GoModGuardSettings               `yaml:"gomodguard,omitempty" toml:"gomodguard,multiline,omitempty"`
+	Gosec                    GoSecSettings                    `yaml:"gosec,omitempty" toml:"gosec,multiline,omitempty"`
+	Gosmopolitan             GosmopolitanSettings             `yaml:"gosmopolitan,omitempty" toml:"gosmopolitan,multiline,omitempty"`
+	Govet                    GovetSettings                    `yaml:"govet,omitempty" toml:"govet,multiline,omitempty"`
+	Grouper                  GrouperSettings                  `yaml:"grouper,omitempty" toml:"grouper,multiline,omitempty"`
+	Iface                    IfaceSettings                    `yaml:"iface,omitempty" toml:"iface,multiline,omitempty"`
+	ImportAs                 ImportAsSettings                 `yaml:"importas,omitempty" toml:"importas,multiline,omitempty"`
+	Inamedparam              INamedParamSettings              `yaml:"inamedparam,omitempty" toml:"inamedparam,multiline,omitempty"`
+	InterfaceBloat           InterfaceBloatSettings           `yaml:"interfacebloat,omitempty" toml:"interfacebloat,multiline,omitempty"`
+	Ireturn                  IreturnSettings                  `yaml:"ireturn,omitempty" toml:"ireturn,multiline,omitempty"`
+	Lll                      LllSettings                      `yaml:"lll,omitempty" toml:"lll,multiline,omitempty"`
+	LoggerCheck              LoggerCheckSettings              `yaml:"loggercheck,omitempty" toml:"loggercheck,multiline,omitempty"`
+	MaintIdx                 MaintIdxSettings                 `yaml:"maintidx,omitempty" toml:"maintidx,multiline,omitempty"`
+	Makezero                 MakezeroSettings                 `yaml:"makezero,omitempty" toml:"makezero,multiline,omitempty"`
+	Misspell                 MisspellSettings                 `yaml:"misspell,omitempty" toml:"misspell,multiline,omitempty"`
+	Mnd                      MndSettings                      `yaml:"mnd,omitempty" toml:"mnd,multiline,omitempty"`
+	MustTag                  MustTagSettings                  `yaml:"musttag,omitempty" toml:"musttag,multiline,omitempty"`
+	Nakedret                 NakedretSettings                 `yaml:"nakedret,omitempty" toml:"nakedret,multiline,omitempty"`
+	Nestif                   NestifSettings                   `yaml:"nestif,omitempty" toml:"nestif,multiline,omitempty"`
+	NilNil                   NilNilSettings                   `yaml:"nilnil,omitempty" toml:"nilnil,multiline,omitempty"`
+	Nlreturn                 NlreturnSettings                 `yaml:"nlreturn,omitempty" toml:"nlreturn,multiline,omitempty"`
+	NoLintLint               NoLintLintSettings               `yaml:"nolintlint,omitempty" toml:"nolintlint,multiline,omitempty"`
+	NoNamedReturns           NoNamedReturnsSettings           `yaml:"nonamedreturns,omitempty" toml:"nonamedreturns,multiline,omitempty"`
+	ParallelTest             ParallelTestSettings             `yaml:"paralleltest,omitempty" toml:"paralleltest,multiline,omitempty"`
+	PerfSprint               PerfSprintSettings               `yaml:"perfsprint,omitempty" toml:"perfsprint,multiline,omitempty"`
+	Prealloc                 PreallocSettings                 `yaml:"prealloc,omitempty" toml:"prealloc,multiline,omitempty"`
+	Predeclared              PredeclaredSettings              `yaml:"predeclared,omitempty" toml:"predeclared,multiline,omitempty"`
+	Promlinter               PromlinterSettings               `yaml:"promlinter,omitempty" toml:"promlinter,multiline,omitempty"`
+	ProtoGetter              ProtoGetterSettings              `yaml:"protogetter,omitempty" toml:"protogetter,multiline,omitempty"`
+	Reassign                 ReassignSettings                 `yaml:"reassign,omitempty" toml:"reassign,multiline,omitempty"`
+	Recvcheck                RecvcheckSettings                `yaml:"recvcheck,omitempty" toml:"recvcheck,multiline,omitempty"`
+	Revive                   ReviveSettings                   `yaml:"revive,omitempty" toml:"revive,multiline,omitempty"`
+	RowsErrCheck             RowsErrCheckSettings             `yaml:"rowserrcheck,omitempty" toml:"rowserrcheck,multiline,omitempty"`
+	SlogLint                 SlogLintSettings                 `yaml:"sloglint,omitempty" toml:"sloglint,multiline,omitempty"`
+	Spancheck                SpancheckSettings                `yaml:"spancheck,omitempty" toml:"spancheck,multiline,omitempty"`
+	Staticcheck              StaticCheckSettings              `yaml:"staticcheck,omitempty" toml:"staticcheck,multiline,omitempty"`
+	TagAlign                 TagAlignSettings                 `yaml:"tagalign,omitempty" toml:"tagalign,multiline,omitempty"`
+	Tagliatelle              TagliatelleSettings              `yaml:"tagliatelle,omitempty" toml:"tagliatelle,multiline,omitempty"`
+	Testifylint              TestifylintSettings              `yaml:"testifylint,omitempty" toml:"testifylint,multiline,omitempty"`
+	Testpackage              TestpackageSettings              `yaml:"testpackage,omitempty" toml:"testpackage,multiline,omitempty"`
+	Thelper                  ThelperSettings                  `yaml:"thelper,omitempty" toml:"thelper,multiline,omitempty"`
+	Unconvert                UnconvertSettings                `yaml:"unconvert,omitempty" toml:"unconvert,multiline,omitempty"`
+	Unparam                  UnparamSettings                  `yaml:"unparam,omitempty" toml:"unparam,multiline,omitempty"`
+	Unused                   UnusedSettings                   `yaml:"unused,omitempty" toml:"unused,multiline,omitempty"`
+	UseStdlibVars            UseStdlibVarsSettings            `yaml:"usestdlibvars,omitempty" toml:"usestdlibvars,multiline,omitempty"`
+	UseTesting               UseTestingSettings               `yaml:"usetesting,omitempty" toml:"usetesting,multiline,omitempty"`
+	Varnamelen               VarnamelenSettings               `yaml:"varnamelen,omitempty" toml:"varnamelen,multiline,omitempty"`
+	Whitespace               WhitespaceSettings               `yaml:"whitespace,omitempty" toml:"whitespace,multiline,omitempty"`
+	Wrapcheck                WrapcheckSettings                `yaml:"wrapcheck,omitempty" toml:"wrapcheck,multiline,omitempty"`
+	WSL                      WSLv4Settings                    `yaml:"wsl,omitempty" toml:"wsl,multiline,omitempty"`
+	WSLv5                    WSLv5Settings                    `yaml:"wsl_v5,omitempty" toml:"wsl_v5,multiline,omitempty"`
 
 	Custom map[string]CustomLinterSettings `yaml:"custom,omitempty" toml:"custom,multiline,omitempty"`
 }
@@ -153,11 +155,16 @@ type DupWordSettings struct {
 	Ignore   []string `yaml:"ignore,omitempty" toml:"ignore,multiline,omitempty"`
 }
 
+type EmbeddedStructFieldCheckSettings struct {
+	ForbidMutex *bool `yaml:"forbid-mutex,omitempty" toml:"forbid-mutex,multiline,omitempty"`
+}
+
 type ErrcheckSettings struct {
 	DisableDefaultExclusions *bool    `yaml:"disable-default-exclusions,omitempty" toml:"disable-default-exclusions,multiline,omitempty"`
 	CheckTypeAssertions      *bool    `yaml:"check-type-assertions,omitempty" toml:"check-type-assertions,multiline,omitempty"`
 	CheckAssignToBlank       *bool    `yaml:"check-blank,omitempty" toml:"check-blank,multiline,omitempty"`
 	ExcludeFunctions         []string `yaml:"exclude-functions,omitempty" toml:"exclude-functions,multiline,omitempty"`
+	Verbose                  *bool    `yaml:"verbose,omitempty" toml:"verbose,multiline,omitempty"`
 }
 
 type ErrChkJSONSettings struct {
@@ -214,6 +221,7 @@ type ForbidigoPattern struct {
 type FuncOrderSettings struct {
 	Constructor  *bool `yaml:"constructor,omitempty,omitempty" toml:"constructor,omitempty,multiline,omitempty"`
 	StructMethod *bool `yaml:"struct-method,omitempty,omitempty" toml:"struct-method,omitempty,multiline,omitempty"`
+	Alphabetical *bool `yaml:"alphabetical,omitempty,omitempty" toml:"alphabetical,omitempty,multiline,omitempty"`
 }
 
 type FunlenSettings struct {
@@ -695,6 +703,7 @@ type UseStdlibVarsSettings struct {
 	SQLIsolationLevel  *bool `yaml:"sql-isolation-level,omitempty" toml:"sql-isolation-level,multiline,omitempty"`
 	TLSSignatureScheme *bool `yaml:"tls-signature-scheme,omitempty" toml:"tls-signature-scheme,multiline,omitempty"`
 	ConstantKind       *bool `yaml:"constant-kind,omitempty" toml:"constant-kind,multiline,omitempty"`
+	TimeDateMonth      *bool `yaml:"time-date-month,omitempty" toml:"time-date-month,multiline,omitempty"`
 }
 
 type UseTestingSettings struct {
@@ -752,7 +761,7 @@ type WrapcheckSettings struct {
 	ReportInternalErrors   *bool    `yaml:"report-internal-errors,omitempty" toml:"report-internal-errors,multiline,omitempty"`
 }
 
-type WSLSettings struct {
+type WSLv4Settings struct {
 	StrictAppend                     *bool    `yaml:"strict-append,omitempty" toml:"strict-append,multiline,omitempty"`
 	AllowAssignAndCallCuddle         *bool    `yaml:"allow-assign-and-call,omitempty" toml:"allow-assign-and-call,multiline,omitempty"`
 	AllowAssignAndAnythingCuddle     *bool    `yaml:"allow-assign-and-anything,omitempty" toml:"allow-assign-and-anything,multiline,omitempty"`
@@ -767,6 +776,16 @@ type WSLSettings struct {
 	ForceCuddleErrCheckAndAssign     *bool    `yaml:"force-err-cuddling,omitempty" toml:"force-err-cuddling,multiline,omitempty"`
 	ErrorVariableNames               []string `yaml:"error-variable-names,omitempty" toml:"error-variable-names,multiline,omitempty"`
 	ForceExclusiveShortDeclarations  *bool    `yaml:"force-short-decl-cuddling,omitempty" toml:"force-short-decl-cuddling,multiline,omitempty"`
+}
+
+type WSLv5Settings struct {
+	AllowFirstInBlock *bool    `yaml:"allow-first-in-block,omitempty" toml:"allow-first-in-block,multiline,omitempty"`
+	AllowWholeBlock   *bool    `yaml:"allow-whole-block,omitempty" toml:"allow-whole-block,multiline,omitempty"`
+	BranchMaxLines    *int     `yaml:"branch-max-lines,omitempty" toml:"branch-max-lines,multiline,omitempty"`
+	CaseMaxLines      *int     `yaml:"case-max-lines,omitempty" toml:"case-max-lines,multiline,omitempty"`
+	Default           *string  `yaml:"default,omitempty" toml:"default,multiline,omitempty"`
+	Enable            []string `yaml:"enable,omitempty" toml:"enable,multiline,omitempty"`
+	Disable           []string `yaml:"disable,omitempty" toml:"disable,multiline,omitempty"`
 }
 
 type CustomLinterSettings struct {

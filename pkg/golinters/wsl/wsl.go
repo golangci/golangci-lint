@@ -1,17 +1,18 @@
 package wsl
 
 import (
-	"github.com/bombsimon/wsl/v4"
+	wslv4 "github.com/bombsimon/wsl/v4"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
 )
 
-func New(settings *config.WSLSettings) *goanalysis.Linter {
-	var conf *wsl.Configuration
+// Deprecated: use NewV5 instead.
+func NewV4(settings *config.WSLv4Settings) *goanalysis.Linter {
+	var conf *wslv4.Configuration
 
 	if settings != nil {
-		conf = &wsl.Configuration{
+		conf = &wslv4.Configuration{
 			StrictAppend:                     settings.StrictAppend,
 			AllowAssignAndCallCuddle:         settings.AllowAssignAndCallCuddle,
 			AllowAssignAndAnythingCuddle:     settings.AllowAssignAndAnythingCuddle,
@@ -31,6 +32,6 @@ func New(settings *config.WSLSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.
-		NewLinterFromAnalyzer(wsl.NewAnalyzer(conf)).
+		NewLinterFromAnalyzer(wslv4.NewAnalyzer(conf)).
 		WithLoadMode(goanalysis.LoadModeSyntax)
 }

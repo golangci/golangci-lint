@@ -685,6 +685,32 @@
         "header"
       ]
     },
+    "wsl-checks": {
+      "enum": [
+        "assign",
+        "branch",
+        "decl",
+        "defer",
+        "expr",
+        "for",
+        "go",
+        "if",
+        "inc-dec",
+        "label",
+        "range",
+        "return",
+        "select",
+        "send",
+        "switch",
+        "type-switch",
+        "append",
+        "assign-exclusive",
+        "assign-expr",
+        "err",
+        "leading-whitespace",
+        "trailing-whitespace"
+      ]
+    },
     "relative-path-modes": {
       "enum": [
         "gomod",
@@ -829,6 +855,7 @@
             "whitespace",
             "wrapcheck",
             "wsl",
+            "wsl_v5",
             "zerologlint"
           ]
         },
@@ -4090,6 +4117,44 @@
             }
           }
         },
+        "wslSettingsV5": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "allow-first-in-block": {
+              "type": "boolean",
+              "default": true
+            },
+            "allow-whole-block": {
+              "type": "boolean",
+              "default": false
+            },
+            "branch-max-lines": {
+              "type": "integer",
+              "default": 2
+            },
+            "case-max-lines": {
+              "type": "integer",
+              "default": 0
+            },
+            "default": {
+              "enum": ["all", "none", "default", ""],
+              "default": "default"
+            },
+            "enable": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/wsl-checks"
+              }
+            },
+            "disable": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/wsl-checks"
+              }
+            }
+          }
+        },
         "copyloopvarSettings": {
           "type": "object",
           "additionalProperties": false,
@@ -4591,6 +4656,9 @@
             },
             "wsl": {
               "$ref": "#/definitions/settings/definitions/wslSettings"
+            },
+            "wsl_v5": {
+              "$ref": "#/definitions/settings/definitions/wslSettingsV5"
             },
             "copyloopvar": {
               "$ref": "#/definitions/settings/definitions/copyloopvarSettings"
