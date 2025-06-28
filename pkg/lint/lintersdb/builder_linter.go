@@ -698,7 +698,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithURL("https://github.com/bombsimon/wsl"),
 
 		linter.NewConfig(wsl.NewV5(&cfg.Linters.Settings.WSLv5)).
-			WithSince("v1.20.0").
+			WithSince("v2.2.0").
 			WithAutoFix().
 			WithURL("https://github.com/bombsimon/wsl"),
 
