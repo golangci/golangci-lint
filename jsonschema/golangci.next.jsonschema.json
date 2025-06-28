@@ -1512,6 +1512,17 @@
             }
           }
         },
+        "pkgnameSettings": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "import-alias": {
+              "description": "Include import alias in the checks.",
+              "type": "boolean",
+              "default": false
+            }
+          }
+        },
         "goconstSettings": {
           "type": "object",
           "additionalProperties": false,
@@ -4522,6 +4533,9 @@
             },
             "perfsprint": {
               "$ref": "#/definitions/settings/definitions/perfsprintSettings"
+            },
+            "pkgname": {
+              "$ref": "#/definitions/settings/definitions/pkgnameSettings"
             },
             "prealloc": {
               "$ref": "#/definitions/settings/definitions/preallocSettings"

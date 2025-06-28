@@ -85,6 +85,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/nosprintfhostport"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/paralleltest"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/perfsprint"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/pkgname"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/prealloc"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/predeclared"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/promlinter"
@@ -536,6 +537,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithAutoFix().
 			WithURL("https://github.com/catenacyber/perfsprint"),
+
+		linter.NewConfig(pkgname.New(&cfg.Linters.Settings.Pkgname)).
+			WithSince("v2.2.0").
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/uudashr/pkgname"),
 
 		linter.NewConfig(prealloc.New(&cfg.Linters.Settings.Prealloc)).
 			WithSince("v1.19.0").

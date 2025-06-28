@@ -97,6 +97,7 @@ linters:
     - nosprintfhostport
     - paralleltest
     - perfsprint
+    - pkgname
     - prealloc
     - predeclared
     - promlinter
@@ -207,6 +208,7 @@ linters:
     - nosprintfhostport
     - paralleltest
     - perfsprint
+    - pkgname
     - prealloc
     - predeclared
     - promlinter
@@ -2091,6 +2093,11 @@ linters:
       # Enable/disable optimization of hex formatting.
       # Default: true
       hex-format: false
+
+    pkgname:
+      # Include import alias in checks.
+      # Default: false
+      import-alias: true
 
     prealloc:
       # IMPORTANT: we don't recommend using this linter before doing performance profiling.

@@ -259,6 +259,7 @@ type LintersSettings struct {
 	NoNamedReturns           NoNamedReturnsSettings           `mapstructure:"nonamedreturns"`
 	ParallelTest             ParallelTestSettings             `mapstructure:"paralleltest"`
 	PerfSprint               PerfSprintSettings               `mapstructure:"perfsprint"`
+	Pkgname                  PkgnameSettings                  `mapstructure:"pkgname"`
 	Prealloc                 PreallocSettings                 `mapstructure:"prealloc"`
 	Predeclared              PredeclaredSettings              `mapstructure:"predeclared"`
 	Promlinter               PromlinterSettings               `mapstructure:"promlinter"`
@@ -736,6 +737,10 @@ type PerfSprintSettings struct {
 
 	BoolFormat bool `mapstructure:"bool-format"`
 	HexFormat  bool `mapstructure:"hex-format"`
+}
+
+type PkgnameSettings struct {
+	ImportAlias bool `mapstructure:"import-alias"`
 }
 
 type PreallocSettings struct {

@@ -121,6 +121,7 @@ require (
 	github.com/ultraware/whitespace v0.2.0
 	github.com/uudashr/gocognit v1.2.0
 	github.com/uudashr/iface v1.4.0
+	github.com/uudashr/pkgname v1.0.0
 	github.com/valyala/quicktemplate v1.8.0
 	github.com/xen0n/gosmopolitan v1.3.0
 	github.com/yagipy/maintidx v1.0.0
