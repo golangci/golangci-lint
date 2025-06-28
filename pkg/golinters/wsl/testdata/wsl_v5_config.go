@@ -4,10 +4,10 @@ package testdata
 
 func fn1(s []string) {
 	a := "a"
-	s = append(s, a)
+	s = append(s, a) // want `missing whitespace above this line \(invalid statement above assign\)`
 
 	x := 1
-	s = append(s, "s") // want `missing whitespace above this line \(no shared variables above append\)`
+	s = append(s, "s") // want `missing whitespace above this line \(invalid statement above assign\)`
 
 	_ = x
 }
