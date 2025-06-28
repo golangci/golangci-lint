@@ -3948,7 +3948,7 @@ linters:
       # Enabled checks.
       # Will be additive to any presets.
       # https://github.com/bombsimon/wsl/tree/main?tab=readme-ov-file#checks-and-configuration
-      # Default: None
+      # Default: []
       enable:
         - assign
         - branch
@@ -3976,7 +3976,7 @@ linters:
       # Disable checks.
       # Will be subtractive to any preset.
       # https://github.com/bombsimon/wsl/tree/main?tab=readme-ov-file#checks-and-configuration
-      # Default: None
+      # Default: []
       disable:
         - assign
         - branch
