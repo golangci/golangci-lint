@@ -772,7 +772,6 @@ type WSLv4Settings struct {
 }
 
 type WSLv5Settings struct {
-	IncludeGenerated  *bool    `yaml:"include-generated,omitempty" toml:"include-generated,multiline,omitempty"`
 	AllowFirstInBlock *bool    `yaml:"allow-first-in-block,omitempty" toml:"allow-first-in-block,multiline,omitempty"`
 	AllowWholeBlock   *bool    `yaml:"allow-whole-block,omitempty" toml:"allow-whole-block,multiline,omitempty"`
 	BranchMaxLines    *int     `yaml:"branch-max-lines,omitempty" toml:"branch-max-lines,multiline,omitempty"`
