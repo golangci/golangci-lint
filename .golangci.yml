@@ -191,7 +191,11 @@ linters:
       - path: pkg/lint/lintersdb/builder_linter.go
         text: "SA1019: wsl.NewV4 is deprecated: use NewV5 instead."
         linters:
-        - staticcheck
+          - staticcheck
+      - path: pkg/golinters/wsl/wsl.go
+        text: "SA1019: config.WSLv4Settings is deprecated: use WSLv5Settings instead."
+        linters:
+          - staticcheck
 
 formatters:
   enable:
