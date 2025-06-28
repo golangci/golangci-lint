@@ -205,9 +205,9 @@ var defaultLintersSettings = LintersSettings{
 		AllowWholeBlock:   false,
 		BranchMaxLines:    2,
 		CaseMaxLines:      0,
-		Default:           "",
-		Enable:            []string{},
-		Disable:           []string{},
+		Default:           "default",
+		Enable:            nil,
+		Disable:           nil,
 	},
 }
 
