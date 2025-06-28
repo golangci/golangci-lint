@@ -187,6 +187,12 @@ linters:
         linters:
           - dupl
 
+      # Deprecated linters
+      - path: pkg/lint/lintersdb/builder_linter.go
+        text: "SA1019: wsl.NewV4 is deprecated: use NewV5 instead."
+        linters:
+        - staticcheck
+
 formatters:
   enable:
     - gofmt

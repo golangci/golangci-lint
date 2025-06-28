@@ -3,10 +3,9 @@ package wsl
 import (
 	"github.com/bombsimon/wsl/v5"
 
-	"github.com/golangci/golangci-lint/v2/pkg/golinters/internal"
-
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/internal"
 )
 
 func NewV5(settings *config.WSLv5Settings) *goanalysis.Linter {
@@ -30,6 +29,6 @@ func NewV5(settings *config.WSLv5Settings) *goanalysis.Linter {
 
 	return goanalysis.
 		NewLinterFromAnalyzer(wsl.NewAnalyzer(conf)).
-		WithVersion(5).
+		WithVersion(5). //nolint:mnd // It's the linter version.
 		WithLoadMode(goanalysis.LoadModeSyntax)
 }
