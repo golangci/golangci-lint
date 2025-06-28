@@ -30,6 +30,7 @@ After that:
       if you think that this project needs not default values.
     - [config struct](https://github.com/golangci/golangci-lint/blob/HEAD/pkg/config/config.go):
       don't forget about `mapstructure` tags for proper configuration files parsing.
+    - [jsonschema/golangci.next.jsonschema.json](https://github.com/golangci/golangci-lint/blob/HEAD/jsonschema/golangci.next.jsonschema.json): update the JSON schema to include your new linter and its options, so configuration files are validated and editor support is available.
 5. Take a look at the example of [pull requests with new linter support](https://github.com/golangci/golangci-lint/pulls?q=is%3Apr+is%3Amerged+label%3A%22linter%3A+new%22).
 6. Run the tests:
     ```bash
