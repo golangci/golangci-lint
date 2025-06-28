@@ -102,6 +102,8 @@ github.com/bombsimon/wsl/v4 v4.7.0 h1:1Ilm9JBPRczjyUs6hvOPKvd7VL1Q++PL8M0SXBDf+j
 github.com/bombsimon/wsl/v4 v4.7.0/go.mod h1:uV/+6BkffuzSAVYD+yGyld1AChO7/EuLrCF/8xTiapg=
 github.com/bombsimon/wsl/v5 v5.0.0-rc2 h1:4pE+3ge8WG658J0mJl0jyS9QekDfnvRGTn+2JD8sRFA=
 github.com/bombsimon/wsl/v5 v5.0.0-rc2/go.mod h1:Gp8lD04z27wm3FANIUPZycXp+8huVsn0oxc+n4qfV9I=
+github.com/bombsimon/wsl/v5 v5.0.0 h1:pWxP6X11o/YeF9eBVGXvS7L0FLEbHWm2kJJJGH6SeDQ=
+github.com/bombsimon/wsl/v5 v5.0.0/go.mod h1:Gp8lD04z27wm3FANIUPZycXp+8huVsn0oxc+n4qfV9I=
 github.com/breml/bidichk v0.3.3 h1:WSM67ztRusf1sMoqH6/c4OBCUlRVTKq+CbSeo0R17sE=
 github.com/breml/bidichk v0.3.3/go.mod h1:ISbsut8OnjB367j5NseXEGGgO/th206dVa427kR8YTE=
 github.com/breml/errchkjson v0.4.1 h1:keFSS8D7A2T0haP9kzZTi7o26r7kE3vymjZNeNDRDwg=
