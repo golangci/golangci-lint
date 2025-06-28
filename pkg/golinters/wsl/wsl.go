@@ -2,6 +2,7 @@ package wsl
 
 import (
 	wslv4 "github.com/bombsimon/wsl/v4"
+
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
 )

@@ -2,6 +2,7 @@ package wsl
 
 import (
 	"github.com/bombsimon/wsl/v5"
+
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/internal"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
