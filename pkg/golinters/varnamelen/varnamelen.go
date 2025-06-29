@@ -14,7 +14,7 @@ func New(settings *config.VarnamelenSettings) *goanalysis.Linter {
 	var cfg map[string]any
 
 	if settings != nil {
-		vnlCfg := map[string]any{
+		cfg = map[string]any{
 			"checkReceiver":      strconv.FormatBool(settings.CheckReceiver),
 			"checkReturn":        strconv.FormatBool(settings.CheckReturn),
 			"checkTypeParam":     strconv.FormatBool(settings.CheckTypeParam),
@@ -26,11 +26,11 @@ func New(settings *config.VarnamelenSettings) *goanalysis.Linter {
 		}
 
 		if settings.MaxDistance > 0 {
-			vnlCfg["maxDistance"] = strconv.Itoa(settings.MaxDistance)
+			cfg["maxDistance"] = strconv.Itoa(settings.MaxDistance)
 		}
 
 		if settings.MinNameLength > 0 {
-			vnlCfg["minNameLength"] = strconv.Itoa(settings.MinNameLength)
+			cfg["minNameLength"] = strconv.Itoa(settings.MinNameLength)
 		}
 	}
 
