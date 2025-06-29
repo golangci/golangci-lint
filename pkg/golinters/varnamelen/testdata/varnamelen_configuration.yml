@@ -1,0 +1,9 @@
+version: "2"
+
+linters:
+  settings:
+    varnamelen:
+      ignore-names:
+        - fn
+      ignore-decls:
+        - ok bool
