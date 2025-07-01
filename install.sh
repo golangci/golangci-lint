@@ -42,6 +42,7 @@ execute() {
   log_debug "downloading files into ${tmpdir}"
   http_download "${tmpdir}/${TARBALL}" "${TARBALL_URL}"
   http_download "${tmpdir}/${CHECKSUM}" "${CHECKSUM_URL}"
+  cosign_verify "${tmpdir}/${CHECKSUM}"
   hash_sha256_verify "${tmpdir}/${TARBALL}" "${tmpdir}/${CHECKSUM}"
   srcdir="${tmpdir}/${NAME}"
   rm -rf "${srcdir}"
@@ -390,6 +391,20 @@ End of functions from https://github.com/client9/shlib
 ------------------------------------------------------------------------
 EOF
 
+cosign_verify() {
+  if ! is_command cosign; then
+    log_info "cosign is not available, skipping verify"
+    return 0
+  fi
+  checksums=$1
+  http_download "${tmpdir}/${CHECKSUM_COSIGN_BUNDLE}" "${CHECKSUM_COSIGN_BUNDLE_URL}"
+  cosign verify-blob \
+   --bundle="${tmpdir}/${CHECKSUM_COSIGN_BUNDLE}" \
+   --certificate-identity="https://github.com/$PREFIX/.github/workflows/release.yml@refs/tags/$TAG" \
+   --certificate-oidc-issuer=https://token.actions.githubusercontent.com \
+   "$checksums"
+}
+
 PROJECT_NAME="golangci-lint"
 OWNER=golangci
 REPO="golangci-lint"
@@ -428,6 +443,8 @@ TARBALL=${NAME}.${FORMAT}
 TARBALL_URL=${GITHUB_DOWNLOAD}/${TAG}/${TARBALL}
 CHECKSUM=${PROJECT_NAME}-${VERSION}-checksums.txt
 CHECKSUM_URL=${GITHUB_DOWNLOAD}/${TAG}/${CHECKSUM}
+CHECKSUM_COSIGN_BUNDLE=${CHECKSUM}.sigstore.json
+CHECKSUM_COSIGN_BUNDLE_URL=${CHECKSUM_URL}.sigstore.json
 
 
 execute
