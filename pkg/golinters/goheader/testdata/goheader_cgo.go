@@ -1,11 +1,10 @@
 //go:build ignore
 
-// TODO(ldez) the linter doesn't support cgo.
-
-/*MY TITLE!*/ // want `Expected:TITLE\., Actual: TITLE!`
+/*my template*/ // want `template doesn't match`
 
 //golangcitest:args -Egoheader
 //golangcitest:config_path testdata/goheader.yml
+//golangcitest:expected_exitcode 1
 package testdata
 
 /*
