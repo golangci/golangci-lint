@@ -1,6 +1,7 @@
 package testshared
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"os"
@@ -48,7 +49,8 @@ func InstallGolangciLint(tb testing.TB) string {
 		defer builtLock.Unlock()
 
 		if !built {
-			cmd := exec.Command("make", "-C", parentPath, "build")
+			// TODO(ldez): clean inside go1.25 PR
+			cmd := exec.CommandContext(context.Background(), "make", "-C", parentPath, "build")
 
 			output, err := cmd.CombinedOutput()
 			require.NoError(tb, err, "can't install golangci-lint %s", string(output))

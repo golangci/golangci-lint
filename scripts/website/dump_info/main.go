@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -33,7 +34,7 @@ func main() {
 		log.Fatalf("Save default exclusions: %v", err)
 	}
 
-	err = saveCLIHelp(filepath.Join("assets", "cli-help.json"))
+	err = saveCLIHelp(context.Background(), filepath.Join("assets", "cli-help.json"))
 	if err != nil {
 		log.Fatalf("Save CLI help: %v", err)
 	}
@@ -139,25 +140,25 @@ func saveDefaultExclusions() error {
 	return saveToJSONFile(filepath.Join("assets", "exclusion-presets.json"), data)
 }
 
-func saveCLIHelp(dst string) error {
-	err := exec.Command("make", "build").Run()
+func saveCLIHelp(ctx context.Context, dst string) error {
+	err := exec.CommandContext(ctx, "make", "build").Run()
 	if err != nil {
 		return fmt.Errorf("can't run make build: %w", err)
 	}
 
-	lintersOut, err := exec.Command("./golangci-lint", "help", "linters").Output()
+	lintersOut, err := exec.CommandContext(ctx, "./golangci-lint", "help", "linters").Output()
 	if err != nil {
 		return fmt.Errorf("can't run linters cmd: %w", err)
 	}
 
 	lintersOutParts := bytes.Split(lintersOut, []byte("\n\n"))
 
-	rumCmdHelp, err := getCmdHelp("run")
+	rumCmdHelp, err := getCmdHelp(ctx, "run")
 	if err != nil {
 		return err
 	}
 
-	fmtCmdHelp, err := getCmdHelp("fmt")
+	fmtCmdHelp, err := getCmdHelp(ctx, "fmt")
 	if err != nil {
 		return err
 	}
@@ -171,8 +172,8 @@ func saveCLIHelp(dst string) error {
 	return saveToJSONFile(dst, data)
 }
 
-func getCmdHelp(name string) (string, error) {
-	helpCmd := exec.Command("./golangci-lint", name, "-h")
+func getCmdHelp(ctx context.Context, name string) (string, error) {
+	helpCmd := exec.CommandContext(ctx, "./golangci-lint", name, "-h")
 	helpCmd.Env = append(helpCmd.Env, os.Environ()...)
 
 	help, err := helpCmd.Output()
