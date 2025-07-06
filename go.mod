@@ -37,7 +37,7 @@ require (
 	github.com/ckaznocha/intrange v0.3.1
 	github.com/curioswitch/go-reassign v0.3.0
 	github.com/daixiang0/gci v0.13.6
-	github.com/denis-tingaikin/go-header v0.5.0
+	github.com/denis-tingaikin/go-header v1.0.0-rc.8
 	github.com/fatih/color v1.18.0
 	github.com/firefart/nonamedreturns v1.0.6
 	github.com/fzipp/gocyclo v0.6.0
