@@ -1813,7 +1813,7 @@
           "properties": {
             "scope": {
               "description": "Comments to be checked.",
-              "enum": ["declarations", "toplevel", "all"],
+              "enum": ["declarations", "toplevel", "all", "noinline"],
               "default": "declarations"
             },
             "exclude": {
