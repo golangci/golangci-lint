@@ -27,6 +27,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/errorlint"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/exhaustive"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/exhaustruct"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/expecterlint"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/exptostd"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/fatcontext"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/forbidigo"
@@ -249,6 +250,12 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.46.0").
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/GaijinEntertainment/go-exhaustruct"),
+
+		linter.NewConfig(expecterlint.New()).
+			WithSince("v2.3.0").
+			WithLoadForGoAnalysis().
+			WithAutoFix().
+			WithURL("https://github.com/d0ubletr0uble/expecterlint"),
 
 		linter.NewConfig(exptostd.New()).
 			WithSince("v1.63.0").

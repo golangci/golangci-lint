@@ -771,6 +771,7 @@
             "errorlint",
             "exhaustive",
             "exhaustruct",
+            "expecterlint",
             "exptostd",
             "fatcontext",
             "forbidigo",

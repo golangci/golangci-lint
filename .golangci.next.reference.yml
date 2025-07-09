@@ -44,6 +44,7 @@ linters:
     - errorlint
     - exhaustive
     - exhaustruct
+    - expecterlint
     - exptostd
     - fatcontext
     - forbidigo
@@ -155,6 +156,7 @@ linters:
     - errorlint
     - exhaustive
     - exhaustruct
+    - expecterlint
     - exptostd
     - fatcontext
     - forbidigo
