@@ -1,6 +1,7 @@
 package goanalysis
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"go/ast"
@@ -84,14 +85,16 @@ func (lp *loadingPackage) analyze(stopChan chan struct{}, loadMode LoadMode, loa
 		return
 	}
 
-	var actsWg errgroup.Group
+	actsWg, ctx := errgroup.WithContext(context.Background())
 
 	for _, act := range lp.actions {
 		actsWg.Go(func() error {
-			act.waitUntilDependingAnalyzersWorked(stopChan)
+			act.waitUntilDependingAnalyzersWorked(ctx, stopChan)
 
 			select {
 			case <-stopChan:
+				return nil
+			case <-ctx.Done():
 				return nil
 			default:
 			}
