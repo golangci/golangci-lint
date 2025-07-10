@@ -14,6 +14,7 @@ import (
 	"sync"
 	"sync/atomic"
 
+	"golang.org/x/sync/errgroup"
 	"golang.org/x/tools/go/gcexportdata"
 	"golang.org/x/tools/go/packages"
 
@@ -83,36 +84,28 @@ func (lp *loadingPackage) analyze(stopChan chan struct{}, loadMode LoadMode, loa
 		return
 	}
 
-	var actsWg sync.WaitGroup
-
-	actsWg.Add(len(lp.actions))
+	var actsWg errgroup.Group
 
 	for _, act := range lp.actions {
-		go func(act *action) {
-			defer actsWg.Done()
-
+		actsWg.Go(func() error {
 			act.waitUntilDependingAnalyzersWorked(stopChan)
 
 			select {
 			case <-stopChan:
-				return
+				return nil
 			default:
 			}
 
 			act.analyzeSafe()
 
-			select {
-			case <-stopChan:
-				return
-			default:
-				if act.Err != nil {
-					close(stopChan)
-				}
-			}
-		}(act)
+			return act.Err
+		})
 	}
 
-	actsWg.Wait()
+	err := actsWg.Wait()
+	if err != nil {
+		close(stopChan)
+	}
 }
 
 func (lp *loadingPackage) loadFromSource(loadMode LoadMode) error {
