@@ -16,23 +16,20 @@ const EnvTestRun = "GL_TEST_RUN"
 const envDebug = "GL_DEBUG"
 
 const (
-	DebugKeyBinSalt          = "bin_salt"
-	DebugKeyGoModSalt        = "gomod_salt"
-	DebugKeyConfigReader     = "config_reader"
-	DebugKeyEmpty            = ""
-	DebugKeyEnabledLinters   = "enabled_linters"
-	DebugKeyExec             = "exec"
-	DebugKeyFormatter        = "formatter"
-	DebugKeyFormattersOutput = "formatters_output"
-	DebugKeyGoEnv            = "goenv"
-	DebugKeyLintersContext   = "linters_context"
-	DebugKeyLintersDB        = "lintersdb"
-	DebugKeyLintersOutput    = "linters_output"
-	DebugKeyLoader           = "loader" // Debugs packages loading (including `go/packages` internal debugging).
-	DebugKeyPkgCache         = "pkgcache"
-	DebugKeyRunner           = "runner"
-	DebugKeyStopwatch        = "stopwatch"
-	DebugKeyTest             = "test"
+	DebugKeyBinSalt        = "bin_salt"      // Forces the usage of constant as salt (only for maintainers).
+	DebugKeyGoModSalt      = "gomod_salt"    // Display logs related to the salt computation from the go.mod file.
+	DebugKeyConfigReader   = "config_reader" // Display logs related to configuration loading.
+	DebugKeyEmpty          = ""
+	DebugKeyEnabledLinters = "enabled_linters" // Display logs related to the enabled linters inside the [lintersdb.Manager].
+	DebugKeyExec           = "exec"            // Display logs related to the lock file.
+	DebugKeyGoEnv          = "goenv"           // Display logs related to [goenv.Env].
+	DebugKeyLintersContext = "linters_context" // Display logs related to the package analysis context (not related to [context.Context]).
+	DebugKeyLintersDB      = "lintersdb"       // Display logs related to the linters/formatters loading.
+	DebugKeyLoader         = "loader"          // Display logs related to package loading (including `go/packages` internal debugging).
+	DebugKeyPkgCache       = "pkgcache"        // Display logs related to cache.
+	DebugKeyRunner         = "runner"          // Display logs related to the linter runner.
+	DebugKeyStopwatch      = "stopwatch"       // Display logs related to the stopwatch of the cache.
+	DebugKeyTest           = "test"            // Display debug logs during integration tests.
 )
 
 // Printers.
@@ -59,7 +56,6 @@ const (
 	DebugKeyPathPrettifier      = "path_prettifier"
 	DebugKeyPathRelativity      = "path_relativity"
 	DebugKeySeverityRules       = "severity_rules"
-	DebugKeySkipDirs            = "skip_dirs"
 	DebugKeySourceCode          = "source_code"
 )
 
@@ -77,12 +73,16 @@ const (
 	DebugKeyGoAnalysisFactsInherit = DebugKeyGoAnalysisFacts + "/inherit"
 )
 
-// Linters.
+// Linters and Formatters.
 const (
-	DebugKeyForbidigo   = "forbidigo" // Debugs `forbidigo` linter.
-	DebugKeyGoCritic    = "gocritic"  // Debugs `gocritic` linter.
-	DebugKeyGovet       = "govet"     // Debugs `govet` linter.
-	DebugKeyLinter      = "linter"
+	DebugKeyFormatter        = "formatter"         // Display logs from the shared logger for formatters.
+	DebugKeyFormattersOutput = "formatters_output" // Display logs from formatters themselves.
+	DebugKeyLinter           = "linter"            // Display logs from the shared logger for linters.
+	DebugKeyLintersOutput    = "linters_output"    // Display logs from linters themselves.
+
+	DebugKeyForbidigo   = "forbidigo"   // Debugs `forbidigo` linter.
+	DebugKeyGoCritic    = "gocritic"    // Debugs `gocritic` linter.
+	DebugKeyGovet       = "govet"       // Debugs `govet` linter.
 	DebugKeyRevive      = "revive"      // Debugs `revive` linter.
 	DebugKeyStaticcheck = "staticcheck" // Debugs `staticcheck` linter.
 )
