@@ -1,6 +1,7 @@
 package goanalysis
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"go/ast"
@@ -14,6 +15,7 @@ import (
 	"sync"
 	"sync/atomic"
 
+	"golang.org/x/sync/errgroup"
 	"golang.org/x/tools/go/gcexportdata"
 	"golang.org/x/tools/go/packages"
 
@@ -83,36 +85,30 @@ func (lp *loadingPackage) analyze(stopChan chan struct{}, loadMode LoadMode, loa
 		return
 	}
 
-	var actsWg sync.WaitGroup
-
-	actsWg.Add(len(lp.actions))
+	actsWg, ctx := errgroup.WithContext(context.Background())
 
 	for _, act := range lp.actions {
-		go func(act *action) {
-			defer actsWg.Done()
-
-			act.waitUntilDependingAnalyzersWorked(stopChan)
+		actsWg.Go(func() error {
+			act.waitUntilDependingAnalyzersWorked(ctx, stopChan)
 
 			select {
 			case <-stopChan:
-				return
+				return nil
+			case <-ctx.Done():
+				return nil
 			default:
 			}
 
 			act.analyzeSafe()
 
-			select {
-			case <-stopChan:
-				return
-			default:
-				if act.Err != nil {
-					close(stopChan)
-				}
-			}
-		}(act)
+			return act.Err
+		})
 	}
 
-	actsWg.Wait()
+	err := actsWg.Wait()
+	if err != nil {
+		close(stopChan)
+	}
 }
 
 func (lp *loadingPackage) loadFromSource(loadMode LoadMode) error {
