@@ -34,6 +34,7 @@ func (act *action) waitUntilDependingAnalyzersWorked(ctx context.Context, stopCh
 		if dep.Package == act.Package {
 			select {
 			case <-stopChan:
+				return
 			case <-ctx.Done():
 				return
 			case <-dep.analysisDoneCh:
