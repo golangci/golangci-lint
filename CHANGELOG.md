@@ -7,6 +7,16 @@ If you value it, consider supporting us, we appreciate it! ❤️
 [![Open Collective backers and sponsors](https://img.shields.io/badge/OpenCollective-Donate-blue?logo=opencollective&style=for-the-badge)](https://opencollective.com/golangci-lint)
 [![GitHub Sponsors](https://img.shields.io/badge/GitHub-Donate-blue?logo=github&style=for-the-badge)](https://github.com/sponsors/golangci)
 
+### v2.2.2
+
+1. Linters bug fixes
+   * `noinlineerr`: from 1.0.3 to 1.0.4
+2. Documentation
+   * Improve debug keys documentation
+3. Misc.
+   * fix: panic close of closed channel
+   * godot: add noinline value into the JSONSchema
+
 ### v2.2.1
 
 1. Linters bug fixes
