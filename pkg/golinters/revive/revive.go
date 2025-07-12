@@ -269,7 +269,7 @@ func safeTomlSlice(r []any) []any {
 }
 
 // This element is not exported by revive, so we need copy the code.
-// Extracted from https://github.com/mgechev/revive/blob/v1.10.0/config/config.go#L16
+// Extracted from https://github.com/mgechev/revive/blob/v1.11.0/config/config.go#L166
 var defaultRules = []lint.Rule{
 	&rule.VarDeclarationsRule{},
 	&rule.PackageCommentsRule{},
@@ -320,6 +320,7 @@ var allRules = append([]lint.Rule{
 	&rule.EnforceMapStyleRule{},
 	&rule.EnforceRepeatedArgTypeStyleRule{},
 	&rule.EnforceSliceStyleRule{},
+	&rule.EnforceSwitchStyleRule{},
 	&rule.FileHeaderRule{},
 	&rule.FileLengthLimitRule{},
 	&rule.FilenameFormatRule{},
@@ -366,7 +367,7 @@ var allRules = append([]lint.Rule{
 const defaultConfidence = 0.8
 
 // This element is not exported by revive, so we need copy the code.
-// Extracted from https://github.com/mgechev/revive/blob/v1.5.0/config/config.go#L183
+// Extracted from https://github.com/mgechev/revive/blob/v1.11.0/config/config.go#L198
 func normalizeConfig(cfg *lint.Config) {
 	// NOTE(ldez): this custom section for golangci-lint should be kept.
 	// ---
@@ -408,7 +409,7 @@ func normalizeConfig(cfg *lint.Config) {
 }
 
 // This element is not exported by revive, so we need copy the code.
-// Extracted from https://github.com/mgechev/revive/blob/v1.5.0/config/config.go#L252
+// Extracted from https://github.com/mgechev/revive/blob/v1.11.0/config/config.go#L266
 func defaultConfig() *lint.Config {
 	defaultConfig := lint.Config{
 		Confidence: defaultConfidence,
@@ -454,7 +455,7 @@ func extractRulesName(rules []lint.Rule) []string {
 	return names
 }
 
-// Extracted from https://github.com/mgechev/revive/blob/v1.7.0/formatter/severity.go
+// Extracted from https://github.com/mgechev/revive/blob/v1.11.0/formatter/severity.go
 // Modified to use pointers (related to hugeParam rule).
 func severity(cfg *lint.Config, failure *lint.Failure) lint.Severity {
 	if cfg, ok := cfg.Rules[failure.RuleName]; ok && cfg.Severity == lint.SeverityError {
