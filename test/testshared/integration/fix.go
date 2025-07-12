@@ -1,6 +1,7 @@
 package integration
 
 import (
+	"context"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -30,7 +31,8 @@ func setupTestFix(t *testing.T) []string {
 
 	sourcesDir := filepath.Join(testdataDir, "fix")
 
-	err := exec.Command("cp", "-R", sourcesDir, tmpDir).Run()
+	// TODO(ldez): clean inside go1.25 PR
+	err := exec.CommandContext(context.Background(), "cp", "-R", sourcesDir, tmpDir).Run()
 	require.NoError(t, err)
 
 	return findSources(t, tmpDir, "in", "*.go")

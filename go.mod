@@ -104,7 +104,7 @@ require (
 	github.com/shirou/gopsutil/v4 v4.25.6
 	github.com/sirupsen/logrus v1.9.3
 	github.com/sivchari/containedctx v1.0.3
-	github.com/sonatard/noctx v0.3.4
+	github.com/sonatard/noctx v0.3.5
 	github.com/sourcegraph/go-diff v0.7.0
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/pflag v1.0.6
