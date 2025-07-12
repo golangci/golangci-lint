@@ -134,7 +134,7 @@ require (
 	go.augendre.info/fatcontext v0.8.0
 	go.uber.org/automaxprocs v1.6.0
 	golang.org/x/mod v0.26.0
-	golang.org/x/sync v0.15.0
+	golang.org/x/sync v0.16.0
 	golang.org/x/sys v0.34.0
 	golang.org/x/tools v0.34.0
 	gopkg.in/yaml.v3 v3.0.1
