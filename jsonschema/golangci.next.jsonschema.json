@@ -599,6 +599,7 @@
         "enforce-map-style",
         "enforce-repeated-arg-type-style",
         "enforce-slice-style",
+        "enforce-switch-style",
         "error-naming",
         "error-return",
         "error-strings",
