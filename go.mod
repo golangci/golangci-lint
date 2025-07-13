@@ -127,6 +127,7 @@ require (
 	github.com/yagipy/maintidx v1.0.0
 	github.com/yeya24/promlinter v0.3.0
 	github.com/ykadowak/zerologlint v0.1.5
+	github.com/zcross/clearslice v0.1.0
 	gitlab.com/bosi/decorder v0.4.2
 	go-simpler.org/musttag v0.13.1
 	go-simpler.org/sloglint v0.11.0

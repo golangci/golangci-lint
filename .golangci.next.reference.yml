@@ -137,6 +137,7 @@ linters:
     - bidichk
     - bodyclose
     - canonicalheader
+    - clearslice
     - containedctx
     - contextcheck
     - copyloopvar

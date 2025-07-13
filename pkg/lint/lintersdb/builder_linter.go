@@ -9,6 +9,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/bidichk"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/bodyclose"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/canonicalheader"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/clearslice"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/containedctx"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/contextcheck"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/copyloopvar"
@@ -172,6 +173,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.44.0").
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/sivchari/containedctx"),
+
+		linter.NewConfig(clearslice.New()).
+			WithSince("v2.3.0").
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/zcross/clearslice"),
 
 		linter.NewConfig(contextcheck.New()).
 			WithSince("v1.43.0").
