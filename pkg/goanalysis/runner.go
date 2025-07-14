@@ -5,6 +5,7 @@
 package goanalysis
 
 import (
+	"context"
 	"encoding/gob"
 	"fmt"
 	"go/token"
@@ -259,9 +260,11 @@ func (r *runner) analyze(pkgs []*packages.Package, analyzers []*analysis.Analyze
 	debugf("Analyzing at most %d packages in parallel", gomaxprocs)
 
 	loadSem := make(chan struct{}, gomaxprocs)
-	stopChan := make(chan struct{}, 1)
 
 	debugf("There are %d initial and %d total packages", len(initialPkgs), len(loadingPackages))
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 
 	var wg sync.WaitGroup
 
@@ -270,7 +273,7 @@ func (r *runner) analyze(pkgs []*packages.Package, analyzers []*analysis.Analyze
 			wg.Add(1)
 
 			go func(lp *loadingPackage) {
-				lp.analyzeRecursive(stopChan, r.loadMode, loadSem)
+				lp.analyzeRecursive(ctx, cancel, r.loadMode, loadSem)
 
 				wg.Done()
 			}(lp)

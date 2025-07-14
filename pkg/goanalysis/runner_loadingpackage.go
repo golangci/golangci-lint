@@ -41,7 +41,7 @@ type loadingPackage struct {
 	decUseMutex sync.Mutex
 }
 
-func (lp *loadingPackage) analyzeRecursive(stopChan chan struct{}, loadMode LoadMode, loadSem chan struct{}) {
+func (lp *loadingPackage) analyzeRecursive(ctx context.Context, cancel context.CancelFunc, loadMode LoadMode, loadSem chan struct{}) {
 	lp.analyzeOnce.Do(func() {
 		// Load the direct dependencies, in parallel.
 		var wg sync.WaitGroup
@@ -50,7 +50,7 @@ func (lp *loadingPackage) analyzeRecursive(stopChan chan struct{}, loadMode Load
 
 		for _, imp := range lp.imports {
 			go func(imp *loadingPackage) {
-				imp.analyzeRecursive(stopChan, loadMode, loadSem)
+				imp.analyzeRecursive(ctx, cancel, loadMode, loadSem)
 
 				wg.Done()
 			}(imp)
@@ -58,15 +58,21 @@ func (lp *loadingPackage) analyzeRecursive(stopChan chan struct{}, loadMode Load
 
 		wg.Wait()
 
-		lp.analyze(stopChan, loadMode, loadSem)
+		lp.analyze(ctx, cancel, loadMode, loadSem)
 	})
 }
 
-func (lp *loadingPackage) analyze(stopChan chan struct{}, loadMode LoadMode, loadSem chan struct{}) {
+func (lp *loadingPackage) analyze(ctx context.Context, cancel context.CancelFunc, loadMode LoadMode, loadSem chan struct{}) {
 	loadSem <- struct{}{}
 	defer func() {
 		<-loadSem
 	}()
+
+	select {
+	case <-ctx.Done():
+		return
+	default:
+	}
 
 	// Save memory on unused more fields.
 	defer lp.decUse(loadMode < LoadModeWholeProgram)
@@ -85,16 +91,14 @@ func (lp *loadingPackage) analyze(stopChan chan struct{}, loadMode LoadMode, loa
 		return
 	}
 
-	actsWg, ctx := errgroup.WithContext(context.Background())
+	actsWg, ctxGroup := errgroup.WithContext(ctx)
 
 	for _, act := range lp.actions {
 		actsWg.Go(func() error {
-			act.waitUntilDependingAnalyzersWorked(ctx, stopChan)
+			act.waitUntilDependingAnalyzersWorked(ctxGroup)
 
 			select {
-			case <-stopChan:
-				return nil
-			case <-ctx.Done():
+			case <-ctxGroup.Done():
 				return nil
 			default:
 			}
@@ -107,7 +111,7 @@ func (lp *loadingPackage) analyze(stopChan chan struct{}, loadMode LoadMode, loa
 
 	err := actsWg.Wait()
 	if err != nil {
-		close(stopChan)
+		cancel()
 	}
 }
 
