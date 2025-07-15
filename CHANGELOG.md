@@ -7,6 +7,21 @@ If you value it, consider supporting us, we appreciate it! ❤️
 [![Open Collective backers and sponsors](https://img.shields.io/badge/OpenCollective-Donate-blue?logo=opencollective&style=for-the-badge)](https://opencollective.com/golangci-lint)
 [![GitHub Sponsors](https://img.shields.io/badge/GitHub-Donate-blue?logo=github&style=for-the-badge)](https://github.com/sponsors/golangci)
 
+### v2.3.0
+
+1. Linters new features or changes
+   * `ginkgolinter`: from 0.19.1 to 0.20.0 (new option: `force-assertion-description`)
+   * `iface`: from 1.4.0 to 1.4.1 (report message improvements)
+   * `noctx`: from 0.3.4 to 0.3.5 (new detections: `log/slog`, `exec`, `crypto/tls`)
+   * `revive`: from 1.10.0 to 1.11.0 (new rule: `enforce-switch-style`)
+   * `wsl`: from 5.0.0 to 5.1.0
+2. Linters bug fixes
+   * `gosec`: from 2.22.5 to 2.22.6
+   * `noinlineerr`: from 1.0.4 to 1.0.5
+   * `sloglint`: from 0.11.0 to 0.11.1
+3. Misc.
+   * fix: panic close of closed channel
+
 ### v2.2.2
 
 1. Linters bug fixes
