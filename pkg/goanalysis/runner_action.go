@@ -29,12 +29,10 @@ func (actAlloc *actionAllocator) alloc() *action {
 	return act
 }
 
-func (act *action) waitUntilDependingAnalyzersWorked(ctx context.Context, stopChan chan struct{}) {
+func (act *action) waitUntilDependingAnalyzersWorked(ctx context.Context) {
 	for _, dep := range act.Deps {
 		if dep.Package == act.Package {
 			select {
-			case <-stopChan:
-				return
 			case <-ctx.Done():
 				return
 			case <-dep.analysisDoneCh:
