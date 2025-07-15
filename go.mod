@@ -123,6 +123,7 @@ require (
 	github.com/uudashr/gocognit v1.2.0
 	github.com/uudashr/iface v1.4.1
 	github.com/valyala/quicktemplate v1.8.0
+	github.com/winder/safebigint v0.1.0
 	github.com/xen0n/gosmopolitan v1.3.0
 	github.com/yagipy/maintidx v1.0.0
 	github.com/yeya24/promlinter v0.3.0

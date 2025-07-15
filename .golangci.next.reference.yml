@@ -105,6 +105,7 @@ linters:
     - recvcheck
     - revive
     - rowserrcheck
+    - safebigint
     - sloglint
     - spancheck
     - sqlclosecheck
@@ -2770,6 +2771,14 @@ linters:
       # Default: []
       packages:
         - github.com/jmoiron/sqlx
+
+    safebigint:
+      # Check for calls to Uint64() and Int64() which have undefined behavior
+      # when the object contains a value that doesn't fit in those types.
+      disable-truncation-check: true
+      # Check for shared object mutation where the first argument is also the
+      # method receiver.
+      disable-mutation-check: true
 
     sloglint:
       # Enforce not mixing key-value pairs and attributes.

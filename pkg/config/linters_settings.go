@@ -137,6 +137,10 @@ var defaultLintersSettings = LintersSettings{
 	Predeclared: PredeclaredSettings{
 		Qualified: false,
 	},
+	SafeBigInt: SafeBigIntSettings{
+		DisableTruncationCheck: true,
+		DisableMutationCheck:   true,
+	},
 	SlogLint: SlogLintSettings{
 		NoMixedArgs:    true,
 		KVOnly:         false,
@@ -276,6 +280,7 @@ type LintersSettings struct {
 	Recvcheck                RecvcheckSettings                `mapstructure:"recvcheck"`
 	Revive                   ReviveSettings                   `mapstructure:"revive"`
 	RowsErrCheck             RowsErrCheckSettings             `mapstructure:"rowserrcheck"`
+	SafeBigInt               SafeBigIntSettings               `mapstructure:"safebigint"`
 	SlogLint                 SlogLintSettings                 `mapstructure:"sloglint"`
 	Spancheck                SpancheckSettings                `mapstructure:"spancheck"`
 	Staticcheck              StaticCheckSettings              `mapstructure:"staticcheck"`
@@ -808,6 +813,11 @@ type ReviveDirective struct {
 
 type RowsErrCheckSettings struct {
 	Packages []string `mapstructure:"packages"`
+}
+
+type SafeBigIntSettings struct {
+	DisableTruncationCheck bool `mapstructure:"enable-truncation-check"`
+	DisableMutationCheck   bool `mapstructure:"enable-mutation-check"`
 }
 
 type SlogLintSettings struct {
