@@ -1,7 +1,6 @@
 package integration
 
 import (
-	"os"
 	"os/exec"
 	"path/filepath"
 	"slices"
@@ -32,12 +31,7 @@ func RunTestSourcesFromDir(t *testing.T, dir string) {
 
 	binPath := testshared.InstallGolangciLint(t)
 
-	cwd, err := os.Getwd()
-	require.NoError(t, err)
-	t.Cleanup(func() { _ = os.Chdir(cwd) })
-
-	err = os.Chdir(dir)
-	require.NoError(t, err)
+	t.Chdir(dir)
 
 	log := logutils.NewStderrLog(logutils.DebugKeyTest)
 	log.SetLevel(logutils.LogLevelInfo)
