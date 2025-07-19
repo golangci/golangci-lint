@@ -825,6 +825,7 @@
             "nolintlint",
             "nonamedreturns",
             "nosprintfhostport",
+            "notag",
             "paralleltest",
             "perfsprint",
             "prealloc",

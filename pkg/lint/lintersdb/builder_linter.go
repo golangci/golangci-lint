@@ -83,6 +83,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/nolintlint"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/nonamedreturns"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/nosprintfhostport"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/notag"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/paralleltest"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/perfsprint"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/prealloc"
@@ -525,6 +526,10 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 		linter.NewConfig(nosprintfhostport.New()).
 			WithSince("v1.46.0").
 			WithURL("https://github.com/stbenjam/no-sprintf-host-port"),
+
+		linter.NewConfig(notag.New(&cfg.Linters.Settings.NoTag)).
+			WithSince("next_version").
+			WithURL("https://github.com/guerinoni/notag"),
 
 		linter.NewConfig(paralleltest.New(&cfg.Linters.Settings.ParallelTest)).
 			WithSince("v1.33.0").

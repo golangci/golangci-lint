@@ -266,6 +266,7 @@ type LintersSettings struct {
 	Nlreturn                 NlreturnSettings                 `mapstructure:"nlreturn"`
 	NoLintLint               NoLintLintSettings               `mapstructure:"nolintlint"`
 	NoNamedReturns           NoNamedReturnsSettings           `mapstructure:"nonamedreturns"`
+	NoTag                    NoTagSettings                    `mapstructure:"notag"`
 	ParallelTest             ParallelTestSettings             `mapstructure:"paralleltest"`
 	PerfSprint               PerfSprintSettings               `mapstructure:"perfsprint"`
 	Prealloc                 PreallocSettings                 `mapstructure:"prealloc"`
@@ -707,6 +708,12 @@ type NilNilSettings struct {
 
 type NlreturnSettings struct {
 	BlockSize int `mapstructure:"block-size"`
+}
+
+type NoTagSettings struct {
+	Denied        string            `mapstructure:"denied"`
+	DeniedPkg     map[string]string `mapstructure:"denied-pkg"`
+	DeniedPkgPath map[string]string `mapstructure:"denied-pkg-path"`
 }
 
 type MndSettings struct {

@@ -95,6 +95,7 @@ linters:
     - nolintlint
     - nonamedreturns
     - nosprintfhostport
+    - notag
     - paralleltest
     - perfsprint
     - prealloc
@@ -206,6 +207,7 @@ linters:
     - nolintlint
     - nonamedreturns
     - nosprintfhostport
+    - notag
     - paralleltest
     - perfsprint
     - prealloc
@@ -2056,6 +2058,9 @@ linters:
       # Report named error if it is assigned inside defer.
       # Default: false
       report-error-in-defer: true
+
+    notag:
+      denied: "json"
 
     paralleltest:
       # Ignore missing calls to `t.Parallel()` and only report incorrect uses of it.
