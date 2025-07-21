@@ -599,6 +599,7 @@
         "enforce-map-style",
         "enforce-repeated-arg-type-style",
         "enforce-slice-style",
+        "enforce-switch-style",
         "error-naming",
         "error-return",
         "error-strings",
@@ -1507,6 +1508,11 @@
             },
             "force-succeed": {
               "description": "Force using the Succeed matcher for error functions, and the HaveOccurred matcher for non-function error values.",
+              "type": "boolean",
+              "default": false
+            },
+            "force-assertion-description": {
+              "description": "Force adding assertion descriptions to gomega matchers.",
               "type": "boolean",
               "default": false
             }
