@@ -626,6 +626,10 @@ linters:
       # Default: false
       force-succeed: true
 
+      # Force adding assertion descriptions to gomega matchers.
+      # Default: false
+      force-assertion-description: true
+
     gochecksumtype:
       # Presence of `default` case in switch statements satisfies exhaustiveness, if all members are not listed.
       # Default: true
@@ -2389,6 +2393,12 @@ linters:
           exclude: [""]
           arguments:
             - "make"
+        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#enforce-switch-style
+        - name: enforce-switch-style
+          severity: warning
+          disabled: false
+          exclude: [""]
+          arguments: [ "allowNoDefault" ]
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#error-naming
         - name: error-naming
           severity: warning
@@ -2679,7 +2689,7 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
-            - "fmt.Printf"
+            - "^fmt.Printf"
             - "myFunction"
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#unnecessary-format
         - name: unnecessary-format
@@ -2743,7 +2753,12 @@ linters:
           arguments:
             - [ "ID" ] # AllowList
             - [ "VM" ] # DenyList
-            - - upper-case-const: true # Extra parameter (upper-case-const|skip-package-name-checks)
+            - - skip-initialism-name-checks: true
+                upper-case-const: true
+                skip-package-name-checks: true
+                extra-bad-package-names:
+                  - helpers
+                  - models
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#waitgroup-by-value
         - name: waitgroup-by-value
           severity: warning
