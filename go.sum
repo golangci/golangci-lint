@@ -520,8 +520,8 @@ github.com/sashamelentyev/interfacebloat v1.1.0 h1:xdRdJp0irL086OyW1H/RTZTr1h/tM
 github.com/sashamelentyev/interfacebloat v1.1.0/go.mod h1:+Y9yU5YdTkrNvoX0xHc84dxiN1iBi9+G8zZIhPVoNjQ=
 github.com/sashamelentyev/usestdlibvars v1.29.0 h1:8J0MoRrw4/NAXtjQqTHrbW9NN+3iMf7Knkq057v4XOQ=
 github.com/sashamelentyev/usestdlibvars v1.29.0/go.mod h1:8PpnjHMk5VdeWlVb4wCdrB8PNbLqZ3wBZTZWkrpZZL8=
-github.com/securego/gosec/v2 v2.22.6 h1:mixR+X+Z5fT6QddWY8jyU9gs43CyW0SnADHB6kJm8NY=
-github.com/securego/gosec/v2 v2.22.6/go.mod h1:510TFNDMrIPytokyHQAVLvPeDr41Yihn2ak8P+XQfNE=
+github.com/securego/gosec/v2 v2.22.7 h1:8/9P+oTYI4yIpAzccQKVsg1/90Po+JzGtAhqoHImDeM=
+github.com/securego/gosec/v2 v2.22.7/go.mod h1:510TFNDMrIPytokyHQAVLvPeDr41Yihn2ak8P+XQfNE=
 github.com/sergi/go-diff v1.2.0 h1:XU+rvMAioB0UC3q1MFrIQy4Vo5/4VsRDQQXHsEya6xQ=
 github.com/sergi/go-diff v1.2.0/go.mod h1:STckp+ISIX8hZLjrqAeVduY0gWCT9IjLuqbuNXdaHfM=
 github.com/shirou/gopsutil/v4 v4.25.6 h1:kLysI2JsKorfaFPcYmcJqbzROzsBWEOAtw6A7dIfqXs=
