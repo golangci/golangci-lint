@@ -1,0 +1,16 @@
+version: "2"
+
+linters:
+  settings:
+    tagliatelle:
+      case:
+        rules:
+          json: camel
+        extended-rules:
+          json:
+            case: camel
+            extra-initialisms: true
+            initialism-overrides:
+              LHS: false
+              RHS: true
+              AWS: true
