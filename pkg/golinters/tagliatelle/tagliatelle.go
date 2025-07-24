@@ -2,6 +2,7 @@ package tagliatelle
 
 import (
 	"maps"
+	"strings"
 
 	"github.com/ldez/tagliatelle"
 
@@ -50,10 +51,15 @@ func toExtendedRules(src map[string]config.TagliatelleExtendedRule) map[string]t
 	result := make(map[string]tagliatelle.ExtendedRule, len(src))
 
 	for k, v := range src {
+		initialismOverrides := make(map[string]bool, len(v.InitialismOverrides))
+		for ki, vi := range v.InitialismOverrides {
+			initialismOverrides[strings.ToUpper(ki)] = vi
+		}
+
 		result[k] = tagliatelle.ExtendedRule{
 			Case:                v.Case,
 			ExtraInitialisms:    v.ExtraInitialisms,
-			InitialismOverrides: v.InitialismOverrides,
+			InitialismOverrides: initialismOverrides,
 		}
 	}
 
