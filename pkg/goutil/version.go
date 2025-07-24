@@ -60,9 +60,7 @@ func CleanRuntimeVersion() (string, error) {
 }
 
 func cleanRuntimeVersion(rv string) (string, error) {
-	parts := strings.Fields(rv)
-
-	for _, part := range parts {
+	for part := range strings.FieldsSeq(rv) {
 		// Allow to handle:
 		// - GOEXPERIMENT -> "go1.23.0 X:boringcrypto"
 		// - devel -> "devel go1.24-e705a2d Wed Aug 7 01:16:42 2024 +0000 linux/amd64"
