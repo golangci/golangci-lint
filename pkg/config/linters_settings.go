@@ -137,6 +137,9 @@ var defaultLintersSettings = LintersSettings{
 	Predeclared: PredeclaredSettings{
 		Qualified: false,
 	},
+	PtrEquality: PtrEqualitySettings{
+		CheckIs: true,
+	},
 	SlogLint: SlogLintSettings{
 		NoMixedArgs:    true,
 		KVOnly:         false,
@@ -272,6 +275,7 @@ type LintersSettings struct {
 	Predeclared              PredeclaredSettings              `mapstructure:"predeclared"`
 	Promlinter               PromlinterSettings               `mapstructure:"promlinter"`
 	ProtoGetter              ProtoGetterSettings              `mapstructure:"protogetter"`
+	PtrEquality              PtrEqualitySettings              `mapstructure:"ptrequality"`
 	Reassign                 ReassignSettings                 `mapstructure:"reassign"`
 	Recvcheck                RecvcheckSettings                `mapstructure:"recvcheck"`
 	Revive                   ReviveSettings                   `mapstructure:"revive"`
@@ -770,6 +774,10 @@ type ProtoGetterSettings struct {
 	SkipFiles               []string `mapstructure:"skip-files"`
 	SkipAnyGenerated        bool     `mapstructure:"skip-any-generated"`
 	ReplaceFirstArgInAppend bool     `mapstructure:"replace-first-arg-in-append"`
+}
+
+type PtrEqualitySettings struct {
+	CheckIs bool `mapstructure:"check-is"`
 }
 
 type ReassignSettings struct {
