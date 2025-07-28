@@ -301,7 +301,7 @@ http_download_curl() {
     code=$(curl -w '%{http_code}' -sL -H "$header" -o "$local_file" "$source_url")
   fi
   if [ "$code" != "200" ]; then
-    log_debug "http_download_curl received HTTP status $code"
+    log_err "http_download_curl received HTTP status $code"
     return 1
   fi
   return 0
@@ -311,10 +311,15 @@ http_download_wget() {
   source_url=$2
   header=$3
   if [ -z "$header" ]; then
-    wget -q -O "$local_file" "$source_url"
+    code=$(wget --server-response --quiet -O "$local_file" "$source_url" 2>&1 | awk '/^  HTTP/{print $2}' | tail -n1)
   else
-    wget -q --header "$header" -O "$local_file" "$source_url"
+    code=$(wget --server-response --quiet --header "$header" -O "$local_file" "$source_url" 2>&1 | awk '/^  HTTP/{print $2}' | tail -n1)
   fi
+  if [ "$code" != "200" ]; then
+    log_err "http_download_wget received HTTP status $code"
+    return 1
+  fi
+  return 0
 }
 http_download() {
   log_debug "http_download $2"
