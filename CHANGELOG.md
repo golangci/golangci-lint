@@ -2,10 +2,9 @@ Follow the news and releases on [Mastodon](https://fosstodon.org/@golangcilint) 
 
 `golangci-lint` is a free and open-source project built by volunteers.
 
-If you value it, consider supporting us, we appreciate it! ❤️
+If you value it, consider supporting us, we appreciate it!
 
-[![Open Collective backers and sponsors](https://img.shields.io/badge/OpenCollective-Donate-blue?logo=opencollective&style=for-the-badge)](https://opencollective.com/golangci-lint)
-[![GitHub Sponsors](https://img.shields.io/badge/GitHub-Donate-blue?logo=github&style=for-the-badge)](https://github.com/sponsors/golangci)
+[![Donate](https://img.shields.io/badge/Donate-❤️-blue?style=for-the-badge)](https://donate.golangci.org)
 
 ### v2.3.1
 
