@@ -31,7 +31,7 @@ func main() {
 func rewriteDocs(replacements map[string]string) error {
 	madeReplacements := map[string]bool{}
 
-	err := filepath.Walk(filepath.Join("docs", "src", "docs"),
+	err := filepath.Walk(filepath.Join("docs", "content"),
 		func(path string, info os.FileInfo, err error) error {
 			if err != nil {
 				return err
@@ -90,6 +90,11 @@ func processDoc(path string, replacements map[string]string, madeReplacements ma
 }
 
 func buildTemplateContext() (map[string]string, error) {
+	latestVersion, err := github.GetLatestVersion()
+	if err != nil {
+		return nil, fmt.Errorf("get the latest version: %w", err)
+	}
+
 	snippets, err := NewExampleSnippetsExtractor().GetExampleSnippets()
 	if err != nil {
 		return nil, err
@@ -110,11 +115,6 @@ func buildTemplateContext() (map[string]string, error) {
 		return nil, fmt.Errorf("read CHANGELOG.md: %w", err)
 	}
 
-	latestVersion, err := github.GetLatestVersion()
-	if err != nil {
-		return nil, fmt.Errorf("get the latest version: %w", err)
-	}
-
 	exclusions, err := getExclusionPresets()
 	if err != nil {
 		return nil, fmt.Errorf("default exclusions: %w", err)
@@ -126,15 +126,30 @@ func buildTemplateContext() (map[string]string, error) {
 		"FormattersExample":               snippets.FormattersSettings,
 		"ConfigurationExample":            snippets.ConfigurationFile,
 		"LintersCommandOutputEnabledOnly": helps.Enable,
-		"EnabledByDefaultLinters":         getLintersListMarkdown(true, filepath.Join("assets", "linters-info.json")),
-		"DisabledByDefaultLinters":        getLintersListMarkdown(false, filepath.Join("assets", "linters-info.json")),
-		"Formatters":                      getLintersListMarkdown(false, filepath.Join("assets", "formatters-info.json")),
-		"ExclusionPresets":                exclusions,
-		"ThanksList":                      getThanksList(),
-		"RunHelpText":                     helps.RunCmdHelp,
-		"FmtHelpText":                     helps.FmtCmdHelp,
-		"ChangeLog":                       string(changeLog),
-		"LatestVersion":                   latestVersion,
+		"EnabledByDefaultLinters": getLintersListMarkdown(
+			true,
+			filepath.Join("assets", "linters-info.json"),
+			"linters",
+			latestVersion,
+		),
+		"DisabledByDefaultLinters": getLintersListMarkdown(
+			false,
+			filepath.Join("assets", "linters-info.json"),
+			"linters",
+			latestVersion,
+		),
+		"Formatters": getLintersListMarkdown(
+			false,
+			filepath.Join("assets", "formatters-info.json"),
+			"formatters",
+			latestVersion,
+		),
+		"ExclusionPresets": exclusions,
+		"ThanksList":       getThanksList(),
+		"RunHelpText":      helps.RunCmdHelp,
+		"FmtHelpText":      helps.FmtCmdHelp,
+		"ChangeLog":        string(changeLog),
+		"LatestVersion":    latestVersion,
 	}, nil
 }
 

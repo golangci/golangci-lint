@@ -51,7 +51,7 @@ func getThanksList() string {
 				addedAuthors[info.Author] = &authorDetails{
 					Linters: []string{lc.Name()},
 					Profile: fmt.Sprintf("[%[1]s](https://github.com/sponsors/%[1]s)", info.Author),
-					Avatar:  fmt.Sprintf(`<img src="https://github.com/%[1]s.png" alt="%[1]s" style="max-width: 100%%;" width="20px;" />`, info.Author),
+					Avatar:  getGitHubAvatar(info),
 				}
 			}
 
@@ -59,9 +59,11 @@ func getThanksList() string {
 			if _, ok := addedAuthors[info.Author]; ok {
 				addedAuthors[info.Author].Linters = append(addedAuthors[info.Author].Linters, lc.Name())
 			} else {
+				getGitHubAvatar(info)
 				addedAuthors[info.Author] = &authorDetails{
 					Linters: []string{lc.Name()},
 					Profile: fmt.Sprintf("[%[1]s](https://gitlab.com/%[1]s)", info.Author),
+					Avatar:  getGitHubAvatar(info),
 				}
 			}
 		}
@@ -77,11 +79,18 @@ func getThanksList() string {
 	}
 
 	for _, author := range authors {
-		lines = append(lines, fmt.Sprintf("|%s %s|%s|",
+		lines = append(lines, fmt.Sprintf("|<figure>%s<figcaption>%s</figcaption></figure>|%s|",
 			addedAuthors[author].Avatar, addedAuthors[author].Profile, strings.Join(addedAuthors[author].Linters, ", ")))
 	}
 
 	return strings.Join(lines, "\n")
+}
+
+func getGitHubAvatar(info authorInfo) string {
+	return fmt.Sprintf(
+		`<img src="https://github.com/%[1]s.png" style="max-width: 100%%;" width="50px;" title="%[1]s" alt="%[1]s" loading="lazy">`,
+		info.Author,
+	)
 }
 
 type authorInfo struct {
@@ -133,6 +142,9 @@ func extractInfo(lc *linter.Config) authorInfo {
 
 		case "OpenPeeDeeP":
 			info.Author = "dixonwille"
+
+		case "bosi":
+			info.Author = "bosix"
 
 		case "golangci":
 			return authorInfo{}

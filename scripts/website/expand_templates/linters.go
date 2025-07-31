@@ -15,10 +15,9 @@ import (
 	"gopkg.in/yaml.v3"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
+	"github.com/golangci/golangci-lint/v2/scripts/website/expand_templates/internal"
 	"github.com/golangci/golangci-lint/v2/scripts/website/types"
 )
-
-const listItemPrefix = "list-item-"
 
 const (
 	keyLinters    = "linters"
@@ -26,7 +25,7 @@ const (
 	keySettings   = "settings"
 )
 
-func getLintersListMarkdown(enabled bool, src string) string {
+func getLintersListMarkdown(enabled bool, src, section, latestVersion string) string {
 	linters, err := readJSONFile[[]*types.LinterWrapper](src)
 	if err != nil {
 		panic(err)
@@ -63,59 +62,43 @@ func getLintersListMarkdown(enabled bool, src string) string {
 		return strings.Compare(a.Name, b.Name)
 	})
 
-	lines := []string{
-		"|Name|Description|AutoFix|Since|",
-		"|----|-----------|-------|-----|",
-	}
+	cards := internal.NewCards()
 
 	for _, lc := range neededLcs {
-		line := fmt.Sprintf("|%s|%s|%v|%s|",
-			getName(lc),
-			getDesc(lc),
-			check(lc.CanAutoFix, "Auto fix supported"),
-			lc.Since,
+		cards.Add(internal.NewCard().
+			Link(fmt.Sprintf("/docs/usage/%s/configuration/#%s", section, lc.Name)).
+			Title(lc.Name).
+			Subtitle(getDesc(lc)).
+			Tag(getTag(lc, latestVersion)),
 		)
-		lines = append(lines, line)
 	}
 
-	return strings.Join(lines, "\n")
+	return cards.String()
 }
 
-func getName(lc *types.LinterWrapper) string {
-	name := spanWithID(listItemPrefix+lc.Name, "", "")
-
-	if hasSettings(lc.Name) && lc.Deprecation == nil {
-		name += fmt.Sprintf("[%[1]s&nbsp;%[2]s](#%[1]s \"%[1]s configuration\")", lc.Name, "<FaCog size={'0.8rem'} />")
-	} else {
-		name += fmt.Sprintf("%[1]s[%[2]s](#%[2]s \"%[2]s has no configuration\")", spanWithID(lc.Name, "", ""), lc.Name)
-	}
-
-	if lc.OriginalURL != "" {
-		icon := "<FaGithub size={'0.8rem'} />"
-		if strings.Contains(lc.OriginalURL, "gitlab") {
-			icon = "<FaGitlab size={'0.8rem'} />"
+func getTag(lc *types.LinterWrapper, latestVersion string) (content, style string) {
+	if lc.Deprecation != nil {
+		tagContent := "Deprecated"
+		if lc.Deprecation.Replacement != "" {
+			tagContent += fmt.Sprintf(" since %s", lc.Deprecation.Since)
 		}
 
-		name += fmt.Sprintf("&nbsp;[%s](%s)", span(lc.Name+" repository", icon), lc.OriginalURL)
+		return tagContent, "error"
 	}
 
-	if lc.Deprecation == nil {
-		return name
+	if compareVersion(lc.Since, latestVersion) {
+		return "New", "warning"
 	}
 
-	title := "deprecated"
-	if lc.Deprecation.Replacement != "" {
-		title += fmt.Sprintf(" since %s", lc.Deprecation.Since)
+	if lc.CanAutoFix {
+		return "Autofix", "info"
 	}
 
-	return name + "&nbsp;" + span(title, "⚠")
+	return "", ""
 }
 
-func check(b bool, title string) string {
-	if b {
-		return span(title, "✔")
-	}
-	return ""
+func compareVersion(a, b string) bool {
+	return a[:strings.LastIndex(a, ".")] == b[:strings.LastIndex(b, ".")]
 }
 
 func getDesc(lc *types.LinterWrapper) string {
@@ -140,35 +123,7 @@ func formatDesc(desc string) string {
 		runes = append(runes, '.')
 	}
 
-	return strings.ReplaceAll(string(runes), "\n", "<br/>")
-}
-
-func hasSettings(name string) bool {
-	tp := reflect.TypeOf(config.LintersSettings{})
-
-	for i := range tp.NumField() {
-		if strings.EqualFold(name, tp.Field(i).Name) {
-			return true
-		}
-	}
-
-	tp = reflect.TypeOf(config.FormatterSettings{})
-
-	for i := range tp.NumField() {
-		if strings.EqualFold(name, tp.Field(i).Name) {
-			return true
-		}
-	}
-
-	return false
-}
-
-func span(title, icon string) string {
-	return fmt.Sprintf(`<span title=%q>%s</span>`, title, icon)
-}
-
-func spanWithID(id, title, icon string) string {
-	return fmt.Sprintf(`<span id=%q title=%q>%s</span>`, id, title, icon)
+	return strings.NewReplacer("\n", "<br/>", `"`, `'`).Replace(string(runes))
 }
 
 type SettingSnippets struct {
@@ -225,6 +180,7 @@ func (e *ExampleSnippetsExtractor) GetExampleSnippets() (*SettingSnippets, error
 	return snippets, nil
 }
 
+//nolint:gocyclo // The complexity is expected because of raw YAML manipulations.
 func (e *ExampleSnippetsExtractor) extractExampleSnippets(example []byte) (*SettingSnippets, error) {
 	var data yaml.Node
 	if err := yaml.Unmarshal(example, &data); err != nil {
@@ -346,7 +302,27 @@ func (e *ExampleSnippetsExtractor) extractExampleSnippets(example []byte) (*Sett
 			return nil, errSnip
 		}
 
-		_, _ = builder.WriteString(fmt.Sprintf("### `%s` configuration\n\n%s", node.Value, snippet))
+		_, _ = builder.WriteString(fmt.Sprintf("## `%s` configuration\n\n", node.Value))
+
+		if node.Value == keyLinters || node.Value == keyFormatters {
+			baseTitle := []rune(node.Value)
+			r, _ := utf8.DecodeRuneInString(node.Value)
+			baseTitle[0] = unicode.ToUpper(r)
+
+			builder.WriteString(internal.NewCards().
+				Cols(2).
+				Add(internal.NewCard().
+					Link(fmt.Sprintf("/docs/usage/%s", node.Value)).
+					Title(string(baseTitle) + " Overview").
+					Icon("collection")).
+				Add(internal.NewCard().
+					Link(fmt.Sprintf("/docs/usage/%s/configuration", node.Value)).
+					Title(string(baseTitle) + "  Settings").
+					Icon("adjustments")).
+				String())
+		}
+
+		_, _ = builder.WriteString(fmt.Sprintf("\n\n%s", snippet))
 	}
 
 	overview, err := marshallSnippet(globalNode)
@@ -360,25 +336,11 @@ func (e *ExampleSnippetsExtractor) extractExampleSnippets(example []byte) (*Sett
 }
 
 func (e *ExampleSnippetsExtractor) getSettingSections(node, nextNode *yaml.Node) (string, error) {
-	linters, err := readJSONFile[[]*types.LinterWrapper](filepath.Join(e.assetsPath, fmt.Sprintf("%s-info.json", node.Value)))
-	if err != nil {
-		return "", err
-	}
-
-	lintersDesc := make(map[string]string)
-	for _, lc := range linters {
-		if lc.Internal {
-			continue
-		}
-
-		// it's important to use lc.Name() nor name because name can be alias
-		lintersDesc[lc.Name] = getDesc(lc)
-	}
-
-	builder := &strings.Builder{}
+	// Extract YAML settings
+	allNodes := make(map[string]*yaml.Node)
 
 	for i := 0; i < len(nextNode.Content); i += 2 {
-		r := &yaml.Node{
+		allNodes[nextNode.Content[i].Value] = &yaml.Node{
 			Kind:  yaml.MappingNode,
 			Tag:   nextNode.Tag,
 			Value: node.Value,
@@ -405,24 +367,114 @@ func (e *ExampleSnippetsExtractor) getSettingSections(node, nextNode *yaml.Node)
 				},
 			},
 		}
+	}
 
-		_, _ = fmt.Fprintf(builder, "### %s\n\n", nextNode.Content[i].Value)
-		_, _ = fmt.Fprintf(builder, "%s\n\n", lintersDesc[nextNode.Content[i].Value])
+	// Using linter information
+
+	linters, err := readJSONFile[[]*types.LinterWrapper](filepath.Join(e.assetsPath, fmt.Sprintf("%s-info.json", node.Value)))
+	if err != nil {
+		return "", err
+	}
+
+	builder := &strings.Builder{}
+	for _, lc := range linters {
+		if lc.Internal {
+			continue
+		}
+
+		// it's important to use lc.Name() nor name because name can be alias
+		_, _ = fmt.Fprintf(builder, "## %s\n\n", lc.Name)
+
+		writeTags(builder, lc)
+
+		if lc.Deprecation != nil {
+			continue
+		}
+
+		settings, ok := allNodes[lc.Name]
+		if !ok {
+			if hasSettings(lc.Name) {
+				return "", fmt.Errorf("can't find %s settings in .golangci.reference.yml", lc.Name)
+			}
+
+			_, _ = fmt.Fprintln(builder, "_No configuration_")
+
+			continue
+		}
+
 		_, _ = fmt.Fprintln(builder, "```yaml")
 
 		encoder := yaml.NewEncoder(builder)
 		encoder.SetIndent(2)
 
-		err := encoder.Encode(r)
+		err := encoder.Encode(settings)
 		if err != nil {
 			return "", err
 		}
 
 		_, _ = fmt.Fprintln(builder, "```")
 		_, _ = fmt.Fprintln(builder)
-		_, _ = fmt.Fprintf(builder, "[%s](#%s)\n\n", span("Back to the top", "<FaArrowUp />"), listItemPrefix+nextNode.Content[i].Value)
-		_, _ = fmt.Fprintln(builder)
 	}
 
 	return builder.String(), nil
+}
+
+func writeTags(builder *strings.Builder, lc *types.LinterWrapper) {
+	if lc == nil {
+		return
+	}
+
+	_, _ = fmt.Fprintf(builder, "%s\n\n", getDesc(lc))
+
+	_, _ = fmt.Fprintln(builder, internal.NewBadge().
+		Content(fmt.Sprintf("Since golangci-lint %s", lc.Since)).
+		Icon("calendar"))
+
+	switch {
+	case lc.IsDeprecated():
+		content := "Deprecated"
+		if lc.Deprecation.Replacement != "" {
+			content += fmt.Sprintf(" since %s", lc.Deprecation.Since)
+		}
+
+		_, _ = fmt.Fprintln(builder, internal.NewBadge().
+			Content(content).
+			Type("error").
+			Icon("sparkles"))
+
+	case lc.CanAutoFix:
+		_, _ = fmt.Fprintln(builder, internal.NewBadge().
+			Content("Autofix").
+			Type("info").
+			Icon("sparkles"))
+	}
+
+	if lc.OriginalURL != "" {
+		_, _ = fmt.Fprintln(builder, internal.NewBadge().
+			Content("Repository").
+			Link(lc.OriginalURL).
+			Icon("github"))
+	}
+
+	_, _ = fmt.Fprintln(builder)
+}
+
+func hasSettings(name string) bool {
+	tp := reflect.TypeOf(config.LintersSettings{})
+
+	for i := range tp.NumField() {
+		if strings.EqualFold(name, tp.Field(i).Name) {
+			return true
+		}
+	}
+
+	tp = reflect.TypeOf(config.FormatterSettings{})
+
+	for i := range tp.NumField() {
+		if strings.EqualFold(name, tp.Field(i).Name) {
+			return true
+		}
+	}
+
+	return false
 }
