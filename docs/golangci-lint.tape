@@ -1,4 +1,4 @@
-Output docs/static/demo.gif
+Output docs/static/images/demo.gif
 
 # NOTE: it should be run at the root of the repository.
 # vhs docs/golangci-lint.tape
