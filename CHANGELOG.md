@@ -7,6 +7,15 @@ If you value it, consider supporting us, we appreciate it! ❤️
 [![Open Collective backers and sponsors](https://img.shields.io/badge/OpenCollective-Donate-blue?logo=opencollective&style=for-the-badge)](https://opencollective.com/golangci-lint)
 [![GitHub Sponsors](https://img.shields.io/badge/GitHub-Donate-blue?logo=github&style=for-the-badge)](https://github.com/sponsors/golangci)
 
+### v2.3.1
+
+1. Linters bug fixes
+   * `gci`: from 0.13.6 to 0.13.7
+   * `gosec`: from 2.22.6 to 2.22.7
+   * `noctx`: from 0.3.5 to 0.4.0
+   * `wsl`: from 5.1.0 to 5.1.1
+   * tagliatelle: force upper case for custom initialisms
+
 ### v2.3.0
 
 1. Linters new features or changes
