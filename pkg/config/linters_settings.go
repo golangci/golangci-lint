@@ -238,6 +238,7 @@ type LintersSettings struct {
 	Funlen                   FunlenSettings                   `mapstructure:"funlen"`
 	GinkgoLinter             GinkgoLinterSettings             `mapstructure:"ginkgolinter"`
 	Gocognit                 GocognitSettings                 `mapstructure:"gocognit"`
+	GoCheckErrBeforeUse      GoCheckErrBeforeUseSettings      `mapstructure:"gocheckerrbeforeuse"`
 	GoChecksumType           GoChecksumTypeSettings           `mapstructure:"gochecksumtype"`
 	Goconst                  GoConstSettings                  `mapstructure:"goconst"`
 	Gocritic                 GoCriticSettings                 `mapstructure:"gocritic"`
@@ -476,6 +477,10 @@ type GinkgoLinterSettings struct {
 	ForbidSpecPollution        bool `mapstructure:"forbid-spec-pollution"`
 	ForceSucceedForFuncs       bool `mapstructure:"force-succeed"`
 	ForceAssertionDescription  bool `mapstructure:"force-assertion-description"`
+}
+
+type GoCheckErrBeforeUseSettings struct {
+	MaxAllowedDistance int `mapstructure:"max-allowed-distance"`
 }
 
 type GoChecksumTypeSettings struct {

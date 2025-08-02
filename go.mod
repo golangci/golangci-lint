@@ -15,6 +15,7 @@ require (
 	github.com/BurntSushi/toml v1.5.0
 	github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24
 	github.com/OpenPeeDeeP/depguard/v2 v2.2.1
+	github.com/T-Sh/go-check-err-before-use v1.0.0
 	github.com/alecthomas/chroma/v2 v2.20.0
 	github.com/alecthomas/go-check-sumtype v0.3.1
 	github.com/alexkohler/nakedret/v2 v2.0.6

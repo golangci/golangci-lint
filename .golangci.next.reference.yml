@@ -52,6 +52,7 @@ linters:
     - funlen
     - ginkgolinter
     - gocheckcompilerdirectives
+    - gocheckerrbeforeuse
     - gochecknoglobals
     - gochecknoinits
     - gochecksumtype
@@ -163,6 +164,7 @@ linters:
     - funlen
     - ginkgolinter
     - gocheckcompilerdirectives
+    - gocheckerrbeforeuse
     - gochecknoglobals
     - gochecknoinits
     - gochecksumtype
@@ -656,6 +658,12 @@ linters:
       # Force adding assertion descriptions to gomega matchers.
       # Default: false
       force-assertion-description: true
+
+    gocheckerrbeforeuse:
+      # Maximum allowable distance between receiving an error and handling it.
+      # Value must always be greater than or equal to 1.
+      # Default: 1
+      max-allowed-distance: 1
 
     gochecksumtype:
       # Presence of `default` case in switch statements satisfies exhaustiveness, if all members are not listed.

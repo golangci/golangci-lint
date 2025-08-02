@@ -788,6 +788,7 @@
             "funlen",
             "ginkgolinter",
             "gocheckcompilerdirectives",
+            "gocheckerrbeforeuse",
             "gochecknoglobals",
             "gochecknoinits",
             "gochecksumtype",

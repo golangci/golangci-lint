@@ -36,6 +36,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/gci"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/ginkgolinter"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/gocheckcompilerdirectives"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/gocheckerrbeforeuse"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/gochecknoglobals"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/gochecknoinits"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/gochecksumtype"
@@ -298,6 +299,10 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 		linter.NewConfig(gocheckcompilerdirectives.New()).
 			WithSince("v1.51.0").
 			WithURL("https://github.com/leighmcculloch/gocheckcompilerdirectives"),
+
+		linter.NewConfig(gocheckerrbeforeuse.New(&cfg.Linters.Settings.GoCheckErrBeforeUse)).
+			WithSince("v2.5.0").
+			WithURL("https://github.com/T-Sh/go-check-err-before-use"),
 
 		linter.NewConfig(gochecknoglobals.New()).
 			WithSince("v1.12.0").
