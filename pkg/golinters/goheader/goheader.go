@@ -8,6 +8,7 @@ import (
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/internal"
 )
 
 const linterName = "goheader"
@@ -22,7 +23,9 @@ func New(settings *config.GoHeaderSettings, replacer *strings.Replacer) *goanaly
 		}
 	}
 	var goheaderSettings goheader.Settings
-	_ = conf.FillSettings(&goheaderSettings)
+	if err := conf.FillSettings(&goheaderSettings); err != nil {
+		internal.LinterLogger.Fatalf("%s: invalid toolchain pattern: %s", linterName, err.Error())
+	}
 	return goanalysis.NewLinter(
 		linterName,
 		"Checks if file header matches to pattern",
