@@ -813,6 +813,7 @@
             "ineffassign",
             "interfacebloat",
             "intrange",
+            "iotamixing",
             "ireturn",
             "lll",
             "loggercheck",
@@ -2424,6 +2425,17 @@
           "properties": {
             "check-escaping-errors": {
               "description": "Check escaping variables of type error, may cause false positives.",
+              "type": "boolean",
+              "default": false
+            }
+          }
+        },
+        "iotamixingSettings": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "report-individual": {
+              "description": "Whether to report individual consts rather than just the const block.",
               "type": "boolean",
               "default": false
             }
@@ -4588,6 +4600,9 @@
             },
             "ineffassign": {
               "$ref": "#/definitions/settings/definitions/ineffassignSettings"
+            },
+            "iotamixing": {
+              "$ref": "#/definitions/settings/definitions/iotamixingSettings"
             },
             "ireturn": {
               "$ref": "#/definitions/settings/definitions/ireturnSettings"

@@ -8,6 +8,7 @@ require (
 	dev.gaijin.team/go/exhaustruct/v4 v4.0.0
 	github.com/4meepo/tagalign v1.4.3
 	github.com/Abirdcfly/dupword v0.1.6
+	github.com/AdminBenni/iota-mixing v0.0.5
 	github.com/AlwxSin/noinlineerr v1.0.5
 	github.com/Antonboom/errname v1.1.0
 	github.com/Antonboom/nilnil v1.1.0

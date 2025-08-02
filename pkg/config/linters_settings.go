@@ -256,6 +256,7 @@ type LintersSettings struct {
 	Inamedparam              INamedParamSettings              `mapstructure:"inamedparam"`
 	Ineffassign              IneffassignSettings              `mapstructure:"ineffassign"`
 	InterfaceBloat           InterfaceBloatSettings           `mapstructure:"interfacebloat"`
+	IotaMixing               IotaMixingSettings               `mapstructure:"iotamixing"`
 	Ireturn                  IreturnSettings                  `mapstructure:"ireturn"`
 	Lll                      LllSettings                      `mapstructure:"lll"`
 	LoggerCheck              LoggerCheckSettings              `mapstructure:"loggercheck"`
@@ -651,6 +652,10 @@ type IneffassignSettings struct {
 
 type InterfaceBloatSettings struct {
 	Max int `mapstructure:"max"`
+}
+
+type IotaMixingSettings struct {
+	ReportIndividual bool `mapstructure:"report-individual"`
 }
 
 type IreturnSettings struct {

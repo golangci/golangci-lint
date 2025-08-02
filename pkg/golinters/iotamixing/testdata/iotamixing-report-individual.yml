@@ -1,0 +1,6 @@
+version: "2"
+
+linters:
+  settings:
+    iotamixing:
+      report-individual: true
