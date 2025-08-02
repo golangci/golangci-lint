@@ -60,6 +60,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/ineffassign"
 	"github.com/golangci/golangci-lint/pkg/golinters/interfacebloat"
 	"github.com/golangci/golangci-lint/pkg/golinters/intrange"
+	"github.com/golangci/golangci-lint/pkg/golinters/iotamixing"
 	"github.com/golangci/golangci-lint/pkg/golinters/ireturn"
 	"github.com/golangci/golangci-lint/pkg/golinters/lll"
 	"github.com/golangci/golangci-lint/pkg/golinters/loggercheck"
@@ -535,6 +536,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithAutoFix().
 			WithURL("https://github.com/ckaznocha/intrange").
 			WithNoopFallback(cfg, linter.IsGoLowerThanGo122()),
+
+		linter.NewConfig(iotamixing.New(&cfg.LintersSettings.IotaMixing)).
+			WithSince("v2.4.0").
+			WithPresets(linter.PresetBugs).
+			WithURL("github.com/AdminBenni/iota-mixing"),
 
 		linter.NewConfig(ireturn.New(&cfg.LintersSettings.Ireturn)).
 			WithSince("v1.43.0").

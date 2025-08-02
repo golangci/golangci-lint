@@ -255,6 +255,7 @@ type LintersSettings struct {
 	ImportAs        ImportAsSettings
 	Inamedparam     INamedParamSettings
 	InterfaceBloat  InterfaceBloatSettings
+	IotaMixing      IotaMixingSettings
 	Ireturn         IreturnSettings
 	Lll             LllSettings
 	LoggerCheck     LoggerCheckSettings
@@ -702,6 +703,10 @@ type INamedParamSettings struct {
 
 type InterfaceBloatSettings struct {
 	Max int `mapstructure:"max"`
+}
+
+type IotaMixingSettings struct {
+	ReportIndividual bool `mapstructure:"report-individual"`
 }
 
 type IreturnSettings struct {

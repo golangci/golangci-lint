@@ -68,6 +68,7 @@ linters:
     - ineffassign
     - interfacebloat
     - intrange
+    - iotamixing
     - ireturn
     - lll
     - loggercheck
@@ -184,6 +185,7 @@ linters:
     - ineffassign
     - interfacebloat
     - intrange
+    - iotamixing
     - ireturn
     - lll
     - loggercheck
@@ -2031,6 +2033,11 @@ linters-settings:
     # The maximum number of methods allowed for an interface.
     # Default: 10
     max: 5
+
+  iotamixing:
+    # Whether to report individual consts rather than just the const block.
+    # Default: false
+    report-individual: true
 
   ireturn:
     # List of interfaces to allow.
