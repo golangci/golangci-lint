@@ -1,9 +1,7 @@
 ---
 title: Linters
-weight: 2
+weight: 3
 excludeSearch: true
-sidebar:
-  open: true
 ---
 
 To see a list of supported linters and which linters are enabled/disabled:

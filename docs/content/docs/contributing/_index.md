@@ -1,6 +1,6 @@
 ---
 title: Contributing
-weight: 4
+weight: 6
 ---
 
 {{< cards >}}

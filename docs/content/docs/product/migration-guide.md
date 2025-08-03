@@ -15,7 +15,7 @@ Be aware that **comments inside a configuration file are not migrated.** You nee
 
 **Deprecated options from v1 or unknown fields are not migrated.**
 
-The migration file format is based on the extension of the [configuration file](/docs/usage/configuration/file).
+The migration file format is based on the extension of the [configuration file](/docs/configuration/file).
 The format can be overridden by using the `--format` flag:
 
 ```bash

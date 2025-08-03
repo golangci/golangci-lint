@@ -1,9 +1,7 @@
 ---
 title: Formatters
-weight: 3
+weight: 4
 excludeSearch: true
-sidebar:
-  open: true
 ---
 
 To see a list of supported formatters and which formatters are enabled/disabled:

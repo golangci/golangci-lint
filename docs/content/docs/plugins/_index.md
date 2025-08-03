@@ -1,6 +1,6 @@
 ---
 title: Plugins
-weight: 5
+weight: 7
 ---
 
 {{< cards >}}

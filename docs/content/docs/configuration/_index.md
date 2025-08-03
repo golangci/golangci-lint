@@ -1,8 +1,6 @@
 ---
 title: Configuration
-weight: 1
-sidebar:
-  open: true
+weight: 2
 ---
 
 The config file has lower priority than command-line options.
@@ -13,8 +11,8 @@ Slice options (e.g. list of enabled/disabled linters) are combined from the comm
 ## More
 
 {{< cards cols=2 >}}
-  {{< card link="/docs/usage/configuration/cli" title="Command Line" icon="terminal" >}}
-  {{< card link="/docs/usage/configuration/file" title="Configuration File" icon="adjustments" >}}
+  {{< card link="/docs/configuration/cli" title="Command Line" icon="terminal" >}}
+  {{< card link="/docs/configuration/file" title="Configuration File" icon="adjustments" >}}
 {{< /cards >}}
 
 

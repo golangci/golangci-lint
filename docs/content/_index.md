@@ -45,20 +45,20 @@ params:
     title="Nice outputs"
     subtitle="Text with colors and source code lines, JSON, tab, HTML, Checkstyle, Code-Climate, JUnit-XML, TeamCity, SARIF."
     style="background: radial-gradient(ellipse at 50% 80%,rgba(221,210,59,0.15),hsla(0,0%,100%,0));"
-    link="/docs/usage/configuration/file/#output-configuration" >}}
+    link="/docs/configuration/file/#output-configuration" >}}
   {{< hextra/feature-card
     icon="eye-off"
     title="Minimum number of false positives"
     subtitle="Tuned default settings."
-    link="/docs/usage/linters/false-positives" >}}
+    link="/docs/linters/false-positives" >}}
   {{< hextra/feature-card
     icon="collection"
     title="A lot of linters"
     subtitle="No need to install them."
-    link="/docs/usage/linters" >}}
+    link="/docs/linters" >}}
   {{< hextra/feature-card
     icon="document-text"
     title="YAML-based configuration"
     subtitle="Easy to read and maintain."
-    link="/docs/usage/configuration/file" >}}
+    link="/docs/configuration/file" >}}
 {{< /hextra/feature-grid >}}

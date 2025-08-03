@@ -1,6 +1,6 @@
 ---
 title: Product
-weight: 3
+weight: 5
 ---
 
 {{< cards cols=2 >}}

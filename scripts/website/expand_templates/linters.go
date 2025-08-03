@@ -66,7 +66,7 @@ func getLintersListMarkdown(enabled bool, src, section, latestVersion string) st
 
 	for _, lc := range neededLcs {
 		cards.Add(internal.NewCard().
-			Link(fmt.Sprintf("/docs/usage/%s/configuration/#%s", section, lc.Name)).
+			Link(fmt.Sprintf("/docs/%s/configuration/#%s", section, lc.Name)).
 			Title(lc.Name).
 			Subtitle(getDesc(lc)).
 			Tag(getTag(lc, latestVersion)),
@@ -312,11 +312,11 @@ func (e *ExampleSnippetsExtractor) extractExampleSnippets(example []byte) (*Sett
 			builder.WriteString(internal.NewCards().
 				Cols(2).
 				Add(internal.NewCard().
-					Link(fmt.Sprintf("/docs/usage/%s", node.Value)).
+					Link(fmt.Sprintf("/docs/%s", node.Value)).
 					Title(string(baseTitle) + " Overview").
 					Icon("collection")).
 				Add(internal.NewCard().
-					Link(fmt.Sprintf("/docs/usage/%s/configuration", node.Value)).
+					Link(fmt.Sprintf("/docs/%s/configuration", node.Value)).
 					Title(string(baseTitle) + "  Settings").
 					Icon("adjustments")).
 				String())

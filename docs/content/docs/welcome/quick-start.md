@@ -41,7 +41,7 @@ Pass `-E/--enable` to enable linter and `-D/--disable` to disable:
 golangci-lint run --default=none -E errcheck
 ```
 
-More information about available linters can be found in the [linters page](/docs/usage/linters/).
+More information about available linters can be found in the [linters page](/docs/linters/).
 
 ## Formatting
 
@@ -58,4 +58,4 @@ golangci-lint fmt dir1 dir2/...
 golangci-lint fmt file1.go
 ```
 
-More information about available formatters can be found in the [formatters page](/docs/usage/formatters/).
+More information about available formatters can be found in the [formatters page](/docs/formatters/).

@@ -50,10 +50,10 @@ menu:
         color: green
     - identifier: linters
       name: Linters
-      pageRef: /docs/usage/linters/
+      pageRef: /docs/linters/
       weight: 3
     - name: Formatters
-      pageRef: /docs/usage/formatters/
+      pageRef: /docs/formatters/
       weight: 4
     - name: Search
       weight: 5

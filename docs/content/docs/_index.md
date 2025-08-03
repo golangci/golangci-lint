@@ -15,12 +15,12 @@ title: 'Golangci-lint Documentation'
     subtitle="Get ready to use golangci-lint"
     icon="arrow-circle-right" >}}
 {{< card
-    link="/docs/usage/linters"
+    link="/docs/linters"
     title="Linters"
     subtitle="List of all the linters"
     icon="arrow-circle-right" >}}
 {{< card
-    link="/docs/usage/formatters"
+    link="/docs/formatters"
     title="Formatters"
     subtitle="List of all the formatters"
     icon="arrow-circle-right" >}}
