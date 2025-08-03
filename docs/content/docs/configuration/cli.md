@@ -3,7 +3,12 @@ title: Command-Line
 weight: 1
 ---
 
-## run
+```console
+$ golangci-lint -h
+{.CmdRootHelpText}
+```
+
+## `run`
 
 {{< cards >}}
     {{< card link="/docs/linters" title="Linters Overview" icon="collection" >}}
@@ -11,9 +16,9 @@ weight: 1
     {{< card link="/docs/linters/configuration/" title="Linter Settings" icon="adjustments" >}}
 {{< /cards >}}
 
-```sh
+```console
 $ golangci-lint run -h
-{.RunHelpText}
+{.CmdRunHelpText}
 ```
 
 When the `--cpu-profile-path` or `--mem-profile-path` arguments are specified,
@@ -22,21 +27,84 @@ golangci-lint writes runtime profiling data in the format expected by the [pprof
 When the `--trace-path` argument is specified, `golangci-lint` writes runtime tracing data in the format expected by
 the `go tool trace` command and visualization tool.
 
-### Cache
+## fmt
+
+{{< cards >}}
+{{< card link="/docs/formatters" title="Formatters Overview" icon="collection" >}}
+{{< card link="/docs/configuration/file/#formatters-configuration" title="Global Configuration" icon="adjustments" >}}
+{{< card link="/docs/formatters/configuration/" title="Formatter Settings" icon="adjustments" >}}
+{{< /cards >}}
+
+```console
+$ golangci-lint fmt -h
+{.CmdFmtHelpText}
+```
+
+## `migrate`
+
+```console
+$ golangci-lint migrate -h
+{.CmdMigrateHelpText}
+```
+
+## `formatters`
+
+```console
+$ golangci-lint formatters -h
+{.CmdFormattersHelpText}
+```
+
+## `help`
+
+```console
+$ golangci-lint help -h
+{.CmdHelpText}
+```
+
+## `linters`
+
+```console
+$ golangci-lint linters -h
+{.CmdLintersHelpText}
+```
+
+## `cache`
 
 Golangci-lint stores its cache in the subdirectory `golangci-lint` inside the [default user cache directory](https://pkg.go.dev/os#UserCacheDir).
 
 You can override the default cache directory with the environment variable `GOLANGCI_LINT_CACHE`; the path must be absolute.
 
-## fmt
+The cache is only used by `golangci-lint run` (linters).
 
-{{< cards >}}
-    {{< card link="/docs/formatters" title="Formatters Overview" icon="collection" >}}
-    {{< card link="/docs/configuration/file/#formatters-configuration" title="Global Configuration" icon="adjustments" >}}
-    {{< card link="/docs/formatters/configuration/" title="Formatter Settings" icon="adjustments" >}}
-{{< /cards >}}
+```console
+$ golangci-lint cache -h
+{.CmdCacheHelpText}
+```
 
-```sh
-$ golangci-lint fmt -h
-{.FmtHelpText}
+## `config`
+
+```console
+$ golangci-lint config -h
+{.CmdConfigHelpText}
+```
+
+## `custom`
+
+```console
+$ golangci-lint custom -h
+{.CmdCustomHelpText}
+```
+
+## `version`
+
+```console
+$ golangci-lint version -h
+{.CmdVersionHelpText}
+```
+
+## `completion`
+
+```console
+$ golangci-lint completion -h
+{.CmdCompletionHelpText}
 ```
