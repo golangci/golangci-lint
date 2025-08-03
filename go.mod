@@ -5,7 +5,7 @@ go 1.23.0
 require (
 	4d63.com/gocheckcompilerdirectives v1.3.0
 	4d63.com/gochecknoglobals v0.2.2
-	github.com/4meepo/tagalign v1.4.2
+	github.com/4meepo/tagalign v1.4.3
 	github.com/Abirdcfly/dupword v0.1.6
 	github.com/AlwxSin/noinlineerr v1.0.5
 	github.com/Antonboom/errname v1.1.0
@@ -146,6 +146,7 @@ require (
 require (
 	codeberg.org/chavacava/garif v0.2.0 // indirect
 	github.com/Masterminds/semver/v3 v3.3.1 // indirect
+	github.com/alfatraining/structtag v1.0.0 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/ccojocar/zxcvbn-go v1.0.4 // indirect
