@@ -5,6 +5,12 @@ weight: 1
 
 ## run
 
+{{< cards >}}
+    {{< card link="/docs/linters" title="Linters Overview" icon="collection" >}}
+    {{< card link="/docs/configuration/file/#linters-configuration" title="Global Configuration" icon="adjustments" >}}
+    {{< card link="/docs/linters/configuration/" title="Linter Settings" icon="adjustments" >}}
+{{< /cards >}}
+
 ```sh
 $ golangci-lint run -h
 {.RunHelpText}
@@ -23,6 +29,12 @@ Golangci-lint stores its cache in the subdirectory `golangci-lint` inside the [d
 You can override the default cache directory with the environment variable `GOLANGCI_LINT_CACHE`; the path must be absolute.
 
 ## fmt
+
+{{< cards >}}
+    {{< card link="/docs/formatters" title="Formatters Overview" icon="collection" >}}
+    {{< card link="/docs/configuration/file/#formatters-configuration" title="Global Configuration" icon="adjustments" >}}
+    {{< card link="/docs/formatters/configuration/" title="Formatter Settings" icon="adjustments" >}}
+{{< /cards >}}
 
 ```sh
 $ golangci-lint fmt -h
