@@ -16,6 +16,12 @@ golangci-lint writes runtime profiling data in the format expected by the [pprof
 When the `--trace-path` argument is specified, `golangci-lint` writes runtime tracing data in the format expected by
 the `go tool trace` command and visualization tool.
 
+### Cache
+
+Golangci-lint stores its cache in the subdirectory `golangci-lint` inside the [default user cache directory](https://pkg.go.dev/os#UserCacheDir).
+
+You can override the default cache directory with the environment variable `GOLANGCI_LINT_CACHE`; the path must be absolute.
+
 ## fmt
 
 ```sh
