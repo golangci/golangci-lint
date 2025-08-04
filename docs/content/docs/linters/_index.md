@@ -10,7 +10,7 @@ To see a list of supported linters and which linters are enabled/disabled:
 golangci-lint help linters
 ```
 
-To see a list of linters enabled by your configuration use:
+To see a list of linters enabled by your configuration, use:
 
 ```bash
 golangci-lint linters

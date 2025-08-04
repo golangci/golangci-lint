@@ -19,12 +19,12 @@ The site is based on [hextra](https://github.com/imfing/hextra) theme.
 
 We use templates like `{.SomeField}` inside our `md` files.
 
-There templates are expanded by running `make website_expand_templates` in the root of the repository.  
+These templates are expanded by running `make website_expand_templates` in the root of the repository.  
 It runs script `scripts/website/expand_templates/` that rewrites `md` files with replaced templates.
 
 ## Hosting
 
-We use GitHub Pages as static website hosting and CD.
+We use GitHub Pages for static website hosting and CD.
 
 GitHub deploys the website to production after merging anything to a `main` branch.
 
@@ -35,17 +35,17 @@ Install Hugo (v0.148.1 or newer).
 Run:
 
 ```bash
- hugo server --buildDrafts --disableFastRender
+hugo server --buildDrafts --disableFastRender
 ```
 
-And navigate to `http://localhost:1313` after successful build.
+And navigate to `http://localhost:1313` after a successful build.
 
-There is no need to restart Hugo server almost for all changes: it supports hot reload.  
+There is no need to restart the Hugo server for almost all changes: it supports hot reload.  
 Also, there is no need to refresh a webpage: hot reload updates changed content on the open page.
 
 ## Website Build
 
-To do it run:
+To do this, run:
 
 ```bash
 make website_expand_templates
