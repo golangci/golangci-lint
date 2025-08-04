@@ -1,5 +1,6 @@
 ---
 title: Module Plugin System
+weight: 1
 ---
 
 > [!TIP]

@@ -1,5 +1,6 @@
 ---
 title: Go Plugin System
+weight: 2
 ---
 
 {{< callout type="warning" >}}
