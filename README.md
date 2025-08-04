@@ -13,8 +13,8 @@ integrates with all major IDEs, and includes over a hundred linters.
 
 ## Install `golangci-lint`
 
-- [On my machine](https://golangci-lint.run/welcome/install/#local-installation);
-- [On CI/CD systems](https://golangci-lint.run/welcome/install/#ci-installation).
+- [On my machine](https://golangci-lint.run/docs/welcome/install/#local-installation);
+- [On CI/CD systems](https://golangci-lint.run/docs/welcome/install/#ci-installation).
 
 ## Documentation
 
@@ -31,7 +31,7 @@ Documentation is hosted at https://golangci-lint.run.
 
 [![Open Collective backers and sponsors](https://img.shields.io/badge/OpenCollective-Donate-blue?logo=opencollective&style=for-the-badge)](https://opencollective.com/golangci-lint)
 [![GitHub Sponsors](https://img.shields.io/badge/GitHub-Donate-blue?logo=github&style=for-the-badge)](https://github.com/sponsors/golangci)
-[![Linter Authors](https://img.shields.io/badge/Linter_Authors-Donate-blue?style=for-the-badge)](https://golangci-lint.run/product/thanks/)
+[![Linter Authors](https://img.shields.io/badge/Linter_Authors-Donate-blue?style=for-the-badge)](https://golangci-lint.run/docs/product/thanks/)
 
 `golangci-lint` is a free and open-source project built by volunteers.
 
@@ -47,7 +47,7 @@ If you value it, consider supporting us, we appreciate it! :heart:
 
 ## Contributors
 
-This project exists thanks to all the people who contribute. [How to contribute](https://golangci-lint.run/contributing/quick-start/).
+This project exists thanks to all the people who contribute. [How to contribute](https://golangci-lint.run/docs/contributing/).
 
 <a href="https://github.com/golangci/golangci-lint/graphs/contributors">
   <img src="https://opencollective.com/golangci-lint/contributors.svg?width=890&button=false&skip=golangcidev,CLAassistant,renovate,fossabot,golangcibot,kortschak,golangci-releaser,dependabot%5Bbot%5D" />

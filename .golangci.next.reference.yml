@@ -11,7 +11,7 @@ version: "2"
 linters:
   # Default set of linters.
   # The value can be:
-  # - `standard`: https://golangci-lint.run/linters/#enabled-by-default
+  # - `standard`: https://golangci-lint.run/docs/linters/#enabled-by-default
   # - `all`: enables all linters by default.
   # - `none`: disables all linters by default.
   # - `fast`: enables only linters considered as "fast" (`golangci-lint help linters --json | jq '[ .[] | select(.fast==true) ] | map(.name)'`).

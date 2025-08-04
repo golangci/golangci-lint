@@ -55,7 +55,7 @@ func (v Validator) validateLintersNames(cfg *config.Linters) error {
 			if lc.IsDeprecated() && lc.Deprecation.Level > linter.DeprecationWarning {
 				v.m.log.Warnf("The linter %q is deprecated (step 2) and deactivated. "+
 					"It should be removed from the list of disabled linters. "+
-					"https://golangci-lint.run/product/roadmap/#linter-deprecation-cycle", lc.Name())
+					"https://golangci-lint.run/docs/product/roadmap/#linter-deprecation-cycle", lc.Name())
 			}
 		}
 	}
