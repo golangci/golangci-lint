@@ -68,7 +68,17 @@ menu:
     - identifier: donate
       name: "Donate"
       url: "https://donate.golangci.org"
+      weight: 1
+    - identifier: more
+      name: More
+      params:
+        type: separator
       weight: 2
+    - identifier: doc-v1
+      name: "Documentation v1"
+      url: "https://golangci.github.io/legacy-v1-doc/"
+      weight: 3
+
 
 params:
   description: Golangci-lint is a fast linters runner for Go.
