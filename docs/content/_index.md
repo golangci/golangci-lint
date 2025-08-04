@@ -9,7 +9,7 @@ params:
 
 <div class="hx-mt-6 hx-mb-6">
 {{< hextra/hero-headline >}}
-  Golangci-lint is a fast linters runner for Go.
+  Golangci-lint is a fast linters runner for Go
 {{< /hextra/hero-headline >}}
 </div>
 

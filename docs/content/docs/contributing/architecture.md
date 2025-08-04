@@ -32,7 +32,7 @@ Also, depending on the enabled linters set some parsing of the source code can b
 
 Packages loading starts here:
 
-```go {base_url="https://github.com/golangci/golangci-lint/blob/main/", filename="pkg/lint/package.go"}
+```go {base_url="https://github.com/golangci/golangci-lint/blob/HEAD/", filename="pkg/lint/package.go"}
 func (l *PackageLoader) Load(ctx context.Context, linters []*linter.Config) (pkgs, deduplicatedPkgs []*packages.Package, err error) {
 	loadMode := findLoadMode(linters)
 
@@ -72,7 +72,7 @@ func (lc *Config) WithLoadForGoAnalysis() *Config {
 ```
 
 After finding a load mode, we run `go/packages`: 
-he library get list of dirs (or `./...` as the default value) as input and outputs list of packages and requested information about them:
+the library get list of dirs (or `./...` as the default value) as input and outputs list of packages and requested information about them:
 filenames, type information, AST, etc.
 
 ## Run Linters
@@ -244,5 +244,3 @@ $ tree -L 1 ./pkg/printers/ | grep -v test
     {{< filetree/file name="text.go" >}}
   {{< /filetree/folder >}}
 {{< /filetree/container >}}
-
-
