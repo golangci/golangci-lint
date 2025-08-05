@@ -1,0 +1,87 @@
+name: Auto Tag for Alauda
+
+on:
+  push:
+    branches:
+      - 'alauda-v*'
+
+permissions:
+  contents: write  # create tags and releases
+  packages: write  # upload packages
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # fetch all tags
+
+      - name: Set up Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Extract version and tag prefix
+        id: extract
+        run: |
+          BRANCH_NAME="${GITHUB_REF#refs/heads/}"
+          echo "Branch: $BRANCH_NAME"
+
+          PREFIX="${BRANCH_NAME%%-*}"  # alauda
+          BASE_VERSION="${BRANCH_NAME#${PREFIX}-}"  # v0.62.1
+
+          VERSION_NO_V="${BASE_VERSION#v}"              # 0.62.1
+          MAJOR=$(echo "$VERSION_NO_V" | cut -d. -f1)
+          MINOR=$(echo "$VERSION_NO_V" | cut -d. -f2)
+          PATCH=$(echo "$VERSION_NO_V" | cut -d. -f3)
+
+          echo "MAJOR: $MAJOR, MINOR: $MINOR, PATCH: $PATCH"
+
+          # PATCH + 1
+          NEXT_PATCH=$((PATCH + 1))
+          echo "NEXT_PATCH=$NEXT_PATCH"
+
+          NEXT_VERSION="v${MAJOR}.${MINOR}.${NEXT_PATCH}"   # v0.62.2
+          echo "NEXT_VERSION=$NEXT_VERSION"
+
+          TAG_PREFIX="${NEXT_VERSION}-${PREFIX}"  # v0.62.2-alauda
+          echo "TAG_PREFIX=$TAG_PREFIX"
+
+          echo "prefix=$PREFIX" >> $GITHUB_OUTPUT
+          echo "base_version=$BASE_VERSION" >> $GITHUB_OUTPUT
+          echo "tag_prefix=$TAG_PREFIX" >> $GITHUB_OUTPUT
+
+      - name: Find latest tag with this prefix
+        id: latest
+        run: |
+          TAG_PREFIX="${{ steps.extract.outputs.tag_prefix }}"
+          echo "Looking for tags with prefix: $TAG_PREFIX"
+
+          EXISTING_TAGS=$(git tag --list "${TAG_PREFIX}-*" | sort -V)
+          echo "Existing tags: $EXISTING_TAGS"
+
+          MAX_INDEX=-1
+          for tag in $EXISTING_TAGS; do
+            NUM=${tag##*-}
+            if [[ "$NUM" =~ ^[0-9]+$ && "$NUM" -gt "$MAX_INDEX" ]]; then
+              MAX_INDEX=$NUM
+            fi
+          done
+
+          NEW_INDEX=$((MAX_INDEX + 1))
+          NEW_TAG="${TAG_PREFIX}-${NEW_INDEX}"
+
+          echo "new_tag=$NEW_TAG" >> $GITHUB_OUTPUT
+
+      - name: Create and push new tag
+        run: |
+          NEW_TAG="${{ steps.latest.outputs.new_tag }}"
+          git tag "$NEW_TAG"
+          git push origin "$NEW_TAG"
+
+  release-alauda:
+    name: Release Alauda
+    needs: [tag]
+    uses: ./.github/workflows/reusable-release-alauda.yaml

@@ -1,0 +1,16 @@
+name: Release Alauda
+
+on:
+  push:
+    tags:
+      - "v*-alauda-*"
+  workflow_dispatch:
+
+permissions:
+  contents: write  # create releases
+  packages: write  # upload packages
+
+jobs:
+  release-alauda:
+    name: Release Alauda
+    uses: ./.github/workflows/reusable-release-alauda.yaml
