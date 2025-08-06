@@ -1,3 +1,4 @@
 .hugo_build.lock
 public/
 /static/jsonschema/
+resources/
