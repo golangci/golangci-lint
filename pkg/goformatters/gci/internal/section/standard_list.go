@@ -1,6 +1,6 @@
 package section
 
-// Code generated based on go1.25rc1 X:boringcrypto,arenas,synctest,jsonv2. DO NOT EDIT.
+// Code generated based on go1.25rc3 X:boringcrypto,arenas,synctest,jsonv2. DO NOT EDIT.
 
 var standardPackages = map[string]struct{}{
 	"archive/tar":            {},
