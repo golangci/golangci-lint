@@ -35,7 +35,10 @@ Install Hugo (v0.148.1 or newer).
 Run:
 
 ```bash
-hugo server --buildDrafts --disableFastRender
+# (if in the root of the repository)
+make docs_serve
+# OR (if inside the docs/ folder)
+make serve
 ```
 
 And navigate to `http://localhost:1313` after a successful build.
@@ -48,5 +51,6 @@ Also, there is no need to refresh a webpage: hot reload updates changed content 
 To do this, run:
 
 ```bash
+# (only in the root of the repository)
 make website_expand_templates
 ```

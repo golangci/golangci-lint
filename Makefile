@@ -90,9 +90,6 @@ hyperfine:
 $(BINARY): FORCE
 	go build -o $@ ./cmd/golangci-lint
 
-docs/static/demo.gif: FORCE
-	vhs docs/golangci-lint.tape
-
 assets/github-action-config.json: FORCE $(BINARY)
 	# go run ./scripts/gen_github_action_config/main.go $@
 	cd ./scripts/gen_github_action_config/; go run . ../../$@
@@ -101,6 +98,23 @@ go.mod: FORCE
 	go mod tidy
 	go mod verify
 go.sum: go.mod
+
+# Documentation
+
+docs_serve:
+	@make -C ./docs serve
+.PHONY: docs_serve
+
+docs_reset:
+	@make -C ./docs reset
+.PHONY: docs_reset
+
+docs_clean:
+	@make -C ./docs clean
+.PHONY: docs_clean
+
+docs/static/demo.gif: FORCE
+	vhs docs/golangci-lint.tape
 
 website_copy_jsonschema:
 	 go run ./scripts/website/copy_jsonschema/
