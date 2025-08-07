@@ -79,5 +79,5 @@ linters:
 The configuration file can be validated with the JSON Schema: [custom-gcl.jsonschema.json](https://golangci-lint.run/jsonschema/custom-gcl.jsonschema.json)
 
 ```yml {filename=".custom-gcl.yml"}
-{ .CustomGCLReference }
+{{% embed file=".tmp/.custom-gcl.reference.yml" %}}
 ```
