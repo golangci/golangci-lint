@@ -6,6 +6,8 @@ If you value it, consider supporting us, we appreciate it!
 
 [![Donate](https://img.shields.io/badge/Donate-❤️-blue?style=for-the-badge)](https://donate.golangci.org)
 
+<!-- START --->
+
 ### v2.3.1
 
 1. Linters bug fixes

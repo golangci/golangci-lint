@@ -1,15 +1,30 @@
 package main
 
 import (
-	"fmt"
+	"io"
 	"os"
+	"path/filepath"
 )
 
-func getPluginReference() (string, error) {
-	reference, err := os.ReadFile(".custom-gcl.reference.yml")
+func copyPluginReference(dir string) error {
+	in, err := os.Open(".custom-gcl.reference.yml")
 	if err != nil {
-		return "", fmt.Errorf("can't read .custom-gcl.reference.yml: %w", err)
+		return err
 	}
 
-	return string(reference), nil
+	defer func() { _ = in.Close() }()
+
+	out, err := os.Create(filepath.Join(dir, ".custom-gcl.reference.yml"))
+	if err != nil {
+		return err
+	}
+
+	defer func() { _ = out.Close() }()
+
+	_, err = io.Copy(out, in)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

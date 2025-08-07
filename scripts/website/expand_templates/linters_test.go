@@ -1,7 +1,6 @@
 package main
 
 import (
-	"os"
 	"path/filepath"
 	"testing"
 
@@ -13,7 +12,7 @@ func Test_ExampleSnippetsExtractor_GetExampleSnippets(t *testing.T) {
 
 	e := &ExampleSnippetsExtractor{
 		referencePath: "../../../.golangci.next.reference.yml",
-		assetsPath:    filepath.Join("..", "..", "..", "assets"),
+		assetsPath:    filepath.Join("..", "..", "..", "docs", "data"),
 	}
 
 	m, err := e.GetExampleSnippets()
@@ -21,12 +20,12 @@ func Test_ExampleSnippetsExtractor_GetExampleSnippets(t *testing.T) {
 
 	t.Log(m)
 
-	err = os.WriteFile("./ConfigurationFile.md", []byte(m.ConfigurationFile), 0644)
+	err = saveToJSONFile("./ConfigurationFile.json", m.ConfigurationFile)
 	require.NoError(t, err)
 
-	err = os.WriteFile("./LintersSettings.md", []byte(m.LintersSettings), 0644)
+	err = saveToJSONFile("./LintersSettings.json", m.LintersSettings)
 	require.NoError(t, err)
 
-	err = os.WriteFile("./FormattersSettings.md", []byte(m.FormattersSettings), 0644)
+	err = saveToJSONFile("./FormattersSettings.json", m.FormattersSettings)
 	require.NoError(t, err)
 }
