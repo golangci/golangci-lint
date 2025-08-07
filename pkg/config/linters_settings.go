@@ -838,7 +838,7 @@ type StaticCheckSettings struct {
 }
 
 func (s *StaticCheckSettings) HasConfiguration() bool {
-	return len(s.Initialisms) > 0 || len(s.HTTPStatusCodeWhitelist) > 0 || len(s.DotImportWhitelist) > 0 || len(s.Checks) > 0
+	return s.Initialisms == nil || s.HTTPStatusCodeWhitelist == nil || s.DotImportWhitelist == nil || s.Checks == nil
 }
 
 type TagAlignSettings struct {

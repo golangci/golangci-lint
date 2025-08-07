@@ -79,19 +79,19 @@ func createConfig(settings *config.StaticCheckSettings) *scconfig.Config {
 		HTTPStatusCodeWhitelist: settings.HTTPStatusCodeWhitelist,
 	}
 
-	if len(cfg.Checks) == 0 {
+	if cfg.Checks == nil {
 		cfg.Checks = defaultChecks
 	}
 
-	if len(cfg.Initialisms) == 0 {
+	if cfg.Initialisms == nil {
 		cfg.Initialisms = append(cfg.Initialisms, scconfig.DefaultConfig.Initialisms...)
 	}
 
-	if len(cfg.DotImportWhitelist) == 0 {
+	if cfg.DotImportWhitelist == nil {
 		cfg.DotImportWhitelist = append(cfg.DotImportWhitelist, scconfig.DefaultConfig.DotImportWhitelist...)
 	}
 
-	if len(cfg.HTTPStatusCodeWhitelist) == 0 {
+	if cfg.HTTPStatusCodeWhitelist == nil {
 		cfg.HTTPStatusCodeWhitelist = append(cfg.HTTPStatusCodeWhitelist, scconfig.DefaultConfig.HTTPStatusCodeWhitelist...)
 	}
 
