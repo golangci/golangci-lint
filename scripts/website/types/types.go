@@ -5,19 +5,19 @@ import (
 )
 
 type CLIHelp struct {
-	Enable            string `json:"enable"`
-	RootCmdHelp       string `json:"rootHelp"`
-	RunCmdHelp        string `json:"runHelp"`
-	LintersCmdHelp    string `json:"lintersHelp"`
-	FmtCmdHelp        string `json:"fmtHelp"`
-	FormattersCmdHelp string `json:"formattersHelp"`
-	HelpCmdHelp       string `json:"help"`
-	MigrateCmdHelp    string `json:"migrateHelp"`
-	ConfigCmdHelp     string `json:"configHelp"`
-	CustomCmdHelp     string `json:"customHelp"`
-	CacheCmdHelp      string `json:"cacheHelp"`
-	VersionCmdHelp    string `json:"versionHelp"`
-	CompletionCmdHelp string `json:"completionHelp"`
+	Enable            string `json:"defaultEnabledLinters"`
+	RootCmdHelp       string `json:"rootOutput"`
+	RunCmdHelp        string `json:"runOutput"`
+	LintersCmdHelp    string `json:"lintersOutput"`
+	FmtCmdHelp        string `json:"fmtOutput"`
+	FormattersCmdHelp string `json:"formattersOutput"`
+	HelpCmdHelp       string `json:"helpOutput"`
+	MigrateCmdHelp    string `json:"migrateOutput"`
+	ConfigCmdHelp     string `json:"configOutput"`
+	CustomCmdHelp     string `json:"customOutput"`
+	CacheCmdHelp      string `json:"cacheOutput"`
+	VersionCmdHelp    string `json:"versionOutput"`
+	CompletionCmdHelp string `json:"completionOutput"`
 }
 
 type ExcludeRule struct {
@@ -41,7 +41,7 @@ type LinterWrapper struct {
 	Name string `json:"name"` // From linter.
 	Desc string `json:"desc"` // From linter.
 
-	Groups map[string]struct{}
+	Groups []string `json:"groups,omitempty"`
 
 	LoadMode packages.LoadMode `json:"loadMode,omitempty"`
 
