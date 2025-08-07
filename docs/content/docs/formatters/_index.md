@@ -25,4 +25,6 @@ golangci-lint formatters
 
 ## All formatters
 
-{.Formatters}
+{{< cards >}}
+    {{< item-cards path="formatters" data="formatters_info" >}}
+{{< /cards >}}

@@ -25,8 +25,12 @@ golangci-lint linters
 
 ## Enabled by Default
 
-{.EnabledByDefaultLinters}
+{{< cards >}}
+    {{< item-cards path="linters" data="linters_info" group="standard" >}}
+{{< /cards >}}
 
 ## Disabled by Default
 
-{.DisabledByDefaultLinters}
+{{< cards >}}
+    {{< item-cards path="linters" data="linters_info" group="!standard" >}}
+{{< /cards >}}

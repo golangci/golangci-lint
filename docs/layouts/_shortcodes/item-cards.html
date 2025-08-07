@@ -1,0 +1,65 @@
+{{- /*
+Creates a card for each item (linter/formatter) in a data file.
+
+@param {string} data The name of the data file.
+@param {string} path The path to the data file.
+@param {string} group The group to filter items by (use the prefix `!` to exclude items from the group).
+@returns {string}
+
+@example {{< item-cards path="formatters" data="formatters_info" >}}
+@example {{< item-cards path="linters" data="linters_info" group="!standard" >}}
+*/ -}}
+
+{{- $file := .Get "data" -}}
+{{- $path := .Get "path" -}}
+{{- $group := .Get "group" | default "" -}}
+
+{{- $info := index $.Site.Data $file -}}
+
+{{- /* Determine if we should exclude items from the group */ -}}
+{{- $notInGroup := hasPrefix $group "!" -}}
+{{- if $notInGroup -}}
+    {{- $group = strings.TrimPrefix "!" $group -}}
+{{- end -}}
+
+{{- /* Filter items by group */ -}}
+{{ $items := slice }}
+{{- range sort $info "name" -}}
+    {{- if $group -}}
+        {{- if in .groups $group -}}
+            {{- if not $notInGroup -}}
+                {{- $items = $items | append . -}}
+            {{- end -}}
+        {{- else -}}
+            {{- if $notInGroup -}}
+                {{- $items = $items | append . -}}
+            {{- end -}}
+        {{- end -}}
+    {{- else -}}
+        {{- $items = $items | append . -}}
+    {{- end -}}
+{{- end -}}
+
+{{- $gcilVersion := index $.Site.Data.version.version -}}
+
+{{- /* Create cards */ -}}
+{{- range $items -}}
+    {{- if .internal -}}
+        {{- continue -}}
+    {{- end -}}
+
+    {{- $s := newScratch -}}
+    {{- $s.SetInMap "options" "page" .Page -}}
+    {{- $s.SetInMap "options" "link" (print "/docs/" $path "/configuration/#" .name) -}}
+    {{- $s.SetInMap "options" "title" .name -}}
+    {{- $s.SetInMap "options" "subtitle" (partial "format-description" .desc) -}}
+
+    {{- /* Create tag information */ -}}
+    {{- $tagOptions := partial "item-tag.html" (dict "gcilVersion" $gcilVersion "item" .) -}}
+    {{- range $k, $v := $tagOptions -}}
+        {{- $s.SetInMap "options" $k $v -}}
+    {{- end -}}
+
+    {{- partial "shortcodes/card" ($s.Get "options") -}}
+
+{{- end -}}
