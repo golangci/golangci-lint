@@ -1,0 +1,92 @@
+{{- /*
+Creates a section for each setting of a linter/formatter.
+
+@param {string} info The name of the data file containing the linter/formatter information.
+@param {string} settings The name of the data file containing the linter/formatter settings.
+
+@example {{% item-settings info="formatters_info" settings="formatter_settings" %}}
+*/ -}}
+
+{{- $fileInfo := .Get "info" -}}
+{{- $fileSettings := .Get "settings" -}}
+
+{{- $gcilVersion := index $.Site.Data.version.version -}}
+{{- $info := index $.Site.Data $fileInfo -}}
+{{- $settings := index $.Site.Data $fileSettings -}}
+
+{{- range sort $info "name" -}}
+{{- if .internal -}}
+    {{- continue -}}
+{{- end -}}
+
+## {{ .name }}
+
+{{/* Description */}}
+{{ if .deprecation -}}
+{{- $replacement := "" -}}
+{{- if .deprecation.replacement -}}
+{{- $replacement = print " Use `" .deprecation.replacement "` instead." -}}
+{{- end -}}
+{{ print (partial "format-description" .deprecation.message) $replacement }}
+{{ else }}
+{{ partial "format-description" .desc }}
+{{ end }}
+
+{{/* Badges */}}
+<p>
+{{ partial "shortcodes/badge.html" (dict
+    "border" true
+    "icon" "calendar"
+    "content" (print "Since golangci-lint " .since)
+    )
+}}
+{{ if .deprecation -}}
+{{ partial "shortcodes/badge.html" (dict
+    "border" true
+    "icon" "sparkles"
+    "content" (print "Deprecated since " .deprecation.since)
+    "type" "error"
+    )
+    }}
+{{ else }}
+    {{ if (partial "compare-versions.html" (dict "a" $gcilVersion "b" .since)) }}
+{{ partial "shortcodes/badge.html" (dict
+    "border" true
+    "icon" "sparkles"
+    "content" "New"
+    "type" "warning"
+    )
+}}
+    {{ end }}
+    {{ if .canAutoFix }}
+{{ partial "shortcodes/badge.html" (dict
+    "border" true
+    "icon" "sparkles"
+    "content" "Autofix"
+    "type" "info"
+    )
+}}
+    {{ end }}
+{{ end }}
+<a href="{{ .originalURL }}" title="Repository" target="_blank">
+{{ partial "shortcodes/badge.html" (dict
+    "border" true
+    "icon" "github"
+    "content" "Repository"
+    "link" .originalURL
+    )
+}}
+</a>
+</p>
+
+{{/* Settings */}}
+{{- $setting := index $settings .name -}}
+{{- if $setting -}}
+```yaml
+{{ $setting | safeHTML}}
+```
+{{- else -}}
+_No settings available._
+{{- end }}
+
+{{ end -}}
