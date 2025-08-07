@@ -3,10 +3,7 @@ title: Command-Line
 weight: 1
 ---
 
-```console
-$ golangci-lint -h
-{.CmdRootHelpText}
-```
+{{% cli-output %}}
 
 ## `run`
 
@@ -16,10 +13,7 @@ $ golangci-lint -h
     {{< card link="/docs/linters/configuration/" title="Linter Settings" icon="adjustments" >}}
 {{< /cards >}}
 
-```console
-$ golangci-lint run -h
-{.CmdRunHelpText}
-```
+{{% cli-output cmd="run" %}}
 
 When the `--cpu-profile-path` or `--mem-profile-path` arguments are specified,
 golangci-lint writes runtime profiling data in the format expected by the [pprof](https://github.com/google/pprof) visualization tool.
@@ -35,38 +29,23 @@ the `go tool trace` command and visualization tool.
 {{< card link="/docs/formatters/configuration/" title="Formatter Settings" icon="adjustments" >}}
 {{< /cards >}}
 
-```console
-$ golangci-lint fmt -h
-{.CmdFmtHelpText}
-```
+{{% cli-output cmd="fmt" %}}
 
 ## `migrate`
 
-```console
-$ golangci-lint migrate -h
-{.CmdMigrateHelpText}
-```
+{{% cli-output cmd="migrate" %}}
 
 ## `formatters`
 
-```console
-$ golangci-lint formatters -h
-{.CmdFormattersHelpText}
-```
+{{% cli-output cmd="formatters" %}}
 
 ## `help`
 
-```console
-$ golangci-lint help -h
-{.CmdHelpText}
-```
+{{% cli-output cmd="help" %}}
 
 ## `linters`
 
-```console
-$ golangci-lint linters -h
-{.CmdLintersHelpText}
-```
+{{% cli-output cmd="linters" %}}
 
 ## `cache`
 
@@ -76,35 +55,20 @@ You can override the default cache directory with the environment variable `GOLA
 
 The cache is only used by `golangci-lint run` (linters).
 
-```console
-$ golangci-lint cache -h
-{.CmdCacheHelpText}
-```
+{{% cli-output cmd="cache" %}}
 
 ## `config`
 
-```console
-$ golangci-lint config -h
-{.CmdConfigHelpText}
-```
+{{% cli-output cmd="config" %}}
 
 ## `custom`
 
-```console
-$ golangci-lint custom -h
-{.CmdCustomHelpText}
-```
+{{% cli-output cmd="custom" %}}
 
 ## `version`
 
-```console
-$ golangci-lint version -h
-{.CmdVersionHelpText}
-```
+{{% cli-output cmd="version" %}}
 
 ## `completion`
 
-```console
-$ golangci-lint completion -h
-{.CmdCompletionHelpText}
-```
+{{% cli-output cmd="completion" %}}
