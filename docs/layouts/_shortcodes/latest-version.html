@@ -1,0 +1,8 @@
+{{- /*
+Displays the latest version of golangci-lint.
+Based on the data file `data/version.json`.
+
+@example {{< latest-version >}}
+*/ -}}
+
+{{- index $.Site.Data.version.version | default .Page.GitInfo.AbbreviatedHash | default "devel" -}}

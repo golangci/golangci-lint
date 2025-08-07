@@ -20,7 +20,7 @@ Requirements:
 ### Configuration Example
 
 ```yaml {filename=".custom-gcl.yml"}
-version: {.LatestVersion}
+version: {{< latest-version >}}
 plugins:
   # a plugin from a Go proxy
   - module: 'github.com/golangci/plugin1'
