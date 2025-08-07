@@ -1,0 +1,28 @@
+{{- /*
+Creates a table of exclusion presets.
+
+@example {{% exclusion-presets %}}
+*/ -}}
+
+{{- $presets := index $.Site.Data.exclusion_presets -}}
+
+{{ range $key, $values := $presets }}
+### Preset {{ print "`" $key "`" }}
+
+<table>
+    <thead>
+    <tr>
+        <th>Linter</th>
+        <th>Issue Text</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{- range $i, $value := $values -}}
+    <tr>
+        <td>{{ index $value "linters" 0 }}</td>
+        <td><code>{{ index $value "text" }}</code></td>
+    </tr>
+    {{- end -}}
+    </tbody>
+</table>
+{{ end }}
