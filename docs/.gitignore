@@ -1,4 +1,9 @@
+# Hugo files
 .hugo_build.lock
 public/
-/static/jsonschema/
 resources/
+
+# Generated files
+/static/jsonschema/
+data/version.json
+.tmp/
