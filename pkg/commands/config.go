@@ -42,7 +42,7 @@ func newConfigCommand(log logutils.Log, info BuildInfo) *configCommand {
 
 	configCmd := &cobra.Command{
 		Use:   "config",
-		Short: "Config file information",
+		Short: "Configuration file information and verification.",
 		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return cmd.Help()
@@ -52,7 +52,7 @@ func newConfigCommand(log logutils.Log, info BuildInfo) *configCommand {
 
 	verifyCommand := &cobra.Command{
 		Use:               "verify",
-		Short:             "Verify configuration against JSON schema",
+		Short:             "Verify configuration against JSON schema.",
 		Args:              cobra.NoArgs,
 		ValidArgsFunction: cobra.NoFileCompletions,
 		RunE:              c.executeVerify,
@@ -62,7 +62,7 @@ func newConfigCommand(log logutils.Log, info BuildInfo) *configCommand {
 
 	pathCommand := &cobra.Command{
 		Use:               "path",
-		Short:             "Print used config path",
+		Short:             "Print used configuration path.",
 		Args:              cobra.NoArgs,
 		ValidArgsFunction: cobra.NoFileCompletions,
 		RunE:              c.executePath,

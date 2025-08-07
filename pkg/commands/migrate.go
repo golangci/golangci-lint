@@ -51,7 +51,7 @@ func newMigrateCommand(log logutils.Log, info BuildInfo) *migrateCommand {
 
 	migrateCmd := &cobra.Command{
 		Use:               "migrate",
-		Short:             "Migrate configuration file from v1 to v2",
+		Short:             "Migrate configuration file from v1 to v2.",
 		SilenceUsage:      true,
 		SilenceErrors:     true,
 		Args:              cobra.NoArgs,

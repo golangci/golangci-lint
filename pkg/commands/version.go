@@ -42,7 +42,7 @@ func newVersionCommand(info BuildInfo) *versionCommand {
 
 	versionCmd := &cobra.Command{
 		Use:               "version",
-		Short:             "Version",
+		Short:             "Display the golangci-lint version.",
 		Args:              cobra.NoArgs,
 		ValidArgsFunction: cobra.NoFileCompletions,
 		RunE:              c.execute,

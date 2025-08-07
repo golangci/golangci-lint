@@ -47,7 +47,7 @@ func newLintersCommand(logger logutils.Log) *lintersCommand {
 
 	lintersCmd := &cobra.Command{
 		Use:               "linters",
-		Short:             "List current linters configuration",
+		Short:             "List current linters configuration.",
 		Args:              cobra.NoArgs,
 		ValidArgsFunction: cobra.NoFileCompletions,
 		RunE:              c.execute,

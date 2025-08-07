@@ -50,7 +50,7 @@ func newFmtCommand(logger logutils.Log, info BuildInfo) *fmtCommand {
 
 	fmtCmd := &cobra.Command{
 		Use:               "fmt",
-		Short:             "Format Go source files",
+		Short:             "Format Go source files.",
 		RunE:              c.execute,
 		PreRunE:           c.preRunE,
 		PersistentPreRunE: c.persistentPreRunE,

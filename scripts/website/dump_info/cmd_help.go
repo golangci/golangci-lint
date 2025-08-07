@@ -103,8 +103,5 @@ func getCmdHelp(ctx context.Context, names ...string) (string, error) {
 		return "", fmt.Errorf("can't run help cmd: %w", err)
 	}
 
-	helpLines := bytes.Split(help, []byte("\n"))
-	shortHelp := bytes.Join(helpLines[2:], []byte("\n"))
-
-	return string(shortHelp), nil
+	return string(help), nil
 }

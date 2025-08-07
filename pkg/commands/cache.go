@@ -21,7 +21,7 @@ func newCacheCommand() *cacheCommand {
 
 	cacheCmd := &cobra.Command{
 		Use:   "cache",
-		Short: "Cache control and information",
+		Short: "Cache control and information.",
 		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return cmd.Help()

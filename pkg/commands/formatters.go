@@ -47,7 +47,7 @@ func newFormattersCommand(logger logutils.Log) *formattersCommand {
 
 	formattersCmd := &cobra.Command{
 		Use:               "formatters",
-		Short:             "List current formatters configuration",
+		Short:             "List current formatters configuration.",
 		Args:              cobra.NoArgs,
 		ValidArgsFunction: cobra.NoFileCompletions,
 		RunE:              c.execute,
