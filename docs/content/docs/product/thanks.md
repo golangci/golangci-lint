@@ -9,7 +9,7 @@ Thanks to all [contributors](https://github.com/golangci/golangci-lint/graphs/co
 
 Thanks to developers and authors of used linters:
 
-{.ThanksList}
+{{< thanks >}}
 
 Thanks to [alecthomas/gometalinter](https://github.com/alecthomas/gometalinter) for inspiration and amazing work.
 
