@@ -1,12 +1,9 @@
-.PHONY: default clean reset serve
+.PHONY: default clean serve
 
 default: clean serve
 
 clean:
 	rm -rf public/
 
-reset:
-	git checkout HEAD content/
-
 serve: clean
-	hugo server --disableFastRender --buildDrafts --enableGitInfo --watch --source .
+	hugo server --disableFastRender --buildDrafts --enableGitInfo
