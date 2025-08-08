@@ -80,9 +80,6 @@ Also, there is no need to refresh a webpage: hot reload updates changed content 
 To do this, run:
 
 ```bash
-HUGO_ENVIRONMENT=production \
-HUGO_ENV=production \
-hugo \
-    --gc --minify \
-    --baseURL "https://golangci-lint.run/"
+# (inside the docs/ folder)
+make build
 ```
