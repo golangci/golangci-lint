@@ -1,0 +1,63 @@
+{{/* Copy from https://github.com/imfing/hextra/blob/v0.9.7/layouts/partials/utils/fragments.html */}}
+{{/* Split page raw content into fragments */}}
+{{ $page := .context }}
+{{ $type := .type | default "content" }}
+
+{{ $headingKeys := slice }}
+{{ $headingTitles := slice }}
+
+{{ range $h1 := $page.Fragments.Headings }}
+  {{ if eq $h1.Title "" }}
+    {{ $headingKeys = $headingKeys | append $h1.Title }}
+  {{ else }}
+    {{ $headingKeys = $headingKeys | append (printf "%s#%s" $h1.ID $h1.Title) }}
+  {{ end }}
+  {{ $headingTitles = $headingTitles | append (printf "# %s" $h1.Title) }}
+
+  {{ range $h2 := $h1.Headings }}
+    {{ $headingKeys = $headingKeys | append (printf "%s#%s" $h2.ID $h2.Title) }}
+    {{ $headingTitles = $headingTitles | append (printf "## %s" $h2.Title) }}
+  {{ end }}
+{{ end }}
+
+{{ $content := $page.RawContent }}
+{{ $len := len $headingKeys }}
+{{ $data := dict }}
+
+{{ if eq $type "content" }}
+  {{/* Include full content of the page */}}
+  {{ if eq $len 0 }}
+    {{ $data = $data | merge (dict "" ($page.Plain | htmlUnescape | chomp)) }}
+  {{ else }}
+    {{/* Split the raw content from bottom to top */}}
+    {{ range seq $len }}
+      {{ $i := sub $len . }}
+      {{ $headingKey := index $headingKeys $i }}
+      {{ $headingTitle := index $headingTitles $i }}
+
+      {{ if eq $i 0 }}
+        {{ $data = $data | merge (dict $headingKey ($content | $page.RenderString | plainify | htmlUnescape | chomp)) }}
+      {{ else }}
+        {{ $parts := split $content (printf "\n%s\n" $headingTitle) }}
+        {{ $lastPart := index $parts (sub (len $parts) 1) }}
+
+        {{ $data = $data | merge (dict $headingKey ($lastPart | $page.RenderString | plainify | htmlUnescape | chomp)) }}
+        {{ $content = strings.TrimSuffix $lastPart $content }}
+        {{ $content = strings.TrimSuffix (printf "\n%s\n" $headingTitle) $content }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
+{{ else if (eq $type "heading" ) }}
+  {{/* Put heading keys with empty content to the data object */}}
+  {{ $data = dict "" "" }}
+  {{ range $headingKeys }}
+    {{ $data = $data | merge (dict . "") }}
+  {{ end }}
+{{ else if (eq $type "title") }}
+  {{/* Use empty data object since title is included in search-data.json */}}
+  {{ $data = $data | merge (dict "" "") }}
+{{ else if (eq $type "summary" ) }}
+  {{ $data = $data | merge (dict "" ($page.Summary | plainify | htmlUnescape | chomp)) }}
+{{ end }}
+
+{{ return $data }}
