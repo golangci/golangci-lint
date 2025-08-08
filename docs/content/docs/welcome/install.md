@@ -21,11 +21,13 @@ We recommend using [our GitHub Action](https://github.com/golangci/golangci-lint
 It's [fast and uses smart caching](https://github.com/golangci/golangci-lint-action#performance) inside,
 and it can be much faster than the simple binary installation.
 
-![Log output of the action](/images/colored-line-number.png "Console Output")
+Also, the action creates GitHub annotations for found issues (you don't need to dig into build log to see found by golangci-lint issues).
 
-Also, the action creates GitHub annotations for found issues (you don't need to dig into build log to see found by golangci-lint issues):
+{{< cards cols=2 >}}
+    {{< card subtitle="Console Output" image="/images/colored-line-number.png" >}}
+    {{< card subtitle="Annotations" image="/images/annotations.png" >}}
+{{< /cards >}}
 
-![GitHub annotations of the action](/images/annotations.png "Annotations")
 
 ### GitLab CI
 
