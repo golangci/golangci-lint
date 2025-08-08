@@ -5,11 +5,17 @@ weight: 1
 
 ## ❤️
 
-Thanks to all [contributors](https://github.com/golangci/golangci-lint/graphs/contributors)!
+### Thanks to developers and authors of used linters
 
-Thanks to developers and authors of used linters:
+{{< author-cards cols=7 >}}
+{{< authors >}}
+{{< /author-cards >}}
 
-{{< thanks >}}
+### Thanks to all contributors
+
+[![golangci-lint contributors](https://opencollective.com/golangci-lint/contributors.svg?width=890&button=false&skip=golangcidev,CLAassistant,renovate,fossabot,golangcibot,kortschak,golangci-releaser,dependabot%5Bbot%5D)](https://github.com/golangci/golangci-lint/graphs/contributors)
+
+### Special thanks
 
 Thanks to [alecthomas/gometalinter](https://github.com/alecthomas/gometalinter) for inspiration and amazing work.
 
