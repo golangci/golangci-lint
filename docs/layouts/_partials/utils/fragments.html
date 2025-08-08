@@ -12,15 +12,15 @@
   {{ else }}
     {{ $headingKeys = $headingKeys | append (printf "%s#%s" $h1.ID $h1.Title) }}
   {{ end }}
-  {{ $headingTitles = $headingTitles | append (printf "# %s" $h1.Title) }}
+  {{ $headingTitles = $headingTitles | append (printf "<h1>%s" $h1.Title) }}
 
   {{ range $h2 := $h1.Headings }}
     {{ $headingKeys = $headingKeys | append (printf "%s#%s" $h2.ID $h2.Title) }}
-    {{ $headingTitles = $headingTitles | append (printf "## %s" $h2.Title) }}
+    {{ $headingTitles = $headingTitles | append (printf "<h2>%s" $h2.Title) }}
   {{ end }}
 {{ end }}
 
-{{ $content := $page.RawContent }}
+{{ $content := $page.Content | htmlUnescape }}
 {{ $len := len $headingKeys }}
 {{ $data := dict }}
 
@@ -36,14 +36,14 @@
       {{ $headingTitle := index $headingTitles $i }}
 
       {{ if eq $i 0 }}
-        {{ $data = $data | merge (dict $headingKey ($content | $page.RenderString | plainify | htmlUnescape | chomp)) }}
+        {{ $data = $data | merge (dict $headingKey ($content | plainify | htmlUnescape | chomp)) }}
       {{ else }}
-        {{ $parts := split $content (printf "\n%s\n" $headingTitle) }}
+        {{ $parts := split $content (printf "%s" $headingTitle) }}
         {{ $lastPart := index $parts (sub (len $parts) 1) }}
 
-        {{ $data = $data | merge (dict $headingKey ($lastPart | $page.RenderString | plainify | htmlUnescape | chomp)) }}
+        {{ $data = $data | merge (dict $headingKey ($lastPart | plainify | htmlUnescape | chomp)) }}
         {{ $content = strings.TrimSuffix $lastPart $content }}
-        {{ $content = strings.TrimSuffix (printf "\n%s\n" $headingTitle) $content }}
+        {{ $content = strings.TrimSuffix (printf "%s" $headingTitle) $content }}
       {{ end }}
     {{ end }}
   {{ end }}
