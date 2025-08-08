@@ -1,0 +1,6 @@
+version: "2"
+
+linters:
+  settings:
+    staticcheck:
+      checks: ["ST1013"]
