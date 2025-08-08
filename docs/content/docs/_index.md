@@ -33,8 +33,7 @@ Golangci-lint is a free and open-source project built by volunteers.
 
 If you value it, consider supporting us, we appreciate it!
 
-<div class="hx-mb-6"></div>
-<div class="hx-mb-6">
+<div class="hx-mt-6 hx-mb-6">
 {{< hextra/hero-button text="Donate ❤️" link="https://donate.golangci.org" >}}
 </div>
 
