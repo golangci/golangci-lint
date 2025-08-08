@@ -60,6 +60,28 @@ Creates a card for each item (linter/formatter) in a data file.
         {{- $s.SetInMap "options" $k $v -}}
     {{- end -}}
 
+    {{- /* CSS classes */ -}}
+    {{- $class := slice "gl-item" -}}
+    {{- if .canAutoFix -}}
+        {{- $class = $class | append "gl-autofix" -}}
+    {{- end -}}
+    {{- if .deprecation -}}
+        {{- $class = $class | append "gl-deprecated" -}}
+    {{- end -}}
+    {{- if .isSlow -}}
+        {{- $class = $class | append "gl-slow" -}}
+    {{- else -}}
+        {{- $class = $class | append "gl-fast" -}}
+    {{- end -}}
+    {{- if in .groups "standard" -}}
+        {{- $class = $class | append "gl-default" -}}
+    {{- end -}}
+    {{- if (partial "compare-versions.html" (dict "a" $gcilVersion "b" .since)) -}}
+        {{- $class = $class | append "gl-new" -}}
+    {{- end -}}
+
+<div class="{{ delimit $class " " | safeHTMLAttr }}">
     {{- partial "shortcodes/card" ($s.Get "options") -}}
+</div>
 
 {{- end -}}

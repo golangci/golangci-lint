@@ -12,3 +12,7 @@
 .author-cards {
     grid-template-columns: repeat(auto-fill, minmax(max(150px, calc((100% - 1rem * 4) / var(--hextra-cards-grid-cols))), 1fr));
 }
+
+.gl-hidden {
+    display: none;
+}

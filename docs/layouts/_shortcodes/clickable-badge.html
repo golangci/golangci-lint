@@ -1,0 +1,30 @@
+{{- /* Modified version of https://github.com/imfing/hextra/blob/v0.9.7/layouts/shortcodes/badge.html */ -}}
+{{- /*
+Creates a badge with the given id and class.
+
+@param {string} content The content of the badge.
+@param {string} type The type of the badge.
+@param {string} id The id of the badge.
+@param {string} class The class of the badge.
+@param {boolean} border Whether to render a border around the badge.
+@param {string} icon The icon of the badge.
+
+@example {{< clickable-badge icon="inbox" id="my-id" content="Text" class="my-class" type="info" border=true >}}
+*/}}
+
+{{- $content := .Get "content" -}}
+{{- $type := .Get "type" | default "" -}}
+{{- $id := .Get "id" | default "" -}}
+{{- $class := .Get "class" | default "" -}}
+{{- $icon := .Get "icon" | default "" -}}
+{{- $border := .Get "border" | default false -}}
+
+{{- partial "clickable-badge.html" (dict
+  "id" $id
+  "class" $class
+  "content" $content
+  "type" $type
+  "border" $border
+  "icon" $icon
+  )
+-}}
