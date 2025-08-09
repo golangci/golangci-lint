@@ -44,9 +44,14 @@ func run(pass *analysis.Pass, settings *config.GodoxSettings) error {
 		ft := pass.Fset.File(file.Pos())
 
 		for _, i := range messages {
+			msg := strings.TrimRight(i.Message, "\n")
+
+			// https://github.com/matoous/godox/blob/1d6ac9d899726279072e1c4d2b10f1eb52f22878/godox.go#L56
+			index := strings.Index(msg, "Line contains")
+
 			pass.Report(analysis.Diagnostic{
 				Pos:     ft.LineStart(goanalysis.AdjustPos(i.Pos.Line, nonAdjPosition.Line, position.Line)) + token.Pos(i.Pos.Column),
-				Message: strings.TrimRight(i.Message, "\n"),
+				Message: msg[index:],
 			})
 		}
 	}
