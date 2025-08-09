@@ -10,7 +10,8 @@ it shows how to write `go/analysis` linter from scratch and integrate it into `g
 
 ## How to add a public linter to `golangci-lint`
 
-You need to implement a new linter using `go/analysis` API.  
+You need to implement a new linter using `go/analysis` API.
+
 We don't accept non `go/analysis` linters.
 
 After that:

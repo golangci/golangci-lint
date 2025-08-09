@@ -3,7 +3,7 @@ title: Welcome
 weight: 1
 ---
 
-Welcome to the quickstart of  golangci-lint, where you'll find step-by-step guides to help you get up and running smoothly.
+This quickstart guide provides step-by-step instructions to help you install, configure, and begin using `golangci-lint` efficiently.
 
 <!--more-->
 
