@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /page-data/
+Sitemap: https://golangci-lint.run/sitemap/sitemap-index.xml
+Host: https://golangci-lint.run
