@@ -1,0 +1,10 @@
+:root {
+  --primary-hue: 187deg;
+  --primary-saturation: 54.4%;
+  --primary-lightness: 57.8%;
+}
+
+/* Allow card subtitle with more than 3 lines */
+.hx-line-clamp-3.hextra-card-subtitle {
+  -webkit-line-clamp: 30;
+}

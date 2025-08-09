@@ -2,10 +2,9 @@ Follow the news and releases on [Mastodon](https://fosstodon.org/@golangcilint) 
 
 `golangci-lint` is a free and open-source project built by volunteers.
 
-If you value it, consider supporting us, we appreciate it! ❤️
+If you value it, consider supporting us, we appreciate it!
 
-[![Open Collective backers and sponsors](https://img.shields.io/badge/OpenCollective-Donate-blue?logo=opencollective&style=for-the-badge)](https://opencollective.com/golangci-lint)
-[![GitHub Sponsors](https://img.shields.io/badge/GitHub-Donate-blue?logo=github&style=for-the-badge)](https://github.com/sponsors/golangci)
+[![Donate](https://img.shields.io/badge/Donate-❤️-blue?style=for-the-badge)](https://donate.golangci.org)
 
 ### v2.3.1
 
@@ -191,20 +190,20 @@ The binaries of v2.1.0 have been published, but not the other artifacts (AUR, Do
 ### v2.0.0
 
 1. Enhancements
-   * 🌟 New `golangci-lint fmt` command with dedicated [formatter configuration](https://golangci-lint.run/welcome/quick-start/#formatting)
-   * ♻️ New `golangci-lint migrate` command to help migration from v1 to v2 (cf. [Migration guide](https://golangci-lint.run/product/migration-guide/#command-migrate))
-   * ⚠️ New default values (cf. [Migration guide](https://golangci-lint.run/product/migration-guide/))
-   * ⚠️ No exclusions by default (cf. [Migration guide](https://golangci-lint.run/product/migration-guide/#issuesexclude-use-default))
-   * ⚠️ New default sort order (cf. [Migration guide](https://golangci-lint.run/product/migration-guide/#outputsort-order))
-   * 🌟 New option `run.relative-path-mode` (cf. [Migration guide](https://golangci-lint.run/product/migration-guide/#runrelative-path-mode))
-   * 🌟 New linters configuration (cf. [Migration guide](https://golangci-lint.run/product/migration-guide/#linters))
-   * 🌟 New output format configuration (cf. [Migration guide](https://golangci-lint.run/product/migration-guide/#output))
-   * 🌟 New `--fast-only` flag (cf. [Migration guide](https://golangci-lint.run/product/migration-guide/#lintersfast))
+   * 🌟 New `golangci-lint fmt` command with dedicated [formatter configuration](https://golangci-lint.run/docs/welcome/quick-start/#formatting)
+   * ♻️ New `golangci-lint migrate` command to help migration from v1 to v2 (cf. [Migration guide](https://golangci-lint.run/docs/product/migration-guide/#command-migrate))
+   * ⚠️ New default values (cf. [Migration guide](https://golangci-lint.run/docs/product/migration-guide/))
+   * ⚠️ No exclusions by default (cf. [Migration guide](https://golangci-lint.run/docs/product/migration-guide/#issuesexclude-use-default))
+   * ⚠️ New default sort order (cf. [Migration guide](https://golangci-lint.run/docs/product/migration-guide/#outputsort-order))
+   * 🌟 New option `run.relative-path-mode` (cf. [Migration guide](https://golangci-lint.run/docs/product/migration-guide/#runrelative-path-mode))
+   * 🌟 New linters configuration (cf. [Migration guide](https://golangci-lint.run/docs/product/migration-guide/#linters))
+   * 🌟 New output format configuration (cf. [Migration guide](https://golangci-lint.run/docs/product/migration-guide/#output))
+   * 🌟 New `--fast-only` flag (cf. [Migration guide](https://golangci-lint.run/docs/product/migration-guide/#lintersfast))
    * 🌟 New option `linters.exclusions.warn-unused` to log a warning if an exclusion rule is unused.
 2. New linters/formatters
    * Add `golines` formatter https://github.com/segmentio/golines
 3. Linters new features
-   * ⚠️ Merge `staticcheck`, `stylecheck`, `gosimple` into one linter (`staticcheck`) (cf. [Migration guide](https://golangci-lint.run/product/migration-guide/#lintersenablestylecheckgosimplestaticcheck))
+   * ⚠️ Merge `staticcheck`, `stylecheck`, `gosimple` into one linter (`staticcheck`) (cf. [Migration guide](https://golangci-lint.run/docs/product/migration-guide/#lintersenablestylecheckgosimplestaticcheck))
    * `go-critic`: from 0.12.0 to 0.13.0
    * `gomodguard`: from 1.3.5 to 1.4.1 (block explicit indirect dependencies)
    * `nilnil`: from 1.0.1 to 1.1.0 (new option: `only-two`)
@@ -224,11 +223,11 @@ The binaries of v2.1.0 have been published, but not the other artifacts (AUR, Do
    * `protogetter`: from 0.3.9 to 0.3.12
    * `unparam`: from 8a5130ca722f to 0df0534333a4
 5. Misc.
-   * 🧹 Configuration options renaming (cf. [Migration guide](https://golangci-lint.run/product/migration-guide/))
-   * 🧹 Remove options (cf. [Migration guide](https://golangci-lint.run/product/migration-guide/))
-   * 🧹 Remove flags (cf. [Migration guide](https://golangci-lint.run/product/migration-guide/))
-   * 🧹 Remove alternative names (cf. [Migration guide](https://golangci-lint.run/product/migration-guide/#alternative-linter-names))
-   * 🧹 Remove or replace deprecated elements (cf. [Migration guide](https://golangci-lint.run/product/migration-guide/))
+   * 🧹 Configuration options renaming (cf. [Migration guide](https://golangci-lint.run/docs/product/migration-guide/))
+   * 🧹 Remove options (cf. [Migration guide](https://golangci-lint.run/docs/product/migration-guide/))
+   * 🧹 Remove flags (cf. [Migration guide](https://golangci-lint.run/docs/product/migration-guide/))
+   * 🧹 Remove alternative names (cf. [Migration guide](https://golangci-lint.run/docs/product/migration-guide/#alternative-linter-names))
+   * 🧹 Remove or replace deprecated elements (cf. [Migration guide](https://golangci-lint.run/docs/product/migration-guide/))
    * Adds an option to display some commands as JSON:
      * `golangci-lint config path --json`
      * `golangci-lint help linters --json`
@@ -237,7 +236,7 @@ The binaries of v2.1.0 have been published, but not the other artifacts (AUR, Do
      * `golangci-lint formatters --json`
      * `golangci-lint version --json`
 6. Documentation
-   * [Migration guide](https://golangci-lint.run/product/migration-guide/)
+   * [Migration guide](https://golangci-lint.run/docs/product/migration-guide/)
 
 ### v1.64.8
 
@@ -636,7 +635,7 @@ Cancelled due to a CI problem.
    * Keep only `typecheck` issues when needed
    * Don't hide `typecheck` errors inside diff processor
 5. Misc.
-   * ⚠️ log an error when using previously deprecated linters ([Linter Deprecation Cycle](https://golangci-lint.run/product/roadmap/#linter-deprecation-cycle))
+   * ⚠️ log an error when using previously deprecated linters ([Linter Deprecation Cycle](https://golangci-lint.run/docs/product/roadmap/#linter-deprecation-cycle))
       * [`deadcode`](https://github.com/remyoudompheng/go-misc/tree/HEAD/deadcode): deprecated since v1.49.0 (2022-08-23).
       * [`exhaustivestruct`](https://github.com/mbilski/exhaustivestruct): deprecated since v1.46.0 (2022-05-08).
       * [`golint`](https://github.com/golang/lint): deprecated since v1.41.0 (2021-06-15).
@@ -710,7 +709,7 @@ GitHub Action (v5.1.0) for golangci-lint:
    * `wrapcheck`: from 2.8.1 to 2.8.3
    * Disable `copyloopvar` and `intrange` on Go < 1.22
 3. Enhancements
-   * 🧩New custom linters system https://golangci-lint.run/plugins/module-plugins/
+   * 🧩New custom linters system https://golangci-lint.run/docs/plugins/module-plugins/
    * Allow running only a specific linter without modifying the file configuration (`--enable-only`)
    * Allow custom sort order for the reports (`output.sort-order`)
    * Automatically adjust the maximum concurrency to the container CPU quota if `run.concurrency=0`
@@ -730,7 +729,7 @@ GitHub Action (v5.1.0) for golangci-lint:
    * Improve 'no go files to analyze' message
    * Use `GOTOOLCHAIN=auto` inside the Docker images
 5. Documentation
-   * ⚠️ Define the linter deprecation cycle https://golangci-lint.run/product/roadmap/#linter-deprecation-cycle
+   * ⚠️ Define the linter deprecation cycle https://golangci-lint.run/docs/product/roadmap/#linter-deprecation-cycle
    * 🎉Use information from the previous release to create linter pages
    * Publish JSON schema on https://golangci-lint.run/jsonschema/golangci.jsonschema.json
    * Reorganize documentation pages
@@ -1665,8 +1664,8 @@ IMPORTANT: `varcheck` and `deadcode` has been removed of default linters.
    * `wastedassign`: bump to v0.2.0
    * `wrapcheck`: bump to v1.0.0
 3. documentation:
-   * improve [linters page](https://golangci-lint.run/usage/linters/) (versions, deprecation, and presets)
-   * add [cache directory](https://golangci-lint.run/usage/configuration/#cache) information
+   * improve [linters page](https://golangci-lint.run/docs/linters/) (versions, deprecation, and presets)
+   * add [cache directory](https://golangci-lint.run/docs/configuration/cli/#cache) information
    * adding missing format options
    * fix typos
 4. Misc:

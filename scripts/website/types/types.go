@@ -5,9 +5,19 @@ import (
 )
 
 type CLIHelp struct {
-	Enable     string `json:"enable"`
-	RunCmdHelp string `json:"help"`
-	FmtCmdHelp string `json:"fmtHelp"`
+	Enable            string `json:"enable"`
+	RootCmdHelp       string `json:"rootHelp"`
+	RunCmdHelp        string `json:"runHelp"`
+	LintersCmdHelp    string `json:"lintersHelp"`
+	FmtCmdHelp        string `json:"fmtHelp"`
+	FormattersCmdHelp string `json:"formattersHelp"`
+	HelpCmdHelp       string `json:"help"`
+	MigrateCmdHelp    string `json:"migrateHelp"`
+	ConfigCmdHelp     string `json:"configHelp"`
+	CustomCmdHelp     string `json:"customHelp"`
+	CacheCmdHelp      string `json:"cacheHelp"`
+	VersionCmdHelp    string `json:"versionHelp"`
+	CompletionCmdHelp string `json:"completionHelp"`
 }
 
 type ExcludeRule struct {
