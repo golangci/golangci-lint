@@ -1,7 +1,7 @@
 package exhaustruct
 
 import (
-	exhaustruct "github.com/GaijinEntertainment/go-exhaustruct/v3/analyzer"
+	exhaustruct "dev.gaijin.team/go/exhaustruct/v4/analyzer"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
@@ -9,14 +9,17 @@ import (
 )
 
 func New(settings *config.ExhaustructSettings) *goanalysis.Linter {
-	var include, exclude []string
-
+	cfg := exhaustruct.Config{}
 	if settings != nil {
-		include = settings.Include
-		exclude = settings.Exclude
+		cfg.IncludeRx = settings.Include
+		cfg.ExcludeRx = settings.Exclude
+		cfg.AllowEmpty = settings.AllowEmpty
+		cfg.AllowEmptyRx = settings.AllowEmptyRx
+		cfg.AllowEmptyReturns = settings.AllowEmptyReturns
+		cfg.AllowEmptyDeclarations = settings.AllowEmptyDeclarations
 	}
 
-	analyzer, err := exhaustruct.NewAnalyzer(include, exclude)
+	analyzer, err := exhaustruct.NewAnalyzer(cfg)
 	if err != nil {
 		internal.LinterLogger.Fatalf("exhaustruct configuration: %v", err)
 	}
