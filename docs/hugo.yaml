@@ -75,7 +75,7 @@ menu:
         type: separator
       weight: 2
     - identifier: doc-v1
-      name: "Documentation v1"
+      name: "Documentation v1 ↗"
       url: "https://golangci.github.io/legacy-v1-doc/"
       weight: 3
 
