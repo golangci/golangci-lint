@@ -81,11 +81,11 @@ release:
   header: |
     `golangci-lint` is a free and open-source project built by volunteers.
 
-    If you value it, consider supporting us, the [maintainers](https://opencollective.com/golangci-lint) and [linter authors](https://golangci-lint.run/product/thanks/).
+    If you value it, consider supporting us, the [maintainers](https://donate.golangci.org) and [linter authors](https://golangci-lint.run/docs/product/thanks/).
 
     We appreciate it! :heart:
 
-    For key updates, see the [changelog](https://golangci-lint.run/product/changelog/#{{ .Major }}{{ .Minor }}{{ .Patch }}).
+    For key updates, see the [changelog](https://golangci-lint.run/docs/product/changelog/#{{ .Major }}{{ .Minor }}{{ .Patch }}).
 
 source:
   enabled: true

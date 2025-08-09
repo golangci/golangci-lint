@@ -1,0 +1,24 @@
+{{ define "main" }}
+<div class='hx-mx-auto hx-flex {{ partial "utils/page-width" . }}'>
+    {{ partial "sidebar.html" (dict "context" . "disableSidebar" true "displayPlaceholder" true) }}
+    {{ partial "toc.html" . }}
+    <article class="hx-w-full hx-break-words hx-flex hx-min-h-[calc(100vh-var(--navbar-height))] hx-min-w-0 hx-justify-center hx-pb-8 hx-pr-[calc(env(safe-area-inset-right)-1.5rem)]">
+        <main
+                class="hx-w-full hx-min-w-0 hx-max-w-6xl hx-flex hx-flex-col hx-items-center hx-justify-center">
+            <div class="hx-flex hx-flex-col hx-items-center hx-justify-center">
+                <a href="/" ><img src="/images/logo-circle.svg" alt="logo" width="200" height="200"></a>
+                <h1 id="error-heading"
+                    class="not-prose hx-text-4xl font-bold leading-none tracking-tighter md:text-5xl py-2 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-gray-100 dark:to-gray-400">
+                    404
+                </h1>
+                <p class="hx-mb-6">
+                    The page could not be found.
+                </p>
+                <a href="/" class="hx-font-medium hx-px-6 hx-py-3 hx-text-center inline-block">
+                    Go to the home page
+                </a>
+            </div>
+        </main>
+    </article>
+</div>
+{{ end }}

@@ -7,7 +7,7 @@ Hey, @${username} — we just merged your PR to \`golangci-lint\`! 🔥🚀
 This will add you to our team of maintainers. Accept the invite by visiting [this link](https://github.com/orgs/golangci/invitation).
 
 By joining the team, you’ll be able to label issues, review pull requests, and merge approved pull requests.
-More information about contributing is [here](https://golangci-lint.run/contributing/quick-start/).
+More information about contributing is [here](https://golangci-lint.run/docs/contributing/).
 
 Thanks again!
 `;
