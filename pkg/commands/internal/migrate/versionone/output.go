@@ -24,9 +24,7 @@ type OutputFormat struct {
 type OutputFormats []OutputFormat
 
 func (p *OutputFormats) UnmarshalText(text []byte) error {
-	formats := strings.Split(string(text), ",")
-
-	for _, item := range formats {
+	for item := range strings.SplitSeq(string(text), ",") {
 		format, path, _ := strings.Cut(item, ":")
 
 		*p = append(*p, OutputFormat{
