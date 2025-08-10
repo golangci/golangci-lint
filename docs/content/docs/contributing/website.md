@@ -62,7 +62,7 @@ or
 
 ```bash
 # (in the root of the repository)
-make make website_expand_templates
+make website_expand_templates
 
 cd docs/
 
