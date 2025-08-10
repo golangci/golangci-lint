@@ -31,6 +31,9 @@ jobs:
           wget -O ${{ runner.temp }}/hugo.deb https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb \
           && sudo dpkg -i ${{ runner.temp }}/hugo.deb
 
+      - name: Build Documentation assets
+        run: make website_copy_jsonschema
+
       - name: Build Documentation
         env:
           # For maximum backward compatibility with Hugo modules
