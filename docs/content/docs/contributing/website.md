@@ -62,7 +62,7 @@ or
 
 ```bash
 # (in the root of the repository)
-make website_expand_templates
+make make website_expand_templates
 
 cd docs/
 
@@ -80,6 +80,17 @@ Also, there is no need to refresh a webpage: hot reload updates changed content 
 To do this, run:
 
 ```bash
+# (in the root of the repository)
+make docs_build
+```
+or
+
+```bash
+# (in the root of the repository)
+make website_copy_jsonschema website_expand_templates
+
+cd docs/
+
 # (inside the docs/ folder)
 make build
 ```
