@@ -26,8 +26,7 @@ title: 'Golangci-lint Documentation'
     icon="arrow-circle-right" >}}
 {{< /cards >}}
 
-
-## Supporting Us
+## Support Us
 
 Golangci-lint is a free and open-source project built by volunteers.
 
