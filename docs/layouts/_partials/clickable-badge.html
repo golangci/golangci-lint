@@ -30,7 +30,7 @@ Creates a badge with the given id and class.
 
 {{- $borderClass := cond (eq $border true) "hx-border" "" -}}
 {{- $badgeClass := or ($styleClass.Get $type) $defaultClass  -}}
-<div class="hextra-badge">
+<div class="hextra-badge hx-mt-2">
     <div id="{{ $id }}" class="hx-inline-flex hx-gap-1 hx-items-center hx-rounded-full hx-px-2.5 hx-leading-6 hx-text-[.65rem] {{ $borderClass }} {{ $badgeClass }} {{ $class }}">
         {{- with $icon -}}{{- partial "utils/icon" (dict "name" . "attributes" "height=12") -}}{{- end -}}
         {{- $content -}}
