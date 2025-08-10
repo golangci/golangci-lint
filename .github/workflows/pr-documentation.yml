@@ -31,12 +31,4 @@ jobs:
           && sudo dpkg -i ${{ runner.temp }}/hugo.deb
 
       - name: Build Documentation
-        env:
-          # For maximum backward compatibility with Hugo modules
-          HUGO_ENVIRONMENT: production
-          HUGO_ENV: production
-        working-directory: ./docs
-        run: |
-          hugo \
-            --gc --minify \
-            --baseURL "https://golangci-lint.run/"
+        run: make docs_build

@@ -8,8 +8,10 @@ clean:
 serve: clean
 	hugo server --disableFastRender --buildDrafts --enableGitInfo
 
+# IMPORTANT used by the CI to deploy documentation
 build: clean
 	HUGO_ENVIRONMENT=production \
 	HUGO_ENV=production \
 	hugo \
+		--gc --minify \
 		--baseURL "https://golangci-lint.run/"
