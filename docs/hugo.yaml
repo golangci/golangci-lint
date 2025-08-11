@@ -42,12 +42,11 @@ menu:
       pageRef: /docs
       weight: 1
     - identifier: donate
-      name: "Donate"
-      url: "https://donate.golangci.org"
+      name: "Support us"
+      pageRef: /docs/donate/
       weight: 2
       params:
-        icon: heart
-        color: green
+        icon: "heart-red"
     - identifier: linters
       name: Linters
       pageRef: /docs/linters/
@@ -65,10 +64,6 @@ menu:
       params:
         icon: github
   sidebar:
-    - identifier: donate
-      name: "Support Us"
-      url: "https://donate.golangci.org"
-      weight: 1
     - identifier: more
       name: More
       params:

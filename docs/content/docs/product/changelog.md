@@ -13,7 +13,7 @@ Follow the news and releases on [Mastodon](https://fosstodon.org/@golangcilint) 
 If you value it, consider supporting us, we appreciate it!
 
 <div class="hx-mt-6 hx-mb-6">
-{{< hextra/hero-button text="Donate ❤️" link="https://donate.golangci.org" >}}
+{{< hextra/hero-button text="Donate ❤️" link="/docs/donate" >}}
 </div>
 
 {{% embed file=".tmp/raw_changelog.tmp" %}}
