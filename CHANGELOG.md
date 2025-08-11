@@ -8,6 +8,19 @@ If you value it, consider supporting us, we appreciate it!
 
 <!-- START --->
 
+### v2.4.0
+
+1. Enhancements
+    * 🎉 go1.25 support
+2. Linters new features or changes
+    * `exhaustruct`: from v3.3.1 to 4.0.0 (new options: `allow-empty`, `allow-empty-rx`, `allow-empty-returns`, `allow-empty-declarations`)
+3. Linters bug fixes
+   * `godox`: trim filepath from report messages
+   * `staticcheck`: allow empty options
+   * `tagalign`: from 1.4.2 to 1.4.3
+4. Documentation
+   * 🌟 New website (with a search engine)
+
 ### v2.3.1
 
 1. Linters bug fixes

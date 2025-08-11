@@ -241,7 +241,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithURL("https://github.com/polyfloyd/go-errorlint"),
 
 		linter.NewConfig(exhaustive.New(&cfg.Linters.Settings.Exhaustive)).
-			WithSince(" v1.28.0").
+			WithSince("v1.28.0").
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/nishanths/exhaustive"),
 

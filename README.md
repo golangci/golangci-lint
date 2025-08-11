@@ -29,13 +29,12 @@ Documentation is hosted at https://golangci-lint.run.
 
 ## Support Us
 
-[![Open Collective backers and sponsors](https://img.shields.io/badge/OpenCollective-Donate-blue?logo=opencollective&style=for-the-badge)](https://opencollective.com/golangci-lint)
-[![GitHub Sponsors](https://img.shields.io/badge/GitHub-Donate-blue?logo=github&style=for-the-badge)](https://github.com/sponsors/golangci)
-[![Linter Authors](https://img.shields.io/badge/Linter_Authors-Donate-blue?style=for-the-badge)](https://golangci-lint.run/docs/product/thanks/)
-
 `golangci-lint` is a free and open-source project built by volunteers.
 
 If you value it, consider supporting us, we appreciate it! :heart:
+
+[![Golangci-lint](https://img.shields.io/badge/Support-golangci_lint-blue?style=for-the-badge)](https://donate.golangci.org)
+[![Linter Authors](https://img.shields.io/badge/Support-Linter_Authors-blue?style=for-the-badge)](https://golangci-lint.run/docs/product/thanks/)
 
 ## Badges
 
