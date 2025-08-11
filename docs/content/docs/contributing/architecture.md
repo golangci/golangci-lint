@@ -1,6 +1,8 @@
 ---
 title: Architecture
 weight: 3
+aliases:
+  - /contributing/architecture/
 ---
 
 There are the following golangci-lint execution steps:

@@ -1,6 +1,8 @@
 ---
 title: Go Plugin System
 weight: 2
+aliases:
+  - /plugins/go-plugins/
 ---
 
 {{< callout type="warning" >}}

@@ -1,6 +1,8 @@
 ---
 title: Quick Start
 weight: 2
+aliases:
+  - /welcome/quick-start/
 ---
 
 ## Linting

@@ -2,6 +2,8 @@
 title: Changelog
 weight: 2
 excludeSearch: true
+aliases:
+  - /product/changelog/
 ---
 
 Follow the news and releases on [Mastodon](https://fosstodon.org/@golangcilint) and on [Bluesky](https://bsky.app/profile/golangci-lint.run).

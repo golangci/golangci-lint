@@ -1,6 +1,8 @@
 ---
 title: Migration guide
 weight: 3
+aliases:
+  - /product/migration-guide/
 ---
 
 ## Command `migrate`

@@ -1,6 +1,8 @@
 ---
 title: Configuration
 weight: 2
+aliases:
+  - /usage/configuration/
 ---
 
 The config file has lower priority than command-line options.

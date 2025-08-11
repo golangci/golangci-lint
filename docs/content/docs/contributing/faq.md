@@ -1,6 +1,8 @@
 ---
 title: FAQ
 weight: 6
+aliases:
+  - /contributing/faq/
 ---
 
 ## How to add a new open-source linter to `golangci-lint`

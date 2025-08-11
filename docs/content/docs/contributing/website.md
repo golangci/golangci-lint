@@ -1,6 +1,8 @@
 ---
 title: This Website
 weight: 7
+aliases:
+  - /contributing/website/
 ---
 
 ## Technology

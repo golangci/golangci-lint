@@ -1,6 +1,8 @@
 ---
 title: Workflow
 weight: 2
+aliases:
+  - /contributing/workflow/
 ---
 
 By participating in this project, you agree to abide our [code of conduct](https://github.com/golangci/golangci-lint?tab=coc-ov-file).

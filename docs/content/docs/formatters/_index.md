@@ -2,6 +2,8 @@
 title: Formatters
 weight: 4
 excludeSearch: true
+aliases:
+  - /usage/formatters/
 ---
 
 To see a list of supported formatters and which formatters are enabled/disabled:

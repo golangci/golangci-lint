@@ -1,6 +1,8 @@
 ---
 title: Integrations
 weight: 3
+aliases:
+  - /welcome/integrations/
 ---
 
 ## Editor Integration

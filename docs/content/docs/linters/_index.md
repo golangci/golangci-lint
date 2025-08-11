@@ -2,6 +2,8 @@
 title: Linters
 weight: 3
 excludeSearch: true
+aliases:
+  - /usage/linters/
 ---
 
 To see a list of supported linters and which linters are enabled/disabled:
