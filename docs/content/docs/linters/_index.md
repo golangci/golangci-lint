@@ -25,16 +25,15 @@ golangci-lint linters
 
 ## All Linters
 
-<div class="hx-mt-6">
-    {{< icon "filter" >}}
-    {{< clickable-badge icon="inbox" id="default-filter" content="Default" class="gl-filter hx-cursor-pointer" type="info" border=false >}}
-    {{< clickable-badge icon="fire" id="new-filter" content="New" class="gl-filter hx-cursor-pointer" type="warning" border=false >}}
-    {{< clickable-badge icon="sparkles" id="autofix-filter" content="Autofix" class="gl-filter hx-cursor-pointer" type="info" border=false >}}
-    {{< clickable-badge icon="fast-forward" id="fast-filter" content="Fast" class="gl-filter hx-cursor-pointer" border=false >}}
-    {{< clickable-badge icon="play" id="slow-filter" content="Slow" class="gl-filter hx-cursor-pointer" border=false >}}
-    {{< clickable-badge icon="emoji-sad" id="deprecated-filter" content="Deprecated" class="gl-filter hx-cursor-pointer" type="info" border=false >}}
-    {{< clickable-badge icon="trash" id="reset-filter" content="Reset" class="gl-filter-reset gl-hidden hx-cursor-pointer" type="error" border=true >}}
-</div>
+{{< filter-bar >}}
+    {{< clickable-badge class="gl-filter" id="default-filter" icon="inbox" content="Default" type="info" >}}
+    {{< clickable-badge class="gl-filter" id="new-filter" icon="fire" content="New" type="warning" >}}
+    {{< clickable-badge class="gl-filter" id="autofix-filter" icon="sparkles" content="Autofix" type="info" >}}
+    {{< clickable-badge class="gl-filter" id="fast-filter" icon="fast-forward" content="Fast" >}}
+    {{< clickable-badge class="gl-filter" id="slow-filter" icon="play" content="Slow" >}}
+    {{< clickable-badge class="gl-filter" id="deprecated-filter" icon="emoji-sad" content="Deprecated" type="info" >}}
+    {{< clickable-badge class="gl-filter-reset gl-hidden" icon="trash" id="reset-filter" content="Reset" type="error" border=true >}}
+{{< /filter-bar >}}
 
 {{< cards >}}
     {{< item-cards path="linters" data="linters_info" >}}
