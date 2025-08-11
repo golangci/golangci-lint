@@ -18,12 +18,17 @@ const (
 )
 
 type authorDetails struct {
-	Linters []string
-	Profile string
-	Avatar  string
+	Name    string   `json:"name"`
+	Linters []string `json:"linters"`
+	Profile string   `json:"profile"`
+	Avatar  string   `json:"avatar"`
 }
 
-func getThanksList() string {
+func saveThanksList(dst string) error {
+	return saveToJSONFile(dst, getThanksList())
+}
+
+func getThanksList() []*authorDetails {
 	addedAuthors := map[string]*authorDetails{}
 
 	linters, _ := lintersdb.NewLinterBuilder().Build(config.NewDefault())
@@ -49,9 +54,10 @@ func getThanksList() string {
 				addedAuthors[info.Author].Linters = append(addedAuthors[info.Author].Linters, lc.Name())
 			} else {
 				addedAuthors[info.Author] = &authorDetails{
+					Name:    info.Author,
 					Linters: []string{lc.Name()},
-					Profile: fmt.Sprintf("[%[1]s](https://github.com/sponsors/%[1]s)", info.Author),
-					Avatar:  getGitHubAvatar(info),
+					Profile: fmt.Sprintf("https://github.com/sponsors/%s", info.Author),
+					Avatar:  fmt.Sprintf("https://github.com/%[1]s.png", info.Author),
 				}
 			}
 
@@ -59,11 +65,16 @@ func getThanksList() string {
 			if _, ok := addedAuthors[info.Author]; ok {
 				addedAuthors[info.Author].Linters = append(addedAuthors[info.Author].Linters, lc.Name())
 			} else {
-				getGitHubAvatar(info)
+				ghAuthor := info.Author
+				if info.Author == "bosi" {
+					ghAuthor = "bosix"
+				}
+
 				addedAuthors[info.Author] = &authorDetails{
+					Name:    info.Author,
 					Linters: []string{lc.Name()},
-					Profile: fmt.Sprintf("[%[1]s](https://gitlab.com/%[1]s)", info.Author),
-					Avatar:  getGitHubAvatar(info),
+					Profile: fmt.Sprintf("https://gitlab.com/%[1]s", info.Author),
+					Avatar:  fmt.Sprintf("https://github.com/%[1]s.png", ghAuthor),
 				}
 			}
 		}
@@ -73,24 +84,13 @@ func getThanksList() string {
 		return strings.Compare(strings.ToLower(a), strings.ToLower(b))
 	})
 
-	lines := []string{
-		"|Author|Linter(s)|",
-		"|---|---|",
-	}
+	var details []*authorDetails
 
 	for _, author := range authors {
-		lines = append(lines, fmt.Sprintf("|<figure>%s<figcaption>%s</figcaption></figure>|%s|",
-			addedAuthors[author].Avatar, addedAuthors[author].Profile, strings.Join(addedAuthors[author].Linters, ", ")))
+		details = append(details, addedAuthors[author])
 	}
 
-	return strings.Join(lines, "\n")
-}
-
-func getGitHubAvatar(info authorInfo) string {
-	return fmt.Sprintf(
-		`<img src="https://github.com/%[1]s.png" style="max-width: 100%%;" width="50px;" title="%[1]s" alt="%[1]s" loading="lazy">`,
-		info.Author,
-	)
+	return details
 }
 
 type authorInfo struct {
@@ -104,6 +104,9 @@ func extractInfo(lc *linter.Config) authorInfo {
 	switch lc.Name() {
 	case "staticcheck":
 		return authorInfo{Author: "dominikh", Host: hostGitHub}
+
+	case "exhaustruct":
+		return authorInfo{Author: "xobotyi", Host: hostGitHub}
 
 	case "misspell":
 		return authorInfo{Author: "client9", Host: hostGitHub}
@@ -142,9 +145,6 @@ func extractInfo(lc *linter.Config) authorInfo {
 
 		case "OpenPeeDeeP":
 			info.Author = "dixonwille"
-
-		case "bosi":
-			info.Author = "bosix"
 
 		case "golangci":
 			return authorInfo{}

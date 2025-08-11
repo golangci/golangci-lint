@@ -1,0 +1,16 @@
+{{- /*
+Creates a code block with the contents of a configuration file section.
+
+@param {string} section The name of the section inside the data file.
+@returns {string}
+
+@example {{% configuration-file-snippet section="sectionName" %}}
+*/ -}}
+
+{{- $sectionName := .Get "section" -}}
+
+{{- $file := index $.Site.Data.configuration_file -}}
+
+```yaml
+{{ index $file $sectionName | safeHTML }}
+```

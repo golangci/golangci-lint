@@ -1,242 +1,41 @@
 package main
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
 	"log"
 	"os"
-	"os/exec"
 	"path/filepath"
-	"slices"
-
-	"github.com/golangci/golangci-lint/v2/pkg/config"
-	"github.com/golangci/golangci-lint/v2/pkg/goformatters"
-	"github.com/golangci/golangci-lint/v2/pkg/lint/linter"
-	"github.com/golangci/golangci-lint/v2/pkg/lint/lintersdb"
-	"github.com/golangci/golangci-lint/v2/pkg/result/processors"
-	"github.com/golangci/golangci-lint/v2/scripts/website/types"
 )
 
 func main() {
-	err := saveLinters()
+	dataDir := filepath.Join("docs", "data")
+
+	err := saveLinters(filepath.Join(dataDir, "linters_info.json"))
 	if err != nil {
 		log.Fatalf("Save linters: %v", err)
 	}
 
-	err = saveFormatters()
+	err = saveFormatters(filepath.Join(dataDir, "formatters_info.json"))
 	if err != nil {
 		log.Fatalf("Save formatters: %v", err)
 	}
 
-	err = saveDefaultExclusions()
+	err = saveDefaultExclusions(filepath.Join(dataDir, "exclusion_presets.json"))
 	if err != nil {
 		log.Fatalf("Save default exclusions: %v", err)
 	}
 
-	err = saveCLIHelp(context.Background(), filepath.Join("assets", "cli-help.json"))
+	err = saveCLIHelp(context.Background(), filepath.Join(dataDir, "cli_help.json"))
 	if err != nil {
 		log.Fatalf("Save CLI help: %v", err)
 	}
-}
 
-func saveFormatters() error {
-	linters, _ := lintersdb.NewLinterBuilder().Build(config.NewDefault())
-
-	var wraps []types.LinterWrapper
-	for _, l := range linters {
-		if l.IsDeprecated() && l.Deprecation.Level > linter.DeprecationWarning {
-			continue
-		}
-
-		if !goformatters.IsFormatter(l.Name()) {
-			continue
-		}
-
-		wrapper := types.LinterWrapper{
-			Name:             l.Linter.Name(),
-			Desc:             l.Linter.Desc(),
-			Groups:           l.Groups,
-			LoadMode:         l.LoadMode,
-			AlternativeNames: l.AlternativeNames,
-			OriginalURL:      l.OriginalURL,
-			Internal:         l.Internal,
-			CanAutoFix:       l.CanAutoFix,
-			IsSlow:           l.IsSlow,
-			DoesChangeTypes:  l.DoesChangeTypes,
-			Since:            l.Since,
-		}
-
-		if l.Deprecation != nil {
-			wrapper.Deprecation = &types.Deprecation{
-				Since:       l.Deprecation.Since,
-				Message:     l.Deprecation.Message,
-				Replacement: l.Deprecation.Replacement,
-			}
-		}
-
-		wraps = append(wraps, wrapper)
-	}
-
-	return saveToJSONFile(filepath.Join("assets", "formatters-info.json"), wraps)
-}
-
-func saveLinters() error {
-	linters, _ := lintersdb.NewLinterBuilder().Build(config.NewDefault())
-
-	var wraps []types.LinterWrapper
-	for _, l := range linters {
-		if l.IsDeprecated() && l.Deprecation.Level > linter.DeprecationWarning {
-			continue
-		}
-
-		if goformatters.IsFormatter(l.Name()) {
-			continue
-		}
-
-		wrapper := types.LinterWrapper{
-			Name:             l.Linter.Name(),
-			Desc:             l.Linter.Desc(),
-			Groups:           l.Groups,
-			LoadMode:         l.LoadMode,
-			AlternativeNames: l.AlternativeNames,
-			OriginalURL:      l.OriginalURL,
-			Internal:         l.Internal,
-			CanAutoFix:       l.CanAutoFix,
-			IsSlow:           l.IsSlow,
-			DoesChangeTypes:  l.DoesChangeTypes,
-			Since:            l.Since,
-		}
-
-		if l.Deprecation != nil {
-			wrapper.Deprecation = &types.Deprecation{
-				Since:       l.Deprecation.Since,
-				Message:     l.Deprecation.Message,
-				Replacement: l.Deprecation.Replacement,
-			}
-		}
-
-		wraps = append(wraps, wrapper)
-	}
-
-	return saveToJSONFile(filepath.Join("assets", "linters-info.json"), wraps)
-}
-
-func saveDefaultExclusions() error {
-	data := make(map[string][]types.ExcludeRule)
-
-	for name, rules := range processors.LinterExclusionPresets {
-		for _, rule := range rules {
-			data[name] = append(data[name], types.ExcludeRule{
-				Linters:    rule.Linters,
-				Path:       rule.Path,
-				PathExcept: rule.PathExcept,
-				Text:       rule.Text,
-				Source:     rule.Source,
-			})
-		}
-	}
-
-	return saveToJSONFile(filepath.Join("assets", "exclusion-presets.json"), data)
-}
-
-func saveCLIHelp(ctx context.Context, dst string) error {
-	err := exec.CommandContext(ctx, "make", "build").Run()
+	err = saveThanksList(filepath.Join(dataDir, "thanks.json"))
 	if err != nil {
-		return fmt.Errorf("can't run make build: %w", err)
+		log.Fatalf("Save thanks list: %v", err)
 	}
-
-	lintersOut, err := exec.CommandContext(ctx, "./golangci-lint", "help", "linters").Output()
-	if err != nil {
-		return fmt.Errorf("can't run linters cmd: %w", err)
-	}
-
-	lintersOutParts := bytes.Split(lintersOut, []byte("\n\n"))
-
-	data := types.CLIHelp{
-		Enable: string(lintersOutParts[0]),
-	}
-
-	data.RootCmdHelp, err = getCmdHelp(ctx)
-	if err != nil {
-		return err
-	}
-
-	data.RunCmdHelp, err = getCmdHelp(ctx, "run")
-	if err != nil {
-		return err
-	}
-
-	data.LintersCmdHelp, err = getCmdHelp(ctx, "linters")
-	if err != nil {
-		return err
-	}
-
-	data.FmtCmdHelp, err = getCmdHelp(ctx, "fmt")
-	if err != nil {
-		return err
-	}
-
-	data.FormattersCmdHelp, err = getCmdHelp(ctx, "formatters")
-	if err != nil {
-		return err
-	}
-
-	data.HelpCmdHelp, err = getCmdHelp(ctx, "help")
-	if err != nil {
-		return err
-	}
-
-	data.ConfigCmdHelp, err = getCmdHelp(ctx, "config")
-	if err != nil {
-		return err
-	}
-
-	data.MigrateCmdHelp, err = getCmdHelp(ctx, "migrate")
-	if err != nil {
-		return err
-	}
-
-	data.CustomCmdHelp, err = getCmdHelp(ctx, "custom")
-	if err != nil {
-		return err
-	}
-
-	data.CacheCmdHelp, err = getCmdHelp(ctx, "cache")
-	if err != nil {
-		return err
-	}
-
-	data.VersionCmdHelp, err = getCmdHelp(ctx, "version")
-	if err != nil {
-		return err
-	}
-
-	data.CompletionCmdHelp, err = getCmdHelp(ctx, "completion")
-	if err != nil {
-		return err
-	}
-
-	return saveToJSONFile(dst, data)
-}
-
-func getCmdHelp(ctx context.Context, names ...string) (string, error) {
-	args := slices.Clone(names)
-	args = append(args, "--help")
-
-	helpCmd := exec.CommandContext(ctx, "./golangci-lint", args...)
-	helpCmd.Env = append(helpCmd.Env, os.Environ()...)
-
-	help, err := helpCmd.Output()
-	if err != nil {
-		return "", fmt.Errorf("can't run help cmd: %w", err)
-	}
-
-	helpLines := bytes.Split(help, []byte("\n"))
-	shortHelp := bytes.Join(helpLines[2:], []byte("\n"))
-
-	return string(shortHelp), nil
 }
 
 func saveToJSONFile(dst string, data any) error {

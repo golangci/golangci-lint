@@ -30,10 +30,7 @@ It's not possible to mix files and packages/directories, and files must come fro
 
 Golangci-lint can be used with zero configuration. By default, the following linters are enabled:
 
-```console
-$ golangci-lint help linters
-{.LintersCommandOutputEnabledOnly}
-```
+{{% cli-output section="defaultEnabledLinters" cmd="help linters" %}}
 
 Pass `-E/--enable` to enable linter and `-D/--disable` to disable:
 

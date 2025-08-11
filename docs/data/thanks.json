@@ -1,0 +1,700 @@
+[
+  {
+    "name": "4meepo",
+    "linters": [
+      "tagalign"
+    ],
+    "profile": "https://github.com/sponsors/4meepo",
+    "avatar": "https://github.com/4meepo.png"
+  },
+  {
+    "name": "Abirdcfly",
+    "linters": [
+      "dupword"
+    ],
+    "profile": "https://github.com/sponsors/Abirdcfly",
+    "avatar": "https://github.com/Abirdcfly.png"
+  },
+  {
+    "name": "alecthomas",
+    "linters": [
+      "gochecksumtype"
+    ],
+    "profile": "https://github.com/sponsors/alecthomas",
+    "avatar": "https://github.com/alecthomas.png"
+  },
+  {
+    "name": "alexkohler",
+    "linters": [
+      "dogsled",
+      "nakedret",
+      "prealloc"
+    ],
+    "profile": "https://github.com/sponsors/alexkohler",
+    "avatar": "https://github.com/alexkohler.png"
+  },
+  {
+    "name": "alingse",
+    "linters": [
+      "asasalint",
+      "nilnesserr"
+    ],
+    "profile": "https://github.com/sponsors/alingse",
+    "avatar": "https://github.com/alingse.png"
+  },
+  {
+    "name": "AlwxSin",
+    "linters": [
+      "noinlineerr"
+    ],
+    "profile": "https://github.com/sponsors/AlwxSin",
+    "avatar": "https://github.com/AlwxSin.png"
+  },
+  {
+    "name": "Antonboom",
+    "linters": [
+      "errname",
+      "nilnil",
+      "testifylint"
+    ],
+    "profile": "https://github.com/sponsors/Antonboom",
+    "avatar": "https://github.com/Antonboom.png"
+  },
+  {
+    "name": "ashanbrown",
+    "linters": [
+      "forbidigo",
+      "makezero"
+    ],
+    "profile": "https://github.com/sponsors/ashanbrown",
+    "avatar": "https://github.com/ashanbrown.png"
+  },
+  {
+    "name": "bkielbasa",
+    "linters": [
+      "cyclop"
+    ],
+    "profile": "https://github.com/sponsors/bkielbasa",
+    "avatar": "https://github.com/bkielbasa.png"
+  },
+  {
+    "name": "blizzy78",
+    "linters": [
+      "varnamelen"
+    ],
+    "profile": "https://github.com/sponsors/blizzy78",
+    "avatar": "https://github.com/blizzy78.png"
+  },
+  {
+    "name": "bombsimon",
+    "linters": [
+      "wsl",
+      "wsl_v5"
+    ],
+    "profile": "https://github.com/sponsors/bombsimon",
+    "avatar": "https://github.com/bombsimon.png"
+  },
+  {
+    "name": "bosi",
+    "linters": [
+      "decorder"
+    ],
+    "profile": "https://gitlab.com/bosi",
+    "avatar": "https://github.com/bosix.png"
+  },
+  {
+    "name": "breml",
+    "linters": [
+      "bidichk",
+      "errchkjson"
+    ],
+    "profile": "https://github.com/sponsors/breml",
+    "avatar": "https://github.com/breml.png"
+  },
+  {
+    "name": "butuzov",
+    "linters": [
+      "ireturn",
+      "mirror"
+    ],
+    "profile": "https://github.com/sponsors/butuzov",
+    "avatar": "https://github.com/butuzov.png"
+  },
+  {
+    "name": "catenacyber",
+    "linters": [
+      "perfsprint"
+    ],
+    "profile": "https://github.com/sponsors/catenacyber",
+    "avatar": "https://github.com/catenacyber.png"
+  },
+  {
+    "name": "charithe",
+    "linters": [
+      "durationcheck"
+    ],
+    "profile": "https://github.com/sponsors/charithe",
+    "avatar": "https://github.com/charithe.png"
+  },
+  {
+    "name": "chokoswitch",
+    "linters": [
+      "reassign"
+    ],
+    "profile": "https://github.com/sponsors/chokoswitch",
+    "avatar": "https://github.com/chokoswitch.png"
+  },
+  {
+    "name": "ckaznocha",
+    "linters": [
+      "intrange"
+    ],
+    "profile": "https://github.com/sponsors/ckaznocha",
+    "avatar": "https://github.com/ckaznocha.png"
+  },
+  {
+    "name": "client9",
+    "linters": [
+      "misspell"
+    ],
+    "profile": "https://github.com/sponsors/client9",
+    "avatar": "https://github.com/client9.png"
+  },
+  {
+    "name": "Crocmagnon",
+    "linters": [
+      "arangolint",
+      "fatcontext"
+    ],
+    "profile": "https://github.com/sponsors/Crocmagnon",
+    "avatar": "https://github.com/Crocmagnon.png"
+  },
+  {
+    "name": "daixiang0",
+    "linters": [
+      "gci"
+    ],
+    "profile": "https://github.com/sponsors/daixiang0",
+    "avatar": "https://github.com/daixiang0.png"
+  },
+  {
+    "name": "denis-tingaikin",
+    "linters": [
+      "goheader"
+    ],
+    "profile": "https://github.com/sponsors/denis-tingaikin",
+    "avatar": "https://github.com/denis-tingaikin.png"
+  },
+  {
+    "name": "dixonwille",
+    "linters": [
+      "depguard"
+    ],
+    "profile": "https://github.com/sponsors/dixonwille",
+    "avatar": "https://github.com/dixonwille.png"
+  },
+  {
+    "name": "Djarvur",
+    "linters": [
+      "err113"
+    ],
+    "profile": "https://github.com/sponsors/Djarvur",
+    "avatar": "https://github.com/Djarvur.png"
+  },
+  {
+    "name": "dominikh",
+    "linters": [
+      "staticcheck",
+      "unused"
+    ],
+    "profile": "https://github.com/sponsors/dominikh",
+    "avatar": "https://github.com/dominikh.png"
+  },
+  {
+    "name": "firefart",
+    "linters": [
+      "nonamedreturns"
+    ],
+    "profile": "https://github.com/sponsors/firefart",
+    "avatar": "https://github.com/firefart.png"
+  },
+  {
+    "name": "fzipp",
+    "linters": [
+      "gocyclo"
+    ],
+    "profile": "https://github.com/sponsors/fzipp",
+    "avatar": "https://github.com/fzipp.png"
+  },
+  {
+    "name": "ghostiam",
+    "linters": [
+      "protogetter"
+    ],
+    "profile": "https://github.com/sponsors/ghostiam",
+    "avatar": "https://github.com/ghostiam.png"
+  },
+  {
+    "name": "go-critic",
+    "linters": [
+      "gocritic"
+    ],
+    "profile": "https://github.com/sponsors/go-critic",
+    "avatar": "https://github.com/go-critic.png"
+  },
+  {
+    "name": "golang",
+    "linters": [
+      "gofmt",
+      "goimports",
+      "govet"
+    ],
+    "profile": "https://github.com/sponsors/golang",
+    "avatar": "https://github.com/golang.png"
+  },
+  {
+    "name": "gordonklaus",
+    "linters": [
+      "ineffassign"
+    ],
+    "profile": "https://github.com/sponsors/gordonklaus",
+    "avatar": "https://github.com/gordonklaus.png"
+  },
+  {
+    "name": "jgautheron",
+    "linters": [
+      "goconst"
+    ],
+    "profile": "https://github.com/sponsors/jgautheron",
+    "avatar": "https://github.com/jgautheron.png"
+  },
+  {
+    "name": "jingyugao",
+    "linters": [
+      "rowserrcheck"
+    ],
+    "profile": "https://github.com/sponsors/jingyugao",
+    "avatar": "https://github.com/jingyugao.png"
+  },
+  {
+    "name": "jjti",
+    "linters": [
+      "spancheck"
+    ],
+    "profile": "https://github.com/sponsors/jjti",
+    "avatar": "https://github.com/jjti.png"
+  },
+  {
+    "name": "julz",
+    "linters": [
+      "importas"
+    ],
+    "profile": "https://github.com/sponsors/julz",
+    "avatar": "https://github.com/julz.png"
+  },
+  {
+    "name": "karamaru-alpha",
+    "linters": [
+      "copyloopvar"
+    ],
+    "profile": "https://github.com/sponsors/karamaru-alpha",
+    "avatar": "https://github.com/karamaru-alpha.png"
+  },
+  {
+    "name": "kisielk",
+    "linters": [
+      "errcheck"
+    ],
+    "profile": "https://github.com/sponsors/kisielk",
+    "avatar": "https://github.com/kisielk.png"
+  },
+  {
+    "name": "kkHAIKE",
+    "linters": [
+      "contextcheck"
+    ],
+    "profile": "https://github.com/sponsors/kkHAIKE",
+    "avatar": "https://github.com/kkHAIKE.png"
+  },
+  {
+    "name": "kulti",
+    "linters": [
+      "thelper"
+    ],
+    "profile": "https://github.com/sponsors/kulti",
+    "avatar": "https://github.com/kulti.png"
+  },
+  {
+    "name": "kunwardeep",
+    "linters": [
+      "paralleltest"
+    ],
+    "profile": "https://github.com/sponsors/kunwardeep",
+    "avatar": "https://github.com/kunwardeep.png"
+  },
+  {
+    "name": "lasiar",
+    "linters": [
+      "canonicalheader"
+    ],
+    "profile": "https://github.com/sponsors/lasiar",
+    "avatar": "https://github.com/lasiar.png"
+  },
+  {
+    "name": "ldez",
+    "linters": [
+      "exptostd",
+      "gomoddirectives",
+      "tagliatelle",
+      "usetesting"
+    ],
+    "profile": "https://github.com/sponsors/ldez",
+    "avatar": "https://github.com/ldez.png"
+  },
+  {
+    "name": "leighmcculloch",
+    "linters": [
+      "gocheckcompilerdirectives",
+      "gochecknoglobals"
+    ],
+    "profile": "https://github.com/sponsors/leighmcculloch",
+    "avatar": "https://github.com/leighmcculloch.png"
+  },
+  {
+    "name": "leonklingele",
+    "linters": [
+      "grouper"
+    ],
+    "profile": "https://github.com/sponsors/leonklingele",
+    "avatar": "https://github.com/leonklingele.png"
+  },
+  {
+    "name": "macabu",
+    "linters": [
+      "inamedparam"
+    ],
+    "profile": "https://github.com/sponsors/macabu",
+    "avatar": "https://github.com/macabu.png"
+  },
+  {
+    "name": "manuelarte",
+    "linters": [
+      "embeddedstructfieldcheck",
+      "funcorder"
+    ],
+    "profile": "https://github.com/sponsors/manuelarte",
+    "avatar": "https://github.com/manuelarte.png"
+  },
+  {
+    "name": "maratori",
+    "linters": [
+      "testableexamples",
+      "testpackage"
+    ],
+    "profile": "https://github.com/sponsors/maratori",
+    "avatar": "https://github.com/maratori.png"
+  },
+  {
+    "name": "matoous",
+    "linters": [
+      "godox"
+    ],
+    "profile": "https://github.com/sponsors/matoous",
+    "avatar": "https://github.com/matoous.png"
+  },
+  {
+    "name": "mdempsky",
+    "linters": [
+      "unconvert"
+    ],
+    "profile": "https://github.com/sponsors/mdempsky",
+    "avatar": "https://github.com/mdempsky.png"
+  },
+  {
+    "name": "mgechev",
+    "linters": [
+      "revive"
+    ],
+    "profile": "https://github.com/sponsors/mgechev",
+    "avatar": "https://github.com/mgechev.png"
+  },
+  {
+    "name": "mibk",
+    "linters": [
+      "dupl"
+    ],
+    "profile": "https://github.com/sponsors/mibk",
+    "avatar": "https://github.com/mibk.png"
+  },
+  {
+    "name": "moricho",
+    "linters": [
+      "tparallel"
+    ],
+    "profile": "https://github.com/sponsors/moricho",
+    "avatar": "https://github.com/moricho.png"
+  },
+  {
+    "name": "mvdan",
+    "linters": [
+      "gofumpt",
+      "unparam"
+    ],
+    "profile": "https://github.com/sponsors/mvdan",
+    "avatar": "https://github.com/mvdan.png"
+  },
+  {
+    "name": "nakabonne",
+    "linters": [
+      "nestif"
+    ],
+    "profile": "https://github.com/sponsors/nakabonne",
+    "avatar": "https://github.com/nakabonne.png"
+  },
+  {
+    "name": "nishanths",
+    "linters": [
+      "exhaustive",
+      "predeclared"
+    ],
+    "profile": "https://github.com/sponsors/nishanths",
+    "avatar": "https://github.com/nishanths.png"
+  },
+  {
+    "name": "nunnatsa",
+    "linters": [
+      "ginkgolinter"
+    ],
+    "profile": "https://github.com/sponsors/nunnatsa",
+    "avatar": "https://github.com/nunnatsa.png"
+  },
+  {
+    "name": "polyfloyd",
+    "linters": [
+      "errorlint"
+    ],
+    "profile": "https://github.com/sponsors/polyfloyd",
+    "avatar": "https://github.com/polyfloyd.png"
+  },
+  {
+    "name": "raeperd",
+    "linters": [
+      "recvcheck"
+    ],
+    "profile": "https://github.com/sponsors/raeperd",
+    "avatar": "https://github.com/raeperd.png"
+  },
+  {
+    "name": "ryancurrah",
+    "linters": [
+      "gomodguard"
+    ],
+    "profile": "https://github.com/sponsors/ryancurrah",
+    "avatar": "https://github.com/ryancurrah.png"
+  },
+  {
+    "name": "ryanrolds",
+    "linters": [
+      "sqlclosecheck"
+    ],
+    "profile": "https://github.com/sponsors/ryanrolds",
+    "avatar": "https://github.com/ryanrolds.png"
+  },
+  {
+    "name": "sanposhiho",
+    "linters": [
+      "wastedassign"
+    ],
+    "profile": "https://github.com/sponsors/sanposhiho",
+    "avatar": "https://github.com/sanposhiho.png"
+  },
+  {
+    "name": "sashamelentyev",
+    "linters": [
+      "interfacebloat",
+      "usestdlibvars"
+    ],
+    "profile": "https://github.com/sponsors/sashamelentyev",
+    "avatar": "https://github.com/sashamelentyev.png"
+  },
+  {
+    "name": "securego",
+    "linters": [
+      "gosec"
+    ],
+    "profile": "https://github.com/sponsors/securego",
+    "avatar": "https://github.com/securego.png"
+  },
+  {
+    "name": "segmentio",
+    "linters": [
+      "golines"
+    ],
+    "profile": "https://github.com/sponsors/segmentio",
+    "avatar": "https://github.com/segmentio.png"
+  },
+  {
+    "name": "sivchari",
+    "linters": [
+      "containedctx"
+    ],
+    "profile": "https://github.com/sponsors/sivchari",
+    "avatar": "https://github.com/sivchari.png"
+  },
+  {
+    "name": "sonatard",
+    "linters": [
+      "noctx"
+    ],
+    "profile": "https://github.com/sponsors/sonatard",
+    "avatar": "https://github.com/sonatard.png"
+  },
+  {
+    "name": "ssgreg",
+    "linters": [
+      "nlreturn"
+    ],
+    "profile": "https://github.com/sponsors/ssgreg",
+    "avatar": "https://github.com/ssgreg.png"
+  },
+  {
+    "name": "stbenjam",
+    "linters": [
+      "nosprintfhostport"
+    ],
+    "profile": "https://github.com/sponsors/stbenjam",
+    "avatar": "https://github.com/stbenjam.png"
+  },
+  {
+    "name": "swaggo",
+    "linters": [
+      "swaggo"
+    ],
+    "profile": "https://github.com/sponsors/swaggo",
+    "avatar": "https://github.com/swaggo.png"
+  },
+  {
+    "name": "tdakkota",
+    "linters": [
+      "asciicheck"
+    ],
+    "profile": "https://github.com/sponsors/tdakkota",
+    "avatar": "https://github.com/tdakkota.png"
+  },
+  {
+    "name": "tenntenn",
+    "linters": [
+      "forcetypeassert",
+      "nilerr"
+    ],
+    "profile": "https://github.com/sponsors/tenntenn",
+    "avatar": "https://github.com/tenntenn.png"
+  },
+  {
+    "name": "tetafro",
+    "linters": [
+      "godot"
+    ],
+    "profile": "https://github.com/sponsors/tetafro",
+    "avatar": "https://github.com/tetafro.png"
+  },
+  {
+    "name": "timakin",
+    "linters": [
+      "bodyclose"
+    ],
+    "profile": "https://github.com/sponsors/timakin",
+    "avatar": "https://github.com/timakin.png"
+  },
+  {
+    "name": "timonwong",
+    "linters": [
+      "loggercheck"
+    ],
+    "profile": "https://github.com/sponsors/timonwong",
+    "avatar": "https://github.com/timonwong.png"
+  },
+  {
+    "name": "tmzane",
+    "linters": [
+      "musttag",
+      "sloglint"
+    ],
+    "profile": "https://github.com/sponsors/tmzane",
+    "avatar": "https://github.com/tmzane.png"
+  },
+  {
+    "name": "tomarrell",
+    "linters": [
+      "wrapcheck"
+    ],
+    "profile": "https://github.com/sponsors/tomarrell",
+    "avatar": "https://github.com/tomarrell.png"
+  },
+  {
+    "name": "tommy-muehle",
+    "linters": [
+      "mnd"
+    ],
+    "profile": "https://github.com/sponsors/tommy-muehle",
+    "avatar": "https://github.com/tommy-muehle.png"
+  },
+  {
+    "name": "ultraware",
+    "linters": [
+      "funlen",
+      "whitespace"
+    ],
+    "profile": "https://github.com/sponsors/ultraware",
+    "avatar": "https://github.com/ultraware.png"
+  },
+  {
+    "name": "uudashr",
+    "linters": [
+      "gocognit",
+      "iface"
+    ],
+    "profile": "https://github.com/sponsors/uudashr",
+    "avatar": "https://github.com/uudashr.png"
+  },
+  {
+    "name": "xen0n",
+    "linters": [
+      "gosmopolitan"
+    ],
+    "profile": "https://github.com/sponsors/xen0n",
+    "avatar": "https://github.com/xen0n.png"
+  },
+  {
+    "name": "xobotyi",
+    "linters": [
+      "exhaustruct"
+    ],
+    "profile": "https://github.com/sponsors/xobotyi",
+    "avatar": "https://github.com/xobotyi.png"
+  },
+  {
+    "name": "yagipy",
+    "linters": [
+      "maintidx"
+    ],
+    "profile": "https://github.com/sponsors/yagipy",
+    "avatar": "https://github.com/yagipy.png"
+  },
+  {
+    "name": "yeya24",
+    "linters": [
+      "promlinter"
+    ],
+    "profile": "https://github.com/sponsors/yeya24",
+    "avatar": "https://github.com/yeya24.png"
+  },
+  {
+    "name": "ykadowak",
+    "linters": [
+      "zerologlint"
+    ],
+    "profile": "https://github.com/sponsors/ykadowak",
+    "avatar": "https://github.com/ykadowak.png"
+  }
+]

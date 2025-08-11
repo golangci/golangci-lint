@@ -1,0 +1,23 @@
+{{- /*
+Creates a card for each author of a linter/formatter.
+
+@example {{< authors >}}
+*/ -}}
+
+{{- $thanks := index $.Site.Data.thanks -}}
+{{- range $thanks }}
+
+{{ $v := slice }}
+{{- range .linters -}}
+{{- $v = $v | append (printf "<code>%s</code>" .) -}}
+{{- end -}}
+
+{{- partial "shortcodes/card" (dict
+  "page"        .Page
+  "link"        .profile
+  "title"       .name
+  "subtitle"    (delimit $v "<br>")
+  "image"       .avatar
+  )
+-}}
+{{- end -}}

@@ -46,24 +46,7 @@ Other fields explicitly defined in the configuration file are migrated even if t
 
 The `migrate` command automatically migrates `linters.presets` in individual linters to `linters.enable`.
 
-```txt
-Migrate configuration file from v1 to v2
-
-Usage:
-  golangci-lint migrate [flags]
-
-Flags:
-  -c, --config PATH       Read config from file path PATH
-      --no-config         Don't read config file
-      --format string     Output file format.
-                          By default, the format of the input configuration file is used.
-                          It can be 'yml', 'yaml', 'toml', or 'json'.
-      --skip-validation   Skip validation of the configuration file against the JSON Schema for v1.
-
-Global Flags:
-  -h, --help           Help for a command
-
-```
+{{% cli-output cmd="migrate" %}}
 
 ## Changes
 

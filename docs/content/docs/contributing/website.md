@@ -17,10 +17,29 @@ The site is based on [hextra](https://github.com/imfing/hextra) theme.
 
 ## Templating
 
-We use templates like `{.SomeField}` inside our `md` files.
+We use [shortcodes](https://gohugo.io/templates/types/#shortcode) and [partials](https://gohugo.io/templates/types/#partial) based on files from `./docs/.tmp/` and `./docs/data/`. 
 
-These templates are expanded by running `make website_expand_templates` in the root of the repository.  
-It runs script `scripts/website/expand_templates/` that rewrites `md` files with replaced templates.
+- The files in `./docs/.tmp/` are used to be embedded with the shortcode `{{%/* embed file="filename.ext" */%}}`.
+- The files in `./docs/data/` are used as [data sources](https://gohugo.io/content-management/data-sources/). 
+
+These files are created by running:
+
+- `make website_expand_templates` in the root of the repository.  
+- `make website_dump_info` in the root of the repository. (only during a release)
+
+### Some Notes
+
+[shortcodes](https://gohugo.io/templates/types/#shortcode):
+- cannot be used inside another shortcode
+- can only be used inside a page
+- can contain Markdown or HTML, but the tag is different: `{{%/* shortcode */%}}` vs `{{</* shortcode */>}}`
+
+[partials](https://gohugo.io/templates/types/#partial):
+- are reusable HTML blocks or "functions"
+- cannot be used inside a page
+- can be used inside another partial
+- can be used inside a shortcode
+- can be used inside a layout
 
 ## Hosting
 
@@ -30,14 +49,24 @@ GitHub deploys the website to production after merging anything to a `main` bran
 
 ## Local Testing
 
-Install Hugo (v0.148.1 or newer).
+Install Hugo Extended (v0.148.1 or newer).
 
 Run:
 
 ```bash
-# (if in the root of the repository)
+# (in the root of the repository)
 make docs_serve
-# OR (if inside the docs/ folder)
+```
+
+or
+
+```bash
+# (in the root of the repository)
+make website_expand_templates
+
+cd docs/
+
+# (inside the docs/ folder)
 make serve
 ```
 
@@ -51,6 +80,17 @@ Also, there is no need to refresh a webpage: hot reload updates changed content 
 To do this, run:
 
 ```bash
-# (only in the root of the repository)
-make website_expand_templates
+# (in the root of the repository)
+make docs_build
+```
+or
+
+```bash
+# (in the root of the repository)
+make website_copy_jsonschema website_expand_templates
+
+cd docs/
+
+# (inside the docs/ folder)
+make build
 ```

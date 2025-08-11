@@ -2,7 +2,6 @@
   {
     "name": "gci",
     "desc": "Check if code and import statements are formatted, with additional rules.",
-    "Groups": null,
     "loadMode": 8199,
     "originalURL": "https://github.com/daixiang0/gci",
     "internal": false,
@@ -13,7 +12,6 @@
   {
     "name": "gofmt",
     "desc": "Check if the code is formatted according to 'gofmt' command.",
-    "Groups": null,
     "loadMode": 8199,
     "originalURL": "https://pkg.go.dev/cmd/gofmt",
     "internal": false,
@@ -24,7 +22,6 @@
   {
     "name": "gofumpt",
     "desc": "Check if code and import statements are formatted, with additional rules.",
-    "Groups": null,
     "loadMode": 8199,
     "originalURL": "https://github.com/mvdan/gofumpt",
     "internal": false,
@@ -35,7 +32,6 @@
   {
     "name": "golines",
     "desc": "Checks if code is formatted, and fixes long lines",
-    "Groups": null,
     "loadMode": 8199,
     "originalURL": "https://github.com/segmentio/golines",
     "internal": false,
@@ -46,7 +42,6 @@
   {
     "name": "goimports",
     "desc": "Checks if the code and import statements are formatted according to the 'goimports' command.",
-    "Groups": null,
     "loadMode": 8199,
     "originalURL": "https://pkg.go.dev/golang.org/x/tools/cmd/goimports",
     "internal": false,
@@ -57,7 +52,6 @@
   {
     "name": "swaggo",
     "desc": "Check if swaggo comments are formatted",
-    "Groups": null,
     "loadMode": 8199,
     "originalURL": "https://github.com/swaggo/swaggo",
     "internal": false,

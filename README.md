@@ -27,7 +27,7 @@ Documentation is hosted at https://golangci-lint.run.
 [![Follow on Bluesky](https://img.shields.io/badge/Bluesky-0a7aff?logo=bluesky&logoColor=white)](https://bsky.app/profile/golangci-lint.run)
 [![Follow on Twitter](https://img.shields.io/badge/Twitter-1DA1F2?logo=x&logoColor=white)](https://twitter.com/golangci)
 
-## Supporting Us
+## Support Us
 
 [![Open Collective backers and sponsors](https://img.shields.io/badge/OpenCollective-Donate-blue?logo=opencollective&style=for-the-badge)](https://opencollective.com/golangci-lint)
 [![GitHub Sponsors](https://img.shields.io/badge/GitHub-Donate-blue?logo=github&style=for-the-badge)](https://github.com/sponsors/golangci)

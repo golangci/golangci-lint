@@ -101,17 +101,17 @@ go.sum: go.mod
 
 # Documentation
 
-docs_serve:
+docs_serve: website_expand_templates
 	@make -C ./docs serve
 .PHONY: docs_serve
-
-docs_reset:
-	@make -C ./docs reset
-.PHONY: docs_reset
 
 docs_clean:
 	@make -C ./docs clean
 .PHONY: docs_clean
+
+docs_build: website_copy_jsonschema website_expand_templates
+	@make -C ./docs build
+.PHONY: docs_build
 
 docs/static/demo.gif: FORCE
 	vhs docs/golangci-lint.tape

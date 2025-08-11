@@ -1,166 +1,85 @@
 package main
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"log"
 	"os"
 	"path/filepath"
-	"strings"
-
-	"github.com/rogpeppe/go-internal/lockedfile"
 
 	"github.com/golangci/golangci-lint/v2/scripts/website/github"
-	"github.com/golangci/golangci-lint/v2/scripts/website/types"
 )
 
 func main() {
-	replacements, err := buildTemplateContext()
+	err := saveTmp(filepath.Join("docs", ".tmp"))
 	if err != nil {
-		log.Fatalf("Failed to build template context: %s", err)
+		log.Fatalf("Save tmp: %s", err)
 	}
 
-	if err := rewriteDocs(replacements); err != nil {
-		log.Fatalf("Failed to rewrite docs: %s", err)
+	err = saveData(filepath.Join("docs", "data"))
+	if err != nil {
+		log.Fatalf("Save data: %s", err)
 	}
 
 	log.Print("Successfully expanded templates")
 }
 
-func rewriteDocs(replacements map[string]string) error {
-	madeReplacements := map[string]bool{}
-
-	err := filepath.Walk(filepath.Join("docs", "content"),
-		func(path string, info os.FileInfo, err error) error {
-			if err != nil {
-				return err
-			}
-			if info.IsDir() {
-				return nil
-			}
-			return processDoc(path, replacements, madeReplacements)
-		})
+func saveTmp(tmpDir string) error {
+	err := os.RemoveAll(tmpDir)
 	if err != nil {
-		return fmt.Errorf("walk dir: %w", err)
+		return fmt.Errorf("remove tmp dir: %w", err)
 	}
 
-	if len(madeReplacements) != len(replacements) {
-		for key := range replacements {
-			if !madeReplacements[key] {
-				log.Printf("Replacement %q wasn't performed", key)
-			}
-		}
-		return fmt.Errorf("%d replacements weren't performed", len(replacements)-len(madeReplacements))
-	}
-	return nil
-}
-
-func processDoc(path string, replacements map[string]string, madeReplacements map[string]bool) error {
-	contentBytes, err := os.ReadFile(path)
+	err = os.MkdirAll(tmpDir, os.ModePerm)
 	if err != nil {
-		return fmt.Errorf("read %s: %w", path, err)
+		return fmt.Errorf("create tmp dir: %w", err)
 	}
 
-	content := string(contentBytes)
-	hasReplacements := false
-	for key, replacement := range replacements {
-		nextContent := content
-		nextContent = strings.ReplaceAll(nextContent, fmt.Sprintf("{.%s}", key), replacement)
-
-		// YAML formatter in mdx code section makes extra spaces, need to match them too.
-		nextContent = strings.ReplaceAll(nextContent, fmt.Sprintf("{ .%s }", key), replacement)
-
-		if nextContent != content {
-			hasReplacements = true
-			madeReplacements[key] = true
-			content = nextContent
-		}
-	}
-	if !hasReplacements {
-		return nil
+	err = copyPluginReference(tmpDir)
+	if err != nil {
+		return fmt.Errorf("copy plugin reference: %w", err)
 	}
 
-	log.Printf("Expanded template in %s, saving it", path)
-	if err = lockedfile.Write(path, bytes.NewBufferString(content), os.ModePerm); err != nil {
-		return fmt.Errorf("write changes to file %s: %w", path, err)
+	err = copyChangelog(tmpDir)
+	if err != nil {
+		return fmt.Errorf("copy changelog: %w", err)
 	}
 
 	return nil
 }
 
-func buildTemplateContext() (map[string]string, error) {
+func saveData(dir string) error {
 	latestVersion, err := github.GetLatestVersion()
 	if err != nil {
-		return nil, fmt.Errorf("get the latest version: %w", err)
+		return fmt.Errorf("get the latest version: %w", err)
+	}
+
+	err = saveToJSONFile(filepath.Join(dir, "version.json"), map[string]string{"version": latestVersion})
+	if err != nil {
+		return fmt.Errorf("save latest version: %w", err)
 	}
 
 	snippets, err := NewExampleSnippetsExtractor().GetExampleSnippets()
 	if err != nil {
-		return nil, err
+		return fmt.Errorf("get example snippets: %w", err)
 	}
 
-	pluginReference, err := getPluginReference()
+	err = saveToJSONFile(filepath.Join(dir, "linter_settings.json"), snippets.LintersSettings)
 	if err != nil {
-		return nil, fmt.Errorf("read plugin reference file: %w", err)
+		return fmt.Errorf("save linter snippets: %w", err)
 	}
 
-	helps, err := readJSONFile[types.CLIHelp](filepath.Join("assets", "cli-help.json"))
+	err = saveToJSONFile(filepath.Join(dir, "formatter_settings.json"), snippets.FormattersSettings)
 	if err != nil {
-		return nil, err
+		return fmt.Errorf("save formatter snippets: %w", err)
 	}
 
-	changeLog, err := os.ReadFile("CHANGELOG.md")
+	err = saveToJSONFile(filepath.Join(dir, "configuration_file.json"), snippets.ConfigurationFile)
 	if err != nil {
-		return nil, fmt.Errorf("read CHANGELOG.md: %w", err)
+		return fmt.Errorf("save configuration file snippets: %w", err)
 	}
 
-	exclusions, err := getExclusionPresets()
-	if err != nil {
-		return nil, fmt.Errorf("default exclusions: %w", err)
-	}
-
-	return map[string]string{
-		"CustomGCLReference":              pluginReference,
-		"LintersExample":                  snippets.LintersSettings,
-		"FormattersExample":               snippets.FormattersSettings,
-		"ConfigurationExample":            snippets.ConfigurationFile,
-		"LintersCommandOutputEnabledOnly": helps.Enable,
-		"EnabledByDefaultLinters": getLintersListMarkdown(
-			true,
-			filepath.Join("assets", "linters-info.json"),
-			"linters",
-			latestVersion,
-		),
-		"DisabledByDefaultLinters": getLintersListMarkdown(
-			false,
-			filepath.Join("assets", "linters-info.json"),
-			"linters",
-			latestVersion,
-		),
-		"Formatters": getLintersListMarkdown(
-			false,
-			filepath.Join("assets", "formatters-info.json"),
-			"formatters",
-			latestVersion,
-		),
-		"ExclusionPresets":      exclusions,
-		"ThanksList":            getThanksList(),
-		"CmdRootHelpText":       helps.RootCmdHelp,
-		"CmdRunHelpText":        helps.RunCmdHelp,
-		"CmdLintersHelpText":    helps.LintersCmdHelp,
-		"CmdFmtHelpText":        helps.FmtCmdHelp,
-		"CmdFormattersHelpText": helps.FormattersCmdHelp,
-		"CmdHelpText":           helps.HelpCmdHelp,
-		"CmdConfigHelpText":     helps.ConfigCmdHelp,
-		"CmdMigrateHelpText":    helps.MigrateCmdHelp,
-		"CmdCustomHelpText":     helps.CustomCmdHelp,
-		"CmdCacheHelpText":      helps.CacheCmdHelp,
-		"CmdVersionHelpText":    helps.VersionCmdHelp,
-		"CmdCompletionHelpText": helps.CompletionCmdHelp,
-		"ChangeLog":             string(changeLog),
-		"LatestVersion":         latestVersion,
-	}, nil
+	return nil
 }
 
 func readJSONFile[T any](src string) (T, error) {
@@ -180,4 +99,23 @@ func readJSONFile[T any](src string) (T, error) {
 	}
 
 	return result, nil
+}
+
+func saveToJSONFile(dst string, data any) error {
+	file, err := os.Create(dst)
+	if err != nil {
+		return fmt.Errorf("open file (%s): %w", dst, err)
+	}
+
+	defer func() { _ = file.Close() }()
+
+	encoder := json.NewEncoder(file)
+	encoder.SetIndent("", "  ")
+
+	err = encoder.Encode(data)
+	if err != nil {
+		return fmt.Errorf("encode JSON (%s): %w", dst, err)
+	}
+
+	return nil
 }

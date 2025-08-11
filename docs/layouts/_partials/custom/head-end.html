@@ -4,3 +4,67 @@
     quicklink.listen();
   });
 </script>
+<script>
+  window.addEventListener('load', () => {
+    const resetButton = document.querySelector('.gl-filter-reset');
+
+    if (!resetButton) {
+      return
+    }
+
+    const borderClass = 'hx-border'
+    const hiddenClass = 'gl-hidden'
+
+    document.querySelectorAll('.gl-filter').forEach(button => {
+      button.addEventListener('click', event => {
+        let clean = event.currentTarget.classList.contains(borderClass)
+
+        document.querySelectorAll('.gl-item').forEach(element => element.classList.remove(hiddenClass));
+        document.querySelectorAll('.gl-filter').forEach(element => element.classList.remove(borderClass));
+
+        if (clean) {
+          resetButton.classList.add(hiddenClass);
+        } else {
+          resetButton.classList.remove(hiddenClass);
+
+          document.querySelectorAll('.gl-filter').forEach(element => element.classList.remove(borderClass))
+
+          event.currentTarget.classList.add(borderClass);
+
+          let selector = ''
+          switch (event.currentTarget.id) {
+            case 'default-filter':
+              selector = '.gl-item:not(.gl-default)'
+              break;
+            case 'new-filter':
+              selector = '.gl-item:not(.gl-new)'
+              break;
+            case 'autofix-filter':
+              selector = '.gl-item:not(.gl-autofix)'
+              break;
+            case 'fast-filter':
+              selector = '.gl-item:not(.gl-slow)'
+              break;
+            case 'slow-filter':
+              selector = '.gl-item:not(.gl-fast)'
+              break;
+            case 'deprecated-filter':
+              selector = '.gl-item:not(.gl-deprecated)'
+              break;
+          }
+
+          if (selector) {
+            document.querySelectorAll(selector).forEach(element => element.classList.add(hiddenClass));
+          }
+        }
+      });
+    });
+
+    resetButton.addEventListener('click', (event) => {
+      event.currentTarget.classList.add(hiddenClass);
+
+      document.querySelectorAll('.gl-item').forEach(element => element.classList.remove(hiddenClass));
+      document.querySelectorAll('.gl-filter').forEach(element => element.classList.remove(borderClass));
+    });
+  });
+</script>

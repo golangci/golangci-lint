@@ -1,0 +1,14 @@
+{{- /*
+Compares two versions.
+
+@param {string} a Version A
+@param {string} b Version B
+@returns {boolean}
+
+@example {{ partial "compare-versions.html" (dict "a" "v1.2.3" "b" "v1.2.4") }}
+*/ -}}
+
+{{- $aVersion := path.Dir (replace .a "." "/") -}}
+{{- $bVersion := path.Dir (replace .b "." "/") -}}
+
+{{- return (eq $aVersion $bVersion) -}}

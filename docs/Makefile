@@ -1,12 +1,17 @@
-.PHONY: default clean reset serve
+.PHONY: default clean serve build
 
 default: clean serve
 
 clean:
 	rm -rf public/
 
-reset:
-	git checkout HEAD content/
-
 serve: clean
-	hugo server --disableFastRender --buildDrafts --enableGitInfo --watch --source .
+	hugo server --disableFastRender --buildDrafts --enableGitInfo
+
+# IMPORTANT used by the CI to deploy documentation
+build: clean
+	HUGO_ENVIRONMENT=production \
+	HUGO_ENV=production \
+	hugo \
+		--gc --minify \
+		--baseURL "https://golangci-lint.run/"

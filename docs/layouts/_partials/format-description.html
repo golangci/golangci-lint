@@ -1,0 +1,15 @@
+{{- /*
+Formats a item (linter/formatter) description.
+
+@param {string} (positional parameter 0) Description
+@returns {string}
+
+@example {{ partial "format-description" "message" }}
+*/ -}}
+
+{{- $desc := . -}}
+{{- $desc = strings.FirstUpper $desc -}}
+{{- if not (hasSuffix $desc ".") -}}
+    {{- $desc = print $desc "."  -}}
+{{- end -}}
+{{- return $desc -}}

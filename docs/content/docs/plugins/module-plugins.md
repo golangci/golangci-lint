@@ -20,7 +20,7 @@ Requirements:
 ### Configuration Example
 
 ```yaml {filename=".custom-gcl.yml"}
-version: {.LatestVersion}
+version: {{< latest-version >}}
 plugins:
   # a plugin from a Go proxy
   - module: 'github.com/golangci/plugin1'
@@ -79,5 +79,5 @@ linters:
 The configuration file can be validated with the JSON Schema: [custom-gcl.jsonschema.json](https://golangci-lint.run/jsonschema/custom-gcl.jsonschema.json)
 
 ```yml {filename=".custom-gcl.yml"}
-{ .CustomGCLReference }
+{{% embed file=".tmp/.custom-gcl.reference.yml" %}}
 ```
