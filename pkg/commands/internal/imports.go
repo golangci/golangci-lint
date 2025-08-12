@@ -48,7 +48,7 @@ func generateImports(cfg *Configuration) ([]byte, error) {
 		return nil, fmt.Errorf("parse template: %w", err)
 	}
 
-	var imps []string
+	imps := make([]string, 0, len(cfg.Plugins))
 	for _, plugin := range cfg.Plugins {
 		imps = append(imps, plugin.Import)
 	}

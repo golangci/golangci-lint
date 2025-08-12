@@ -728,7 +728,7 @@ func allLinters() []LinterInfo {
 }
 
 func toNames(linters []LinterInfo) []string {
-	var results []string
+	results := make([]string, 0, len(linters))
 
 	for _, linter := range linters {
 		results = append(results, linter.Name)
