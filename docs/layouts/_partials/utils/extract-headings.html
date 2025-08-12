@@ -20,7 +20,7 @@ The scratchpad must be initialized with empty slices before calling this functio
     {{ $.scratch.Add "keys" (slice $key) }}
   {{ end }}
 
-  {{ $title := (printf "<h%d>%s" $heading.Level $heading.Title) }}
+  {{ $title := (printf "<h%d>%s" $heading.Level $heading.Title) | htmlUnescape }}
   {{ $.scratch.Add "titles" (slice $title) }}
 
   {{ partial "utils/extract-headings.html" (dict
