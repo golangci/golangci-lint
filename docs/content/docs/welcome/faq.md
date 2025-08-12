@@ -2,6 +2,8 @@
 title: FAQ
 toc: false
 weight: 5
+aliases:
+  - /welcome/faq/
 ---
 
 ## Which Go versions are supported?

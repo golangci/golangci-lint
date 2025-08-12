@@ -1,6 +1,8 @@
 ---
 title: New linters
 weight: 4
+aliases:
+  - /contributing/new-linters/
 ---
 
 ## How to write a linter

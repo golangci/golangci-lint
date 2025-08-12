@@ -1,6 +1,8 @@
 ---
 title: Thanks
 weight: 1
+aliases:
+  - /product/thanks/
 ---
 
 ## ❤️

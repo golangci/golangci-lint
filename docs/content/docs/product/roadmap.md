@@ -1,6 +1,8 @@
 ---
 title: Roadmap
 weight: 4
+aliases:
+  - /product/roadmap/
 ---
 
 ## 💡 Feature Requests

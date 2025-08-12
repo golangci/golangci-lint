@@ -1,6 +1,8 @@
 ---
 title: False Positives
 weight: 3
+aliases:
+  - /usage/false-positives/
 ---
 
 False positives are inevitable, but we did our best to reduce their count.

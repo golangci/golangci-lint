@@ -1,6 +1,8 @@
 ---
 title: Debugging
 weight: 5
+aliases:
+  - /contributing/debug/
 ---
 
 You can see a verbose output of linter by using `-v` option.

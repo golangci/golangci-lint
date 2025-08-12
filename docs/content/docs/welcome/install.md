@@ -1,6 +1,8 @@
 ---
 title: "Install"
 weight: 1
+aliases:
+  - /welcome/install/
 ---
 
 ## CI installation
