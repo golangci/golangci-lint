@@ -165,159 +165,22 @@ The `migrate` command automatically migrates `linters.presets` in individual lin
 {{< tab >}}
 Presets:
 
-- bugs:
-  - `asasalint`
-  - `asciicheck`
-  - `bidichk`
-  - `bodyclose`
-  - `contextcheck`
-  - `durationcheck`
-  - `errcheck`
-  - `errchkjson`
-  - `errorlint`
-  - `exhaustive`
-  - `gocheckcompilerdirectives`
-  - `gochecksumtype`
-  - `gosec`
-  - `gosmopolitan`
-  - `govet`
-  - `loggercheck`
-  - `makezero`
-  - `musttag`
-  - `nilerr`
-  - `nilnesserr`
-  - `noctx`
-  - `protogetter`
-  - `reassign`
-  - `recvcheck`
-  - `rowserrcheck`
-  - `spancheck`
-  - `sqlclosecheck`
-  - `staticcheck`
-  - `testifylint`
-  - `zerologlint`
-- comment:
-  - `dupword`
-  - `godot`
-  - `godox`
-  - `misspell`
-- complexity:
-  - `cyclop`
-  - `funlen`
-  - `gocognit`
-  - `gocyclo`
-  - `maintidx`
-  - `nestif`
-- error:
-  - `err113`
-  - `errcheck`
-  - `errorlint`
-  - `wrapcheck`
-- format:
-  - `gci`
-  - `gofmt`
-  - `gofumpt`
-  - `goimports`
-- import:
-  - `depguard`
-  - `gci`
-  - `goimports`
-  - `gomodguard`
-- metalinter:
-  - `gocritic`
-  - `govet`
-  - `revive`
-  - `staticcheck`
-- module:
-  - `depguard`
-  - `gomoddirectives`
-  - `gomodguard`
-- performance:
-  - `bodyclose`
-  - `fatcontext`
-  - `noctx`
-  - `perfsprint`
-  - `prealloc`
-- sql:
-  - `rowserrcheck`
-  - `sqlclosecheck`
-- style:
-  - `asciicheck`
-  - `canonicalheader`
-  - `containedctx`
-  - `copyloopvar`
-  - `decorder`
-  - `depguard`
-  - `dogsled`
-  - `dupl`
-  - `err113`
-  - `errname`
-  - `exhaustruct`
-  - `exptostd`
-  - `forbidigo`
-  - `forcetypeassert`
-  - `ginkgolinter`
-  - `gochecknoglobals`
-  - `gochecknoinits`
-  - `goconst`
-  - `gocritic`
-  - `godot`
-  - `godox`
-  - `goheader`
-  - `gomoddirectives`
-  - `gomodguard`
-  - `goprintffuncname`
-  - `gosimple`
-  - `grouper`
-  - `iface`
-  - `importas`
-  - `inamedparam`
-  - `interfacebloat`
-  - `intrange`
-  - `ireturn`
-  - `lll`
-  - `loggercheck`
-  - `makezero`
-  - `mirror`
-  - `misspell`
-  - `mnd`
-  - `musttag`
-  - `nakedret`
-  - `nilnil`
-  - `nlreturn`
-  - `nolintlint`
-  - `nonamedreturns`
-  - `nosprintfhostport`
-  - `paralleltest`
-  - `predeclared`
-  - `promlinter`
-  - `revive`
-  - `sloglint`
-  - `stylecheck`
-  - `tagalign`
-  - `tagliatelle`
-  - `testpackage`
-  - `tparallel`
-  - `unconvert`
-  - `usestdlibvars`
-  - `varnamelen`
-  - `wastedassign`
-  - `whitespace`
-  - `wrapcheck`
-  - `wsl`
-- test:
-  - `exhaustruct`
-  - `paralleltest`
-  - `testableexamples`
-  - `testifylint`
-  - `testpackage`
-  - `thelper`
-  - `tparallel`
-  - `usetesting`
-- unused:
-  - `ineffassign`
-  - `unparam`
-  - `unused`
+| name | linters |
+|------|---------|
+| bugs | `asasalint`, `asciicheck`, `bidichk`, `bodyclose`, `contextcheck`, `durationcheck`, `errcheck`, `errchkjson`, `errorlint`, `exhaustive`, `gocheckcompilerdirectives`, `gochecksumtype`, `gosec`, `gosmopolitan`, `govet`, `loggercheck`, `makezero`, `musttag`, `nilerr`, `nilnesserr`, `noctx`, `protogetter`, `reassign`, `recvcheck`, `rowserrcheck`, `spancheck`, `sqlclosecheck`, `staticcheck`, `testifylint`, `zerologlint` |
+| comment | `dupword`, `godot`, `godox`, `misspell` | 
+| complexity | `cyclop`, `funlen`, `gocognit`, `gocyclo`, `maintidx`, `nestif` |
+| error | `err113`, `errcheck`, `errorlint`, `wrapcheck` |
+| format | `gci`, `gofmt`, `gofumpt`, `goimports` |
+| import | `depguard`, `gci`, `goimports`, `gomodguard` |
+| metalinter | `gocritic`, `govet`, `revive`, `staticcheck` |
+| module | `depguard`, `gomoddirectives`, `gomodguard` |
+| performance | `bodyclose`, `fatcontext`, `noctx`, `perfsprint`, `prealloc` |
+| sql | `rowserrcheck`, `sqlclosecheck` |
+| style | `asciicheck`, `canonicalheader`, `containedctx`, `copyloopvar`, `decorder`, `depguard`, `dogsled`, `dupl`, `err113`, `errname`, `exhaustruct`, `exptostd`, `forbidigo`, `forcetypeassert`, `ginkgolinter`, `gochecknoglobals`, `gochecknoinits`, `goconst`, `gocritic`, `godot`, `godox`, `goheader`, `gomoddirectives`, `gomodguard`, `goprintffuncname`, `gosimple`, `grouper`, `iface`, `importas`, `inamedparam`, `interfacebloat`, `intrange`, `ireturn`, `lll`, `loggercheck`, `makezero`, `mirror`, `misspell`, `mnd`, `musttag`, `nakedret`, `nilnil`, `nlreturn`, `nolintlint`, `nonamedreturns`, `nosprintfhostport`, `paralleltest`, `predeclared`, `promlinter`, `revive`, `sloglint`, `stylecheck`, `tagalign`, `tagliatelle`, `testpackage`, `tparallel`, `unconvert`, `usestdlibvars`, `varnamelen`, `wastedassign`, `whitespace`, `wrapcheck`, `wsl` |
+| test | `exhaustruct`, `paralleltest`, `testableexamples`, `testifylint`, `testpackage`, `thelper`, `tparallel`, `usetesting` |
+| unused | `ineffassign`, `unparam`, `unused` |
+
 {{< /tab >}}
 {{< tab >}}
 ```yaml
