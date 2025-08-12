@@ -502,45 +502,42 @@ linters:
       default-case-required: true
 
     exhaustruct:
-      # List of regular expressions to match type names that should be
-      # processed. Anonymous structs can be matched by '<anonymous>' alias.
+      # List of regular expressions to match type names that should be processed.
+      # Anonymous structs can be matched by '<anonymous>' alias.
       #
       # Each regular expression must match the full type name, including package path.
-      # For example, to match type `net/http.Cookie` regular expression should be
-      # `.*/http\.Cookie`, but not `http\.Cookie`.
-      #
+      # For example, to match type `net/http.Cookie` regular expression should be `.*/http\.Cookie`,
+      # but not `http\.Cookie`.
       # Default: []
       include:
         - '.+\.Test'
         - 'example\.com/package\.ExampleStruct[\d]{1,2}'
-      # List of regular expressions to match type names that should be
-      # excluded from processing. Anonymous structs can be matched by '<anonymous>'
-      # alias.
-      # Has precedence over IncludeRx.
+      # List of regular expressions to match type names that should be excluded from processing.
+      # Anonymous structs can be matched by '<anonymous>' alias.
+      # Has precedence over `include`.
       # Each regular expression must match the full type name, including package path.
-      # For example, to match type `net/http.Cookie` regular expression should be
-      # `.*/http\.Cookie`, but not `http\.Cookie`.
+      # For example, to match type `net/http.Cookie` regular expression should be `.*/http\.Cookie`,
+      # but not `http\.Cookie`.
       # Default: []
       exclude:
         - '.+/cobra\.Command$'
-      # AllowEmpty allows empty structures, effectively excluding them from the check.
+      # Allows empty structures, effectively excluding them from the check.
       # Default: false
-      allow-empty: false
-      # List of regular expressions to match type names that should be
-      # allowed to be empty. Anonymous structs can be matched by '<anonymous>'
-      # alias.
+      allow-empty: true
+      # List of regular expressions to match type names that should be allowed to be empty.
+      # Anonymous structs can be matched by '<anonymous>' alias.
       # Each regular expression must match the full type name, including package path.
-      # For example, to match type `net/http.Cookie` regular expression should be
-      # `.*/http\.Cookie`, but not `http\.Cookie`.
+      # For example, to match type `net/http.Cookie` regular expression should be `.*/http\.Cookie`,
+      # but not `http\.Cookie`.
       # Default: []
       allow-empty-rx:
         - '.*/http\.Cookie'
       # Allows empty structures in return statements.
       # Default: false
-      allow-empty-returns: false
+      allow-empty-returns: true
       # Allows empty structures in variable declarations.
       # Default: false
-      allow-empty-declarations: false
+      allow-empty-declarations: true
 
     fatcontext:
       # Check for potential fat contexts in struct pointers.
