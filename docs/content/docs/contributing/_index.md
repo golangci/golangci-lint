@@ -1,6 +1,8 @@
 ---
 title: Contributing
 weight: 6
+aliases:
+  - /contributing/quick-start/
 ---
 
 {{< cards >}}
