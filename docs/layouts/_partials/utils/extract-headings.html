@@ -1,0 +1,31 @@
+{{/*
+Extracts all headings from a page and adds them to the scratchpad.
+
+The keys can be obtained from the scratchpad by using the "keys" key.
+The titles can be obtained from the scratchpad by using the "titles" key.
+
+The scratchpad must be initialized with empty slices before calling this function for the keys "keys" and "titles"
+
+@param {any} target The element to extract headings from.
+@param {any} scratch The scratchpad to add the keys and titles to.
+
+@example {{ partial "utils/extract-headings.html" (dict "target" $h1 "scratch" $s) }}
+*/}}
+
+{{ range $heading := index .target.Headings }}
+  {{ if and (eq $heading.Level 0) (not $heading.Title) }}
+    {{ $.scratch.Add "keys" (slice $heading.Title) }}
+  {{ else }}
+    {{ $key := (printf "%s#%s" $heading.ID $heading.Title) }}
+    {{ $.scratch.Add "keys" (slice $key) }}
+  {{ end }}
+
+  {{ $title := (printf "<h%d>%s" $heading.Level $heading.Title) }}
+  {{ $.scratch.Add "titles" (slice $title) }}
+
+  {{ partial "utils/extract-headings.html" (dict
+    "target" $heading
+    "scratch" $.scratch
+    )
+  }}
+{{ end }}

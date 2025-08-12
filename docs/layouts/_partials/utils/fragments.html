@@ -3,22 +3,14 @@
 {{ $page := .context }}
 {{ $type := .type | default "content" }}
 
-{{ $headingKeys := slice }}
-{{ $headingTitles := slice }}
+{{ $s := newScratch }}
+{{ $s.Set "keys" slice }}
+{{ $s.Set "titles" slice }}
 
-{{ range $h1 := $page.Fragments.Headings }}
-  {{ if eq $h1.Title "" }}
-    {{ $headingKeys = $headingKeys | append $h1.Title }}
-  {{ else }}
-    {{ $headingKeys = $headingKeys | append (printf "%s#%s" $h1.ID $h1.Title) }}
-  {{ end }}
-  {{ $headingTitles = $headingTitles | append (printf "<h1>%s" $h1.Title) }}
+{{ partial "utils/extract-headings.html" (dict "target" $page.Fragments "scratch" $s) }}
 
-  {{ range $h2 := $h1.Headings }}
-    {{ $headingKeys = $headingKeys | append (printf "%s#%s" $h2.ID $h2.Title) }}
-    {{ $headingTitles = $headingTitles | append (printf "<h2>%s" $h2.Title) }}
-  {{ end }}
-{{ end }}
+{{ $headingKeys := $s.Get "keys" }}
+{{ $headingTitles := $s.Get "titles" }}
 
 {{ $content := $page.Content | htmlUnescape }}
 {{ $len := len $headingKeys }}
