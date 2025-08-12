@@ -34,22 +34,32 @@ Creates a section for each setting of a linter/formatter.
 
 {{/* Badges */}}
 <p>
+{{ $sinceLink := "/docs/product/changelog/" }}
+<!-- changelog entries are missing for versions less than v1.44.0 -->
+{{ if eq (partial "compare-versions.html" (dict "a" .since "b" "v1.43.0")) 1 }}
+  {{ $sinceLink = (print "/docs/product/changelog/#" (replace .since "." "")) }}
+{{ end }}
+<a href="{{ $sinceLink }}" title="Since golangci-lint {{ .since }}">
 {{ partial "shortcodes/badge.html" (dict
     "border" true
     "icon" "calendar"
     "content" (print "Since golangci-lint " .since)
     )
 }}
+</a>
 {{ if .deprecation -}}
+{{ $deprecatedSinceLink := (print "/docs/product/changelog/#" (replace .deprecation.since "." "")) }}
+<a href="{{ $deprecatedSinceLink }}" title="Deprecated since {{ .deprecation.since }}">
 {{ partial "shortcodes/badge.html" (dict
     "border" true
     "icon" "sparkles"
     "content" (print "Deprecated since " .deprecation.since)
     "type" "error"
     )
-    }}
+}}
+</a>
 {{ else }}
-    {{ if (partial "compare-versions.html" (dict "a" $gcilVersion "b" .since)) }}
+    {{ if eq (partial "compare-versions.html" (dict "a" $gcilVersion "b" .since)) 0 }}
 {{ partial "shortcodes/badge.html" (dict
     "border" true
     "icon" "sparkles"

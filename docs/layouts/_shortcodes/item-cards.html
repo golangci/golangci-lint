@@ -76,7 +76,7 @@ Creates a card for each item (linter/formatter) in a data file.
     {{- if in .groups "standard" -}}
         {{- $class = $class | append "gl-default" -}}
     {{- end -}}
-    {{- if (partial "compare-versions.html" (dict "a" $gcilVersion "b" .since)) -}}
+    {{- if eq (partial "compare-versions.html" (dict "a" $gcilVersion "b" .since)) 0 -}}
         {{- $class = $class | append "gl-new" -}}
     {{- end -}}
 

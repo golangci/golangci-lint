@@ -21,7 +21,7 @@ Creates tag information for an item (linter/formatter).
     {{- $tag.SetInMap "options" "subtitle" (print (strings.FirstUpper $item.deprecation.message) $replacement) -}}
     {{- $tag.SetInMap "options" "tag" (print "Deprecated since " $item.deprecation.since) -}}
     {{- $tag.SetInMap "options" "tagType" "error" -}}
-{{- else if (partial "compare-versions.html" (dict "a" $gcilVersion "b" $item.since)) -}}
+{{- else if eq (partial "compare-versions.html" (dict "a" $gcilVersion "b" $item.since)) 0 -}}
     {{- $tag.SetInMap "options" "tag" "New" -}}
     {{- $tag.SetInMap "options" "tagType" "warning" -}}
 {{- else if $item.canAutoFix -}}

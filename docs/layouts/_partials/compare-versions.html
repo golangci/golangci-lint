@@ -3,7 +3,7 @@ Compares two versions.
 
 @param {string} a Version A
 @param {string} b Version B
-@returns {boolean}
+@returns {int} -1 if a < b, 0 if a == b, 1 if a > b
 
 @example {{ partial "compare-versions.html" (dict "a" "v1.2.3" "b" "v1.2.4") }}
 */ -}}
@@ -11,4 +11,11 @@ Compares two versions.
 {{- $aVersion := path.Dir (replace .a "." "/") -}}
 {{- $bVersion := path.Dir (replace .b "." "/") -}}
 
-{{- return (eq $aVersion $bVersion) -}}
+{{- $result := 0 -}}
+{{- if (lt $aVersion $bVersion) -}}
+  {{- $result = -1 -}}
+{{- end -}}
+{{- if (gt $aVersion $bVersion) -}}
+  {{- $result = 1 -}}
+{{- end -}}
+{{- return $result -}}
