@@ -26,10 +26,9 @@ and it can be much faster than the simple binary installation.
 Also, the action creates GitHub annotations for found issues (you don't need to dig into build log to see found by golangci-lint issues).
 
 {{< cards cols=2 >}}
-    {{< card subtitle="Console Output" image="/images/colored-line-number.png" >}}
-    {{< card subtitle="Annotations" image="/images/annotations.png" >}}
+    {{< image-card src="/images/colored-line-number.png" title="Console Output" >}}
+    {{< image-card src="/images/annotations.png" title="Annotations" >}}
 {{< /cards >}}
-
 
 ### GitLab CI
 

@@ -1,0 +1,15 @@
+{{- /*
+Creates a card for an image.
+
+@param {string} src The path to the image.
+@param {string} title The title text for the image.
+
+@example {{< image-card src="path/to/image.png" title="Image description" >}}
+*/ -}}
+
+{{- $src := .Get "src" -}}
+{{- $title := .Get "title" -}}
+
+<div class="hextra-card hx-group hx-flex hx-flex-col hx-justify-start hx-overflow-hidden">
+  <img class="hextra-card-image" src="{{ $src }}" alt="{{ $title }}" title="{{ $title }}"/>
+</div>
