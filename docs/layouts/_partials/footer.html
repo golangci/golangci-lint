@@ -1,0 +1,67 @@
+{{- /* Modified version of https://github.com/imfing/hextra/blob/v0.9.7/layouts/partials/footer.html */ -}}
+{{- $enableFooterSwitches := .Scratch.Get "enableFooterSwitches" | default false -}}
+{{- $displayThemeToggle := site.Params.theme.displayToggle | default true -}}
+{{- $footerSwitchesVisible := and $enableFooterSwitches (or hugo.IsMultilingual $displayThemeToggle) -}}
+{{- $copyrightSectionVisible := or (.Site.Params.footer.displayPoweredBy | default true) .Site.Params.footer.displayCopyright -}}
+
+{{- $copyright := (T "copyright") | default "© 2024 Hextra." -}}
+{{- $poweredBy := (T "poweredBy") | default "Powered by Hextra" -}}
+
+{{- $footerWidth := "hx-max-w-screen-xl" -}}
+{{- with .Site.Params.footer.width -}}
+  {{ if eq . "wide" -}}
+    {{ $footerWidth = "hx-max-w-[90rem]" -}}
+  {{ else if eq . "full" -}}
+    {{ $footerWidth = "max-w-full" -}}
+  {{ end -}}
+{{- end -}}
+
+<footer class="hextra-footer hx-bg-gray-100 hx-pb-[env(safe-area-inset-bottom)] dark:hx-bg-neutral-900 print:hx-bg-transparent">
+  {{- if $footerSwitchesVisible -}}
+    <div class="hx-mx-auto hx-flex hx-gap-2 hx-py-2 hx-px-4 {{ $footerWidth }}">
+      {{- partial "language-switch.html" (dict "context" .) -}}
+      {{- with $displayThemeToggle }}{{ partial "theme-toggle.html" }}{{ end -}}
+    </div>
+    {{- if or hugo.IsMultilingual $displayThemeToggle -}}
+    <hr class="dark:hx-border-neutral-800" />
+    {{- end -}}
+  {{- end -}}
+
+  {{- if $copyrightSectionVisible -}}
+    <div class="hx-mx-auto hx-flex hx-items-center hx-justify-end hx-gap-2 hx-h-16 hx-px-6 hx-max-w-[90rem] hx-text-gray-600 dark:hx-text-gray-400">
+
+      <div class="hx-flex hx-items-center ltr:hx-mr-auto rtl:hx-ml-auto" >
+
+        {{- if .Site.Params.footer.displayCopyright }}
+        <span class="hx-mr-2 hx-inline">{{ $copyright | markdownify }}</span>
+        {{- end -}}
+
+        {{- if (.Site.Params.footer.displayPoweredBy | default true) }}
+        <span class="hx-mr-2 hx-inline">{{ template "theme-credit" $poweredBy }}</span>
+        {{- end -}}
+
+      </div>
+
+      {{- range .Site.Params.footer.links -}}
+      {{- $external := strings.HasPrefix .url "http" -}}
+      <a title="{{ .title }}" href="{{ .url }}" {{ if $external }}target="_blank"{{ end }} class="hx-text-sm contrast-more:hx-text-gray-700 contrast-more:dark:hx-text-gray-100 hx-relative -hx-ml-2 hx-whitespace-nowrap hx-p-2 md:hx-inline-block hx-text-gray-600 hover:hx-text-gray-800 dark:hx-text-gray-400 dark:hover:hx-text-gray-200">
+        <span class="hx-text-center">
+           {{- partial "utils/icon.html" (dict "name" .icon "attributes" "height=20") -}}
+        </span>
+      </a>
+      {{- end -}}
+
+    </div>
+  {{- end -}}
+</footer>
+
+{{- define "theme-credit" -}}
+<a class="hx-flex hx-text-sm hx-items-center hx-gap-1 hx-text-current" target="_blank" rel="noopener noreferrer" title="Hextra GitHub Homepage" href="https://github.com/imfing/hextra">
+    <span>
+      {{- . | markdownify -}}
+      {{- if strings.Contains . "Hextra" -}}
+        {{- partial "utils/icon.html" (dict "name" "hextra" "attributes" `height=1em class="hx-inline-block ltr:hx-ml-1 rtl:hx-mr-1 hx-align-[-2.5px]"`) -}}
+      {{- end -}}
+    </span>
+</a>
+{{- end -}}
