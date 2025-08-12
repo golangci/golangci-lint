@@ -13,6 +13,15 @@ weight: 1
     {{< card link="/docs/linters/configuration/" title="Linter Settings" icon="adjustments" >}}
 {{< /cards >}}
 
+> [!NOTE]
+> The formatters explicitly defined in the configuration section [`formatters`](/docs/configuration/file/#formatters-configuration) are automatically run by the command [`golangci-lint run`](/docs/configuration/cli/#run).
+> 
+> You don't need to run [`golangci-lint fmt`](/docs/configuration/cli/#fmt) before [`golangci-lint run`](/docs/configuration/cli/#run)
+> 
+> But the formatters cannot be enabled or disabled inside the `linters` section or the flags `-E/--enable`, `-D/--disable` of the command  [`golangci-lint run`](/docs/configuration/cli/#run).
+> 
+> The formatters can be enabled/disabled by defining them inside the [`formatters`](/docs/configuration/file/#formatters-configuration) section or by using the flags `-E/--enable`, `-D/--disable` of command [`golangci-lint fmt`](/docs/configuration/cli/#fmt).
+
 {{% cli-output cmd="run" %}}
 
 When the `--cpu-profile-path` or `--mem-profile-path` arguments are specified,
