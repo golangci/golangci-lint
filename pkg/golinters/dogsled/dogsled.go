@@ -30,18 +30,14 @@ func run(pass *analysis.Pass, maxBlanks int) (any, error) {
 		return nil, nil
 	}
 
-	nodeFilter := []ast.Node{
-		(*ast.FuncDecl)(nil),
-	}
-
-	insp.Preorder(nodeFilter, func(node ast.Node) {
+	for node := range insp.PreorderSeq((*ast.FuncDecl)(nil)) {
 		funcDecl, ok := node.(*ast.FuncDecl)
 		if !ok {
-			return
+			continue
 		}
 
 		if funcDecl.Body == nil {
-			return
+			continue
 		}
 
 		for _, expr := range funcDecl.Body.List {
@@ -65,7 +61,7 @@ func run(pass *analysis.Pass, maxBlanks int) (any, error) {
 				pass.Reportf(assgnStmt.Pos(), "declaration has %v blank identifiers", numBlank)
 			}
 		}
-	})
+	}
 
 	return nil, nil
 }

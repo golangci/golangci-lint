@@ -2,9 +2,22 @@
 package testdata
 
 import (
+	"context"
 	"os"
 	"testing"
 )
+
+func Test_contextBackground(t *testing.T) {
+	context.Background()
+}
+
+func Test_contextTODO(t *testing.T) {
+	context.TODO()
+}
+
+func Test_osChdir(t *testing.T) {
+	os.Chdir("") // want `os\.Chdir\(\) could be replaced by t\.Chdir\(\) in .+`
+}
 
 func Test_osMkdirTemp(t *testing.T) {
 	os.MkdirTemp("", "") // want `os\.MkdirTemp\(\) could be replaced by t\.TempDir\(\) in .+`

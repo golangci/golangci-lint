@@ -227,11 +227,12 @@ func (p *NolintFilter) extractInlineRangeFromComment(text string, g ast.Node, fs
 		return buildRange(nil) // ignore all linters
 	}
 
+	text, _, _ = strings.Cut(text, "//") // allow another comment after this comment
+
 	// ignore specific linters
 	var linters []string
-	text = strings.Split(text, "//")[0] // allow another comment after this comment
-	linterItems := strings.Split(strings.TrimPrefix(text, "nolint:"), ",")
-	for _, item := range linterItems {
+
+	for item := range strings.SplitSeq(strings.TrimPrefix(text, "nolint:"), ",") {
 		linterName := strings.ToLower(strings.TrimSpace(item))
 		if linterName == "all" {
 			p.unknownLintersSet = map[string]bool{}

@@ -219,10 +219,9 @@ func parseVersion(s string) (*version, error) {
 		return nil, fmt.Errorf("version %q should start with %q", s, vPrefix)
 	}
 
-	parts := strings.Split(strings.TrimPrefix(s, vPrefix), ".")
-
 	var nums []int
-	for _, part := range parts {
+
+	for part := range strings.SplitSeq(strings.TrimPrefix(s, vPrefix), ".") {
 		num, err := strconv.Atoi(part)
 		if err != nil {
 			return nil, fmt.Errorf("failed to parse version %q: %w", s, err)
