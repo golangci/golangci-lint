@@ -421,8 +421,12 @@ type ExhaustiveSettings struct {
 }
 
 type ExhaustructSettings struct {
-	Include []string `mapstructure:"include"`
-	Exclude []string `mapstructure:"exclude"`
+	Include                []string `mapstructure:"include"`
+	Exclude                []string `mapstructure:"exclude"`
+	AllowEmpty             bool     `mapstructure:"allow-empty"`
+	AllowEmptyRx           []string `mapstructure:"allow-empty-rx"`
+	AllowEmptyReturns      bool     `mapstructure:"allow-empty-returns"`
+	AllowEmptyDeclarations bool     `mapstructure:"allow-empty-declarations"`
 }
 
 type FatcontextSettings struct {

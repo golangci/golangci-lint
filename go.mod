@@ -5,6 +5,7 @@ go 1.24.0
 require (
 	4d63.com/gocheckcompilerdirectives v1.3.0
 	4d63.com/gochecknoglobals v0.2.2
+	dev.gaijin.team/go/exhaustruct/v4 v4.0.0
 	github.com/4meepo/tagalign v1.4.3
 	github.com/Abirdcfly/dupword v0.1.6
 	github.com/AlwxSin/noinlineerr v1.0.5
@@ -13,7 +14,6 @@ require (
 	github.com/Antonboom/testifylint v1.6.1
 	github.com/BurntSushi/toml v1.5.0
 	github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24
-	github.com/GaijinEntertainment/go-exhaustruct/v3 v3.3.1
 	github.com/OpenPeeDeeP/depguard/v2 v2.2.1
 	github.com/alecthomas/chroma/v2 v2.20.0
 	github.com/alecthomas/go-check-sumtype v0.3.1
@@ -145,6 +145,7 @@ require (
 
 require (
 	codeberg.org/chavacava/garif v0.2.0 // indirect
+	dev.gaijin.team/go/golib v0.6.0 // indirect
 	github.com/Masterminds/semver/v3 v3.3.1 // indirect
 	github.com/alfatraining/structtag v1.0.0 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
@@ -210,9 +211,8 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
-	go.uber.org/atomic v1.7.0 // indirect
-	go.uber.org/multierr v1.6.0 // indirect
-	go.uber.org/zap v1.24.0 // indirect
+	go.uber.org/multierr v1.10.0 // indirect
+	go.uber.org/zap v1.27.0 // indirect
 	golang.org/x/exp v0.0.0-20240909161429-701f63a606c0 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20250620022241-b7579e27df2b // indirect
 	golang.org/x/text v0.27.0 // indirect
