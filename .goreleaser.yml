@@ -295,7 +295,7 @@ dockers:
       - '--label=org.opencontainers.image.created={{.Date}}'
       - '--label=org.opencontainers.image.revision={{.FullCommit}}'
       - '--label=org.opencontainers.image.version={{.Version}}'
-      - '--platform=linux/arm64'
+      - '--platform=linux/arm64v8'
 
   - use: buildx
     goos: linux
@@ -337,4 +337,4 @@ dockers:
       - '--label=org.opencontainers.image.created={{.Date}}'
       - '--label=org.opencontainers.image.revision={{.FullCommit}}'
       - '--label=org.opencontainers.image.version={{.Version}}'
-      - '--platform=linux/arm64'
+      - '--platform=linux/arm64v8'
