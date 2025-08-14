@@ -1,7 +1,7 @@
 {
   "MinorVersionToConfig": {
     "latest": {
-      "TargetVersion": "v2.3.1"
+      "TargetVersion": "v2.4.0"
     },
     "v1.10": {
       "Error": "golangci-lint version 'v1.10' isn't supported: we support only v2.0.0 and later versions"
@@ -200,6 +200,9 @@
     },
     "v2.3": {
       "TargetVersion": "v2.3.1"
+    },
+    "v2.4": {
+      "TargetVersion": "v2.4.0"
     }
   }
 }
