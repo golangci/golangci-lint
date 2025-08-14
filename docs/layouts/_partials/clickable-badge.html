@@ -1,4 +1,4 @@
-{{- /* Modified version of https://github.com/imfing/hextra/blob/v0.9.7/layouts/partials/shortcodes/badge.html */ -}}
+{{- /* Modified version of https://github.com/imfing/hextra/blob/v0.10.0/layouts/_partials/shortcodes/badge.html */ -}}
 {{- /*
 Creates a badge with the given id and class.
 
@@ -18,20 +18,17 @@ Creates a badge with the given id and class.
 {{- $border := .border | default false -}}
 {{- $icon := .icon | default "" -}}
 
-{{- $defaultClass := "hx-text-gray-600 hx-bg-gray-100 dark:hx-bg-neutral-800 dark:hx-text-neutral-200 hx-border-gray-200 dark:hx-border-neutral-700" -}}
+{{- $defaultClass := "hx:text-gray-600 hx:bg-gray-100 hx:dark:bg-neutral-800 hx:dark:text-neutral-200 hx:border-gray-200 hx:dark:border-neutral-700" -}}
 
 {{- $styleClass := newScratch -}}
-{{- $styleClass.Set "info" "hx-border-blue-200 hx-bg-blue-100 hx-text-blue-900 dark:hx-border-blue-200/30 dark:hx-bg-blue-900/30 dark:hx-text-blue-200" -}}
-{{- $styleClass.Set "warning" "hx-border-yellow-100 hx-bg-yellow-50 hx-text-yellow-900 dark:hx-border-yellow-200/30 dark:hx-bg-yellow-700/30 dark:hx-text-yellow-200" -}}
-{{- $styleClass.Set "error" "hx-border-red-200 hx-bg-red-100 hx-text-red-900 dark:hx-border-red-200/30 dark:hx-bg-red-900/30 dark:hx-text-red-200" -}}
-{{- $styleClass.Set "green" "hx-border-green-200 hx-bg-green-100 hx-text-green-900 dark:hx-border-green-200/30 dark:hx-bg-green-900/30 dark:hx-text-green-200" -}}
-{{- $styleClass.Set "indigo" "hx-border-indigo-200 hx-bg-indigo-100 hx-text-indigo-900 dark:hx-border-indigo-200/30 dark:hx-bg-indigo-900/30 dark:hx-text-indigo-200" -}}
-{{- $styleClass.Set "amber" "hx-border-amber-200 hx-bg-amber-100 hx-text-amber-900 dark:hx-border-amber-200/30 dark:hx-bg-amber-900/30 dark:hx-text-amber-200" -}}
+{{- $styleClass.Set "info" "hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200" -}}
+{{- $styleClass.Set "warning" "hx:border-yellow-100 hx:bg-yellow-50 hx:text-yellow-900 hx:dark:border-yellow-200/30 hx:dark:bg-yellow-700/30 hx:dark:text-yellow-200" -}}
+{{- $styleClass.Set "error" "hx:border-red-200 hx:bg-red-100 hx:text-red-900 hx:dark:border-red-200/30 hx:dark:bg-red-900/30 hx:dark:text-red-200" -}}
 
-{{- $borderClass := cond (eq $border true) "hx-border" "" -}}
+{{- $borderClass := cond (eq $border true) "hx:border" "" -}}
 {{- $badgeClass := or ($styleClass.Get $type) $defaultClass  -}}
-<div class="hextra-badge hx-mt-2 hx-mx-1">
-    <div id="{{ $id }}" class="hx-inline-flex hx-gap-1 hx-items-center hx-rounded-full hx-px-2.5 hx-leading-6 hx-text-[.65rem] hx-cursor-pointer {{ $borderClass }} {{ $badgeClass }} {{ $class }}">
+<div class="hextra-badge hx:mt-2 hx:mx-1">
+    <div id="{{ $id }}" class="hx:inline-flex hx:gap-1 hx:items-center hx:rounded-full hx:px-2.5 hx:leading-6 hx:text-[.65rem] hx:cursor-pointer {{ $borderClass }} {{ $badgeClass }} {{ $class }}">
         {{- with $icon -}}{{- partial "utils/icon" (dict "name" . "attributes" "height=12") -}}{{- end -}}
         {{- $content -}}
     </div>

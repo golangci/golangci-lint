@@ -5,7 +5,7 @@
 }
 
 /* Allow card subtitle with more than 3 lines */
-.hx-line-clamp-3.hextra-card-subtitle {
+.hx\:line-clamp-3.hextra-card-subtitle {
   -webkit-line-clamp: 30;
 }
 

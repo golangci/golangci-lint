@@ -1,12 +1,12 @@
-{{- /* Modified version of https://github.com/imfing/hextra/blob/v0.9.7/layouts/shortcodes/details.html */ -}}
+{{- /* Modified version of https://github.com/imfing/hextra/blob/v0.10.0/layouts/_shortcodes/details.html */ -}}
 {{- $title := .Get "title" | default "" -}}
 {{- $closed := eq (.Get "closed") "true" | default false -}}
 
-<details class="last-of-type:hx-mb-0 hx-rounded-lg hx-bg-neutral-50 dark:hx-bg-neutral-800 hx-p-2 hx-mt-4 hx-group" {{ if not $closed }}open{{ end }}>
-  <summary class="hx-flex hx-items-center hx-cursor-pointer hx-select-none hx-list-none hx-p-1 hx-rounded hx-transition-colors hover:hx-bg-gray-100 dark:hover:hx-bg-neutral-800 before:hx-mr-1 before:hx-inline-block before:hx-transition-transform before:hx-content-[''] dark:before:hx-invert rtl:before:hx-rotate-180 group-open:before:hx-rotate-90">
-    <span class="hx-text-lg">{{ $title | markdownify }}</span>
+<details class="hx:last-of-type:mb-0 hx:rounded-lg hx:bg-neutral-50 hx:dark:bg-neutral-800 hx:p-2 hx:mt-4 hx:group" {{ if not $closed }}open{{ end }}>
+  <summary class="hx:flex hx:items-center hx:cursor-pointer hx:select-none hx:list-none hx:p-1 hx:rounded-sm hx:transition-colors hx:hover:bg-gray-100 hx:dark:hover:bg-neutral-800 hx:before:mr-1 hx:before:inline-block hx:before:transition-transform hx:before:content-[''] hx:dark:before:invert hx:rtl:before:rotate-180 hx:group-open:before:rotate-90">
+    <span class="hx:text-lg">{{ $title | markdownify }}</span>
   </summary>
-  <div class="hx-p-2 hx-overflow-hidden">
+  <div class="hx:p-2 hx:overflow-hidden">
     {{ .InnerDeindent | markdownify }}
   </div>
 </details>

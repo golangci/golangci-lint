@@ -95,7 +95,7 @@ params:
     enable: true
     displayCopyright: false
     displayPoweredBy: true
-    width: normal
+    width: wide
     links:
       - title: Bluesky
         url: "https://bsky.app/profile/golangci-lint.run"
@@ -158,3 +158,5 @@ params:
   page:
     # full (100%), wide (90rem), normal (80rem)
     width: full
+    tabs:
+      sync: false
