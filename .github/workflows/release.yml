@@ -7,6 +7,9 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write  # for cosign
     env:
       # https://github.com/actions/setup-go#supported-version-syntax
       # ex:
@@ -56,6 +59,9 @@ jobs:
 
       - name: Install snapcraft
         run: sudo snap install snapcraft --classic
+
+      - name: Set up cosign
+        uses: sigstore/cosign-installer@v3
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
