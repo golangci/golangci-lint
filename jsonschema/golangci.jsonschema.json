@@ -1305,6 +1305,28 @@
               "items": {
                 "type": "string"
               }
+            },
+            "allow-empty": {
+              "description": "Allows empty structures, effectively excluding them from the check.",
+              "type": "boolean",
+              "default": false
+            },
+            "allow-empty-rx": {
+              "description": "List of regular expressions to match type names that should be allowed to be empty.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "allow-empty-returns": {
+              "description": "Allows empty structures in return statements.",
+              "type": "boolean",
+              "default": false
+            },
+            "allow-empty-declarations": {
+              "description": "Allows empty structures in variable declarations.",
+              "type": "boolean",
+              "default": false
             }
           }
         },
