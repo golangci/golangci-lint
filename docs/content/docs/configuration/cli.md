@@ -14,9 +14,13 @@ weight: 1
 {{< /cards >}}
 
 > [!NOTE]
-> The formatters explicitly defined in the configuration section [`formatters`](/docs/configuration/file/#formatters-configuration) are automatically run (as linter) by the command [`golangci-lint run`](/docs/configuration/cli/#run).
+> This command executes enabled linters, and the formatters defined in [`formatters`](/docs/configuration/file/#formatters-configuration),
+> but it does not format the code.
 > 
-> But the formatters cannot be enabled or disabled inside the `linters` section or the flags `-E/--enable`, `-D/--disable` of the command  [`golangci-lint run`](/docs/configuration/cli/#run).
+> To only format code, use [`golangci-lint fmt`](/docs/configuration/cli/#fmt).
+> To apply both linter fixes and formatting, use `golangci-lint run --fix`. 
+> 
+> The formatters cannot be enabled or disabled inside the [`linters`](/docs/configuration/file/#linters-configuration) section or the flags `-E/--enable`, `-D/--disable` of the command  [`golangci-lint run`](/docs/configuration/cli/#run).
 > 
 > The formatters can be enabled/disabled by defining them inside the [`formatters`](/docs/configuration/file/#formatters-configuration) section or by using the flags `-E/--enable`, `-D/--disable` of command [`golangci-lint fmt`](/docs/configuration/cli/#fmt).
 
