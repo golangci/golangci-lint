@@ -1,9 +1,8 @@
 ---
-title: Changelog
-weight: 2
+title: Changelog v1
 excludeSearch: true
-aliases:
-  - /product/changelog/
+sidebar:
+  exclude: true
 ---
 
 Follow the news and releases on [Mastodon](https://fosstodon.org/@golangcilint) and on [Bluesky](https://bsky.app/profile/golangci-lint.run).
@@ -14,10 +13,4 @@ If you value it, consider supporting us, we appreciate it!
 
 {{< golangci/button text="Donate ❤️" link="/docs/donate" >}}
 
-{{% golangci/embed file=".tmp/raw_changelog.tmp" %}}
-
-## v1.x.x
-
-{{< cards cols=2 >}}
-    {{< card link="/docs/product/changelog-v1" title="Changelog of golangci-lint v1" icon="collection" >}}
-{{< /cards >}}
+{{% golangci/embed file=".tmp/raw_changelog_v1.tmp" %}}
