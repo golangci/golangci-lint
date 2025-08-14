@@ -200,6 +200,9 @@
     },
     "v2.3": {
       "Error": "golangci-lint version 'v2.3' isn't supported: only v1 versions are supported"
+    },
+    "v2.4": {
+      "Error": "golangci-lint version 'v2.4' isn't supported: only v1 versions are supported"
     }
   }
 }
