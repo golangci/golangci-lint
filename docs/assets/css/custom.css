@@ -24,3 +24,11 @@
 .gl-hidden {
     display: none;
 }
+
+.hextra-nav-container a[title="Support us"] {
+    transition: ease-in-out 0.2s;
+}
+
+.hextra-nav-container a[title="Support us"]:hover  {
+    transform: scale(1.3, 1.3);
+}
