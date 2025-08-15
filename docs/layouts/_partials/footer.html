@@ -35,7 +35,7 @@
 
       {{- range .Site.Params.footer.links -}}
       {{- $external := strings.HasPrefix .url "http" -}}
-      <a title="{{ .title }}" href="{{ .url }}" {{ if $external }}target="_blank"{{ end }} class="hx:text-sm hx:contrast-more:text-gray-700 hx:contrast-more:dark:text-gray-100 hx:relative -hx:ml-2 hx:whitespace-nowrap hx:p-1 hx:md:inline-block hx:text-gray-600 hx:hover:text-gray-800 hx:dark:text-gray-400 hx:dark:hover:text-gray-200">
+      <a title="{{ .title }}" href="{{ .url }}" {{ if $external }}target="_blank"{{ end }} class="social-media hx:text-sm hx:contrast-more:text-gray-700 hx:contrast-more:dark:text-gray-100 hx:relative -hx:ml-2 hx:whitespace-nowrap hx:p-1 hx:md:inline-block hx:text-gray-600 hx:hover:text-gray-800 hx:dark:text-gray-400 hx:dark:hover:text-gray-200">
         <span class="hx:text-center">
            {{- partial "utils/icon.html" (dict "name" .icon "attributes" "height=20") -}}
         </span>
