@@ -10,6 +10,6 @@ Creates a card for an image.
 {{- $src := .Get "src" -}}
 {{- $title := .Get "title" -}}
 
-<div class="hextra-card hx-group hx-flex hx-flex-col hx-justify-start hx-overflow-hidden">
+<div class="hextra-card hx:group hx:flex hx:flex-col hx:justify-start hx:overflow-hidden">
   <img class="hextra-card-image" src="{{ $src }}" alt="{{ $title }}" title="{{ $title }}"/>
 </div>

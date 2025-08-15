@@ -1,0 +1,14 @@
+{{- $repo := .Get "repo" -}}
+
+<a href="https://starchart.cc/{{ $repo }}">
+  <img
+    alt="Stargazers over time"
+    src="https://starchart.cc/{{ $repo }}.svg"
+    class="hx:block hx:dark:hidden"
+  />
+  <img
+    alt="Stargazers over time"
+    src="https://starchart.cc/{{ $repo }}.svg?variant=dark"
+    class="hx:hidden hx:dark:block"
+  />
+</a>

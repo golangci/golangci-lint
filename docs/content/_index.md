@@ -7,25 +7,25 @@ params:
 
 {{< hextra/hero-container image="images/golangci-lint-logo-anim.gif" imageWidth="300" imageHeight="300" imageTitle="golangci-lint" >}}
 
-<div class="hx-mt-6 hx-mb-6">
+<div class="hx:mt-6 hx:mb-6">
 {{< hextra/hero-headline >}}
   Golangci-lint is a fast linters runner for Go
 {{< /hextra/hero-headline >}}
 </div>
 
-<div class="hx-mb-12">
+<div class="hx:mb-12">
 {{< hextra/hero-subtitle >}}
-  It runs linters in parallel, uses caching, supports YAML configuration,&nbsp;<br class="sm:hx-block hx-hidden" />integrates with all major IDEs, and includes over a hundred linters.
+  It runs linters in parallel, uses caching, supports YAML configuration,&nbsp;<br class="hx:sm:block hx:hidden" />integrates with all major IDEs, and includes over a hundred linters.
 {{< /hextra/hero-subtitle >}}
 </div>
 
-<div class="hx-mb-6">
+<div class="hx:mb-6">
 {{< hextra/hero-button text="Get Started" link="docs" >}}
 </div>
 
 {{< /hextra/hero-container >}}
 
-<div class="hx-mt-6"></div>
+<div class="hx:mt-6"></div>
 
 {{< hextra/feature-grid cols=3 >}}
   {{< hextra/feature-card
