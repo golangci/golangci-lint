@@ -37,6 +37,7 @@ Creates a section for each setting of a linter/formatter.
 {{ partial "shortcodes/badge.html" (dict
     "border" false
     "icon" "calendar"
+    "class" "hx:mx-1"
     "content" (print "Since golangci-lint " .since)
     )
 }}
@@ -44,6 +45,7 @@ Creates a section for each setting of a linter/formatter.
 {{ partial "shortcodes/badge.html" (dict
     "border" true
     "icon" "sparkles"
+    "class" "hx:mx-1"
     "content" (print "Deprecated since " .deprecation.since)
     "type" "error"
     )
@@ -53,6 +55,7 @@ Creates a section for each setting of a linter/formatter.
 {{ partial "shortcodes/badge.html" (dict
     "border" false
     "icon" "sparkles"
+    "class" "hx:mx-1"
     "content" "New"
     "type" "warning"
     )
@@ -62,6 +65,7 @@ Creates a section for each setting of a linter/formatter.
 {{ partial "shortcodes/badge.html" (dict
     "border" false
     "icon" "sparkles"
+    "class" "hx:mx-1"
     "content" "Autofix"
     "type" "info"
     )
@@ -72,6 +76,7 @@ Creates a section for each setting of a linter/formatter.
 {{ partial "shortcodes/badge.html" (dict
     "border" true
     "icon" "github"
+    "class" "hx:mx-1"
     "content" "Repository"
     "link" .originalURL
     )
