@@ -392,6 +392,9 @@ linters:
         - "0C0C"
 
     embeddedstructfieldcheck:
+      # Checks that there is an empty space between the embedded fields and regular fields.
+      # Default: true
+      empty-line: false
       # Checks that sync.Mutex and sync.RWMutex are not used as embedded fields.
       # Default: false
       forbid-mutex: true

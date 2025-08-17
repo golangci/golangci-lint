@@ -12,7 +12,8 @@ func New(settings *config.EmbeddedStructFieldCheckSettings) *goanalysis.Linter {
 
 	if settings != nil {
 		cfg = map[string]any{
-			analyzer.ForbidMutexName: settings.ForbidMutex,
+			analyzer.ForbidMutexCheck: settings.ForbidMutex,
+			analyzer.EmptyLineCheck:   settings.EmptyLine,
 		}
 	}
 
