@@ -58,8 +58,12 @@ menu:
       weight: 5
       params:
         type: search
-    - name: GitHub
+    - name: Theme Toggle
       weight: 6
+      params:
+        type: theme-toggle
+    - name: GitHub
+      weight: 7
       url: "https://github.com/golangci/golangci-lint"
       params:
         icon: github
