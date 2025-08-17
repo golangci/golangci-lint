@@ -131,7 +131,7 @@ require (
 	go-simpler.org/musttag v0.13.1
 	go-simpler.org/sloglint v0.11.1
 	go.augendre.info/arangolint v0.2.0
-	go.augendre.info/fatcontext v0.8.0
+	go.augendre.info/fatcontext v0.8.1
 	go.uber.org/automaxprocs v1.6.0
 	golang.org/x/mod v0.27.0
 	golang.org/x/sync v0.16.0
