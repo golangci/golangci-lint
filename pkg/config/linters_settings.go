@@ -24,6 +24,9 @@ var defaultLintersSettings = LintersSettings{
 	Dupl: DuplSettings{
 		Threshold: 150,
 	},
+	EmbeddedStructFieldCheck: EmbeddedStructFieldCheckSettings{
+		EmptyLine: true,
+	},
 	ErrorLint: ErrorLintSettings{
 		Errorf:      true,
 		ErrorfMulti: true,
@@ -380,6 +383,7 @@ type DupWordSettings struct {
 
 type EmbeddedStructFieldCheckSettings struct {
 	ForbidMutex bool `mapstructure:"forbid-mutex"`
+	EmptyLine   bool `mapstructure:"empty-line"`
 }
 
 type ErrcheckSettings struct {

@@ -1126,6 +1126,11 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "empty-line": {
+              "description": "Checks that there is an empty space between the embedded fields and regular fields.",
+              "type": "boolean",
+              "default": false
+            },
             "forbid-mutex": {
               "description": "Checks that sync.Mutex and sync.RWMutex are not used as embedded fields.",
               "type": "boolean",
