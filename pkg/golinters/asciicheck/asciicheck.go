@@ -1,7 +1,7 @@
 package asciicheck
 
 import (
-	"github.com/tdakkota/asciicheck"
+	"github.com/golangci/asciicheck"
 
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
 )

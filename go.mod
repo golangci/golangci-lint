@@ -46,6 +46,7 @@ require (
 	github.com/go-viper/mapstructure/v2 v2.4.0
 	github.com/go-xmlfmt/xmlfmt v1.1.3
 	github.com/gofrs/flock v0.12.1
+	github.com/golangci/asciicheck v0.5.0
 	github.com/golangci/dupl v0.0.0-20250308024227-f665c8d69b32
 	github.com/golangci/go-printf-func-name v0.1.0
 	github.com/golangci/gofmt v0.0.0-20250106114630-d62b90e6713d
@@ -112,7 +113,6 @@ require (
 	github.com/ssgreg/nlreturn/v2 v2.2.1
 	github.com/stbenjam/no-sprintf-host-port v0.2.0
 	github.com/stretchr/testify v1.10.0
-	github.com/tdakkota/asciicheck v0.4.1
 	github.com/tetafro/godot v1.5.1
 	github.com/timakin/bodyclose v0.0.0-20241222091800-1db5c5ca4d67
 	github.com/timonwong/loggercheck v0.11.0

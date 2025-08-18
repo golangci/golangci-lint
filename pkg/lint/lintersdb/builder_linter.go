@@ -151,7 +151,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 
 		linter.NewConfig(asciicheck.New()).
 			WithSince("v1.26.0").
-			WithURL("https://github.com/tdakkota/asciicheck"),
+			WithURL("https://github.com/golangci/asciicheck"),
 
 		linter.NewConfig(bidichk.New(&cfg.Linters.Settings.BiDiChk)).
 			WithSince("v1.43.0").
