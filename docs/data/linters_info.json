@@ -21,7 +21,7 @@
     "name": "asciicheck",
     "desc": "checks that all code identifiers does not have non-ASCII symbols in the name",
     "loadMode": 8199,
-    "originalURL": "https://github.com/tdakkota/asciicheck",
+    "originalURL": "https://github.com/golangci/asciicheck",
     "internal": false,
     "isSlow": false,
     "since": "v1.26.0"
