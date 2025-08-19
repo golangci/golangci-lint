@@ -73,7 +73,9 @@ func (p *ExclusionPaths) Process(issues []*result.Issue) ([]*result.Issue, error
 		return issues, nil
 	}
 
-	return filterIssues(issues, p.shouldPassIssue), nil
+	// Use unsafe filtering so path-based exclusions also apply to typecheck issues
+	// when users explicitly configured path exclusions.
+	return filterIssuesUnsafe(issues, p.shouldPassIssue), nil
 }
 
 func (p *ExclusionPaths) Finish() {
@@ -93,6 +95,15 @@ func (p *ExclusionPaths) Finish() {
 }
 
 func (p *ExclusionPaths) shouldPassIssue(issue *result.Issue) bool {
+	// Ensure we have a non-empty path to match against.
+	if issue.RelativePath == "" {
+		if issue.WorkingDirectoryRelativePath != "" {
+			issue.RelativePath = issue.WorkingDirectoryRelativePath
+		} else if issue.FilePath() != "" {
+			issue.RelativePath = issue.FilePath()
+		}
+	}
+
 	for _, pattern := range p.pathPatterns {
 		if pattern.MatchString(issue.RelativePath) {
 			p.excludedPathCounter[pattern]++

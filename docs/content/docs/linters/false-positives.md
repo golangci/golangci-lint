@@ -113,6 +113,28 @@ linters:
       - path/to/a/dir/
 ```
 
+**Note**: The `linters.exclusions.paths` setting only affects linter reports. If you want to exclude paths from formatters (like `gofmt`, `goimports`, etc.), you need to use `formatters.exclusions.paths`:
+
+```yaml
+formatters:
+  exclusions:
+    paths:
+      - path/to/a/dir/
+```
+
+Or you can set both to exclude the same paths from both linters and formatters:
+
+```yaml
+linters:
+  exclusions:
+    paths:
+      - web/app
+formatters:
+  exclusions:
+    paths:
+      - web/app
+```
+
 ## Nolint Directive
 
 To exclude issues from all linters use `//nolint:all`.
