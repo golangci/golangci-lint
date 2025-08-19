@@ -168,4 +168,6 @@ Use `//nolint` instead of `// nolint` because directives should have no space by
 Some exclusions are considered common.
 To help golangci-lint users, those common exclusions are provided through presets.
 
-{{% exclusion-presets %}}
+{{% exclusion-presets-snippet %}}
+
+{{% exclusion-preset-tables %}}
