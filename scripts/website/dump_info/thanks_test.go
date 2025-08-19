@@ -49,14 +49,6 @@ func Test_extractInfo(t *testing.T) {
 			expected: authorInfo{Author: "owner", Host: "gitlab"},
 		},
 		{
-			desc: "staticcheck",
-			lc: &linter.Config{
-				Linter:      &FakeLinter{name: "staticcheck"},
-				OriginalURL: "https://github.com/owner/linter",
-			},
-			expected: authorInfo{Author: "dominikh", Host: "github"},
-		},
-		{
 			desc: "gostaticanalysis",
 			lc: &linter.Config{
 				Linter:      &FakeLinter{name: "fake"},
