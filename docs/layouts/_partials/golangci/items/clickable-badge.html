@@ -12,7 +12,7 @@ Creates a badge with the given id and class.
 */ -}}
 
 {{- $content := .content -}}
-{{- $type := .type -}}
+{{- $type := .type | default "" -}}
 {{- $id := .id | default "" -}}
 {{- $class := .class | default "" -}}
 {{- $border := .border | default false -}}

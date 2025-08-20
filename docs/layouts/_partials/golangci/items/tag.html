@@ -4,7 +4,7 @@ Creates tag information for an item (linter/formatter).
 @param {string} (positional parameter 0) Description
 @returns {map[tag: string, tagType: string]}
 
-@example {{ partial "golangci/item-tag.html" (dict "gcilVersion" "v1.2.3" "item" .) }}
+@example {{ partial "golangci/items/tag" (dict "gcilVersion" "v1.2.3" "item" .) }}
 */ -}}
 
 {{- $gcilVersion := .gcilVersion -}}
@@ -21,7 +21,7 @@ Creates tag information for an item (linter/formatter).
     {{- $tag.SetInMap "options" "subtitle" (print (strings.FirstUpper $item.deprecation.message) $replacement) -}}
     {{- $tag.SetInMap "options" "tag" (print "Deprecated since " $item.deprecation.since) -}}
     {{- $tag.SetInMap "options" "tagType" "error" -}}
-{{- else if (partial "golangci/compare-versions.html" (dict "a" $gcilVersion "b" $item.since)) -}}
+{{- else if (partial "golangci/items/compare-versions" (dict "a" $gcilVersion "b" $item.since)) -}}
     {{- $tag.SetInMap "options" "tag" "New" -}}
     {{- $tag.SetInMap "options" "tagType" "warning" -}}
 {{- else if $item.canAutoFix -}}

@@ -27,12 +27,12 @@ golangci-lint formatters
 
 ## All formatters
 
-{{< golangci/filter-bar >}}
-    {{< golangci/clickable-badge class="gl-filter" id="new-filter" icon="fire" content="New" type="warning" >}}
-    {{< golangci/clickable-badge class="gl-filter" id="deprecated-filter" icon="emoji-sad" content="Deprecated" type="info" >}}
-    {{< golangci/clickable-badge class="gl-filter-reset gl-hidden" id="reset-filter" icon="trash" content="Reset" type="error" border=true >}}
-{{< /golangci/filter-bar >}}
+{{< golangci/items/filter >}}
+    {{< golangci/items/clickable-badge class="gl-filter" id="new-filter" icon="fire" content="New" type="warning" >}}
+    {{< golangci/items/clickable-badge class="gl-filter" id="deprecated-filter" icon="emoji-sad" content="Deprecated" type="info" >}}
+    {{< golangci/items/clickable-badge class="gl-filter-reset gl-hidden" id="reset-filter" icon="trash" content="Reset" type="error" border=true >}}
+{{< /golangci/items/filter >}}
 
 {{< cards >}}
-    {{< golangci/item-cards path="formatters" data="formatters_info" >}}
+    {{< golangci/items/cards path="formatters" data="formatters_info" >}}
 {{< /cards >}}
