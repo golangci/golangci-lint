@@ -26,8 +26,8 @@ and it can be much faster than the simple binary installation.
 Also, the action creates GitHub annotations for found issues (you don't need to dig into build log to see found by golangci-lint issues).
 
 {{< cards cols=2 >}}
-    {{< image-card src="/images/colored-line-number.png" title="Console Output" >}}
-    {{< image-card src="/images/annotations.png" title="Annotations" >}}
+    {{< golangci/image-card src="/images/colored-line-number.png" title="Console Output" >}}
+    {{< golangci/image-card src="/images/annotations.png" title="Annotations" >}}
 {{< /cards >}}
 
 ### GitLab CI
@@ -48,13 +48,13 @@ Here is the other way to install golangci-lint:
 
 ```bash
 # binary will be $(go env GOPATH)/bin/golangci-lint
-curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b $(go env GOPATH)/bin {{< latest-version >}}
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b $(go env GOPATH)/bin {{< golangci/latest-version >}}
 
 # or install it into ./bin/
-curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s {{< latest-version >}}
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s {{< golangci/latest-version >}}
 
 # In Alpine Linux (as it does not come with curl by default)
-wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s {{< latest-version >}}
+wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s {{< golangci/latest-version >}}
 
 golangci-lint --version
 ```
@@ -70,7 +70,7 @@ For any problems with golangci-lint, check out recent [GitHub issues](https://gi
 
 ```bash
 # binary will be $(go env GOPATH)/bin/golangci-lint
-curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b $(go env GOPATH)/bin {{< latest-version >}}
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b $(go env GOPATH)/bin {{< golangci/latest-version >}}
 
 golangci-lint --version
 ```
@@ -138,12 +138,12 @@ The scoop package is not officially maintained by golangci team.
 ### Docker
 
 ```bash
-docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:{{< latest-version >}} golangci-lint run
+docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:{{< golangci/latest-version >}} golangci-lint run
 ```
 
 Colored output:
 ```bash
-docker run -t --rm -v $(pwd):/app -w /app golangci/golangci-lint:{{< latest-version >}} golangci-lint run
+docker run -t --rm -v $(pwd):/app -w /app golangci/golangci-lint:{{< golangci/latest-version >}} golangci-lint run
 ```
 
 Preserving caches between consecutive runs:
@@ -153,7 +153,7 @@ docker run --rm -t -v $(pwd):/app -w /app \
 -v $(go env GOCACHE):/.cache/go-build -e GOCACHE=/.cache/go-build \
 -v $(go env GOMODCACHE):/.cache/mod -e GOMODCACHE=/.cache/mod \
 -v ~/.cache/golangci-lint:/.cache/golangci-lint -e GOLANGCI_LINT_CACHE=/.cache/golangci-lint \
-golangci/golangci-lint:{{< latest-version >}} golangci-lint run
+golangci/golangci-lint:{{< golangci/latest-version >}} golangci-lint run
 ```
 
 ### Install from Sources
@@ -173,7 +173,7 @@ These installations aren't recommended because of the following points:
 7. It's slower than binary installation.
 
 ```bash
-go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@{{< latest-version >}}
+go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@{{< golangci/latest-version >}}
 ```
 
 {{% details title="`go tool` usage recommendations" closed="true" %}}
@@ -199,7 +199,7 @@ go mod init -modfile=golangci-lint.mod <your_module_path>/golangci-lint
 
 ```sh
 # Add golangci-lint as a tool
-go get -tool -modfile=golangci-lint.mod github.com/golangci/golangci-lint/v2/cmd/golangci-lint@{{< latest-version >}}
+go get -tool -modfile=golangci-lint.mod github.com/golangci/golangci-lint/v2/cmd/golangci-lint@{{< golangci/latest-version >}}
 ```
 
 ```sh

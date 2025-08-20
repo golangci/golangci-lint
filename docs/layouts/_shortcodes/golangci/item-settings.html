@@ -4,7 +4,7 @@ Creates a section for each setting of a linter/formatter.
 @param {string} info The name of the data file containing the linter/formatter information.
 @param {string} settings The name of the data file containing the linter/formatter settings.
 
-@example {{% item-settings info="formatters_info" settings="formatter_settings" %}}
+@example {{% golangci/item-settings info="formatters_info" settings="formatter_settings" %}}
 */ -}}
 
 {{- $fileInfo := .Get "info" -}}
@@ -27,9 +27,9 @@ Creates a section for each setting of a linter/formatter.
 {{- if .deprecation.replacement -}}
 {{- $replacement = print " Use `" .deprecation.replacement "` instead." -}}
 {{- end -}}
-{{ print (partial "format-description" .deprecation.message) $replacement }}
+{{ print (partial "golangci/format-description" .deprecation.message) $replacement }}
 {{ else }}
-{{ partial "format-description" .desc }}
+{{ partial "golangci/format-description" .desc }}
 {{ end }}
 
 {{/* Badges */}}
@@ -51,7 +51,7 @@ Creates a section for each setting of a linter/formatter.
     )
     }}
 {{ else }}
-    {{ if (partial "compare-versions.html" (dict "a" $gcilVersion "b" .since)) }}
+    {{ if (partial "golangci/compare-versions.html" (dict "a" $gcilVersion "b" .since)) }}
 {{ partial "shortcodes/badge.html" (dict
     "border" false
     "icon" "sparkles"

@@ -6,8 +6,8 @@ Creates a card for each item (linter/formatter) in a data file.
 @param {string} group The group to filter items by (use the prefix `!` to exclude items from the group).
 @returns {string}
 
-@example {{< item-cards path="formatters" data="formatters_info" >}}
-@example {{< item-cards path="linters" data="linters_info" group="!standard" >}}
+@example {{< golangci/item-cards path="formatters" data="formatters_info" >}}
+@example {{< golangci/item-cards path="linters" data="linters_info" group="!standard" >}}
 */ -}}
 
 {{- $file := .Get "data" -}}
@@ -52,10 +52,10 @@ Creates a card for each item (linter/formatter) in a data file.
     {{- $s.SetInMap "options" "page" .Page -}}
     {{- $s.SetInMap "options" "link" (print "/docs/" $path "/configuration/#" .name) -}}
     {{- $s.SetInMap "options" "title" .name -}}
-    {{- $s.SetInMap "options" "subtitle" (partial "format-description" .desc) -}}
+    {{- $s.SetInMap "options" "subtitle" (partial "golangci/format-description" .desc) -}}
 
     {{- /* Create tag information */ -}}
-    {{- $tagOptions := partial "item-tag.html" (dict "gcilVersion" $gcilVersion "item" .) -}}
+    {{- $tagOptions := partial "golangci/item-tag.html" (dict "gcilVersion" $gcilVersion "item" .) -}}
     {{- range $k, $v := $tagOptions -}}
         {{- $s.SetInMap "options" $k $v -}}
     {{- end -}}
@@ -76,7 +76,7 @@ Creates a card for each item (linter/formatter) in a data file.
     {{- if in .groups "standard" -}}
         {{- $class = $class | append "gl-default" -}}
     {{- end -}}
-    {{- if (partial "compare-versions.html" (dict "a" $gcilVersion "b" .since)) -}}
+    {{- if (partial "golangci/compare-versions.html" (dict "a" $gcilVersion "b" .since)) -}}
         {{- $class = $class | append "gl-new" -}}
     {{- end -}}
 
