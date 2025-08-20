@@ -6,6 +6,7 @@
 {{- $class := .class | default "" -}}
 {{- $border := .border | default false -}}
 {{- $icon := .icon | default "" -}}
+{{- $data := .data | default "" -}}
 
 {{- $defaultClass := "hx:text-gray-600 hx:bg-gray-100 hx:dark:bg-neutral-800 hx:dark:text-neutral-200 hx:border-gray-200 hx:dark:border-neutral-700" -}}
 
@@ -17,6 +18,7 @@
 {{- $borderClass := cond (eq $border true) "hx:border" "" -}}
 {{- $badgeClass := or ($styleClass.Get $type) $defaultClass -}}
 
+{{- /* Custom section to handle icon-only badges. */ -}}
 {{- $iconOnly := hasPrefix $type "icon-only" -}}
 {{- if $iconOnly -}}
   {{- $icon = (strings.TrimPrefix "icon-only:" $type) -}}
@@ -25,7 +27,16 @@
   {{- $badgeClass = "hx:p-2" -}}
 {{- end -}}
 
-<div class="hextra-badge {{ $class }}" {{- if $iconOnly -}}title="{{ $content }}"{{- end -}}>
+{{- /* Custom section to set attributes. */ -}}
+{{- $attributes := slice -}}
+{{- if $iconOnly -}}
+  {{- $attributes = $attributes | append (printf `title="%s"` $content) -}}
+{{- end -}}
+{{- if $data -}}
+  {{- $attributes = $attributes | append (printf `data-badge="%s"` $data) -}}
+{{- end -}}
+
+<div class="hextra-badge {{ $class }}" {{ (delimit $attributes " ") | safeHTMLAttr }}>
   <div class="hx:inline-flex hx:gap-1 hx:items-center hx:rounded-full hx:px-2.5 hx:leading-6 hx:text-[.65rem] {{ $borderClass }} {{ $badgeClass }}">
     {{- with $icon -}}{{- partial "utils/icon" (dict "name" . "attributes" "height=12") -}}{{- end -}}
     {{- if not $iconOnly -}}{{- $content -}}{{- end -}}

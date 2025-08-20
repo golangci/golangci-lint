@@ -1,27 +1,27 @@
 {{- /* Modified version of https://github.com/imfing/hextra/blob/v0.10.0/layouts/_shortcodes/badge.html */ -}}
 {{- /*
-Creates a badge with the given id and class.
+Creates a badge with the given "data-filter" value.
 
 @param {string} content The content of the badge.
 @param {string} type The type of the badge.
-@param {string} id The id of the badge.
+@param {string} data The "data-filter" value for the badge.
 @param {string} class The class of the badge.
 @param {boolean} border Whether to render a border around the badge.
 @param {string} icon The icon of the badge.
 
-@example {{< golangci/items/clickable-badge icon="inbox" id="my-id" content="Text" class="my-class" type="info" border=true >}}
+@example {{< golangci/items/filter-badge icon="inbox" data="my-data" content="Text" class="my-class" type="info" border=true >}}
 */}}
 
 {{- $content := .Get "content" -}}
 {{- $type := .Get "type" | default "" -}}
-{{- $id := .Get "id" | default "" -}}
+{{- $data := .Get "data" | default "" -}}
 {{- $class := .Get "class" | default "" -}}
 {{- $icon := .Get "icon" | default "" -}}
 {{- $border := .Get "border" | default false -}}
 
-{{- partial "golangci/items/clickable-badge" (dict
-  "id" $id
-  "class" $class
+{{- partial "shortcodes/badge" (dict
+  "data" $data
+  "class" (printf "hx:mt-2 hx:mx-1 hx:cursor-pointer %s" $class)
   "content" $content
   "type" $type
   "border" $border
