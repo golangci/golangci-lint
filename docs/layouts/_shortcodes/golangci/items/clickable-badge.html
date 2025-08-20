@@ -9,7 +9,7 @@ Creates a badge with the given id and class.
 @param {boolean} border Whether to render a border around the badge.
 @param {string} icon The icon of the badge.
 
-@example {{< golangci/clickable-badge icon="inbox" id="my-id" content="Text" class="my-class" type="info" border=true >}}
+@example {{< golangci/items/clickable-badge icon="inbox" id="my-id" content="Text" class="my-class" type="info" border=true >}}
 */}}
 
 {{- $content := .Get "content" -}}
@@ -19,7 +19,7 @@ Creates a badge with the given id and class.
 {{- $icon := .Get "icon" | default "" -}}
 {{- $border := .Get "border" | default false -}}
 
-{{- partial "golangci/clickable-badge.html" (dict
+{{- partial "golangci/items/clickable-badge" (dict
   "id" $id
   "class" $class
   "content" $content
