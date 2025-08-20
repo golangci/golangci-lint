@@ -48,7 +48,7 @@ Other fields explicitly defined in the configuration file are migrated even if t
 
 The `migrate` command automatically migrates `linters.presets` in individual linters to `linters.enable`.
 
-{{% cli-output cmd="migrate" %}}
+{{% golangci/cli-output cmd="migrate" %}}
 
 ## Changes
 

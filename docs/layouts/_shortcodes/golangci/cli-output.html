@@ -4,9 +4,9 @@ Creates a code block with the output of the CLI.
 @param {string} cmd The name of the command.
 @param {string} section The name of the section inside the data file.
 
-@example {{% cli-output %}}
-@example {{% cli-output cmd="foo" %}}
-@example {{% cli-output section="sectionName" cmd="foo bar" %}}
+@example {{% golangci/cli-output %}}
+@example {{% golangci/cli-output cmd="foo" %}}
+@example {{% golangci/cli-output section="sectionName" cmd="foo bar" %}}
 */ -}}
 
 {{- $cmdName := .Get "cmd" -}}

@@ -5,7 +5,7 @@ Compares two versions.
 @param {string} b Version B
 @returns {boolean}
 
-@example {{ partial "compare-versions.html" (dict "a" "v1.2.3" "b" "v1.2.4") }}
+@example {{ partial "golangci/compare-versions.html" (dict "a" "v1.2.3" "b" "v1.2.4") }}
 */ -}}
 
 {{- $aVersion := path.Dir (replace .a "." "/") -}}
