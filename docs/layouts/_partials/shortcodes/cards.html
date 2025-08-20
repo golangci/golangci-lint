@@ -1,0 +1,10 @@
+{{/* Modified version of https://github.com/imfing/hextra/blob/v0.10.0/layouts/_partials/shortcodes/cards.html */}}
+{{- /* This file overrides the details shortcode of the theme */ -}}
+
+{{- $cols := .cols | default 3 -}}
+{{- $content := .content -}}
+{{- $class := .class | default "hextra-cards" -}}
+
+<div class="{{ $class }} hx:mt-4 hx:gap-4 hx:grid not-prose" style="--hextra-cards-grid-cols: {{ $cols }};">
+  {{- $content -}}
+</div>
