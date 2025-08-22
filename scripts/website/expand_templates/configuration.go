@@ -270,7 +270,7 @@ func (e *ExampleSnippetsExtractor) getSettingSections(node, nextNode *yaml.Node)
 }
 
 func hasSettings(name string) bool {
-	tp := reflect.TypeOf(config.LintersSettings{})
+	tp := reflect.TypeFor[config.LintersSettings]()
 
 	for i := range tp.NumField() {
 		if strings.EqualFold(name, tp.Field(i).Name) {
@@ -278,7 +278,7 @@ func hasSettings(name string) bool {
 		}
 	}
 
-	tp = reflect.TypeOf(config.FormatterSettings{})
+	tp = reflect.TypeFor[config.FormatterSettings]()
 
 	for i := range tp.NumField() {
 		if strings.EqualFold(name, tp.Field(i).Name) {
