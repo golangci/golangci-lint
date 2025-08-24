@@ -1,0 +1,683 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Golangci-lint – Contributing</title><link>https://golangci-lint.run/docs/contributing/</link><description>Recent content in Contributing on Golangci-lint</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://golangci-lint.run/docs/contributing/index.xml" rel="self" type="application/rss+xml"/><item><title>Workflow</title><link>https://golangci-lint.run/docs/contributing/workflow/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://golangci-lint.run/docs/contributing/workflow/</guid><description>
+&lt;p>By participating in this project, you agree to abide our &lt;a href="https://github.com/golangci/golangci-lint?tab=coc-ov-file" target="_blank" rel="noopener">code of conduct&lt;/a>.&lt;/p>
+&lt;h2>Set up your machine&lt;span class="hx:absolute hx:-mt-20" id="set-up-your-machine">&lt;/span>
+&lt;a href="#set-up-your-machine" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>Golangci-lint is written in &lt;a href="https://go.dev" target="_blank" rel="noopener">Go&lt;/a>.&lt;/p>
+&lt;p>Prerequisites:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>make&lt;/code>&lt;/li>
+&lt;li>&lt;a href="https://go.dev/doc/install" target="_blank" rel="noopener">Go&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;p>Fork and clone &lt;a href="https://github.com/golangci/golangci-lint" target="_blank" rel="noopener">golangci-lint&lt;/a> repository.&lt;/p>
+&lt;p>A good way of making sure everything is all right is running the following:&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">make build
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">./golangci-lint run -v&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;h2>Test your change&lt;span class="hx:absolute hx:-mt-20" id="test-your-change">&lt;/span>
+&lt;a href="#test-your-change" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>When you are satisfied with the changes, we suggest you run:&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">make test&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Which runs all the linters and tests.&lt;/p>
+&lt;h2>Create or update parameters for docs&lt;span class="hx:absolute hx:-mt-20" id="create-or-update-parameters-for-docs">&lt;/span>
+&lt;a href="#create-or-update-parameters-for-docs" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>Add your new or updated parameters to &lt;a href="https://github.com/golangci/golangci-lint/blob/HEAD/.golangci.next.reference.yml" target="_blank" rel="noopener">.golangci.next.reference.yml&lt;/a> so they will be shown in the docs&lt;/p>
+&lt;h2>Submit a pull request&lt;span class="hx:absolute hx:-mt-20" id="submit-a-pull-request">&lt;/span>
+&lt;a href="#submit-a-pull-request" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>Push your branch to your golangci-lint fork and open a pull request against the
+&lt;code>main&lt;/code> branch.&lt;/p>
+&lt;h2>Pull request checks&lt;span class="hx:absolute hx:-mt-20" id="pull-request-checks">&lt;/span>
+&lt;a href="#pull-request-checks" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>First, please, accept CLA - &lt;a href="https://cla-assistant.io/" target="_blank" rel="noopener">CLA assistant&lt;/a> will make a comment on the pull request about it.&lt;/p>
+&lt;p>Also, we run a few checks in CI by using GitHub Actions, you can see them &lt;a href="https://github.com/golangci/golangci-lint/blob/HEAD/.github/workflows" target="_blank" rel="noopener">here&lt;/a>.&lt;/p>
+&lt;h2>New releases&lt;span class="hx:absolute hx:-mt-20" id="new-releases">&lt;/span>
+&lt;a href="#new-releases" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>First, see &lt;a href="https://golangci-lint.run/docs/product/roadmap/#versioning-policy" >our versioning policy&lt;/a>.&lt;/p>
+&lt;p>To make a new release create a tag &lt;code>vX.Y.Z&lt;/code>.&lt;br>
+Don&amp;rsquo;t forget to add zero patch version for a new minor release, e.g. &lt;code>v1.99.0&lt;/code>.&lt;/p>
+&lt;p>A GitHub Action &lt;a href="https://github.com/golangci/golangci-lint/blob/HEAD/.github/workflows/release.yml" target="_blank" rel="noopener">workflow&lt;/a> will start building and publishing release after that.&lt;/p>
+&lt;p>After making a release, you need to update GitHub &lt;a href="https://github.com/golangci/golangci-lint/blob/HEAD/assets/github-action-config.json" target="_blank" rel="noopener">Action config&lt;/a> by running:&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">make assets/github-action-config.json&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div></description></item><item><title>Architecture</title><link>https://golangci-lint.run/docs/contributing/architecture/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://golangci-lint.run/docs/contributing/architecture/</guid><description>
+&lt;p>There are the following golangci-lint execution steps:&lt;/p>
+&lt;pre class="mermaid hx:mt-6">
+graph LR
+init[Init]
+loadPackages[Load packages]
+runLinters[Run linters]
+postprocess[Postprocess issues]
+print[Print issues]
+init --&amp;gt; loadPackages --&amp;gt; runLinters --&amp;gt; postprocess --&amp;gt; print
+&lt;/pre>&lt;h2>Init&lt;span class="hx:absolute hx:-mt-20" id="init">&lt;/span>
+&lt;a href="#init" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>The configuration is loaded from file and flags by &lt;code>config.Loader&lt;/code> inside &lt;code>PersistentPreRun&lt;/code> (or &lt;code>PreRun&lt;/code>) of the commands that require configuration.&lt;/p>
+&lt;p>The linter database (&lt;code>linterdb.Manager&lt;/code>) is fill based on the configuration:&lt;/p>
+&lt;ul>
+&lt;li>The linters (&amp;ldquo;internals&amp;rdquo; and plugins) are built by &lt;code>linterdb.LinterBuilder&lt;/code> and &lt;code>linterdb.PluginBuilder&lt;/code> builders.&lt;/li>
+&lt;li>The configuration is validated by &lt;code>linterdb.Validator&lt;/code>.&lt;/li>
+&lt;/ul>
+&lt;h2>Load Packages&lt;span class="hx:absolute hx:-mt-20" id="load-packages">&lt;/span>
+&lt;a href="#load-packages" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>Loading packages is listing all packages and their recursive dependencies for analysis.&lt;br>
+Also, depending on the enabled linters set some parsing of the source code can be performed at this step.&lt;/p>
+&lt;p>Packages loading starts here:&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div class="hextra-code-filename not-prose" dir="auto">&lt;a class="hx:no-underline hx:inline-flex hx:items-center hx:gap-1" href="https://github.com/golangci/golangci-lint/blob/HEAD/pkg/lint/package.go" target="_blank" rel="noopener noreferrer">
+&lt;span>pkg/lint/package.go&lt;/span>&lt;svg height=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>&lt;/svg>&lt;/a>&lt;/div>&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-go" data-lang="go">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">func&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">l&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="nx">PackageLoader&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="nf">Load&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">ctx&lt;/span> &lt;span class="nx">context&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">Context&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">linters&lt;/span> &lt;span class="p">[]&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="nx">linter&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">Config&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">pkgs&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">deduplicatedPkgs&lt;/span> &lt;span class="p">[]&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="nx">packages&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">Package&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">err&lt;/span> &lt;span class="kt">error&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">loadMode&lt;/span> &lt;span class="o">:=&lt;/span> &lt;span class="nf">findLoadMode&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">linters&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">pkgs&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">err&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="nx">l&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nf">loadPackages&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">ctx&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">loadMode&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="nx">err&lt;/span> &lt;span class="o">!=&lt;/span> &lt;span class="kc">nil&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">nil&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kc">nil&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">fmt&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nf">Errorf&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;failed to load packages: %w&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">err&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// ...&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-8">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>First, we find a load mode as union of load modes for all enabled linters.
+We use &lt;a href="https://pkg.go.dev/golang.org/x/tools/go/packages" target="_blank" rel="noopener">go/packages&lt;/a> for packages loading and use it&amp;rsquo;s enum &lt;code>packages.Need*&lt;/code> for load modes.
+Load mode sets which data does a linter needs for execution.&lt;/p>
+&lt;p>A linter that works only with AST need minimum of information: only filenames and AST.&lt;/p>
+&lt;p>There is no need for packages dependencies or type information.
+AST is built during &lt;code>go/analysis&lt;/code> execution to reduce memory usage.
+Such AST-based linters are configured with the following code:&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div class="hextra-code-filename not-prose" dir="auto">&lt;a class="hx:no-underline hx:inline-flex hx:items-center hx:gap-1" href="https://github.com/golangci/golangci-lint/blob/main/pkg/lint/linter/config.go" target="_blank" rel="noopener noreferrer">
+&lt;span>pkg/lint/linter/config.go&lt;/span>&lt;svg height=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>&lt;/svg>&lt;/a>&lt;/div>&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-go" data-lang="go">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">func&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">lc&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="nx">Config&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="nf">WithLoadFiles&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="nx">Config&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">lc&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">LoadMode&lt;/span> &lt;span class="o">|=&lt;/span> &lt;span class="nx">packages&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">NeedName&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="nx">packages&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">NeedFiles&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="nx">packages&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">NeedCompiledGoFiles&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="nx">lc&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-8">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>If a linter uses &lt;code>go/analysis&lt;/code> and needs type information, we need to extract more data by &lt;code>go/packages&lt;/code>:&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div class="hextra-code-filename not-prose" dir="auto">&lt;a class="hx:no-underline hx:inline-flex hx:items-center hx:gap-1" href="https://github.com/golangci/golangci-lint/blob/main/pkg/lint/linter/config.go" target="_blank" rel="noopener noreferrer">
+&lt;span>pkg/lint/linter/config.go&lt;/span>&lt;svg height=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>&lt;/svg>&lt;/a>&lt;/div>&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-go" data-lang="go">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">func&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">lc&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="nx">Config&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="nf">WithLoadForGoAnalysis&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="nx">Config&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">lc&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="nx">lc&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nf">WithLoadFiles&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">lc&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">LoadMode&lt;/span> &lt;span class="o">|=&lt;/span> &lt;span class="nx">packages&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">NeedImports&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="nx">packages&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">NeedDeps&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="nx">packages&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">NeedExportFile&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="nx">packages&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">NeedTypesSizes&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">lc&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">IsSlow&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="kc">true&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="nx">lc&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-8">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>After finding a load mode, we run &lt;code>go/packages&lt;/code>:
+the library get list of dirs (or &lt;code>./...&lt;/code> as the default value) as input and outputs list of packages and requested information about them:
+filenames, type information, AST, etc.&lt;/p>
+&lt;h2>Run Linters&lt;span class="hx:absolute hx:-mt-20" id="run-linters">&lt;/span>
+&lt;a href="#run-linters" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>First, we need to find all enabled linters. All linters are registered here:&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div class="hextra-code-filename not-prose" dir="auto">&lt;a class="hx:no-underline hx:inline-flex hx:items-center hx:gap-1" href="https://github.com/golangci/golangci-lint/blob/main/pkg/lint/lintersdb/builder_linter.go" target="_blank" rel="noopener noreferrer">
+&lt;span>pkg/lint/lintersdb/builder_linter.go&lt;/span>&lt;svg height=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>&lt;/svg>&lt;/a>&lt;/div>&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-go" data-lang="go">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">func&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">b&lt;/span> &lt;span class="nx">LinterBuilder&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="nf">Build&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">cfg&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="nx">config&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">Config&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">[]&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="nx">linter&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">Config&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// ...&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="p">[]&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="nx">linter&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">Config&lt;/span>&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// ...&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">linter&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nf">NewConfig&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">golinters&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nf">NewBodyclose&lt;/span>&lt;span class="p">()).&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nf">WithSince&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;v1.18.0&amp;#34;&lt;/span>&lt;span class="p">).&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nf">WithLoadForGoAnalysis&lt;/span>&lt;span class="p">().&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nf">WithURL&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;https://github.com/timakin/bodyclose&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// ...&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">linter&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nf">NewConfig&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">golinters&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nf">NewGovet&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">govetCfg&lt;/span>&lt;span class="p">)).&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nf">WithGroups&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">config&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">GroupStandard&lt;/span>&lt;span class="p">).&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nf">WithSince&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;v1.0.0&amp;#34;&lt;/span>&lt;span class="p">).&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nf">WithLoadForGoAnalysis&lt;/span>&lt;span class="p">().&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nf">WithURL&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;https://pkg.go.dev/cmd/vet&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// ...&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-8">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>We filter requested in config and command-line linters in &lt;code>EnabledSet&lt;/code>:&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div class="hextra-code-filename not-prose" dir="auto">&lt;a class="hx:no-underline hx:inline-flex hx:items-center hx:gap-1" href="https://github.com/golangci/golangci-lint/blob/main/pkg/lint/lintersdb/manager.go" target="_blank" rel="noopener noreferrer">
+&lt;span>pkg/lint/lintersdb/manager.go&lt;/span>&lt;svg height=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>&lt;/svg>&lt;/a>&lt;/div>&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-go" data-lang="go">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">func&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">m&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="nx">Manager&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="nf">GetEnabledLintersMap&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kd">map&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="kt">string&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="nx">linter&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">Config&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">error&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-8">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>We merge enabled linters into one &lt;code>MetaLinter&lt;/code> to improve execution time if we can:&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div class="hextra-code-filename not-prose" dir="auto">&lt;a class="hx:no-underline hx:inline-flex hx:items-center hx:gap-1" href="https://github.com/golangci/golangci-lint/blob/main/pkg/lint/lintersdb/manager.go" target="_blank" rel="noopener noreferrer">
+&lt;span>pkg/lint/lintersdb/manager.go&lt;/span>&lt;svg height=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>&lt;/svg>&lt;/a>&lt;/div>&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-go" data-lang="go">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// GetOptimizedLinters returns enabled linters after optimization (merging) of multiple linters into a fewer number of linters.&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// E.g. some go/analysis linters can be optimized into one metalinter for data reuse and speed up.&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">func&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">m&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="nx">Manager&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="nf">GetOptimizedLinters&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">([]&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="nx">linter&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">Config&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">error&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// ...&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">m&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nf">combineGoAnalysisLinters&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">resultLintersSet&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// ...&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-8">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>The &lt;code>MetaLinter&lt;/code> just stores all merged linters inside to run them at once:&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div class="hextra-code-filename not-prose" dir="auto">&lt;a class="hx:no-underline hx:inline-flex hx:items-center hx:gap-1" href="https://github.com/golangci/golangci-lint/blob/main/pkg/goanalysis/metalinter.go" target="_blank" rel="noopener noreferrer">
+&lt;span>pkg/goanalysis/metalinter.go&lt;/span>&lt;svg height=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>&lt;/svg>&lt;/a>&lt;/div>&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-go" data-lang="go">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">type&lt;/span> &lt;span class="nx">MetaLinter&lt;/span> &lt;span class="kd">struct&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">linters&lt;/span> &lt;span class="p">[]&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="nx">Linter&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">analyzerToLinterName&lt;/span> &lt;span class="kd">map&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="nx">analysis&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">Analyzer&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="kt">string&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-8">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>Currently, all linters except &lt;code>unused&lt;/code> can be merged into this meta linter.&lt;br>
+The &lt;code>unused&lt;/code> isn&amp;rsquo;t merged because it has high memory usage.&lt;/p>
+&lt;p>Linters execution starts in &lt;code>runAnalyzers&lt;/code>.
+It&amp;rsquo;s the most complex part of the golangci-lint.
+We use custom &lt;a href="https://pkg.go.dev/golang.org/x/tools/go/analysis" target="_blank" rel="noopener">go/analysis&lt;/a> runner there.&lt;br>
+It runs as much as it can in parallel.
+It lazy-loads as much as it can to reduce memory usage.
+Also, it sets all heavyweight data to &lt;code>nil&lt;/code> as becomes unneeded to save memory.&lt;/p>
+&lt;p>We don&amp;rsquo;t use existing &lt;a href="https://pkg.go.dev/golang.org/x/tools/go/analysis/multichecker" target="_blank" rel="noopener">multichecker&lt;/a> because
+it doesn&amp;rsquo;t use caching and doesn&amp;rsquo;t have some important performance optimizations.&lt;/p>
+&lt;p>All found by linters issues are represented with &lt;code>result.Issue&lt;/code> struct:&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div class="hextra-code-filename not-prose" dir="auto">&lt;a class="hx:no-underline hx:inline-flex hx:items-center hx:gap-1" href="https://github.com/golangci/golangci-lint/blob/main/pkg/result/issue.go" target="_blank" rel="noopener noreferrer">
+&lt;span>pkg/result/issue.go&lt;/span>&lt;svg height=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>&lt;/svg>&lt;/a>&lt;/div>&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-go" data-lang="go">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">type&lt;/span> &lt;span class="nx">Issue&lt;/span> &lt;span class="kd">struct&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">FromLinter&lt;/span> &lt;span class="kt">string&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">Text&lt;/span> &lt;span class="kt">string&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">Severity&lt;/span> &lt;span class="kt">string&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// Source lines of a code with the issue to show&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">SourceLines&lt;/span> &lt;span class="p">[]&lt;/span>&lt;span class="kt">string&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// Pkg is needed for proper caching of linting results&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">Pkg&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="nx">packages&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">Package&lt;/span> &lt;span class="s">`json:&amp;#34;-&amp;#34;`&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">Pos&lt;/span> &lt;span class="nx">token&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">Position&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">LineRange&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="nx">Range&lt;/span> &lt;span class="s">`json:&amp;#34;,omitempty&amp;#34;`&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// HunkPos is used only when golangci-lint is run over a diff&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">HunkPos&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="s">`json:&amp;#34;,omitempty&amp;#34;`&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// If we know how to fix the issue we can provide replacement lines&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">SuggestedFixes&lt;/span> &lt;span class="p">[]&lt;/span>&lt;span class="nx">analysis&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">SuggestedFix&lt;/span> &lt;span class="s">`json:&amp;#34;,omitempty&amp;#34;`&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// If we are expecting a nolint (because this is from nolintlint), record the expected linter&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">ExpectNoLint&lt;/span> &lt;span class="kt">bool&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">ExpectedNoLintLinter&lt;/span> &lt;span class="kt">string&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// ...&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-8">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;h2>Postprocess Issues&lt;span class="hx:absolute hx:-mt-20" id="postprocess-issues">&lt;/span>
+&lt;a href="#postprocess-issues" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>We have an abstraction of &lt;code>result.Processor&lt;/code> to postprocess found issues:&lt;/p>
+&lt;!--
+$ tree -L 1 ./pkg/result/processors/ | grep -v test
+-->
+&lt;div class="hextra-filetree hx:mt-6 hx:select-none hx:text-sm hx:text-gray-800 hx:dark:text-gray-300 not-prose">
+&lt;div class="hx:inline-block hx:rounded-lg hx:px-4 hx:py-2 hx:border hx:border-gray-200 hx:dark:border-neutral-800">
+&lt;li class="hx:group hx:flex hx:list-none hx:flex-col">
+&lt;button class="hextra-filetree-folder hx:inline-flex hx:cursor-pointer hx:items-center hx:py-1 hx:hover:opacity-60">
+&lt;span data-state="open" class="hx:data-[state=open]:hidden">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>&lt;/svg>&lt;/span>
+&lt;span data-state="open" class="hx:data-[state=closed]:hidden">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"/>&lt;/svg>&lt;/span>
+&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">./pkg/result/processors/&lt;/span>
+&lt;/button>
+&lt;ul data-state="open" class="hx:ltr:pl-5 hx:rtl:pr-5 hx:data-[state=closed]:hidden">
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">cgo.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">diff.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">exclusion_generated_file_filter.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">exclusion_generated_file_matcher.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">exclusion_paths.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">exclusion_presets.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">exclusion_rules.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">filename_unadjuster.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">fixer.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">identifier_marker.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">invalid_issue.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">issues.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">max_from_linter.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">max_per_file_from_linter.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">max_same_issues.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">nolint_filter.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">path_absoluter.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">path_prettifier.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">path_relativity.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">path_shortener.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">processor.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">severity.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">sort_results.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">source_code.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">uniq_by_line.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/div>
+&lt;/div>
+&lt;p>The abstraction is simple:&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div class="hextra-code-filename not-prose" dir="auto">&lt;a class="hx:no-underline hx:inline-flex hx:items-center hx:gap-1" href="https://github.com/golangci/golangci-lint/blob/main/pkg/result/processors/processor.go" target="_blank" rel="noopener noreferrer">
+&lt;span>pkg/result/processors/processor.go&lt;/span>&lt;svg height=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>&lt;/svg>&lt;/a>&lt;/div>&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-go" data-lang="go">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">type&lt;/span> &lt;span class="nx">Processor&lt;/span> &lt;span class="kd">interface&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nf">Process&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">issues&lt;/span> &lt;span class="p">[]&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="nx">result&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">Issue&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">([]&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="nx">result&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">Issue&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">error&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nf">Name&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="kt">string&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nf">Finish&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-8">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>A processor can hide issues (&lt;code>nolint&lt;/code>, &lt;code>exclude&lt;/code>) or change issues (&lt;code>path_prettifier&lt;/code>).&lt;/p>
+&lt;h2>Print Issues&lt;span class="hx:absolute hx:-mt-20" id="print-issues">&lt;/span>
+&lt;a href="#print-issues" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>We have an abstraction for printing found issues.&lt;/p>
+&lt;!--
+$ tree -L 1 ./pkg/printers/ | grep -v test
+-->
+&lt;div class="hextra-filetree hx:mt-6 hx:select-none hx:text-sm hx:text-gray-800 hx:dark:text-gray-300 not-prose">
+&lt;div class="hx:inline-block hx:rounded-lg hx:px-4 hx:py-2 hx:border hx:border-gray-200 hx:dark:border-neutral-800">
+&lt;li class="hx:group hx:flex hx:list-none hx:flex-col">
+&lt;button class="hextra-filetree-folder hx:inline-flex hx:cursor-pointer hx:items-center hx:py-1 hx:hover:opacity-60">
+&lt;span data-state="open" class="hx:data-[state=open]:hidden">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>&lt;/svg>&lt;/span>
+&lt;span data-state="open" class="hx:data-[state=closed]:hidden">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"/>&lt;/svg>&lt;/span>
+&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">./pkg/printers/&lt;/span>
+&lt;/button>
+&lt;ul data-state="open" class="hx:ltr:pl-5 hx:rtl:pr-5 hx:data-[state=closed]:hidden">
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">checkstyle.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">codeclimate.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">html.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">json.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">junitxml.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">printer.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">sarif.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">tab.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">teamcity.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;li class="hx:flex hx:list-none">
+&lt;span class="hx:inline-flex hx:cursor-default hx:items-center hx:py-1">&lt;svg width=1em xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>&lt;/svg>&lt;span class="hx:ltr:ml-1 hx:rtl:mr-1">text.go&lt;/span>
+&lt;/span>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/div>
+&lt;/div></description></item><item><title>New linters</title><link>https://golangci-lint.run/docs/contributing/new-linters/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://golangci-lint.run/docs/contributing/new-linters/</guid><description>
+&lt;h2>How to write a linter&lt;span class="hx:absolute hx:-mt-20" id="how-to-write-a-linter">&lt;/span>
+&lt;a href="#how-to-write-a-linter" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>Use &lt;code>go/analysis&lt;/code> and take a look at &lt;a href="https://web.archive.org/web/20250527152107/https://disaev.me/p/writing-useful-go-analysis-linter/" target="_blank" rel="noopener">this tutorial&lt;/a>:
+it shows how to write &lt;code>go/analysis&lt;/code> linter from scratch and integrate it into &lt;code>golangci-lint&lt;/code>.&lt;/p>
+&lt;h2>How to add a public linter to &lt;code>golangci-lint&lt;/code>&lt;span class="hx:absolute hx:-mt-20" id="how-to-add-a-public-linter-to-golangci-lint">&lt;/span>
+&lt;a href="#how-to-add-a-public-linter-to-golangci-lint" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>You need to implement a new linter using &lt;code>go/analysis&lt;/code> API.&lt;/p>
+&lt;p>We don&amp;rsquo;t accept non &lt;code>go/analysis&lt;/code> linters.&lt;/p>
+&lt;p>After that:&lt;/p>
+&lt;ol>
+&lt;li>Implement functional tests for the linter:
+&lt;ul>
+&lt;li>Add one file into directory &lt;code>pkg/golinters/{yourlintername}/testdata/&lt;/code>.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Add a new file &lt;code>pkg/golinters/{yourlintername}/{yourlintername}.go&lt;/code>.
+Other linters implementation can help you.&lt;/li>
+&lt;li>Add the new struct for the linter (which you&amp;rsquo;ve implemented in &lt;code>pkg/golinters/{yourlintername}/{yourlintername}.go&lt;/code>) to the
+list of all supported linters in &lt;a href="https://github.com/golangci/golangci-lint/blob/HEAD/pkg/lint/lintersdb/builder_linter.go" target="_blank" rel="noopener">&lt;code>pkg/lint/lintersdb/builder_linter.go&lt;/code>&lt;/a>
+to the method &lt;code>LinterBuilder.Build&lt;/code>.
+&lt;ul>
+&lt;li>Add &lt;code>WithSince(&amp;quot;next_version&amp;quot;)&lt;/code>, where &lt;code>next_version&lt;/code> must be replaced by the next minor version. (ex: v1.2.0 if the current version is v1.1.0)&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Find out what options do you need to configure for the linter.
+For example, &lt;code>nakedret&lt;/code> has only 1 option: &lt;a href="https://github.com/golangci/golangci-lint/blob/HEAD/.golangci.reference.yml" target="_blank" rel="noopener">&lt;code>max-func-lines&lt;/code>&lt;/a>.
+Choose default values to not being annoying for users of golangci-lint. Add configuration options to:
+&lt;ul>
+&lt;li>&lt;a href="https://github.com/golangci/golangci-lint/blob/HEAD/.golangci.next.reference.yml" target="_blank" rel="noopener">.golangci.next.reference.yml&lt;/a>: the example of a configuration file.
+You can also add them to &lt;a href="https://github.com/golangci/golangci-lint/blob/HEAD/.golangci.yml" target="_blank" rel="noopener">.golangci.yml&lt;/a>
+if you think that this project needs not default values.&lt;/li>
+&lt;li>&lt;a href="https://github.com/golangci/golangci-lint/blob/HEAD/pkg/config/config.go" target="_blank" rel="noopener">config struct&lt;/a>:
+don&amp;rsquo;t forget about &lt;code>mapstructure&lt;/code> tags for proper configuration files parsing.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Take a look at the example of &lt;a href="https://github.com/golangci/golangci-lint/pulls?q=is%3Apr&amp;#43;is%3Amerged&amp;#43;label%3A%22linter%3A&amp;#43;new%22" target="_blank" rel="noopener">pull requests with new linter support&lt;/a>.&lt;/li>
+&lt;li>Run the tests:
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">go run ./cmd/golangci-lint/ run --no-config --default&lt;span class="o">=&lt;/span>none --enable&lt;span class="o">={&lt;/span>yourlintername&lt;span class="o">}&lt;/span> ./pkg/golinters/&lt;span class="o">{&lt;/span>yourlintername&lt;span class="o">}&lt;/span>/testdata/&lt;span class="o">{&lt;/span>yourlintername&lt;span class="o">}&lt;/span>.go&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;/li>
+&lt;/ol>
+&lt;h2>How to add a private linter to &lt;code>golangci-lint&lt;/code>&lt;span class="hx:absolute hx:-mt-20" id="how-to-add-a-private-linter-to-golangci-lint">&lt;/span>
+&lt;a href="#how-to-add-a-private-linter-to-golangci-lint" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>Some people and organizations may choose to have custom-made linters run as a part of &lt;code>golangci-lint&lt;/code>.&lt;br>
+Typically, these linters can&amp;rsquo;t be open-sourced or too specific.&lt;/p>
+&lt;p>Such linters can be added through 2 plugin systems:&lt;/p>
+&lt;div class="hextra-cards hx:mt-4 hx:gap-4 hx:grid not-prose" style="--hextra-cards-grid-cols: 2;">
+&lt;a
+class="hextra-card hx:group hx:flex hx:flex-col hx:justify-start hx:overflow-hidden hx:rounded-lg hx:border hx:border-gray-200 hx:text-current hx:no-underline hx:dark:shadow-none hx:hover:shadow-gray-100 hx:dark:hover:shadow-none hx:shadow-gray-100 hx:active:shadow-sm hx:active:shadow-gray-200 hx:transition-all hx:duration-200 hx:hover:border-gray-300 hx:bg-transparent hx:shadow-xs hx:dark:border-neutral-800 hx:hover:bg-slate-50 hx:hover:shadow-md hx:dark:hover:border-neutral-700 hx:dark:hover:bg-neutral-900"href="https://golangci-lint.run/docs/plugins/module-plugins"
+>&lt;span class="hextra-card-icon hx:flex hx:font-semibold hx:items-start hx:gap-2 hx:p-4 hx:text-gray-700 hx:hover:text-gray-900 hx:dark:text-neutral-200 hx:dark:hover:text-neutral-50">&lt;svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"/>&lt;/svg>Module Plugin System&lt;/span>&lt;div class="hextra-badge hextra-card-tag">
+&lt;div class="hx:inline-flex hx:gap-1 hx:items-center hx:rounded-full hx:px-2.5 hx:leading-6 hx:text-[.65rem] hx:border hx:text-gray-600 hx:bg-gray-100 hx:dark:bg-neutral-800 hx:dark:text-neutral-200 hx:border-gray-200 hx:dark:border-neutral-700">Recommended&lt;/div>
+&lt;/div>&lt;/a>
+&lt;a
+class="hextra-card hx:group hx:flex hx:flex-col hx:justify-start hx:overflow-hidden hx:rounded-lg hx:border hx:border-gray-200 hx:text-current hx:no-underline hx:dark:shadow-none hx:hover:shadow-gray-100 hx:dark:hover:shadow-none hx:shadow-gray-100 hx:active:shadow-sm hx:active:shadow-gray-200 hx:transition-all hx:duration-200 hx:hover:border-gray-300 hx:bg-transparent hx:shadow-xs hx:dark:border-neutral-800 hx:hover:bg-slate-50 hx:hover:shadow-md hx:dark:hover:border-neutral-700 hx:dark:hover:bg-neutral-900"href="https://golangci-lint.run/docs/plugins/go-plugins"
+>&lt;span class="hextra-card-icon hx:flex hx:font-semibold hx:items-start hx:gap-2 hx:p-4 hx:text-gray-700 hx:hover:text-gray-900 hx:dark:text-neutral-200 hx:dark:hover:text-neutral-50">&lt;svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">&lt;path stroke-linecap="round" stroke-linejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"/>&lt;/svg>Go Plugin System&lt;/span>&lt;/a>
+&lt;/div></description></item><item><title>Debugging</title><link>https://golangci-lint.run/docs/contributing/debug/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://golangci-lint.run/docs/contributing/debug/</guid><description>
+&lt;p>You can see a verbose output of linter by using &lt;code>-v&lt;/code> option.&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">golangci-lint run -v&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>If you would like to see more detailed logs you can use the environment variable &lt;code>GL_DEBUG&lt;/code>.&lt;br>
+Its value is a list of debug tags.&lt;/p>
+&lt;p>The existing debug tags are documented in the following file: &lt;a href="https://github.com/golangci/golangci-lint/blob/HEAD/pkg/logutils/logutils.go" target="_blank" rel="noopener">/pkg/logutils/logutils.go&lt;/a>&lt;/p>
+&lt;p>For example:&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">GL_DEBUG&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;loader,gocritic&amp;#34;&lt;/span> golangci-lint run&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">GL_DEBUG&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;loader,env&amp;#34;&lt;/span> golangci-lint run&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div></description></item><item><title>FAQ</title><link>https://golangci-lint.run/docs/contributing/faq/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://golangci-lint.run/docs/contributing/faq/</guid><description>
+&lt;h2>How to add a new open-source linter to &lt;code>golangci-lint&lt;/code>&lt;span class="hx:absolute hx:-mt-20" id="how-to-add-a-new-open-source-linter-to-golangci-lint">&lt;/span>
+&lt;a href="#how-to-add-a-new-open-source-linter-to-golangci-lint" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>See &lt;a href="https://golangci-lint.run/docs/contributing/new-linters/#how-to-add-a-public-linter-to-golangci-lint" >there&lt;/a>.&lt;/p>
+&lt;h2>How to add a new private linter to &lt;code>golangci-lint&lt;/code>&lt;span class="hx:absolute hx:-mt-20" id="how-to-add-a-new-private-linter-to-golangci-lint">&lt;/span>
+&lt;a href="#how-to-add-a-new-private-linter-to-golangci-lint" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>See &lt;a href="https://golangci-lint.run/docs/contributing/new-linters/#how-to-add-a-private-linter-to-golangci-lint" >there&lt;/a>.&lt;/p>
+&lt;h2>How to update an existing linter&lt;span class="hx:absolute hx:-mt-20" id="how-to-update-an-existing-linter">&lt;/span>
+&lt;a href="#how-to-update-an-existing-linter" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>We use &lt;a href="https://github.com/golangci/golangci-lint/blob/HEAD/.github/dependabot.yml" target="_blank" rel="noopener">Dependabot&lt;/a> to update dependencies, including linters.&lt;br>
+The updates happen at least automatically once a week (Sunday 11am UTC).&lt;/p>
+&lt;p>No pull requests to update a linter will be accepted unless you are the author of the linter and specific changes are required.&lt;/p>
+&lt;h2>How to add a configuration option to an existing linter&lt;span class="hx:absolute hx:-mt-20" id="how-to-add-a-configuration-option-to-an-existing-linter">&lt;/span>
+&lt;a href="#how-to-add-a-configuration-option-to-an-existing-linter" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>Add a new field to the &lt;a href="https://github.com/golangci/golangci-lint/blob/HEAD/pkg/config/linters_settings.go" target="_blank" rel="noopener">linter settings struct&lt;/a>.&lt;br>
+Document it in &lt;a href="https://github.com/golangci/golangci-lint/blob/HEAD/.golangci.next.reference.yml" target="_blank" rel="noopener">.golangci.next.reference.yml&lt;/a>.&lt;br>
+Pass it to the linter.&lt;/p>
+&lt;h2>How to see &lt;code>INFO&lt;/code> or &lt;code>DEBUG&lt;/code> logs&lt;span class="hx:absolute hx:-mt-20" id="how-to-see-info-or-debug-logs">&lt;/span>
+&lt;a href="#how-to-see-info-or-debug-logs" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>See &lt;a href="https://golangci-lint.run/docs/contributing/debug/" >tutorial about debugging&lt;/a>.&lt;/p></description></item><item><title>This Website</title><link>https://golangci-lint.run/docs/contributing/website/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://golangci-lint.run/docs/contributing/website/</guid><description>
+&lt;h2>Technology&lt;span class="hx:absolute hx:-mt-20" id="technology">&lt;/span>
+&lt;a href="#technology" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>We use &lt;a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo&lt;/a> for static site generation because sites built with it are very fast.&lt;/p>
+&lt;h2>Source Code&lt;span class="hx:absolute hx:-mt-20" id="source-code">&lt;/span>
+&lt;a href="#source-code" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>The website lives in &lt;code>docs/&lt;/code> directory of &lt;a href="https://github.com/golangci/golangci-lint" target="_blank" rel="noopener">golangci-lint repository&lt;/a>.&lt;/p>
+&lt;h2>Theme&lt;span class="hx:absolute hx:-mt-20" id="theme">&lt;/span>
+&lt;a href="#theme" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>The site is based on &lt;a href="https://github.com/imfing/hextra" target="_blank" rel="noopener">hextra&lt;/a> theme.&lt;/p>
+&lt;h2>Templating&lt;span class="hx:absolute hx:-mt-20" id="templating">&lt;/span>
+&lt;a href="#templating" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>We use &lt;a href="https://gohugo.io/templates/types/#shortcode" target="_blank" rel="noopener">shortcodes&lt;/a> and &lt;a href="https://gohugo.io/templates/types/#partial" target="_blank" rel="noopener">partials&lt;/a> based on files from &lt;code>./docs/.tmp/&lt;/code> and &lt;code>./docs/data/&lt;/code>.&lt;/p>
+&lt;ul>
+&lt;li>The files in &lt;code>./docs/.tmp/&lt;/code> are used to be embedded with the shortcode &lt;code>{{% embed file=&amp;quot;filename.ext&amp;quot; %}}&lt;/code>.&lt;/li>
+&lt;li>The files in &lt;code>./docs/data/&lt;/code> are used as &lt;a href="https://gohugo.io/content-management/data-sources/" target="_blank" rel="noopener">data sources&lt;/a>.&lt;/li>
+&lt;/ul>
+&lt;p>These files are created by running:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>make website_expand_templates&lt;/code> in the root of the repository.&lt;/li>
+&lt;li>&lt;code>make website_dump_info&lt;/code> in the root of the repository. (only during a release)&lt;/li>
+&lt;/ul>
+&lt;h3>Some Notes&lt;span class="hx:absolute hx:-mt-20" id="some-notes">&lt;/span>
+&lt;a href="#some-notes" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;p>&lt;a href="https://gohugo.io/templates/types/#shortcode" target="_blank" rel="noopener">shortcodes&lt;/a>:&lt;/p>
+&lt;ul>
+&lt;li>cannot be used inside another shortcode&lt;/li>
+&lt;li>can only be used inside a page&lt;/li>
+&lt;li>can contain Markdown or HTML, but the tag is different: &lt;code>{{% shortcode %}}&lt;/code> vs &lt;code>{{&amp;lt; shortcode &amp;gt;}}&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>&lt;a href="https://gohugo.io/templates/types/#partial" target="_blank" rel="noopener">partials&lt;/a>:&lt;/p>
+&lt;ul>
+&lt;li>are reusable HTML blocks or &amp;ldquo;functions&amp;rdquo;&lt;/li>
+&lt;li>cannot be used inside a page&lt;/li>
+&lt;li>can be used inside another partial&lt;/li>
+&lt;li>can be used inside a shortcode&lt;/li>
+&lt;li>can be used inside a layout&lt;/li>
+&lt;/ul>
+&lt;h2>Hosting&lt;span class="hx:absolute hx:-mt-20" id="hosting">&lt;/span>
+&lt;a href="#hosting" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>We use GitHub Pages for static website hosting and CD.&lt;/p>
+&lt;p>GitHub deploys the website to production after merging anything to a &lt;code>main&lt;/code> branch.&lt;/p>
+&lt;h2>Local Testing&lt;span class="hx:absolute hx:-mt-20" id="local-testing">&lt;/span>
+&lt;a href="#local-testing" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>Install Hugo Extended (v0.148.1 or newer).&lt;/p>
+&lt;p>Run:&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># (in the root of the repository)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">make docs_serve&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>or&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># (in the root of the repository)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">make website_expand_templates
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">cd&lt;/span> docs/
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># (inside the docs/ folder)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">make serve&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>And navigate to &lt;code>http://localhost:1313&lt;/code> after a successful build.&lt;/p>
+&lt;p>There is no need to restart the Hugo server for almost all changes: it supports hot reload.&lt;br>
+Also, there is no need to refresh a webpage: hot reload updates changed content on the open page.&lt;/p>
+&lt;h2>Website Build&lt;span class="hx:absolute hx:-mt-20" id="website-build">&lt;/span>
+&lt;a href="#website-build" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>To do this, run:&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># (in the root of the repository)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">make docs_build&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div>
+&lt;p>or&lt;/p>
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code">
+&lt;div>&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># (in the root of the repository)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">make website_copy_jsonschema website_expand_templates
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">cd&lt;/span> docs/
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># (inside the docs/ folder)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">make build&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/div>&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0">
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+>
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4">&lt;/div>
+&lt;/button>
+&lt;/div>
+&lt;/div></description></item></channel></rss>
