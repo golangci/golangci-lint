@@ -50,6 +50,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/goheader"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/goimports"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/golines"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/gomodclean"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/gomoddirectives"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/gomodguard"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/goprintffuncname"
@@ -374,6 +375,10 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 		linter.NewConfig(mnd.New(&cfg.Linters.Settings.Mnd)).
 			WithSince("v1.22.0").
 			WithURL("https://github.com/tommy-muehle/go-mnd"),
+
+		linter.NewConfig(gomodclean.New()).
+			WithSince("v2.2.0").
+			WithURL("https://github.com/dmrioja/gomodclean"),
 
 		linter.NewConfig(gomoddirectives.New(&cfg.Linters.Settings.GoModDirectives)).
 			WithSince("v1.39.0").

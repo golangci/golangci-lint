@@ -791,6 +791,7 @@
             "godox",
             "err113",
             "goheader",
+            "gomodclean",
             "gomoddirectives",
             "gomodguard",
             "goprintffuncname",
