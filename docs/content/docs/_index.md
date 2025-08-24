@@ -32,7 +32,7 @@ Golangci-lint is a free and open-source project built by volunteers.
 
 If you value it, consider supporting us, we appreciate it!
 
-{{< button text="Donate ❤️" link="/docs/donate" >}}
+{{< golangci/button text="Donate ❤️" link="/docs/donate" >}}
 
 ## Contributors
 
@@ -42,4 +42,4 @@ This project exists thanks to all the people who contribute. [How to contribute]
 
 ## Stargazers over time
 
-{{< starcharts repo="golangci/golangci-lint" >}}
+{{< golangci/starcharts repo="golangci/golangci-lint" >}}

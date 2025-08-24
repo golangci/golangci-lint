@@ -21,7 +21,7 @@ The site is based on [hextra](https://github.com/imfing/hextra) theme.
 
 We use [shortcodes](https://gohugo.io/templates/types/#shortcode) and [partials](https://gohugo.io/templates/types/#partial) based on files from `./docs/.tmp/` and `./docs/data/`. 
 
-- The files in `./docs/.tmp/` are used to be embedded with the shortcode `{{%/* embed file="filename.ext" */%}}`.
+- The files in `./docs/.tmp/` are used to be embedded with the shortcode `{{%/* golangci/embed file="filename.ext" */%}}`.
 - The files in `./docs/data/` are used as [data sources](https://gohugo.io/content-management/data-sources/). 
 
 These files are created by running:

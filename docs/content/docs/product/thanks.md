@@ -9,9 +9,9 @@ aliases:
 
 ### Thanks to developers and authors of used linters
 
-{{< custom-cards mainClass="author-cards" cols=7 >}}
-{{< authors >}}
-{{< /custom-cards >}}
+{{< cards class="author-cards" cols=7 >}}
+{{< golangci/authors >}}
+{{< /cards >}}
 
 ### Thanks to all contributors
 
