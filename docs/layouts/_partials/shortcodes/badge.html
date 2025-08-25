@@ -1,33 +1,48 @@
-{{- /* Modified version of https://github.com/imfing/hextra/blob/v0.10.0/layouts/_partials/shortcodes/badge.html */ -}}
+{{- /* Modified version of https://github.com/imfing/hextra/blob/v0.11.0/layouts/_partials/shortcodes/badge.html */ -}}
 {{- /* This file overrides the badge partial of the theme */ -}}
 
 {{- $content := .content -}}
-{{- $type := .type | default "" -}}
+{{- $color := .color | default .type | default "" -}}{{- /* Compatibility with previous parameter. */ -}}
 {{- $class := .class | default "" -}}
 {{- $border := .border | default false -}}
 {{- $icon := .icon | default "" -}}
-{{- $data := .data | default "" -}}
 
-{{- $defaultClass := "hx:text-gray-600 hx:bg-gray-100 hx:dark:bg-neutral-800 hx:dark:text-neutral-200 hx:border-gray-200 hx:dark:border-neutral-700" -}}
+{{- /* Compatibility with previous names. */ -}}
+{{- $mapping := (dict
+  "default" "gray"
+  "tip" "green"
+  "info" "blue"
+  "warning" "yellow"
+  "error" "red"
+  "important" "purple"
+  )
+-}}
+{{- $color = index $mapping $color | default $color | default "gray" -}}
 
 {{- $styleClass := newScratch -}}
-{{- $styleClass.Set "info" "hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200" -}}
-{{- $styleClass.Set "warning" "hx:border-yellow-100 hx:bg-yellow-50 hx:text-yellow-900 hx:dark:border-yellow-200/30 hx:dark:bg-yellow-700/30 hx:dark:text-yellow-200" -}}
-{{- $styleClass.Set "error" "hx:border-red-200 hx:bg-red-100 hx:text-red-900 hx:dark:border-red-200/30 hx:dark:bg-red-900/30 hx:dark:text-red-200" -}}
+{{- $styleClass.Set "gray" "hx:text-gray-600 hx:bg-gray-100 hx:dark:bg-neutral-800 hx:dark:text-neutral-200 hx:border-gray-200 hx:dark:border-neutral-700" -}}
+{{- $styleClass.Set "purple" "hx:border-purple-200 hx:bg-purple-100 hx:text-purple-900 hx:dark:border-purple-200/30 hx:dark:bg-purple-900/30 hx:dark:text-purple-200" -}}
+{{- $styleClass.Set "indigo" "hx:border-indigo-200 hx:bg-indigo-100 hx:text-indigo-900 hx:dark:border-indigo-200/30 hx:dark:bg-indigo-900/30 hx:dark:text-indigo-200" -}}
+{{- $styleClass.Set "blue" "hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200" -}}
+{{- $styleClass.Set "green" "hx:border-green-200 hx:bg-green-100 hx:text-green-900 hx:dark:border-green-200/30 hx:dark:bg-green-900/30 hx:dark:text-green-200" -}}
+{{- $styleClass.Set "yellow" "hx:border-yellow-100 hx:bg-yellow-50 hx:text-yellow-900 hx:dark:border-yellow-200/30 hx:dark:bg-yellow-700/30 hx:dark:text-yellow-200" -}}
+{{- $styleClass.Set "orange" "hx:border-orange-100 hx:bg-orange-50 hx:text-orange-800 hx:dark:border-orange-400/30 hx:dark:bg-orange-400/20 hx:dark:text-orange-300" -}}
+{{- $styleClass.Set "amber" "hx:border-amber-200 hx:bg-amber-100 hx:text-amber-900 hx:dark:border-amber-200/30 hx:dark:bg-amber-900/30 hx:dark:text-amber-200" -}}
+{{- $styleClass.Set "red" "hx:border-red-200 hx:bg-red-100 hx:text-red-900 hx:dark:border-red-200/30 hx:dark:bg-red-900/30 hx:dark:text-red-200" -}}
 
 {{- $borderClass := cond (eq $border true) "hx:border" "" -}}
-{{- $badgeClass := or ($styleClass.Get $type) $defaultClass -}}
+{{- $badgeClass := or ($styleClass.Get $color) ($styleClass.Get "gray") -}}
 
 {{- /* Custom section to handle icon-only badges. */ -}}
-{{- $iconOnly := hasPrefix $type "icon-only" -}}
+{{- $iconOnly := hasPrefix $color "icon-only" -}}
 {{- if $iconOnly -}}
-  {{- $icon = (strings.TrimPrefix "icon-only:" $type) -}}
+  {{- $icon = (strings.TrimPrefix "icon-only:" $color) -}}
   {{- $borderClass = "" -}}
-  {{- $defaultClass = "" -}}
   {{- $badgeClass = "hx:p-2" -}}
 {{- end -}}
 
 {{- /* Custom section to set attributes. */ -}}
+{{- $data := .data | default "" -}}
 {{- $attributes := slice -}}
 {{- if $iconOnly -}}
   {{- $attributes = $attributes | append (printf `title="%s"` $content) -}}

@@ -28,9 +28,9 @@ golangci-lint formatters
 ## All formatters
 
 {{< golangci/items/filter >}}
-    {{< golangci/items/filter-badge class="gl-filter" data="new" icon="fire" content="New" type="warning" >}}
-    {{< golangci/items/filter-badge class="gl-filter" data="deprecated" icon="emoji-sad" content="Deprecated" type="info" >}}
-    {{< golangci/items/filter-badge class="gl-filter-reset gl-hidden" icon="trash" content="Reset" type="error" border=true >}}
+    {{< golangci/items/filter-badge class="gl-filter" data="new" icon="fire" content="New" color="yellow" >}}
+    {{< golangci/items/filter-badge class="gl-filter" data="deprecated" icon="emoji-sad" content="Deprecated" color="blue" >}}
+    {{< golangci/items/filter-badge class="gl-filter-reset gl-hidden" icon="trash" content="Reset" color="red" border=true >}}
 {{< /golangci/items/filter >}}
 
 {{< cards >}}

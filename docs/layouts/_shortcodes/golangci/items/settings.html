@@ -47,7 +47,7 @@ Creates a section for each setting of a linter/formatter.
     "icon" "sparkles"
     "class" "hx:mx-1"
     "content" (print "Deprecated since " .deprecation.since)
-    "type" "error"
+    "color" "red"
     )
     }}
 {{ else }}
@@ -57,7 +57,7 @@ Creates a section for each setting of a linter/formatter.
     "icon" "sparkles"
     "class" "hx:mx-1"
     "content" "New"
-    "type" "warning"
+    "color" "yellow"
     )
 }}
     {{ end }}
@@ -67,7 +67,7 @@ Creates a section for each setting of a linter/formatter.
     "icon" "sparkles"
     "class" "hx:mx-1"
     "content" "Autofix"
-    "type" "info"
+    "color" "blue"
     )
 }}
     {{ end }}
