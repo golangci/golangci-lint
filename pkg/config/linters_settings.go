@@ -254,6 +254,7 @@ type LintersSettings struct {
 	Iface                    IfaceSettings                    `mapstructure:"iface"`
 	ImportAs                 ImportAsSettings                 `mapstructure:"importas"`
 	Inamedparam              INamedParamSettings              `mapstructure:"inamedparam"`
+	IneffAssign              IneffAssignSettings              `mapstructure:"ineffassign"`
 	InterfaceBloat           InterfaceBloatSettings           `mapstructure:"interfacebloat"`
 	Ireturn                  IreturnSettings                  `mapstructure:"ireturn"`
 	Lll                      LllSettings                      `mapstructure:"lll"`
@@ -642,6 +643,10 @@ type ImportAsAlias struct {
 
 type INamedParamSettings struct {
 	SkipSingleParam bool `mapstructure:"skip-single-param"`
+}
+
+type IneffAssignSettings struct {
+	CheckEscapingErrors bool `mapstructure:"check-escaping-errors"`
 }
 
 type InterfaceBloatSettings struct {
