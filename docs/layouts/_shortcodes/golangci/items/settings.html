@@ -4,7 +4,7 @@ Creates a section for each setting of a linter/formatter.
 @param {string} info The name of the data file containing the linter/formatter information.
 @param {string} settings The name of the data file containing the linter/formatter settings.
 
-@example {{% item-settings info="formatters_info" settings="formatter_settings" %}}
+@example {{% golangci/items/settings info="formatters_info" settings="formatter_settings" %}}
 */ -}}
 
 {{- $fileInfo := .Get "info" -}}
@@ -27,14 +27,14 @@ Creates a section for each setting of a linter/formatter.
 {{- if .deprecation.replacement -}}
 {{- $replacement = print " Use `" .deprecation.replacement "` instead." -}}
 {{- end -}}
-{{ print (partial "format-description" .deprecation.message) $replacement }}
+{{ print (partial "golangci/items/format-description" .deprecation.message) $replacement }}
 {{ else }}
-{{ partial "format-description" .desc }}
+{{ partial "golangci/items/format-description" .desc }}
 {{ end }}
 
 {{/* Badges */}}
 <p>
-{{ partial "shortcodes/badge.html" (dict
+{{ partial "shortcodes/badge" (dict
     "border" false
     "icon" "calendar"
     "class" "hx:mx-1"
@@ -42,7 +42,7 @@ Creates a section for each setting of a linter/formatter.
     )
 }}
 {{ if .deprecation -}}
-{{ partial "shortcodes/badge.html" (dict
+{{ partial "shortcodes/badge" (dict
     "border" true
     "icon" "sparkles"
     "class" "hx:mx-1"
@@ -51,8 +51,8 @@ Creates a section for each setting of a linter/formatter.
     )
     }}
 {{ else }}
-    {{ if (partial "compare-versions.html" (dict "a" $gcilVersion "b" .since)) }}
-{{ partial "shortcodes/badge.html" (dict
+    {{ if (partial "golangci/items/compare-versions" (dict "a" $gcilVersion "b" .since)) }}
+{{ partial "shortcodes/badge" (dict
     "border" false
     "icon" "sparkles"
     "class" "hx:mx-1"
@@ -62,7 +62,7 @@ Creates a section for each setting of a linter/formatter.
 }}
     {{ end }}
     {{ if .canAutoFix }}
-{{ partial "shortcodes/badge.html" (dict
+{{ partial "shortcodes/badge" (dict
     "border" false
     "icon" "sparkles"
     "class" "hx:mx-1"
@@ -73,7 +73,7 @@ Creates a section for each setting of a linter/formatter.
     {{ end }}
 {{ end }}
 <a href="{{ .originalURL }}" title="Repository" target="_blank">
-{{ partial "shortcodes/badge.html" (dict
+{{ partial "shortcodes/badge" (dict
     "border" true
     "icon" "github"
     "class" "hx:mx-1"

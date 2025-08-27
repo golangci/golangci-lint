@@ -23,11 +23,11 @@ it's just a reference to display all the configuration options used to generate 
 
 The configuration file can be validated with the JSON Schema: [golangci.jsonschema.json](https://golangci-lint.run/jsonschema/golangci.jsonschema.json)
 
-{{% configuration-file-snippet section="root" %}}
+{{% golangci/configuration-file-snippet section="root" %}}
 
 ## `version` configuration
 
-{{% configuration-file-snippet section="version" %}}
+{{% golangci/configuration-file-snippet section="version" %}}
 
 ## `linters` configuration
 
@@ -36,7 +36,7 @@ The configuration file can be validated with the JSON Schema: [golangci.jsonsche
 {{< card link="/docs/linters/configuration" title="Linters  Settings" icon="adjustments" >}}
 {{< /cards >}}
 
-{{% configuration-file-snippet section="linters" %}}
+{{% golangci/configuration-file-snippet section="linters" %}}
 
 ## `formatters` configuration
 
@@ -45,20 +45,20 @@ The configuration file can be validated with the JSON Schema: [golangci.jsonsche
 {{< card link="/docs/formatters/configuration" title="Formatters  Settings" icon="adjustments" >}}
 {{< /cards >}}
 
-{{% configuration-file-snippet section="formatters" %}}
+{{% golangci/configuration-file-snippet section="formatters" %}}
 
 ## `issues` configuration
 
-{{% configuration-file-snippet section="issues" %}}
+{{% golangci/configuration-file-snippet section="issues" %}}
 
 ## `output` configuration
 
-{{% configuration-file-snippet section="output" %}}
+{{% golangci/configuration-file-snippet section="output" %}}
 
 ## `run` configuration
 
-{{% configuration-file-snippet section="run" %}}
+{{% golangci/configuration-file-snippet section="run" %}}
 
 ## `severity` configuration
 
-{{% configuration-file-snippet section="severity" %}}
+{{% golangci/configuration-file-snippet section="severity" %}}

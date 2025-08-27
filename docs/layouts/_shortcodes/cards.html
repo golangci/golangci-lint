@@ -1,0 +1,16 @@
+{{- /* Modified version of https://github.com/imfing/hextra/blob/v0.10.0/layouts/_shortcodes/cards.html */ -}}
+{{- /* This file overrides the cards shortcode of the theme */ -}}
+
+{{- /*
+A shortcode for creating cards.
+
+@param {string} cols The number of columns.
+@param {string} class The class of the cards.
+
+@example {{< cards cols="3" >}}{{< /cards >}}
+*/ -}}
+
+{{- $cols := .Get "cols" | default 3 -}}
+{{- $class := .Get "class" | default "hextra-cards" -}}
+
+{{- partial "shortcodes/cards" (dict "cols" $cols "class" $class "content" .Inner) -}}

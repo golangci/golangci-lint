@@ -12,6 +12,6 @@ Follow the news and releases on [Mastodon](https://fosstodon.org/@golangcilint) 
 
 If you value it, consider supporting us, we appreciate it!
 
-{{< button text="Donate ❤️" link="/docs/donate" >}}
+{{< golangci/button text="Donate ❤️" link="/docs/donate" >}}
 
-{{% embed file=".tmp/raw_changelog.tmp" %}}
+{{% golangci/embed file=".tmp/raw_changelog.tmp" %}}

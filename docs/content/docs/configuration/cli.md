@@ -3,7 +3,7 @@ title: Command-Line
 weight: 1
 ---
 
-{{% cli-output %}}
+{{% golangci/cli-output %}}
 
 ## `run`
 
@@ -24,7 +24,7 @@ weight: 1
 > 
 > The formatters can be enabled/disabled by defining them inside the [`formatters`](/docs/configuration/file/#formatters-configuration) section or by using the flags `-E/--enable`, `-D/--disable` of command [`golangci-lint fmt`](/docs/configuration/cli/#fmt).
 
-{{% cli-output cmd="run" %}}
+{{% golangci/cli-output cmd="run" %}}
 
 When the `--cpu-profile-path` or `--mem-profile-path` arguments are specified,
 golangci-lint writes runtime profiling data in the format expected by the [pprof](https://github.com/google/pprof) visualization tool.
@@ -40,23 +40,23 @@ the `go tool trace` command and visualization tool.
 {{< card link="/docs/formatters/configuration/" title="Formatter Settings" icon="adjustments" >}}
 {{< /cards >}}
 
-{{% cli-output cmd="fmt" %}}
+{{% golangci/cli-output cmd="fmt" %}}
 
 ## `migrate`
 
-{{% cli-output cmd="migrate" %}}
+{{% golangci/cli-output cmd="migrate" %}}
 
 ## `formatters`
 
-{{% cli-output cmd="formatters" %}}
+{{% golangci/cli-output cmd="formatters" %}}
 
 ## `help`
 
-{{% cli-output cmd="help" %}}
+{{% golangci/cli-output cmd="help" %}}
 
 ## `linters`
 
-{{% cli-output cmd="linters" %}}
+{{% golangci/cli-output cmd="linters" %}}
 
 ## `cache`
 
@@ -66,20 +66,20 @@ You can override the default cache directory with the environment variable `GOLA
 
 The cache is only used by `golangci-lint run` (linters).
 
-{{% cli-output cmd="cache" %}}
+{{% golangci/cli-output cmd="cache" %}}
 
 ## `config`
 
-{{% cli-output cmd="config" %}}
+{{% golangci/cli-output cmd="config" %}}
 
 ## `custom`
 
-{{% cli-output cmd="custom" %}}
+{{% golangci/cli-output cmd="custom" %}}
 
 ## `version`
 
-{{% cli-output cmd="version" %}}
+{{% golangci/cli-output cmd="version" %}}
 
 ## `completion`
 
-{{% cli-output cmd="completion" %}}
+{{% golangci/cli-output cmd="completion" %}}

@@ -20,7 +20,7 @@
         let clean = event.currentTarget.classList.contains(borderClass)
 
         document.querySelectorAll('.gl-item').forEach(element => element.classList.remove(hiddenClass));
-        document.querySelectorAll('.gl-filter').forEach(element => element.classList.remove(borderClass));
+        document.querySelectorAll('.gl-filter > *').forEach(element => element.classList.remove(borderClass));
 
         if (clean) {
           resetButton.classList.add(hiddenClass);
@@ -29,26 +29,26 @@
 
           document.querySelectorAll('.gl-filter').forEach(element => element.classList.remove(borderClass))
 
-          event.currentTarget.classList.add(borderClass);
+          event.currentTarget.querySelector('*').classList.add(borderClass);
 
           let selector = ''
-          switch (event.currentTarget.id) {
-            case 'default-filter':
+          switch (event.currentTarget.dataset.badge) {
+            case 'default':
               selector = '.gl-item:not(.gl-default)'
               break;
-            case 'new-filter':
+            case 'new':
               selector = '.gl-item:not(.gl-new)'
               break;
-            case 'autofix-filter':
+            case 'autofix':
               selector = '.gl-item:not(.gl-autofix)'
               break;
-            case 'fast-filter':
+            case 'fast':
               selector = '.gl-item:not(.gl-slow)'
               break;
-            case 'slow-filter':
+            case 'slow':
               selector = '.gl-item:not(.gl-fast)'
               break;
-            case 'deprecated-filter':
+            case 'deprecated':
               selector = '.gl-item:not(.gl-deprecated)'
               break;
           }
@@ -64,7 +64,7 @@
       event.currentTarget.classList.add(hiddenClass);
 
       document.querySelectorAll('.gl-item').forEach(element => element.classList.remove(hiddenClass));
-      document.querySelectorAll('.gl-filter').forEach(element => element.classList.remove(borderClass));
+      document.querySelectorAll('.gl-filter > *').forEach(element => element.classList.remove(borderClass));
     });
   });
 </script>

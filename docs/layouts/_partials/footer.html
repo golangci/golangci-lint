@@ -1,4 +1,6 @@
 {{- /* Modified version of https://github.com/imfing/hextra/blob/v0.10.0/layouts/_partials/footer.html */ -}}
+{{- /* This file overrides the footer partial of the theme */ -}}
+
 {{- $enableFooterSwitches := .Scratch.Get "enableFooterSwitches" | default false -}}
 {{- $displayThemeToggle := site.Params.theme.displayToggle | default true -}}
 {{- $footerSwitchesVisible := and $enableFooterSwitches (or hugo.IsMultilingual $displayThemeToggle) -}}
