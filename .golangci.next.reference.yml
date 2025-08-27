@@ -1873,6 +1873,11 @@ linters:
       # Default: false
       skip-single-param: true
 
+    ineffassign:
+      # Check escaping variables of type error, may cause false positives.
+      # Default: false
+      check-escaping-errors: true
+
     interfacebloat:
       # The maximum number of methods allowed for an interface.
       # Default: 10

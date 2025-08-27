@@ -2410,6 +2410,17 @@
             }
           }
         },
+        "ineffassignSettings": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "check-escaping-errors": {
+              "description": "Check escaping variables of type error, may cause false positives.",
+              "type": "boolean",
+              "default": false
+            }
+          }
+        },
         "ireturnSettings": {
           "type": "object",
           "additionalProperties": false,
@@ -4566,6 +4577,9 @@
             },
             "inamedparam": {
               "$ref": "#/definitions/settings/definitions/inamedparamSettings"
+            },
+            "ineffassign": {
+              "$ref": "#/definitions/settings/definitions/ineffassignSettings"
             },
             "ireturn": {
               "$ref": "#/definitions/settings/definitions/ireturnSettings"
