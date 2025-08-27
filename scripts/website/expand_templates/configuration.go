@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -248,7 +249,7 @@ func (e *ExampleSnippetsExtractor) getSettingSections(node, nextNode *yaml.Node)
 		settings, ok := allNodes[lc.Name]
 		if !ok {
 			if hasSettings(lc.Name) {
-				return nil, fmt.Errorf("can't find %s settings in .golangci.reference.yml", lc.Name)
+				log.Printf("can't find %s settings in .golangci.reference.yml", lc.Name)
 			}
 
 			continue
