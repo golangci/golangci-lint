@@ -424,7 +424,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.55.0").
 			WithURL("https://github.com/macabu/inamedparam"),
 
-		linter.NewConfig(ineffassign.New()).
+		linter.NewConfig(ineffassign.New(&cfg.Linters.Settings.Ineffassign)).
 			WithGroups(config.GroupStandard).
 			WithSince("v1.0.0").
 			WithURL("https://github.com/gordonklaus/ineffassign"),
