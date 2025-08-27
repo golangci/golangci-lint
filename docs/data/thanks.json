@@ -574,14 +574,6 @@
     "avatar": "https://github.com/swaggo.png"
   },
   {
-    "name": "tdakkota",
-    "linters": [
-      "asciicheck"
-    ],
-    "profile": "https://github.com/sponsors/tdakkota",
-    "avatar": "https://github.com/tdakkota.png"
-  },
-  {
     "name": "tenntenn",
     "linters": [
       "forcetypeassert",
