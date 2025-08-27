@@ -385,8 +385,8 @@ github.com/ldez/gomoddirectives v0.7.0 h1:EOx8Dd56BZYSez11LVgdj025lKwlP0/E5OLSl9
 github.com/ldez/gomoddirectives v0.7.0/go.mod h1:wR4v8MN9J8kcwvrkzrx6sC9xe9Cp68gWYCsda5xvyGc=
 github.com/ldez/grignotin v0.10.0 h1:NQPeh1E/Eza4F0exCeC1WkpnLvgUcQDT8MQ1vOLML0E=
 github.com/ldez/grignotin v0.10.0/go.mod h1:oR4iCKUP9fwoeO6vCQeD7M5SMxCT6xdVas4vg0h1LaI=
-github.com/ldez/tagliatelle v0.7.1 h1:bTgKjjc2sQcsgPiT902+aadvMjCeMHrY7ly2XKFORIk=
-github.com/ldez/tagliatelle v0.7.1/go.mod h1:3zjxUpsNB2aEZScWiZTHrAXOl1x25t3cRmzfK1mlo2I=
+github.com/ldez/tagliatelle v0.7.2 h1:KuOlL70/fu9paxuxbeqlicJnCspCRjH0x8FW+NfgYUk=
+github.com/ldez/tagliatelle v0.7.2/go.mod h1:PtGgm163ZplJfZMZ2sf5nhUT170rSuPgBimoyYtdaSI=
 github.com/ldez/usetesting v0.5.0 h1:3/QtzZObBKLy1F4F8jLuKJiKBjjVFi1IavpoWbmqLwc=
 github.com/ldez/usetesting v0.5.0/go.mod h1:Spnb4Qppf8JTuRgblLrEWb7IE6rDmUpGvxY3iRrzvDQ=
 github.com/leonklingele/grouper v1.1.2 h1:o1ARBDLOmmasUaNDesWqWCIFH3u7hoFlM84YrjT3mIY=
