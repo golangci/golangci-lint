@@ -269,7 +269,7 @@ func safeTomlSlice(r []any) []any {
 }
 
 // This element is not exported by revive, so we need copy the code.
-// Extracted from https://github.com/mgechev/revive/blob/v1.11.0/config/config.go#L166
+// Extracted from https://github.com/mgechev/revive/blob/v1.12.0/config/config.go#L16
 var defaultRules = []lint.Rule{
 	&rule.VarDeclarationsRule{},
 	&rule.PackageCommentsRule{},
@@ -329,6 +329,10 @@ var allRules = append([]lint.Rule{
 	&rule.FunctionResultsLimitRule{},
 	&rule.GetReturnRule{},
 	&rule.IdenticalBranchesRule{},
+	&rule.IdenticalIfElseIfBranchesRule{},
+	&rule.IdenticalIfElseIfConditionsRule{},
+	&rule.IdenticalSwitchBranchesRule{},
+	&rule.IdenticalSwitchConditionsRule{},
 	&rule.IfReturnRule{},
 	&rule.ImportAliasNamingRule{},
 	&rule.ImportsBlocklistRule{},
@@ -340,6 +344,7 @@ var allRules = append([]lint.Rule{
 	&rule.ModifiesValRecRule{},
 	&rule.NestedStructs{},
 	&rule.OptimizeOperandsOrderRule{},
+	&rule.PackageDirectoryMismatchRule{},
 	&rule.RangeValAddress{},
 	&rule.RangeValInClosureRule{},
 	&rule.RedundantBuildTagRule{},
@@ -356,18 +361,21 @@ var allRules = append([]lint.Rule{
 	&rule.UnhandledErrorRule{},
 	&rule.UnnecessaryFormatRule{},
 	&rule.UnnecessaryStmtRule{},
+	&rule.UnsecureURLSchemeRule{},
 	&rule.UnusedReceiverRule{},
 	&rule.UseAnyRule{},
 	&rule.UseErrorsNewRule{},
 	&rule.UseFmtPrintRule{},
 	&rule.UselessBreak{},
+	&rule.UselessFallthroughRule{},
+	&rule.UseWaitGroupGoRule{},
 	&rule.WaitGroupByValueRule{},
 }, defaultRules...)
 
 const defaultConfidence = 0.8
 
 // This element is not exported by revive, so we need copy the code.
-// Extracted from https://github.com/mgechev/revive/blob/v1.11.0/config/config.go#L198
+// Extracted from https://github.com/mgechev/revive/blob/v1.12.0/config/config.go#L206
 func normalizeConfig(cfg *lint.Config) {
 	// NOTE(ldez): this custom section for golangci-lint should be kept.
 	// ---
@@ -409,7 +417,7 @@ func normalizeConfig(cfg *lint.Config) {
 }
 
 // This element is not exported by revive, so we need copy the code.
-// Extracted from https://github.com/mgechev/revive/blob/v1.11.0/config/config.go#L266
+// Extracted from https://github.com/mgechev/revive/blob/v1.12.0/config/config.go#L274
 func defaultConfig() *lint.Config {
 	defaultConfig := lint.Config{
 		Confidence: defaultConfidence,
@@ -455,7 +463,7 @@ func extractRulesName(rules []lint.Rule) []string {
 	return names
 }
 
-// Extracted from https://github.com/mgechev/revive/blob/v1.11.0/formatter/severity.go
+// Extracted from https://github.com/mgechev/revive/blob/v1.12.0/formatter/severity.go
 // Modified to use pointers (related to hugeParam rule).
 func severity(cfg *lint.Config, failure *lint.Failure) lint.Severity {
 	if cfg, ok := cfg.Rules[failure.RuleName]; ok && cfg.Severity == lint.SeverityError {
