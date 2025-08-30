@@ -17,7 +17,7 @@
 
     document.querySelectorAll('.gl-filter').forEach(button => {
       button.addEventListener('click', event => {
-        let clean = event.currentTarget.classList.contains(borderClass)
+        let clean = event.currentTarget.querySelectorAll('.hx\\:border').length > 0
 
         document.querySelectorAll('.gl-item').forEach(element => element.classList.remove(hiddenClass));
         document.querySelectorAll('.gl-filter > *').forEach(element => element.classList.remove(borderClass));
