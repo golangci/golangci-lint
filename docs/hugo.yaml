@@ -82,6 +82,11 @@ menu:
 params:
   description: Golangci-lint is a fast linters runner for Go.
 
+  banner:
+    key: 'announcement-v2_4'
+    message: |
+      New golangci-lint release ([v2.4](/docs/product/changelog/)) with support of Go 1.25 🎉🎉🎉 It's time to [support us](/docs/donate/) to keep golangci-lint always up to date! 
+
   navbar:
     displayTitle: true
     displayLogo: true

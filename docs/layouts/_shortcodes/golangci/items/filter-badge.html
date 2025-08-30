@@ -13,7 +13,7 @@ Creates a badge with the given "data-filter" value.
 */}}
 
 {{- $content := .Get "content" -}}
-{{- $type := .Get "type" | default "" -}}
+{{- $color := .Get "color" | default "" -}}
 {{- $data := .Get "data" | default "" -}}
 {{- $class := .Get "class" | default "" -}}
 {{- $icon := .Get "icon" | default "" -}}
@@ -23,7 +23,7 @@ Creates a badge with the given "data-filter" value.
   "data" $data
   "class" (printf "hx:mt-2 hx:mx-1 hx:cursor-pointer %s" $class)
   "content" $content
-  "type" $type
+  "color" $color
   "border" $border
   "icon" $icon
   )

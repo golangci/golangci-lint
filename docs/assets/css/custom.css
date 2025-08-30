@@ -40,3 +40,13 @@
 .hextra-footer .social-media :hover{
     transform: translateY(-2px);
 }
+
+.hextra-banner {
+    background: #6BB43A;
+    background: linear-gradient(135deg, rgba(107, 180, 58, 1) 0%, rgba(29, 253, 253, 1) 50%, rgba(69, 145, 252, 1) 100%);
+    color: var(--hx-color-slate-900);
+}
+
+.extra-banner-close-button {
+    color: var(--hx-color-slate-50);
+}
