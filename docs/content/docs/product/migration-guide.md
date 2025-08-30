@@ -168,7 +168,7 @@ Presets:
 | name | linters |
 |------|---------|
 | bugs | `asasalint`, `asciicheck`, `bidichk`, `bodyclose`, `contextcheck`, `durationcheck`, `errcheck`, `errchkjson`, `errorlint`, `exhaustive`, `gocheckcompilerdirectives`, `gochecksumtype`, `gosec`, `gosmopolitan`, `govet`, `loggercheck`, `makezero`, `musttag`, `nilerr`, `nilnesserr`, `noctx`, `protogetter`, `reassign`, `recvcheck`, `rowserrcheck`, `spancheck`, `sqlclosecheck`, `staticcheck`, `testifylint`, `zerologlint` |
-| comment | `dupword`, `godot`, `godox`, `misspell` | 
+| comment | `dupword`, `godot`, `godox`, `misspell` |
 | complexity | `cyclop`, `funlen`, `gocognit`, `gocyclo`, `maintidx`, `nestif` |
 | error | `err113`, `errcheck`, `errorlint`, `wrapcheck` |
 | format | `gci`, `gofmt`, `gofumpt`, `goimports` |
@@ -1577,14 +1577,14 @@ version: "2"
 
 ### Integration
 
-#### VSCode
+#### Visual Studio Code
 
 {{< tabs items="v1,v2" >}}
 {{< tab >}}
 ```JSONata
 "go.lintTool": "golangci-lint",
 "go.lintFlags": [
-"--fast"
+  "--fast"
 ]
 ```
 {{< /tab >}}
@@ -1592,15 +1592,15 @@ version: "2"
 ```JSONata
 "go.lintTool": "golangci-lint",
 "go.lintFlags": [
-"--fast-only"
+  "--fast-only"
 ],
 "go.formatTool": "custom",
 "go.alternateTools": {
-"customFormatter": "golangci-lint"
+  "customFormatter": "golangci-lint"
 },
 "go.formatFlags": [
-"fmt",
-"--stdin"
+  "fmt",
+  "--stdin"
 ]
 ```
 {{< /tab >}}
