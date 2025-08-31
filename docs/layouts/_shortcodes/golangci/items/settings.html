@@ -72,6 +72,7 @@ Creates a section for each setting of a linter/formatter.
 }}
     {{ end }}
 {{ end }}
+{{- if .originalURL -}}
 <a href="{{ .originalURL }}" title="Repository" target="_blank">
 {{ partial "shortcodes/badge" (dict
     "border" true
@@ -82,6 +83,7 @@ Creates a section for each setting of a linter/formatter.
     )
 }}
 </a>
+{{- end -}}
 </p>
 
 {{/* Settings */}}
