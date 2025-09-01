@@ -8,6 +8,39 @@ If you value it, consider supporting us, we appreciate it!
 
 <!-- START --->
 
+### v2.5.0
+
+1. New linters
+   * Add `godoclint` linter https://github.com/godoc-lint/godoc-lint
+   * Add `unqueryvet` linter https://github.com/MirrexOne/unqueryvet
+   * Add `iotamixing` linter https://github.com/AdminBenni/iota-mixing
+2. Linters new features or changes
+   * `embeddedstructfieldcheck`: from 0.3.0 to 0.4.0 (new option: `empty-line`)
+   * `err113`: from aea10b59be24 to 0.1.1 (skip internals of `Is` methods for `error` type)
+   * `ginkgolinter`: from 0.20.0 to 0.21.0 (new option: `force-tonot`)
+   * `gofumpt`: from 0.8.0 to 0.9.1 (new rule is to "clothe" naked returns for the sake of clarity)
+   * `ineffassign`: from 0.1.0 to 0.2.0 (new option: `check-escaping-errors`)
+   * `musttag`: from 0.13.1 to 0.14.0 (support interface methods)
+   * `revive`: from 1.11.0 to 1.12.0 (new options: `identical-ifelseif-branches`, `identical-ifelseif-conditions`, `identical-switch-branches`, `identical-switch-conditions`, `package-directory-mismatch`, `unsecure-url-scheme`, `use-waitgroup-go`, `useless-fallthrough`)
+   * `thelper`: from 0.6.3 to 0.7.1 (skip `t.Helper` in functions passed to `synctest.Test`)
+   * `wsl`: from 5.1.1 to 5.2.0 (improvements related to subexpressions)
+3. Linters bug fixes
+   * `asciicheck`: from 0.4.1 to 0.5.0
+   * `errname`: from 1.1.0 to 1.1.1
+   * `fatcontext`: from 0.8.0 to 0.8.1
+   * `go-printf-func-name`: from 0.1.0 to 0.1.1
+   * `godot`: from 1.5.1 to 1.5.4
+   * `gosec`: from 2.22.7 to 2.22.8
+   * `nilerr`: from 0.1.1 to a temporary fork
+   * `nilnil`: from 1.1.0 to 1.1.1
+   * `protogetter`: from 0.3.15 to 0.3.16
+   * `tagliatelle`: from 0.7.1 to 0.7.2
+   * `testifylint`: from 1.6.1 to 1.6.4
+4. Misc.
+   * fix: "no export data" errors are now handled as a standard typecheck error
+5. Documentation
+   * Improve nolint section about syntax
+
 ### v2.4.0
 
 1. Enhancements
