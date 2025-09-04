@@ -127,7 +127,7 @@ func forceRootParsePersistentFlags() (*rootOptions, error) {
 	fs := pflag.NewFlagSet("config flag set", pflag.ContinueOnError)
 
 	// Ignore unknown flags because we will parse the command flags later.
-	fs.ParseErrorsWhitelist = pflag.ParseErrorsWhitelist{UnknownFlags: true}
+	fs.ParseErrorsAllowlist = pflag.ParseErrorsAllowlist{UnknownFlags: true}
 
 	opts := &rootOptions{}
 
