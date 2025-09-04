@@ -597,7 +597,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithAutoFix().
-			WithURL("https://staticcheck.dev/"),
+			WithURL("https://github.com/dominikh/go-tools"),
 
 		linter.NewConfig(swaggo.New()).
 			WithSince("v2.2.0").

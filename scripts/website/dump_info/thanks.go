@@ -102,9 +102,6 @@ func extractInfo(lc *linter.Config) authorInfo {
 	exp := regexp.MustCompile(`https://(github|gitlab)\.com/([^/]+)/.*`)
 
 	switch lc.Name() {
-	case "staticcheck":
-		return authorInfo{Author: "dominikh", Host: hostGitHub}
-
 	case "exhaustruct":
 		return authorInfo{Author: "xobotyi", Host: hostGitHub}
 

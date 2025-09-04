@@ -819,7 +819,7 @@
       "standard"
     ],
     "loadMode": 8767,
-    "originalURL": "https://staticcheck.dev/",
+    "originalURL": "https://github.com/dominikh/go-tools",
     "internal": false,
     "canAutoFix": true,
     "isSlow": true,
