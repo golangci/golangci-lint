@@ -240,7 +240,8 @@ func (lp *loadingPackage) loadFromExportData() error {
 		}
 	}
 	if pkg.ExportFile == "" {
-		return fmt.Errorf("no export data for %q", pkg.ID)
+		// https://github.com/golangci/golangci-lint/issues/6056
+		return fmt.Errorf("no export data for %q. (typically this indicates a compilation failure in an imported package; ensure that 'go build' completes successfully)", pkg.ID)
 	}
 	f, err := os.Open(pkg.ExportFile)
 	if err != nil {
