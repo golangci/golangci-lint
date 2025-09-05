@@ -240,7 +240,32 @@ func (lp *loadingPackage) loadFromExportData() error {
 		}
 	}
 	if pkg.ExportFile == "" {
-		return fmt.Errorf("no export data for %q", pkg.ID)
+		seen := make(map[string]struct{})
+
+		count := 0
+		var sb strings.Builder
+		packages.Visit([]*packages.Package{pkg}, func(p *packages.Package) bool {
+			if _, ok := seen[p.ID]; ok {
+				return false
+			}
+			if count >= 3 {
+				return false
+			}
+			seen[p.ID] = struct{}{}
+			// Optionally skip test variants:
+			if p.ForTest == "" && !strings.HasSuffix(p.PkgPath, ".test") {
+				for _, e := range p.Errors {
+					fmt.Fprintf(&sb, "error in package %q: %v\n", p.ID, e.Msg)
+					count++
+				}
+			}
+			return true // keep walking into p.Imports
+		}, nil)
+		err := fmt.Sprintf("no export data for %q", pkg.ID)
+		if sb.Len() > 0 {
+			err += fmt.Sprintf(" because of error in imported package(s): %v", sb.String())
+		}
+		return errors.New(err)
 	}
 	f, err := os.Open(pkg.ExportFile)
 	if err != nil {
