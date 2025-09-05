@@ -130,8 +130,9 @@ func (l *BaseLoader) getConfigSearchPaths() []string {
 	}
 
 	// find all dirs from it up to the root
-	searchPaths := []string{"./"}
+	searchPaths := []string{}
 
+	// Add the target directory and its parents first (highest priority)
 	for {
 		searchPaths = append(searchPaths, currentDir)
 
@@ -141,6 +142,15 @@ func (l *BaseLoader) getConfigSearchPaths() []string {
 		}
 
 		currentDir = parent
+	}
+
+	// Add current working directory if it's not already included and we haven't found a config yet
+	cwd, err := os.Getwd()
+	if err == nil {
+		absCwd, err := filepath.Abs(cwd)
+		if err == nil && !slices.Contains(searchPaths, absCwd) {
+			searchPaths = append(searchPaths, "./")
+		}
 	}
 
 	// find home directory for global config

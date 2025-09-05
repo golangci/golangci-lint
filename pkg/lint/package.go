@@ -53,14 +53,116 @@ func NewPackageLoader(log logutils.Log, cfg *config.Config, args []string, env *
 
 // Load loads packages.
 func (l *PackageLoader) Load(ctx context.Context, linters []*linter.Config) (pkgs, deduplicatedPkgs []*packages.Package, err error) {
+	// Check for multiple modules and provide helpful error
+	if err := l.detectMultipleModules(ctx); err != nil {
+		return nil, nil, err
+	}
+
 	loadMode := findLoadMode(linters)
 
-	pkgs, err = l.loadPackages(ctx, loadMode)
-	if err != nil {
-		return nil, nil, fmt.Errorf("failed to load packages: %w", err)
+	pkgs, loadErr := l.loadPackages(ctx, loadMode)
+	if loadErr != nil {
+		return nil, nil, fmt.Errorf("failed to load packages: %w", loadErr)
 	}
 
 	return pkgs, l.filterDuplicatePackages(pkgs), nil
+}
+
+// detectMultipleModules checks if multiple arguments refer to different modules
+func (l *PackageLoader) detectMultipleModules(ctx context.Context) error {
+	if len(l.args) <= 1 {
+		return nil
+	}
+
+	var moduleRoots []string
+	seenRoots := make(map[string]bool)
+
+	for _, arg := range l.args {
+		moduleRoot := l.findModuleRootForArg(ctx, arg)
+		if moduleRoot != "" && !seenRoots[moduleRoot] {
+			moduleRoots = append(moduleRoots, moduleRoot)
+			seenRoots[moduleRoot] = true
+		}
+	}
+
+	if len(moduleRoots) > 1 {
+		return fmt.Errorf("multiple Go modules detected: %v\n\n"+
+			"Multi-module analysis is not supported. Each module should be analyzed separately:\n"+
+			"  golangci-lint run %s\n  golangci-lint run %s",
+			moduleRoots, moduleRoots[0], moduleRoots[1])
+	}
+
+	return nil
+}
+
+// findModuleRootForArg finds the module root for a given argument using go env
+func (l *PackageLoader) findModuleRootForArg(ctx context.Context, arg string) string {
+	absPath, err := filepath.Abs(arg)
+	if err != nil {
+		if l.debugf != nil {
+			l.debugf("Failed to get absolute path for %s: %v", arg, err)
+		}
+		return ""
+	}
+
+	// Determine the directory to check
+	var targetDir string
+	if info, statErr := os.Stat(absPath); statErr == nil && info.IsDir() {
+		targetDir = absPath
+	} else if statErr == nil {
+		targetDir = filepath.Dir(absPath)
+	} else {
+		return ""
+	}
+
+	// Save current directory
+	originalWd, err := os.Getwd()
+	if err != nil {
+		if l.debugf != nil {
+			l.debugf("Failed to get current directory: %v", err)
+		}
+		return ""
+	}
+	defer func() {
+		if chErr := os.Chdir(originalWd); chErr != nil && l.debugf != nil {
+			l.debugf("Failed to restore directory %s: %v", originalWd, chErr)
+		}
+	}()
+
+	// Change to target directory and use go env GOMOD
+	if chdirErr := os.Chdir(targetDir); chdirErr != nil {
+		if l.debugf != nil {
+			l.debugf("Failed to change to directory %s: %v", targetDir, chdirErr)
+		}
+		return ""
+	}
+
+	goModPath, err := goenv.GetOne(ctx, goenv.GOMOD)
+	if err != nil || goModPath == "" {
+		if l.debugf != nil {
+			l.debugf("go env GOMOD failed in %s: err=%v, path=%s", targetDir, err, goModPath)
+		}
+		return ""
+	}
+
+	return filepath.Dir(goModPath)
+}
+
+// determineWorkingDir determines the working directory for package loading.
+// If the first argument is within a directory tree that has a go.mod file, use that module root.
+// Otherwise, use the current working directory.
+func (l *PackageLoader) determineWorkingDir(ctx context.Context) string {
+	if len(l.args) == 0 {
+		return ""
+	}
+
+	moduleRoot := l.findModuleRootForArg(ctx, l.args[0])
+	if moduleRoot != "" {
+		if l.debugf != nil {
+			l.debugf("Found module root %s, using as working dir", moduleRoot)
+		}
+	}
+	return moduleRoot
 }
 
 func (l *PackageLoader) loadPackages(ctx context.Context, loadMode packages.LoadMode) ([]*packages.Package, error) {
@@ -76,10 +178,11 @@ func (l *PackageLoader) loadPackages(ctx context.Context, loadMode packages.Load
 		Context:    ctx,
 		BuildFlags: l.makeBuildFlags(),
 		Logf:       l.debugf,
+		Dir:        l.determineWorkingDir(ctx),
 		// TODO: use fset, parsefile, overlay
 	}
 
-	args := buildArgs(l.args)
+	args := l.buildArgs(ctx)
 
 	l.debugf("Built loader args are %s", args)
 
@@ -233,13 +336,23 @@ func (l *PackageLoader) makeBuildFlags() []string {
 	return buildFlags
 }
 
-func buildArgs(args []string) []string {
-	if len(args) == 0 {
+// buildArgs processes the arguments for package loading, handling directory changes appropriately.
+func (l *PackageLoader) buildArgs(ctx context.Context) []string {
+	if len(l.args) == 0 {
 		return []string{"./..."}
 	}
 
+	workingDir := l.determineWorkingDir(ctx)
+
+	// If we're using a different working directory, we need to adjust the arguments
+	if workingDir != "" {
+		// We're switching to the target directory as working dir, so use "./..." to analyze it
+		return []string{"./..."}
+	}
+
+	// Use the original buildArgs logic for the current working directory
 	var retArgs []string
-	for _, arg := range args {
+	for _, arg := range l.args {
 		if strings.HasPrefix(arg, ".") || filepath.IsAbs(arg) {
 			retArgs = append(retArgs, arg)
 		} else {
