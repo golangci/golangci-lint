@@ -239,34 +239,11 @@ func (lp *loadingPackage) loadFromExportData() error {
 			return fmt.Errorf("dependency %q hasn't been loaded yet", path)
 		}
 	}
-	if pkg.ExportFile == "" {
-		seen := make(map[string]struct{})
 
-		count := 0
-		var sb strings.Builder
-		packages.Visit([]*packages.Package{pkg}, func(p *packages.Package) bool {
-			if _, ok := seen[p.ID]; ok {
-				return false
-			}
-			if count >= 3 {
-				return false
-			}
-			seen[p.ID] = struct{}{}
-			// Optionally skip test variants:
-			if p.ForTest == "" && !strings.HasSuffix(p.PkgPath, ".test") {
-				for _, e := range p.Errors {
-					fmt.Fprintf(&sb, "error in package %q: %v\n", p.ID, e.Msg)
-					count++
-				}
-			}
-			return true // keep walking into p.Imports
-		}, nil)
-		err := fmt.Sprintf("no export data for %q", pkg.ID)
-		if sb.Len() > 0 {
-			err += fmt.Sprintf(" because of error in imported package(s): %v", sb.String())
-		}
-		return errors.New(err)
+	if pkg.ExportFile == "" {
+		return noExportDataError(pkg)
 	}
+
 	f, err := os.Open(pkg.ExportFile)
 	if err != nil {
 		return err
@@ -357,6 +334,7 @@ func (lp *loadingPackage) loadImportedPackageWithFacts(loadMode LoadMode) error 
 			if srcErr := lp.loadFromSource(loadMode); srcErr != nil {
 				return srcErr
 			}
+
 			// Make sure this package can't be imported successfully
 			pkg.Errors = append(pkg.Errors, packages.Error{
 				Pos:  "-",
@@ -577,4 +555,40 @@ func sizeOfReflectValueTreeBytes(rv reflect.Value, visitedPtrs map[uintptr]struc
 	default:
 		panic("unknown rv of type " + rv.String())
 	}
+}
+
+func noExportDataError(pkg *packages.Package) error {
+	seen := make(map[string]struct{})
+
+	const limit = 3
+
+	var count int
+
+	var sb strings.Builder
+
+	packages.Visit([]*packages.Package{pkg}, func(p *packages.Package) bool {
+		if count >= limit {
+			return false
+		}
+
+		if _, ok := seen[p.ID]; ok {
+			return false
+		}
+
+		seen[p.ID] = struct{}{}
+
+		for _, e := range p.Errors {
+			fmt.Fprintf(&sb, "\terror in package %q: %s\n", p.ID, e.Msg)
+			count++
+		}
+
+		return true
+	}, nil)
+
+	msg := fmt.Sprintf("no export data for %q", pkg.ID)
+	if sb.Len() > 0 {
+		msg += fmt.Sprintf(", maybe because of error(s) in imported package(s):\n%s", sb.String())
+	}
+
+	return errors.New(msg)
 }
