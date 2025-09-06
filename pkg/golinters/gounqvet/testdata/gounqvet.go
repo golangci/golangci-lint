@@ -17,10 +17,6 @@ func badQueries() {
 	count := "SELECT COUNT(*) FROM users"
 	_ = count
 	
-	// This should not trigger because of nolint comment
-	debug := "SELECT * FROM debug_table" //nolint:gounqvet
-	_ = debug
-	
 	// Good queries (should not trigger)
 	goodQuery := "SELECT id, name, email FROM users"
 	_ = goodQuery

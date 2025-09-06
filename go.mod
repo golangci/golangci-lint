@@ -149,7 +149,7 @@ require (
 	codeberg.org/chavacava/garif v0.2.0 // indirect
 	dev.gaijin.team/go/golib v0.6.0 // indirect
 	github.com/Masterminds/semver/v3 v3.3.1 // indirect
-	github.com/MirrexOne/gounqvet v1.1.0
+	github.com/MirrexOne/gounqvet v1.2.0
 	github.com/alfatraining/structtag v1.0.0 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
