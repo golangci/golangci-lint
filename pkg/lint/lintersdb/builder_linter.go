@@ -399,6 +399,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/securego/gosec"),
 
+		linter.NewConfig(gounqvet.New(&cfg.Linters.Settings.Gounqvet)).
+			WithSince("v2.5.0").
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/MirrexOne/gounqvet"),
+
 		linter.NewConfig(gosmopolitan.New(&cfg.Linters.Settings.Gosmopolitan)).
 			WithSince("v1.53.0").
 			WithLoadForGoAnalysis().
@@ -410,11 +415,6 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithAutoFix().
 			WithURL("https://pkg.go.dev/cmd/vet"),
-
-		linter.NewConfig(gounqvet.New(&cfg.Linters.Settings.Gounqvet)).
-			WithSince("v1.50.0").
-			WithLoadForGoAnalysis().
-			WithURL("https://github.com/MirrexOne/gounqvet"),
 
 		linter.NewConfig(grouper.New(&cfg.Linters.Settings.Grouper)).
 			WithSince("v1.44.0").
