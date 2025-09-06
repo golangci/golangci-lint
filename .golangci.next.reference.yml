@@ -66,6 +66,7 @@ linters:
     - gomodguard
     - goprintffuncname
     - gosec
+    - gounqvet
     - gosmopolitan
     - govet
     - grouper
@@ -177,6 +178,7 @@ linters:
     - gomodguard
     - goprintffuncname
     - gosec
+    - gounqvet
     - gosmopolitan
     - govet
     - grouper
@@ -1577,6 +1579,16 @@ linters:
         # Maximum allowed permissions mode for os.WriteFile and ioutil.WriteFile.
         # Default: "0600"
         G306: "0600"
+
+    gounqvet:
+      # Enable SQL builder checking.
+      # Default: true
+      check-sql-builders: false
+      # Regex patterns for acceptable SELECT * usage.
+      # Default: ["SELECT \\* FROM information_schema\\..*", "SELECT \\* FROM pg_catalog\\..*", "SELECT COUNT\\(\\*\\)", "SELECT MAX\\(\\*\\)", "SELECT MIN\\(\\*\\)"]
+      allowed-patterns:
+        - "SELECT \\* FROM temp_.*"
+        - "SELECT \\* FROM.*-- migration"
 
     gosmopolitan:
       # Allow and ignore `time.Local` usages.

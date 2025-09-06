@@ -56,6 +56,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/gosec"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/gosmopolitan"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/govet"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/gounqvet"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/grouper"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/iface"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/importas"
@@ -391,6 +392,10 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/securego/gosec"),
+
+		linter.NewConfig(gounqvet.New(&cfg.Linters.Settings.Gounqvet)).
+			WithSince("v2.5.0").
+			WithURL("https://github.com/MirrexOne/gounqvet"),
 
 		linter.NewConfig(gosmopolitan.New(&cfg.Linters.Settings.Gosmopolitan)).
 			WithSince("v1.53.0").
