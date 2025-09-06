@@ -91,6 +91,10 @@ func (lp *loadingPackage) analyze(ctx context.Context, cancel context.CancelFunc
 			act.Err = werr
 		}
 
+		if len(lp.actions) == 0 {
+			lp.log.Warnf("no action but there is an error: %v", err)
+		}
+
 		return
 	}
 
