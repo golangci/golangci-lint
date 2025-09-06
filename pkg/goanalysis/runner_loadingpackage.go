@@ -338,7 +338,8 @@ func (lp *loadingPackage) loadImportedPackageWithFacts(loadMode LoadMode) error 
 				Msg:  fmt.Sprintf("could not load export data: %s", err),
 				Kind: packages.ParseError,
 			})
-			return fmt.Errorf("could not load export data: %w", err)
+
+			return nil
 		}
 	}
 
