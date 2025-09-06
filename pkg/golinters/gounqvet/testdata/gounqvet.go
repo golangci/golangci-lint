@@ -3,6 +3,7 @@ package testdata
 import (
 	"database/sql"
 	"fmt"
+	"strconv"
 )
 
 func badQueries() {
@@ -27,6 +28,9 @@ func badQueries() {
 	_ = goodQuery
 	
 	fmt.Println(query)
+	
+	// Use strconv to satisfy std lib import requirement
+	_ = strconv.Itoa(42)
 }
 
 type SQLBuilder interface {
