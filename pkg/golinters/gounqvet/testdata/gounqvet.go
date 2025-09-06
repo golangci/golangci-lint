@@ -7,12 +7,10 @@ import (
 )
 
 func badQueries() {
-	// want "avoid SELECT \\* - explicitly specify needed columns for better performance, maintainability and stability"
-	query := "SELECT * FROM users"
+	query := "SELECT * FROM users" // want "avoid SELECT \\* - explicitly specify needed columns for better performance, maintainability and stability"
 	
 	var db *sql.DB
-	// want "avoid SELECT \\* - explicitly specify needed columns for better performance, maintainability and stability"
-	rows, _ := db.Query("SELECT * FROM orders WHERE status = ?", "active")
+	rows, _ := db.Query("SELECT * FROM orders WHERE status = ?", "active") // want "avoid SELECT \\* - explicitly specify needed columns for better performance, maintainability and stability"
 	_ = rows
 	
 	// This should not trigger because it's a COUNT function
@@ -41,8 +39,7 @@ type SQLBuilder interface {
 }
 
 func badSQLBuilder(builder SQLBuilder) {
-	// want "avoid SELECT \\* in SQL builder - explicitly specify columns to prevent unnecessary data transfer and schema change issues"
-	query := builder.Select("*").From("products")
+	query := builder.Select("*").From("products") // want "avoid SELECT \\* in SQL builder - explicitly specify columns to prevent unnecessary data transfer and schema change issues"
 	_ = query
 }
 

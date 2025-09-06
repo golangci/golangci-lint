@@ -13,12 +13,8 @@ func New(settings *config.GounqvetSettings) *goanalysis.Linter {
 	var cfg *pkgconfig.GounqvetSettings
 	if settings != nil {
 		cfg = &pkgconfig.GounqvetSettings{
-			CheckSQLBuilders:      settings.CheckSQLBuilders,
-			IgnoredFunctions:      settings.IgnoredFunctions,
-			IgnoredPackages:       settings.IgnoredPackages,
-			AllowedPatterns:       settings.AllowedPatterns,
-			IgnoredFilePatterns:   settings.IgnoredFilePatterns,
-			IgnoredDirectories:    settings.IgnoredDirectories,
+			CheckSQLBuilders: settings.CheckSQLBuilders,
+			AllowedPatterns:  settings.AllowedPatterns,
 		}
 	}
 
@@ -29,5 +25,5 @@ func New(settings *config.GounqvetSettings) *goanalysis.Linter {
 		"Detects SELECT * usage in SQL queries and SQL builders, encouraging explicit column selection",
 		[]*analysis.Analyzer{analyzer},
 		nil,
-	).WithLoadMode(goanalysis.LoadModeTypesInfo)
+	).WithLoadMode(goanalysis.LoadModeSyntax)
 }
