@@ -250,6 +250,7 @@ type LintersSettings struct {
 	Gosec                    GoSecSettings                    `mapstructure:"gosec"`
 	Gosmopolitan             GosmopolitanSettings             `mapstructure:"gosmopolitan"`
 	Govet                    GovetSettings                    `mapstructure:"govet"`
+	Gounqvet                 GounqvetSettings                 `mapstructure:"gounqvet"`
 	Grouper                  GrouperSettings                  `mapstructure:"grouper"`
 	Iface                    IfaceSettings                    `mapstructure:"iface"`
 	ImportAs                 ImportAsSettings                 `mapstructure:"importas"`
@@ -1077,4 +1078,13 @@ func (s *CustomLinterSettings) Validate() error {
 	}
 
 	return nil
+}
+
+type GounqvetSettings struct {
+	CheckSQLBuilders      bool     `mapstructure:"check-sql-builders"`
+	IgnoredFunctions      []string `mapstructure:"ignored-functions"`
+	IgnoredPackages       []string `mapstructure:"ignored-packages"`
+	AllowedPatterns       []string `mapstructure:"allowed-patterns"`
+	IgnoredFilePatterns   []string `mapstructure:"ignored-file-patterns"`
+	IgnoredDirectories    []string `mapstructure:"ignored-directories"`
 }
