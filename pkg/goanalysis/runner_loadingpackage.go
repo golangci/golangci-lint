@@ -78,6 +78,9 @@ func (lp *loadingPackage) analyze(ctx context.Context, cancel context.CancelFunc
 	defer lp.decUse(loadMode < LoadModeWholeProgram)
 
 	if err := lp.loadWithFacts(loadMode); err != nil {
+		// Note: this error is ignored when there is no facts loading (e.g. with 98% of linters).
+		// But this is not a problem because the errors are added to the package.Errors.
+		// You through an error, try to add it to actions, but there is no action annnddd it's gone!
 		werr := fmt.Errorf("failed to load package %s: %w", lp.pkg.Name, err)
 
 		// Don't need to write error to errCh, it will be extracted and reported on another layer.
@@ -86,6 +89,10 @@ func (lp *loadingPackage) analyze(ctx context.Context, cancel context.CancelFunc
 			close(act.analysisDoneCh)
 
 			act.Err = werr
+		}
+
+		if len(lp.actions) == 0 {
+			lp.log.Warnf("no action but there is an error: %v", err)
 		}
 
 		return
@@ -239,9 +246,11 @@ func (lp *loadingPackage) loadFromExportData() error {
 			return fmt.Errorf("dependency %q hasn't been loaded yet", path)
 		}
 	}
+
 	if pkg.ExportFile == "" {
 		return fmt.Errorf("no export data for %q", pkg.ID)
 	}
+
 	f, err := os.Open(pkg.ExportFile)
 	if err != nil {
 		return err
@@ -332,13 +341,15 @@ func (lp *loadingPackage) loadImportedPackageWithFacts(loadMode LoadMode) error 
 			if srcErr := lp.loadFromSource(loadMode); srcErr != nil {
 				return srcErr
 			}
+
 			// Make sure this package can't be imported successfully
 			pkg.Errors = append(pkg.Errors, packages.Error{
 				Pos:  "-",
 				Msg:  fmt.Sprintf("could not load export data: %s", err),
 				Kind: packages.ParseError,
 			})
-			return fmt.Errorf("could not load export data: %w", err)
+
+			return nil
 		}
 	}
 
