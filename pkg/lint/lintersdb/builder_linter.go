@@ -401,7 +401,6 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 
 		linter.NewConfig(gounqvet.New(&cfg.Linters.Settings.Gounqvet)).
 			WithSince("v2.5.0").
-			WithLoadForGoAnalysis().
 			WithURL("https://github.com/MirrexOne/gounqvet"),
 
 		linter.NewConfig(gosmopolitan.New(&cfg.Linters.Settings.Gosmopolitan)).

@@ -1656,29 +1656,11 @@ linters:
       # Enable SQL builder checking.
       # Default: true
       check-sql-builders: false
-      # Functions to skip during analysis.
-      # Default: []
-      ignored-functions:
-        - "fmt.Printf"
-        - "log.Printf"
-      # Packages to ignore completely.
-      # Default: []
-      ignored-packages:
-        - "testing"
-        - "debug"
       # Regex patterns for acceptable SELECT * usage.
       # Default: ["SELECT \\* FROM information_schema\\..*", "SELECT \\* FROM pg_catalog\\..*", "SELECT COUNT\\(\\*\\)", "SELECT MAX\\(\\*\\)", "SELECT MIN\\(\\*\\)"]
       allowed-patterns:
         - "SELECT \\* FROM temp_.*"
         - "SELECT \\* FROM.*-- migration"
-      # File patterns to ignore.
-      # Default: ["*_test.go", "*.pb.go", "*_gen.go", "*.gen.go", "*_generated.go"]
-      ignored-file-patterns:
-        - "my_special_pattern.go"
-      # Directories to ignore.
-      # Default: ["vendor", "testdata", "migrations", "generated", ".git", "node_modules"]
-      ignored-directories:
-        - "my_special_dir"
 
     gosmopolitan:
       # Allow and ignore `time.Local` usages.

@@ -1105,10 +1105,6 @@ func (s *CustomLinterSettings) Validate() error {
 }
 
 type GounqvetSettings struct {
-	CheckSQLBuilders      bool     `mapstructure:"check-sql-builders"`
-	IgnoredFunctions      []string `mapstructure:"ignored-functions"`
-	IgnoredPackages       []string `mapstructure:"ignored-packages"`
-	AllowedPatterns       []string `mapstructure:"allowed-patterns"`
-	IgnoredFilePatterns   []string `mapstructure:"ignored-file-patterns"`
-	IgnoredDirectories    []string `mapstructure:"ignored-directories"`
+	CheckSQLBuilders bool     `mapstructure:"check-sql-builders"`
+	AllowedPatterns  []string `mapstructure:"allowed-patterns"`
 }
