@@ -242,6 +242,7 @@ type LintersSettings struct {
 	Goconst                  GoConstSettings                  `mapstructure:"goconst"`
 	Gocritic                 GoCriticSettings                 `mapstructure:"gocritic"`
 	Gocyclo                  GoCycloSettings                  `mapstructure:"gocyclo"`
+	Godoclint                GodoclintSettings                `mapstructure:"godoclint"`
 	Godot                    GodotSettings                    `mapstructure:"godot"`
 	Godox                    GodoxSettings                    `mapstructure:"godox"`
 	Goheader                 GoHeaderSettings                 `mapstructure:"goheader"`
@@ -518,6 +519,42 @@ type GoCriticCheckSettings map[string]any
 
 type GoCycloSettings struct {
 	MinComplexity int `mapstructure:"min-complexity"`
+}
+
+type GodoclintSettings struct {
+	Include []string `mapstructure:"include"`
+	Exclude []string `mapstructure:"exclude"`
+	Enable  []string `mapstructure:"enable"`
+	Disable []string `mapstructure:"disable"`
+	Options struct {
+		MaxLen struct {
+			Length       *uint `mapstructure:"length"`
+			IncludeTests *bool `mapstructure:"include-tests"`
+		} `mapstructure:"max-len"`
+		PkgDoc struct {
+			StartWith    *string `mapstructure:"start-with"`
+			IncludeTests *bool   `mapstructure:"include-tests"`
+		} `mapstructure:"pkg-doc"`
+		SinglePkgDoc struct {
+			IncludeTests *bool `mapstructure:"include-tests"`
+		}
+		RequirePkgDoc struct {
+			IncludeTests *bool `mapstructure:"include-tests"`
+		} `mapstructure:"require-pkg-doc"`
+		RequireDoc struct {
+			IgnoreExported   *bool `mapstructure:"ignore-exported"`
+			IgnoreUnexported *bool `mapstructure:"ignore-unexported"`
+			IncludeTests     *bool `mapstructure:"include-tests"`
+		} `mapstructure:"require-doc"`
+		StartWithName struct {
+			Pattern           *string `mapstructure:"pattern"`
+			IncludeUnexported *bool   `mapstructure:"include-unexported"`
+			IncludeTests      *bool   `mapstructure:"include-tests"`
+		} `mapstructure:"start-with-name"`
+		NoUnusedLink struct {
+			IncludeTests *bool `mapstructure:"include-tests"`
+		} `mapstructure:"no-unused-link"`
+	} `mapstructure:"options"`
 }
 
 type GodotSettings struct {
