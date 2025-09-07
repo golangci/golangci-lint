@@ -795,6 +795,7 @@
             "goconst",
             "gocritic",
             "gocyclo",
+            "godoclint",
             "godot",
             "godox",
             "err113",
@@ -1845,6 +1846,199 @@
               "description": "Minimum code complexity to report (we recommend 10-20).",
               "type": "integer",
               "default": 30
+            }
+          }
+        },
+        "godoclintSettings": {
+          "type": "object",
+          "properties": {
+            "include": {
+              "default": null,
+              "description": "List of regexp patterns matching relative paths to files the linter should include. Paths are forward-slash separated (Unix-style).",
+              "oneOf": [
+                {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "exclude": {
+              "default": null,
+              "description": "List of regexp patterns matching relative paths to files the linter should skip. Paths are forward-slash separated (Unix-style).",
+              "oneOf": [
+                {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "enable": {
+              "default": null,
+              "description": "List of rules to enable.",
+              "oneOf": [
+                {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "pkg-doc",
+                      "single-pkg-doc",
+                      "require-pkg-doc",
+                      "start-with-name",
+                      "require-doc",
+                      "max-len",
+                      "no-unused-link"
+                    ]
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "disable": {
+              "default": null,
+              "description": "List of rules to disable.",
+              "oneOf": [
+                {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "pkg-doc",
+                      "single-pkg-doc",
+                      "require-pkg-doc",
+                      "start-with-name",
+                      "require-doc",
+                      "max-len",
+                      "no-unused-link"
+                    ]
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "options": {
+              "type": "object",
+              "description": "A map for setting individual rule options.",
+              "properties": {
+                "max-len": {
+                  "type": "object",
+                  "properties": {
+                    "length": {
+                      "type": "integer",
+                      "description": "Maximum line length for godocs, not including the `// `, or `/*` or `*/` tokens.",
+                      "default": 77
+                    },
+                    "include-tests": {
+                      "type": "boolean",
+                      "description": "Include test files when applying the `max-len` rule.",
+                      "default": false
+                    }
+                  }
+                },
+                "pkg-doc": {
+                  "type": "object",
+                  "properties": {
+                    "start-with": {
+                      "type": "string",
+                      "description": "The start of a valid package godoc (e.g., \"Package <NAME>...\").",
+                      "default": "Package"
+                    },
+                    "include-tests": {
+                      "type": "boolean",
+                      "description": "Include test files when applying the `pkg-doc` rule.",
+                      "default": false
+                    }
+                  }
+                },
+                "single-pkg-doc": {
+                  "type": "object",
+                  "properties": {
+                    "include-tests": {
+                      "type": "boolean",
+                      "description": "Include test files when applying the `single-pkg-doc` rule.",
+                      "default": false
+                    }
+                  }
+                },
+                "require-pkg-doc": {
+                  "type": "object",
+                  "properties": {
+                    "include-tests": {
+                      "type": "boolean",
+                      "description": "Include test files when applying the `require-pkg-doc` rule.",
+                      "default": false
+                    }
+                  }
+                },
+                "require-doc": {
+                  "type": "object",
+                  "properties": {
+                    "include-tests": {
+                      "type": "boolean",
+                      "description": "Include test files when applying the `require-doc` rule.",
+                      "default": false
+                    },
+                    "ignore-exported": {
+                      "type": "boolean",
+                      "description": "Ignore exported (public) symbols when applying the `require-doc` rule.",
+                      "default": false
+                    },
+                    "ignore-unexported": {
+                      "type": "boolean",
+                      "description": "Ignore unexported (private) symbols when applying the `require-doc` rule.",
+                      "default": true
+                    }
+                  }
+                },
+                "start-with-name": {
+                  "type": "object",
+                  "properties": {
+                    "include-tests": {
+                      "type": "boolean",
+                      "description": "Include test files when applying the `start-with-name` rule.",
+                      "default": false
+                    },
+                    "include-unexported": {
+                      "type": "boolean",
+                      "description": "Include unexported symbols when applying the `start-with-name` rule.",
+                      "default": false
+                    },
+                    "pattern": {
+                      "type": "string",
+                      "description": "Acceptable start pattern (regexp) for godoc starte when applying the `start-with-name` rule. The `%` placeholder is where the corresponding symbol name should should appear. An omitted placeholder means the symbol name should appear at the end of the pattern.",
+                      "default": "((A|a|An|an|THE|The|the) )?%"
+                    }
+                  }
+                },
+                "no-unused-link": {
+                  "type": "object",
+                  "properties": {
+                    "include-tests": {
+                      "type": "boolean",
+                      "description": "Include test files when applying the `no-unused-link` rule.",
+                      "default": false
+                    }
+                  }
+                }
+              }
             }
           }
         },
@@ -4546,6 +4740,9 @@
             },
             "gocyclo": {
               "$ref": "#/definitions/settings/definitions/gocycloSettings"
+            },
+            "godoclint": {
+              "$ref": "#/definitions/settings/definitions/godoclintSettings"
             },
             "godot": {
               "$ref": "#/definitions/settings/definitions/godotSettings"
