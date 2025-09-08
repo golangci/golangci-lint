@@ -9,16 +9,16 @@ import (
 )
 
 func New(settings *config.GounqvetSettings) *goanalysis.Linter {
-	var cfg *pkgconfig.GounqvetSettings
+	cfg := pkgconfig.DefaultSettings()
 
 	if settings != nil {
-		cfg = &pkgconfig.GounqvetSettings{
-			CheckSQLBuilders: settings.CheckSQLBuilders,
-			AllowedPatterns:  settings.AllowedPatterns,
+		cfg.CheckSQLBuilders = settings.CheckSQLBuilders
+		if len(settings.AllowedPatterns) > 0 {
+			cfg.AllowedPatterns = settings.AllowedPatterns
 		}
 	}
 
 	return goanalysis.
-		NewLinterFromAnalyzer(gounqvet.NewWithConfig(cfg)).
+		NewLinterFromAnalyzer(gounqvet.NewWithConfig(&cfg)).
 		WithLoadMode(goanalysis.LoadModeSyntax)
 }
