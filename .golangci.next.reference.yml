@@ -66,8 +66,8 @@ linters:
     - gomodguard
     - goprintffuncname
     - gosec
-    - gounqvet
     - gosmopolitan
+    - gounqvet
     - govet
     - grouper
     - iface
@@ -179,8 +179,8 @@ linters:
     - gomodguard
     - goprintffuncname
     - gosec
-    - gounqvet
     - gosmopolitan
+    - gounqvet
     - govet
     - grouper
     - iface
@@ -1582,16 +1582,6 @@ linters:
         # Default: "0600"
         G306: "0600"
 
-    gounqvet:
-      # Enable SQL builder checking.
-      # Default: true
-      check-sql-builders: false
-      # Regex patterns for acceptable SELECT * usage.
-      # Default: ["SELECT \\* FROM information_schema\\..*", "SELECT \\* FROM pg_catalog\\..*", "SELECT COUNT\\(\\*\\)", "SELECT MAX\\(\\*\\)", "SELECT MIN\\(\\*\\)"]
-      allowed-patterns:
-        - "SELECT \\* FROM temp_.*"
-        - "SELECT \\* FROM.*-- migration"
-
     gosmopolitan:
       # Allow and ignore `time.Local` usages.
       #
@@ -1618,6 +1608,21 @@ linters:
         - Hangul
         - Hiragana
         - Katakana
+
+    gounqvet:
+      # Enable SQL builder checking.
+      # Default: true
+      check-sql-builders: false
+      # Regex patterns for acceptable SELECT * usage.
+      # Default:
+      # - "SELECT \\* FROM information_schema\\..*"
+      # - "SELECT \\* FROM pg_catalog\\..*"
+      # - "SELECT COUNT\\(\\*\\)"
+      # - "SELECT MAX\\(\\*\\)"
+      # - "SELECT MIN\\(\\*\\)"
+      allowed-patterns:
+        - "SELECT \\* FROM temp_.*"
+        - "SELECT \\* FROM.*-- migration"
 
     govet:
       # Disable all analyzers.
