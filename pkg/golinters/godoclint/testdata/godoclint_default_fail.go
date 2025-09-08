@@ -7,20 +7,20 @@ package testdata
 // godoclint can, but must not, detect.
 import "go/ast"
 
-// bad godoc // want `godoc should start with symbol name \(pattern "\(\(A\|a\|An\|an\|THE\|The\|the\) \)\?%"\)`
+// bad godoc // want `godoc should start with symbol name \("FooType"\)`
 type FooType struct{}
 
-// bad godoc // want `godoc should start with symbol name \(pattern "\(\(A\|a\|An\|an\|THE\|The\|the\) \)\?%"\)`
+// bad godoc // want `godoc should start with symbol name \("FooAlias"\)`
 type FooAlias = ast.Comment
 
-// bad godoc // want `godoc should start with symbol name \(pattern "\(\(A\|a\|An\|an\|THE\|The\|the\) \)\?%"\)`
+// bad godoc // want `godoc should start with symbol name \("FooConst"\)`
 const FooConst = 1
 
-// bad godoc // want `godoc should start with symbol name \(pattern "\(\(A\|a\|An\|an\|THE\|The\|the\) \)\?%"\)`
+// bad godoc // want `godoc should start with symbol name \("FooVar"\)`
 var FooVar = 1
 
-// bad godoc // want `godoc should start with symbol name \(pattern "\(\(A\|a\|An\|an\|THE\|The\|the\) \)\?%"\)`
+// bad godoc // want `godoc should start with symbol name \("FooFunc"\)`
 func FooFunc() {}
 
-// bad godoc // want `godoc should start with symbol name \(pattern "\(\(A\|a\|An\|an\|THE\|The\|the\) \)\?%"\)`
+// bad godoc // want `godoc should start with symbol name \("FooFunc"\)`
 func (FooType) FooFunc() {}
