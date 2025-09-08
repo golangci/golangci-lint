@@ -86,6 +86,9 @@ var defaultLintersSettings = LintersSettings{
 		EscapeHatches:   []string{},
 		WatchForScripts: []string{"Han"},
 	},
+	Gounqvet: GounqvetSettings{
+		CheckSQLBuilders: true,
+	},
 	Inamedparam: INamedParamSettings{
 		SkipSingleParam: false,
 	},
@@ -250,8 +253,8 @@ type LintersSettings struct {
 	Gomodguard               GoModGuardSettings               `mapstructure:"gomodguard"`
 	Gosec                    GoSecSettings                    `mapstructure:"gosec"`
 	Gosmopolitan             GosmopolitanSettings             `mapstructure:"gosmopolitan"`
-	Govet                    GovetSettings                    `mapstructure:"govet"`
 	Gounqvet                 GounqvetSettings                 `mapstructure:"gounqvet"`
+	Govet                    GovetSettings                    `mapstructure:"govet"`
 	Grouper                  GrouperSettings                  `mapstructure:"grouper"`
 	Iface                    IfaceSettings                    `mapstructure:"iface"`
 	ImportAs                 ImportAsSettings                 `mapstructure:"importas"`
@@ -609,6 +612,11 @@ type GosmopolitanSettings struct {
 	AllowTimeLocal  bool     `mapstructure:"allow-time-local"`
 	EscapeHatches   []string `mapstructure:"escape-hatches"`
 	WatchForScripts []string `mapstructure:"watch-for-scripts"`
+}
+
+type GounqvetSettings struct {
+	CheckSQLBuilders bool     `mapstructure:"check-sql-builders"`
+	AllowedPatterns  []string `mapstructure:"allowed-patterns"`
 }
 
 type GovetSettings struct {
@@ -1102,9 +1110,4 @@ func (s *CustomLinterSettings) Validate() error {
 	}
 
 	return nil
-}
-
-type GounqvetSettings struct {
-	CheckSQLBuilders bool     `mapstructure:"check-sql-builders"`
-	AllowedPatterns  []string `mapstructure:"allowed-patterns"`
 }

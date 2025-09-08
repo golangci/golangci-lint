@@ -2342,6 +2342,24 @@
             }
           }
         },
+        "gounqvetSettings": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "check-sql-builders": {
+              "description": "Enable SQL builder checking.",
+              "type": "boolean",
+              "default": true
+            },
+            "allowed-patterns": {
+              "description": "Regex patterns for acceptable SELECT * usage.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
         "govetSettings": {
           "type": "object",
           "additionalProperties": false,
@@ -4666,6 +4684,9 @@
             },
             "gosmopolitan": {
               "$ref": "#/definitions/settings/definitions/gosmopolitanSettings"
+            },
+            "gounqvet": {
+              "$ref": "#/definitions/settings/definitions/gounqvetSettings"
             },
             "govet": {
               "$ref": "#/definitions/settings/definitions/govetSettings"
