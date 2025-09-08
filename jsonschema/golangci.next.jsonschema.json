@@ -477,6 +477,17 @@
         "-QF1012"
       ]
     },
+    "godoclint-rules": {
+      "enum": [
+        "pkg-doc",
+        "single-pkg-doc",
+        "require-pkg-doc",
+        "start-with-name",
+        "require-doc",
+        "max-len",
+        "no-unused-link"
+      ]
+    },
     "gosec-rules": {
       "enum": [
         "G101",
@@ -1852,38 +1863,6 @@
         "godoclintSettings": {
           "type": "object",
           "properties": {
-            "include": {
-              "default": null,
-              "description": "List of regexp patterns matching relative paths to files the linter should include. Paths are forward-slash separated (Unix-style).",
-              "oneOf": [
-                {
-                  "type": "array",
-                  "uniqueItems": true,
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            },
-            "exclude": {
-              "default": null,
-              "description": "List of regexp patterns matching relative paths to files the linter should skip. Paths are forward-slash separated (Unix-style).",
-              "oneOf": [
-                {
-                  "type": "array",
-                  "uniqueItems": true,
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            },
             "enable": {
               "default": null,
               "description": "List of rules to enable.",
@@ -1892,16 +1871,7 @@
                   "type": "array",
                   "uniqueItems": true,
                   "items": {
-                    "type": "string",
-                    "enum": [
-                      "pkg-doc",
-                      "single-pkg-doc",
-                      "require-pkg-doc",
-                      "start-with-name",
-                      "require-doc",
-                      "max-len",
-                      "no-unused-link"
-                    ]
+                    "$ref": "#/definitions/godoclint-rules"
                   }
                 },
                 {
@@ -1917,16 +1887,7 @@
                   "type": "array",
                   "uniqueItems": true,
                   "items": {
-                    "type": "string",
-                    "enum": [
-                      "pkg-doc",
-                      "single-pkg-doc",
-                      "require-pkg-doc",
-                      "start-with-name",
-                      "require-doc",
-                      "max-len",
-                      "no-unused-link"
-                    ]
+                    "$ref": "#/definitions/godoclint-rules"
                   }
                 },
                 {
@@ -1945,11 +1906,6 @@
                       "type": "integer",
                       "description": "Maximum line length for godocs, not including the `// `, or `/*` or `*/` tokens.",
                       "default": 77
-                    },
-                    "include-tests": {
-                      "type": "boolean",
-                      "description": "Include test files when applying the `max-len` rule.",
-                      "default": false
                     }
                   }
                 },
@@ -1960,42 +1916,12 @@
                       "type": "string",
                       "description": "The start of a valid package godoc (e.g., \"Package <NAME>...\").",
                       "default": "Package"
-                    },
-                    "include-tests": {
-                      "type": "boolean",
-                      "description": "Include test files when applying the `pkg-doc` rule.",
-                      "default": false
-                    }
-                  }
-                },
-                "single-pkg-doc": {
-                  "type": "object",
-                  "properties": {
-                    "include-tests": {
-                      "type": "boolean",
-                      "description": "Include test files when applying the `single-pkg-doc` rule.",
-                      "default": false
-                    }
-                  }
-                },
-                "require-pkg-doc": {
-                  "type": "object",
-                  "properties": {
-                    "include-tests": {
-                      "type": "boolean",
-                      "description": "Include test files when applying the `require-pkg-doc` rule.",
-                      "default": false
                     }
                   }
                 },
                 "require-doc": {
                   "type": "object",
                   "properties": {
-                    "include-tests": {
-                      "type": "boolean",
-                      "description": "Include test files when applying the `require-doc` rule.",
-                      "default": false
-                    },
                     "ignore-exported": {
                       "type": "boolean",
                       "description": "Ignore exported (public) symbols when applying the `require-doc` rule.",
@@ -2011,11 +1937,6 @@
                 "start-with-name": {
                   "type": "object",
                   "properties": {
-                    "include-tests": {
-                      "type": "boolean",
-                      "description": "Include test files when applying the `start-with-name` rule.",
-                      "default": false
-                    },
                     "include-unexported": {
                       "type": "boolean",
                       "description": "Include unexported symbols when applying the `start-with-name` rule.",
@@ -2025,16 +1946,6 @@
                       "type": "string",
                       "description": "Acceptable start pattern (regexp) for godoc starte when applying the `start-with-name` rule. The `%` placeholder is where the corresponding symbol name should should appear. An omitted placeholder means the symbol name should appear at the end of the pattern.",
                       "default": "((A|a|An|an|THE|The|the) )?%"
-                    }
-                  }
-                },
-                "no-unused-link": {
-                  "type": "object",
-                  "properties": {
-                    "include-tests": {
-                      "type": "boolean",
-                      "description": "Include test files when applying the `no-unused-link` rule.",
-                      "default": false
                     }
                   }
                 }

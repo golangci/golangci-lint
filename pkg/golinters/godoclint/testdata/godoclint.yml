@@ -1,14 +1,8 @@
-# This is an unusual configuration assigning all options with non-default values
-# to ensure they are correctly parsed.
-
 version: "2"
 
 linters:
   settings:
     godoclint:
-      exclude:
-        - _excluded.go$
-        - _excluded_test.go$
       enable:
         - pkg-doc
         - require-pkg-doc
@@ -19,19 +13,11 @@ linters:
       options:
         pkg-doc:
           start-with: PACKAGE
-          include-tests: true
-        require-pkg-doc:
-          include-tests: true
         start-with-name:
           pattern: "GODOC %"
           include-unexported: true
-          include-tests: true
         require-doc:
-          include-tests: true
           ignore-exported: false
           ignore-unexported: false
         max-len:
           length: 127
-          include-tests: true
-        no-unused-link:
-          include-tests: true

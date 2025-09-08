@@ -9,26 +9,41 @@ import (
 )
 
 func New(settings *config.GodoclintSettings) *goanalysis.Linter {
-	pcfg := glconfig.PlainConfig{
-		Include: settings.Include,
-		Exclude: settings.Exclude,
-		Enable:  settings.Enable,
-		Disable: settings.Disable,
-		Options: &glconfig.PlainRuleOptions{
-			MaxLenLength:                   settings.Options.MaxLen.Length,
-			MaxLenIncludeTests:             settings.Options.MaxLen.IncludeTests,
-			PkgDocStartWith:                settings.Options.PkgDoc.StartWith,
-			PkgDocIncludeTests:             settings.Options.PkgDoc.IncludeTests,
-			SinglePkgDocIncludeTests:       settings.Options.SinglePkgDoc.IncludeTests,
-			RequirePkgDocIncludeTests:      settings.Options.RequirePkgDoc.IncludeTests,
-			RequireDocIncludeTests:         settings.Options.RequireDoc.IncludeTests,
-			RequireDocIgnoreExported:       settings.Options.RequireDoc.IgnoreExported,
-			RequireDocIgnoreUnexported:     settings.Options.RequireDoc.IgnoreUnexported,
-			StartWithNamePattern:           settings.Options.StartWithName.Pattern,
-			StartWithNameIncludeTests:      settings.Options.StartWithName.IncludeTests,
-			StartWithNameIncludeUnexported: settings.Options.StartWithName.IncludeUnexported,
-			NoUnusedLinkIncludeTests:       settings.Options.NoUnusedLink.IncludeTests,
-		},
+	var pcfg glconfig.PlainConfig
+
+	if settings != nil {
+		// The following options are explicitly ignored: they must be handled globally with exclusions or nolint directives.
+		// - Include
+		// - Exclude
+
+		// The following options are explicitly ignored: these options cannot work as expected because the global configuration about tests.
+		// - Options.MaxLenIncludeTests
+		// - Options.PkgDocIncludeTests
+		// - Options.SinglePkgDocIncludeTests
+		// - Options.RequirePkgDocIncludeTests
+		// - Options.RequireDocIncludeTests
+		// - Options.StartWithNameIncludeTests
+		// - Options.NoUnusedLinkIncludeTests
+
+		pcfg = glconfig.PlainConfig{
+			Enable:  settings.Enable,
+			Disable: settings.Disable,
+			Options: &glconfig.PlainRuleOptions{
+				MaxLenLength:                   settings.Options.MaxLen.Length,
+				MaxLenIncludeTests:             pointer(true),
+				PkgDocStartWith:                settings.Options.PkgDoc.StartWith,
+				PkgDocIncludeTests:             pointer(false),
+				SinglePkgDocIncludeTests:       pointer(true),
+				RequirePkgDocIncludeTests:      pointer(false),
+				RequireDocIncludeTests:         pointer(true),
+				RequireDocIgnoreExported:       settings.Options.RequireDoc.IgnoreExported,
+				RequireDocIgnoreUnexported:     settings.Options.RequireDoc.IgnoreUnexported,
+				StartWithNamePattern:           settings.Options.StartWithName.Pattern,
+				StartWithNameIncludeTests:      pointer(false),
+				StartWithNameIncludeUnexported: settings.Options.StartWithName.IncludeUnexported,
+				NoUnusedLinkIncludeTests:       pointer(true),
+			},
+		}
 	}
 
 	composition := glcompose.Compose(glcompose.CompositionConfig{
@@ -37,5 +52,7 @@ func New(settings *config.GodoclintSettings) *goanalysis.Linter {
 
 	return goanalysis.
 		NewLinterFromAnalyzer(composition.Analyzer.GetAnalyzer()).
-		WithLoadMode(goanalysis.LoadModeTypesInfo)
+		WithLoadMode(goanalysis.LoadModeSyntax)
 }
+
+func pointer[T any](v T) *T { return &v }
