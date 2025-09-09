@@ -1,5 +1,5 @@
 //golangcitest:args -Eiotamixing
-//golangcitest:config_path testdata/iotamixing-report-individual.yml
+//golangcitest:config_path testdata/iotamixing_report-individual.yml
 package testdata
 
 import "fmt"

@@ -1,9 +1,7 @@
 package iotamixing
 
 import (
-	"golang.org/x/tools/go/analysis"
-
-	"github.com/AdminBenni/iota-mixing/pkg/analyzer"
+	im "github.com/AdminBenni/iota-mixing/pkg/analyzer"
 	"github.com/AdminBenni/iota-mixing/pkg/analyzer/flags"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
@@ -11,19 +9,18 @@ import (
 )
 
 func New(settings *config.IotaMixingSettings) *goanalysis.Linter {
-	a := analyzer.GetIotaMixingAnalyzer()
+	cfg := map[string]any{}
 
-	flags.SetupFlags(&a.Flags)
-
-	cfg := map[string]map[string]any{}
 	if settings != nil {
-		cfg[a.Name] = map[string]any{flags.ReportIndividualFlagName: settings.ReportIndividual}
+		cfg[flags.ReportIndividualFlagName] = settings.ReportIndividual
 	}
 
-	return goanalysis.NewLinter(
-		a.Name,
-		a.Doc,
-		[]*analysis.Analyzer{a},
-		cfg,
-	).WithLoadMode(goanalysis.LoadModeSyntax)
+	analyzer := im.GetIotaMixingAnalyzer()
+
+	flags.SetupFlags(&analyzer.Flags)
+
+	return goanalysis.
+		NewLinterFromAnalyzer(analyzer).
+		WithConfig(cfg).
+		WithLoadMode(goanalysis.LoadModeSyntax)
 }
