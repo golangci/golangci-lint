@@ -24,3 +24,18 @@ func FooFunc() {}
 
 // bad godoc // want `godoc should start with symbol name \("FooFunc"\)`
 func (FooType) FooFunc() {}
+
+// DeprecatedConstA is... // want `deprecation note should be formatted as "Deprecated: "`
+//
+// DEPRECATED: do not use
+const DeprecatedConstA = 1
+
+// DeprecatedConstB is... // want `deprecation note should be formatted as "Deprecated: "`
+//
+// DEPRECATED:do not use
+const DeprecatedConstB = 1
+
+// DeprecatedConstC is... // want `deprecation note should be formatted as "Deprecated: "`
+//
+// deprecated:do not use
+const DeprecatedConstC = 1

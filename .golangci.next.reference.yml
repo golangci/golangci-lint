@@ -1271,7 +1271,7 @@ linters:
     godoclint:
       # Default set of rules to enable.
       # Possible values are: `basic`, `all` or `none`.
-      # Default: `basic` (enables `pkg-doc`, `single-pkg-doc`, and `start-with-name`)
+      # Default: `basic` (enables `pkg-doc`, `single-pkg-doc`, `start-with-name`, and `deprecated`)
       default: all
 
       # List of rules to enable in addition to the default set.

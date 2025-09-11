@@ -43,3 +43,16 @@ func fooFunc() {}
 
 // bad godoc on unexported symbol
 func (FooType) fooFunc() {}
+
+// DeprecatedConstA is...
+//
+// Deprecated: do not use
+const DeprecatedConstA = 1
+
+// Deprecated: do not use
+const DeprecatedConstB = 1
+
+// deprecatedConstC is...
+//
+// DEPRECATED: invalid deprecation note but okay since the symbol is not exported
+const deprecatedConstC = 1
