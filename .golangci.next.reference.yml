@@ -1269,30 +1269,38 @@ linters:
       min-complexity: 10
 
     godoclint:
-      # Default set of rules to enable. Possible values are: `basic`, `all` or `none`.
-      # Default: basic (enables `pkg-doc`, `single-pkg-doc`, and `start-with-name`)
+      # Default set of rules to enable.
+      # Possible values are: `basic`, `all` or `none`.
+      # Default: `basic` (enables `pkg-doc`, `single-pkg-doc`, and `start-with-name`)
       default: all
 
-      # List of rules to enable in addition to default set. See the linter docs for more details.
-      # Default: null
+      # List of rules to enable in addition to the default set.
+      # Default: empty
       enable:
-        # Check proper package-level godoc, if any
+        # Check proper package-level godoc, if any.
+        # https://github.com/godoc-lint/godoc-lint?tab=readme-ov-file#pkg-doc
         - pkg-doc
-        # Assert at most one godoc per package
+        # Assert at most one godoc per package.
+        # https://github.com/godoc-lint/godoc-lint?tab=readme-ov-file#single-pkg-doc
         - single-pkg-doc
-        # Require all packages to have a godoc
+        # Require all packages to have a godoc.
+        # https://github.com/godoc-lint/godoc-lint?tab=readme-ov-file#require-pkg-doc
         - require-pkg-doc
-        # Assert symbol godocs start with the symbol name
+        # Assert symbol godocs start with the symbol name.
+        # https://github.com/godoc-lint/godoc-lint?tab=readme-ov-file#start-with-name
         - start-with-name
-        # Require godoc for all public symbols
+        # Require godoc for all public symbols.
+        # https://github.com/godoc-lint/godoc-lint?tab=readme-ov-file#require-doc
         - require-doc
-        # Assert maximum line length for godocs
+        # Assert maximum line length for godocs.
+        # https://github.com/godoc-lint/godoc-lint?tab=readme-ov-file#max-len
         - max-len
-        # Assert no unused link in godocs
+        # Assert no unused link in godocs.
+        # https://github.com/godoc-lint/godoc-lint?tab=readme-ov-file#no-unused-link
         - no-unused-link
 
       # List of rules to disable.
-      # Default: null
+      # Default: empty
       disable:
         - pkg-doc
         - single-pkg-doc
@@ -1302,7 +1310,8 @@ linters:
         - max-len
         - no-unused-link
 
-      # A map for fine tuning individual rules. All sub-keys are optional.
+      # A map for fine-tuning individual rules.
+      # All subkeys are optional.
       options:
         max-len:
           # Maximum line length for godocs, not including the `// `, or `/*` or `*/` tokens.

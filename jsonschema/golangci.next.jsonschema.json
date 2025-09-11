@@ -1870,36 +1870,20 @@
               "description": "Default set of rules to enable."
             },
             "enable": {
-              "default": null,
               "description": "List of rules to enable in addition to the default set.",
-              "oneOf": [
-                {
-                  "type": "array",
-                  "uniqueItems": true,
-                  "items": {
-                    "$ref": "#/definitions/godoclint-rules"
-                  }
-                },
-                {
-                  "type": "null"
-                }
-              ]
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "$ref": "#/definitions/godoclint-rules"
+              }
             },
             "disable": {
-              "default": null,
               "description": "List of rules to disable.",
-              "oneOf": [
-                {
-                  "type": "array",
-                  "uniqueItems": true,
-                  "items": {
-                    "$ref": "#/definitions/godoclint-rules"
-                  }
-                },
-                {
-                  "type": "null"
-                }
-              ]
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "$ref": "#/definitions/godoclint-rules"
+              }
             },
             "options": {
               "type": "object",
