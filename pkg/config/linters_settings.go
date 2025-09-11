@@ -522,22 +522,19 @@ type GoCycloSettings struct {
 }
 
 type GodoclintSettings struct {
+	Default *string  `mapstructure:"default"`
 	Enable  []string `mapstructure:"enable"`
 	Disable []string `mapstructure:"disable"`
 	Options struct {
 		MaxLen struct {
 			Length *uint `mapstructure:"length"`
 		} `mapstructure:"max-len"`
-		PkgDoc struct {
-			StartWith *string `mapstructure:"start-with"`
-		} `mapstructure:"pkg-doc"`
 		RequireDoc struct {
 			IgnoreExported   *bool `mapstructure:"ignore-exported"`
 			IgnoreUnexported *bool `mapstructure:"ignore-unexported"`
 		} `mapstructure:"require-doc"`
 		StartWithName struct {
-			Pattern           *string `mapstructure:"pattern"`
-			IncludeUnexported *bool   `mapstructure:"include-unexported"`
+			IncludeUnexported *bool `mapstructure:"include-unexported"`
 		} `mapstructure:"start-with-name"`
 	} `mapstructure:"options"`
 }

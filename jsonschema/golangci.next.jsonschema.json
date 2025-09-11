@@ -1863,9 +1863,15 @@
         "godoclintSettings": {
           "type": "object",
           "properties": {
+            "default": {
+              "type": "string",
+              "enum": ["all", "basic", "none"],
+              "default": "basic",
+              "description": "Default set of rules to enable."
+            },
             "enable": {
               "default": null,
-              "description": "List of rules to enable.",
+              "description": "List of rules to enable in addition to the default set.",
               "oneOf": [
                 {
                   "type": "array",
@@ -1909,16 +1915,6 @@
                     }
                   }
                 },
-                "pkg-doc": {
-                  "type": "object",
-                  "properties": {
-                    "start-with": {
-                      "type": "string",
-                      "description": "The start of a valid package godoc (e.g., \"Package <NAME>...\").",
-                      "default": "Package"
-                    }
-                  }
-                },
                 "require-doc": {
                   "type": "object",
                   "properties": {
@@ -1941,11 +1937,6 @@
                       "type": "boolean",
                       "description": "Include unexported symbols when applying the `start-with-name` rule.",
                       "default": false
-                    },
-                    "pattern": {
-                      "type": "string",
-                      "description": "Acceptable start pattern (regexp) for godoc starte when applying the `start-with-name` rule. The `%` placeholder is where the corresponding symbol name should should appear. An omitted placeholder means the symbol name should appear at the end of the pattern.",
-                      "default": "((A|a|An|an|THE|The|the) )?%"
                     }
                   }
                 }

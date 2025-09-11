@@ -1269,11 +1269,12 @@ linters:
       min-complexity: 10
 
     godoclint:
-      # List of rules to enable. See the linter docs for more details.
-      # Default:
-      #   - pkg-doc
-      #   - single-pkg-doc
-      #   - start-with-name
+      # Default set of rules to enable. Possible values are: `basic`, `all` or `none`.
+      # Default: basic (enables `pkg-doc`, `single-pkg-doc`, and `start-with-name`)
+      default: all
+
+      # List of rules to enable in addition to default set. See the linter docs for more details.
+      # Default: null
       enable:
         # Check proper package-level godoc, if any
         - pkg-doc
@@ -1290,12 +1291,16 @@ linters:
         # Assert no unused link in godocs
         - no-unused-link
 
-      # List of rules to disable, useful when using the default rules.
+      # List of rules to disable.
       # Default: null
       disable:
         - pkg-doc
         - single-pkg-doc
+        - require-pkg-doc
         - start-with-name
+        - require-doc
+        - max-len
+        - no-unused-link
 
       # A map for fine tuning individual rules. All sub-keys are optional.
       options:
@@ -1303,11 +1308,6 @@ linters:
           # Maximum line length for godocs, not including the `// `, or `/*` or `*/` tokens.
           # Default: 77
           length: 127
-
-        pkg-doc:
-          # The start of a valid package godoc (e.g., "Package <NAME>...").
-          # Default: "Package"
-          start-with: PACKAGE
 
         require-doc:
           # Ignore exported (public) symbols when applying the `require-doc` rule.
@@ -1319,13 +1319,6 @@ linters:
           ignore-unexported: false
 
         start-with-name:
-          # Acceptable start pattern (regexp) for godocs when applying the
-          # `start-with-name` rule. The `%` placeholder is where the corresponding
-          # symbol name should appear. An omitted placeholder means the symbol
-          # name should appear at the end of the pattern.
-          # Default: "((A|a|An|an|THE|The|the) )?%"
-          pattern: "%"
-
           # Include unexported symbols when applying the `start-with-name` rule.
           # Default: false
           include-unexported: true

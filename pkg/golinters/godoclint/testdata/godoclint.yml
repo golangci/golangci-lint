@@ -3,6 +3,7 @@ version: "2"
 linters:
   settings:
     godoclint:
+      default: none
       enable:
         - pkg-doc
         - require-pkg-doc
@@ -11,10 +12,7 @@ linters:
         - no-unused-link
         - max-len
       options:
-        pkg-doc:
-          start-with: PACKAGE
         start-with-name:
-          pattern: "GODOC %"
           include-unexported: true
         require-doc:
           ignore-exported: false

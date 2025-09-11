@@ -26,19 +26,18 @@ func New(settings *config.GodoclintSettings) *goanalysis.Linter {
 		// - Options.NoUnusedLinkIncludeTests
 
 		pcfg = glconfig.PlainConfig{
+			Default: settings.Default,
 			Enable:  settings.Enable,
 			Disable: settings.Disable,
 			Options: &glconfig.PlainRuleOptions{
 				MaxLenLength:                   settings.Options.MaxLen.Length,
 				MaxLenIncludeTests:             pointer(true),
-				PkgDocStartWith:                settings.Options.PkgDoc.StartWith,
 				PkgDocIncludeTests:             pointer(false),
 				SinglePkgDocIncludeTests:       pointer(true),
 				RequirePkgDocIncludeTests:      pointer(false),
 				RequireDocIncludeTests:         pointer(true),
 				RequireDocIgnoreExported:       settings.Options.RequireDoc.IgnoreExported,
 				RequireDocIgnoreUnexported:     settings.Options.RequireDoc.IgnoreUnexported,
-				StartWithNamePattern:           settings.Options.StartWithName.Pattern,
 				StartWithNameIncludeTests:      pointer(false),
 				StartWithNameIncludeUnexported: settings.Options.StartWithName.IncludeUnexported,
 				NoUnusedLinkIncludeTests:       pointer(true),

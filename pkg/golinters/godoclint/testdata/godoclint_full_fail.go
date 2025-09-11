@@ -3,7 +3,7 @@
 
 // Asserting rule "pkg-doc"
 
-// bad godoc // want `package godoc should start with "PACKAGE testdata "`
+// bad godoc // want `package godoc should start with "Package testdata "`
 package testdata
 
 // This is a special stdlib import because the package itself has issues that
@@ -79,7 +79,7 @@ func (BarType) barFunc() {} //foo:bar // want `symbol should have a godoc \("bar
 
 // Asserting rule "no-unused-link"
 
-// GODOC constWithUnusedLink point to [used] and unused links. // want `godoc has unused link \("unused"\)`
+// constWithUnusedLink point to [used] and unused links. // want `godoc has unused link \("unused"\)`
 //
 // [used]: https://example.com
 //
@@ -88,5 +88,5 @@ const constWithUnusedLink = 1
 
 // Asserting rule "max-len"
 
-// GODOC constWithTooLongGodoc has a very long godoc that exceeds the maximum allowed length for godoc comments in this test setup. // want `godoc line is too long \(175 > 127\)`
+// constWithTooLongGodoc has a very long godoc that exceeds the maximum allowed length for godoc comments in this test setup. // want `godoc line is too long \(169 > 127\)`
 const constWithTooLongGodoc = 1
