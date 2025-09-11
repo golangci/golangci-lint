@@ -8,25 +8,30 @@ package analysisinternal
 
 import (
 	"fmt"
-	"os"
+	"slices"
 
 	"golang.org/x/tools/go/analysis"
 )
 
-// MakeReadFile returns a simple implementation of the Pass.ReadFile function.
-func MakeReadFile(pass *analysis.Pass) func(filename string) ([]byte, error) {
+// A ReadFileFunc is a function that returns the
+// contents of a file, such as [os.ReadFile].
+type ReadFileFunc = func(filename string) ([]byte, error)
+
+// CheckedReadFile returns a wrapper around a Pass.ReadFile
+// function that performs the appropriate checks.
+func CheckedReadFile(pass *analysis.Pass, readFile ReadFileFunc) ReadFileFunc {
 	return func(filename string) ([]byte, error) {
 		if err := CheckReadable(pass, filename); err != nil {
 			return nil, err
 		}
-		return os.ReadFile(filename)
+		return readFile(filename)
 	}
 }
 
 // CheckReadable enforces the access policy defined by the ReadFile field of [analysis.Pass].
 func CheckReadable(pass *analysis.Pass, filename string) error {
-	if slicesContains(pass.OtherFiles, filename) ||
-		slicesContains(pass.IgnoredFiles, filename) {
+	if slices.Contains(pass.OtherFiles, filename) ||
+		slices.Contains(pass.IgnoredFiles, filename) {
 		return nil
 	}
 	for _, f := range pass.Files {
@@ -35,14 +40,4 @@ func CheckReadable(pass *analysis.Pass, filename string) error {
 		}
 	}
 	return fmt.Errorf("Pass.ReadFile: %s is not among OtherFiles, IgnoredFiles, or names of Files", filename)
-}
-
-// TODO(adonovan): use go1.21 slices.Contains.
-func slicesContains[S ~[]E, E comparable](slice S, x E) bool {
-	for _, elem := range slice {
-		if elem == x {
-			return true
-		}
-	}
-	return false
 }
