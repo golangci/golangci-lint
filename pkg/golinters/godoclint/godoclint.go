@@ -1,17 +1,27 @@
 package godoclint
 
 import (
+	"errors"
+	"fmt"
+	"slices"
+
 	glcompose "github.com/godoc-lint/godoc-lint/pkg/compose"
 	glconfig "github.com/godoc-lint/godoc-lint/pkg/config"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/internal"
 )
 
 func New(settings *config.GodoclintSettings) *goanalysis.Linter {
 	var pcfg glconfig.PlainConfig
 
 	if settings != nil {
+		err := checkSettings(settings)
+		if err != nil {
+			internal.LinterLogger.Fatalf("godoclint: %v", err)
+		}
+
 		// The following options are explicitly ignored: they must be handled globally with exclusions or nolint directives.
 		// - Include
 		// - Exclude
@@ -47,6 +57,9 @@ func New(settings *config.GodoclintSettings) *goanalysis.Linter {
 
 	composition := glcompose.Compose(glcompose.CompositionConfig{
 		BaseDirPlainConfig: &pcfg,
+		ExitFunc: func(_ int, err error) {
+			internal.LinterLogger.Errorf("godoclint: %v", err)
+		},
 	})
 
 	return goanalysis.
@@ -54,4 +67,42 @@ func New(settings *config.GodoclintSettings) *goanalysis.Linter {
 		WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
+func checkSettings(settings *config.GodoclintSettings) error {
+	switch deref(settings.Default) {
+	case "all":
+		if len(settings.Enable) > 0 {
+			return errors.New("cannot use 'enable' with 'default=all'")
+		}
+
+	case "none":
+		if len(settings.Disable) > 0 {
+			return errors.New("cannot use 'disable' with 'default=none'")
+		}
+
+	default:
+		for _, rule := range settings.Enable {
+			if slices.Contains(settings.Disable, rule) {
+				return fmt.Errorf("a rule cannot be enabled and disabled at the same time: '%s'", rule)
+			}
+		}
+
+		for _, rule := range settings.Disable {
+			if slices.Contains(settings.Enable, rule) {
+				return fmt.Errorf("a rule cannot be enabled and disabled at the same time: '%s'", rule)
+			}
+		}
+	}
+
+	return nil
+}
+
 func pointer[T any](v T) *T { return &v }
+
+func deref[T any](v *T) T {
+	if v == nil {
+		var zero T
+		return zero
+	}
+
+	return *v
+}
