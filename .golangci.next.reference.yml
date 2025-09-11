@@ -1292,6 +1292,9 @@ linters:
         # Require godoc for all public symbols.
         # https://github.com/godoc-lint/godoc-lint?tab=readme-ov-file#require-doc
         - require-doc
+        # Assert correct formatting of deprecation notes.
+        # https://github.com/godoc-lint/godoc-lint?tab=readme-ov-file#deprecated
+        - deprecated
         # Assert maximum line length for godocs.
         # https://github.com/godoc-lint/godoc-lint?tab=readme-ov-file#max-len
         - max-len
@@ -1307,6 +1310,7 @@ linters:
         - require-pkg-doc
         - start-with-name
         - require-doc
+        - deprecated
         - max-len
         - no-unused-link
 

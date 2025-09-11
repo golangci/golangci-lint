@@ -9,8 +9,9 @@ linters:
         - require-pkg-doc
         - start-with-name
         - require-doc
-        - no-unused-link
+        - deprecated
         - max-len
+        - no-unused-link
       options:
         start-with-name:
           include-unexported: true

@@ -60,3 +60,16 @@ const constWithUnusedLink = 1
 
 // constWithTooLongGodoc has a very long godoc that does not exceed the maximum allowed length for godoc comments.
 const constWithTooLongGodoc = 1
+
+// DeprecatedConstA is...
+//
+// Deprecated: do not use
+const DeprecatedConstA = 1
+
+// Deprecated: do not use
+const DeprecatedConstB = 1
+
+// deprecatedConstC is...
+//
+// DEPRECATED: invalid deprecation note but okay since the symbol is not exported
+const deprecatedConstC = 1

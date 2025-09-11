@@ -90,3 +90,18 @@ const constWithUnusedLink = 1
 
 // constWithTooLongGodoc has a very long godoc that exceeds the maximum allowed length for godoc comments in this test setup. // want `godoc line is too long \(169 > 127\)`
 const constWithTooLongGodoc = 1
+
+// DeprecatedConstA is... // want `deprecation note should be formatted as "Deprecated: "`
+//
+// DEPRECATED: do not use
+const DeprecatedConstA = 1
+
+// DeprecatedConstB is... // want `deprecation note should be formatted as "Deprecated: "`
+//
+// DEPRECATED:do not use
+const DeprecatedConstB = 1
+
+// DeprecatedConstC is... // want `deprecation note should be formatted as "Deprecated: "`
+//
+// deprecated:do not use
+const DeprecatedConstC = 1
