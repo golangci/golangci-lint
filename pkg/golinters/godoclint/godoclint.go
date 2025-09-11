@@ -7,6 +7,7 @@ import (
 
 	glcompose "github.com/godoc-lint/godoc-lint/pkg/compose"
 	glconfig "github.com/godoc-lint/godoc-lint/pkg/config"
+	"github.com/godoc-lint/godoc-lint/pkg/model"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
@@ -69,12 +70,12 @@ func New(settings *config.GodoclintSettings) *goanalysis.Linter {
 
 func checkSettings(settings *config.GodoclintSettings) error {
 	switch deref(settings.Default) {
-	case "all":
+	case string(model.DefaultSetAll):
 		if len(settings.Enable) > 0 {
 			return errors.New("cannot use 'enable' with 'default=all'")
 		}
 
-	case "none":
+	case string(model.DefaultSetNone):
 		if len(settings.Disable) > 0 {
 			return errors.New("cannot use 'disable' with 'default=none'")
 		}
