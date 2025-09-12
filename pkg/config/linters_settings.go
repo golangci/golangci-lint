@@ -242,6 +242,7 @@ type LintersSettings struct {
 	Goconst                  GoConstSettings                  `mapstructure:"goconst"`
 	Gocritic                 GoCriticSettings                 `mapstructure:"gocritic"`
 	Gocyclo                  GoCycloSettings                  `mapstructure:"gocyclo"`
+	Godoclint                GodoclintSettings                `mapstructure:"godoclint"`
 	Godot                    GodotSettings                    `mapstructure:"godot"`
 	Godox                    GodoxSettings                    `mapstructure:"godox"`
 	Goheader                 GoHeaderSettings                 `mapstructure:"goheader"`
@@ -519,6 +520,24 @@ type GoCriticCheckSettings map[string]any
 
 type GoCycloSettings struct {
 	MinComplexity int `mapstructure:"min-complexity"`
+}
+
+type GodoclintSettings struct {
+	Default *string  `mapstructure:"default"`
+	Enable  []string `mapstructure:"enable"`
+	Disable []string `mapstructure:"disable"`
+	Options struct {
+		MaxLen struct {
+			Length *uint `mapstructure:"length"`
+		} `mapstructure:"max-len"`
+		RequireDoc struct {
+			IgnoreExported   *bool `mapstructure:"ignore-exported"`
+			IgnoreUnexported *bool `mapstructure:"ignore-unexported"`
+		} `mapstructure:"require-doc"`
+		StartWithName struct {
+			IncludeUnexported *bool `mapstructure:"include-unexported"`
+		} `mapstructure:"start-with-name"`
+	} `mapstructure:"options"`
 }
 
 type GodotSettings struct {

@@ -477,6 +477,18 @@
         "-QF1012"
       ]
     },
+    "godoclint-rules": {
+      "enum": [
+        "pkg-doc",
+        "single-pkg-doc",
+        "require-pkg-doc",
+        "start-with-name",
+        "require-doc",
+        "deprecated",
+        "max-len",
+        "no-unused-link"
+      ]
+    },
     "gosec-rules": {
       "enum": [
         "G101",
@@ -795,6 +807,7 @@
             "goconst",
             "gocritic",
             "gocyclo",
+            "godoclint",
             "godot",
             "godox",
             "err113",
@@ -1846,6 +1859,74 @@
               "description": "Minimum code complexity to report (we recommend 10-20).",
               "type": "integer",
               "default": 30
+            }
+          }
+        },
+        "godoclintSettings": {
+          "type": "object",
+          "properties": {
+            "default": {
+              "type": "string",
+              "enum": ["all", "basic", "none"],
+              "default": "basic",
+              "description": "Default set of rules to enable."
+            },
+            "enable": {
+              "description": "List of rules to enable in addition to the default set.",
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "$ref": "#/definitions/godoclint-rules"
+              }
+            },
+            "disable": {
+              "description": "List of rules to disable.",
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "$ref": "#/definitions/godoclint-rules"
+              }
+            },
+            "options": {
+              "type": "object",
+              "description": "A map for setting individual rule options.",
+              "properties": {
+                "max-len": {
+                  "type": "object",
+                  "properties": {
+                    "length": {
+                      "type": "integer",
+                      "description": "Maximum line length for godocs, not including the `// `, or `/*` or `*/` tokens.",
+                      "default": 77
+                    }
+                  }
+                },
+                "require-doc": {
+                  "type": "object",
+                  "properties": {
+                    "ignore-exported": {
+                      "type": "boolean",
+                      "description": "Ignore exported (public) symbols when applying the `require-doc` rule.",
+                      "default": false
+                    },
+                    "ignore-unexported": {
+                      "type": "boolean",
+                      "description": "Ignore unexported (private) symbols when applying the `require-doc` rule.",
+                      "default": true
+                    }
+                  }
+                },
+                "start-with-name": {
+                  "type": "object",
+                  "properties": {
+                    "include-unexported": {
+                      "type": "boolean",
+                      "description": "Include unexported symbols when applying the `start-with-name` rule.",
+                      "default": false
+                    }
+                  }
+                }
+              }
             }
           }
         },
@@ -4558,6 +4639,9 @@
             },
             "gocyclo": {
               "$ref": "#/definitions/settings/definitions/gocycloSettings"
+            },
+            "godoclint": {
+              "$ref": "#/definitions/settings/definitions/godoclintSettings"
             },
             "godot": {
               "$ref": "#/definitions/settings/definitions/godotSettings"
