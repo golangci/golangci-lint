@@ -67,6 +67,7 @@ linters:
     - goprintffuncname
     - gosec
     - gosmopolitan
+    - gounqvet
     - govet
     - grouper
     - iface
@@ -179,6 +180,7 @@ linters:
     - goprintffuncname
     - gosec
     - gosmopolitan
+    - gounqvet
     - govet
     - grouper
     - iface
@@ -1606,6 +1608,21 @@ linters:
         - Hangul
         - Hiragana
         - Katakana
+
+    gounqvet:
+      # Enable SQL builder checking.
+      # Default: true
+      check-sql-builders: false
+      # Regex patterns for acceptable SELECT * usage.
+      # Default:
+      # - "SELECT \\* FROM information_schema\\..*"
+      # - "SELECT \\* FROM pg_catalog\\..*"
+      # - "SELECT COUNT\\(\\*\\)"
+      # - "SELECT MAX\\(\\*\\)"
+      # - "SELECT MIN\\(\\*\\)"
+      allowed-patterns:
+        - "SELECT \\* FROM temp_.*"
+        - "SELECT \\* FROM.*-- migration"
 
     govet:
       # Disable all analyzers.
