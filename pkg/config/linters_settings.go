@@ -478,6 +478,7 @@ type GinkgoLinterSettings struct {
 	ForbidSpecPollution        bool `mapstructure:"forbid-spec-pollution"`
 	ForceSucceedForFuncs       bool `mapstructure:"force-succeed"`
 	ForceAssertionDescription  bool `mapstructure:"force-assertion-description"`
+	ForeToNot                  bool `mapstructure:"force-tonot"`
 }
 
 type GoChecksumTypeSettings struct {
