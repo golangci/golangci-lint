@@ -68,7 +68,7 @@ linters:
     - goprintffuncname
     - gosec
     - gosmopolitan
-    - gounqvet
+    - unqueryvet
     - govet
     - grouper
     - iface
@@ -182,7 +182,7 @@ linters:
     - goprintffuncname
     - gosec
     - gosmopolitan
-    - gounqvet
+    - unqueryvet
     - govet
     - grouper
     - iface
@@ -1679,7 +1679,7 @@ linters:
         - Hiragana
         - Katakana
 
-    gounqvet:
+    unqueryvet:
       # Enable SQL builder checking.
       # Default: true
       check-sql-builders: false

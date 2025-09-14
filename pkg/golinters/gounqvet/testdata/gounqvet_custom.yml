@@ -1,6 +1,0 @@
-version: "2"
-
-linters:
-  settings:
-    gounqvet:
-      check-sql-builders: false

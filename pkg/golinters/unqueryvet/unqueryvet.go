@@ -1,14 +1,14 @@
-package gounqvet
+package unqueryvet
 
 import (
-	"github.com/MirrexOne/gounqvet"
-	pkgconfig "github.com/MirrexOne/gounqvet/pkg/config"
+	"github.com/MirrexOne/unqueryvet"
+	pkgconfig "github.com/MirrexOne/unqueryvet/pkg/config"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
 )
 
-func New(settings *config.GounqvetSettings) *goanalysis.Linter {
+func New(settings *config.UnqueryvetSettings) *goanalysis.Linter {
 	cfg := pkgconfig.DefaultSettings()
 
 	if settings != nil {
@@ -19,6 +19,6 @@ func New(settings *config.GounqvetSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.
-		NewLinterFromAnalyzer(gounqvet.NewWithConfig(&cfg)).
+		NewLinterFromAnalyzer(unqueryvet.NewWithConfig(&cfg)).
 		WithLoadMode(goanalysis.LoadModeSyntax)
 }

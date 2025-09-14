@@ -56,7 +56,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/goprintffuncname"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/gosec"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/gosmopolitan"
-	"github.com/golangci/golangci-lint/v2/pkg/golinters/gounqvet"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/unqueryvet"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/govet"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/grouper"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/iface"
@@ -404,9 +404,9 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/xen0n/gosmopolitan"),
 
-		linter.NewConfig(gounqvet.New(&cfg.Linters.Settings.Gounqvet)).
+		linter.NewConfig(unqueryvet.New(&cfg.Linters.Settings.Unqueryvet)).
 			WithSince("v2.5.0").
-			WithURL("https://github.com/MirrexOne/gounqvet"),
+			WithURL("https://github.com/MirrexOne/unqueryvet"),
 
 		linter.NewConfig(govet.New(&cfg.Linters.Settings.Govet)).
 			WithGroups(config.GroupStandard).

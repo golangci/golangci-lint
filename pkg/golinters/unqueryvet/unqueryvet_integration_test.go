@@ -1,4 +1,4 @@
-package gounqvet
+package unqueryvet
 
 import (
 	"testing"

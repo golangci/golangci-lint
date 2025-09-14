@@ -86,7 +86,7 @@ var defaultLintersSettings = LintersSettings{
 		EscapeHatches:   []string{},
 		WatchForScripts: []string{"Han"},
 	},
-	Gounqvet: GounqvetSettings{
+	Unqueryvet: UnqueryvetSettings{
 		CheckSQLBuilders: true,
 	},
 	Inamedparam: INamedParamSettings{
@@ -253,7 +253,7 @@ type LintersSettings struct {
 	Gomodguard               GoModGuardSettings               `mapstructure:"gomodguard"`
 	Gosec                    GoSecSettings                    `mapstructure:"gosec"`
 	Gosmopolitan             GosmopolitanSettings             `mapstructure:"gosmopolitan"`
-	Gounqvet                 GounqvetSettings                 `mapstructure:"gounqvet"`
+	Unqueryvet                 UnqueryvetSettings                 `mapstructure:"unqueryvet"`
 	Govet                    GovetSettings                    `mapstructure:"govet"`
 	Grouper                  GrouperSettings                  `mapstructure:"grouper"`
 	Iface                    IfaceSettings                    `mapstructure:"iface"`
@@ -614,7 +614,7 @@ type GosmopolitanSettings struct {
 	WatchForScripts []string `mapstructure:"watch-for-scripts"`
 }
 
-type GounqvetSettings struct {
+type UnqueryvetSettings struct {
 	CheckSQLBuilders bool     `mapstructure:"check-sql-builders"`
 	AllowedPatterns  []string `mapstructure:"allowed-patterns"`
 }

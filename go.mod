@@ -149,7 +149,7 @@ require (
 	codeberg.org/chavacava/garif v0.2.0 // indirect
 	dev.gaijin.team/go/golib v0.6.0 // indirect
 	github.com/Masterminds/semver/v3 v3.3.1 // indirect
-	github.com/MirrexOne/gounqvet v1.2.0
+	github.com/MirrexOne/unqueryvet v1.2.1
 	github.com/alfatraining/structtag v1.0.0 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
@@ -225,3 +225,5 @@ require (
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
+
+replace github.com/MirrexOne/unqueryvet => ../unqueryvet

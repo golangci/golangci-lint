@@ -2342,7 +2342,7 @@
             }
           }
         },
-        "gounqvetSettings": {
+        "unqueryvetSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -4685,8 +4685,8 @@
             "gosmopolitan": {
               "$ref": "#/definitions/settings/definitions/gosmopolitanSettings"
             },
-            "gounqvet": {
-              "$ref": "#/definitions/settings/definitions/gounqvetSettings"
+            "unqueryvet": {
+              "$ref": "#/definitions/settings/definitions/unqueryvetSettings"
             },
             "govet": {
               "$ref": "#/definitions/settings/definitions/govetSettings"
