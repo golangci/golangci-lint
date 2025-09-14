@@ -661,6 +661,10 @@ linters:
       # Default: false
       force-assertion-description: true
 
+      # Force using `ToNot`, `ShouldNot` instead of `To(Not())`.
+      # Default: false
+      force-tonot: true
+
     gochecksumtype:
       # Presence of `default` case in switch statements satisfies exhaustiveness, if all members are not listed.
       # Default: true

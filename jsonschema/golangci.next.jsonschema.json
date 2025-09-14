@@ -1564,6 +1564,11 @@
               "description": "Force adding assertion descriptions to gomega matchers.",
               "type": "boolean",
               "default": false
+            },
+            "force-tonot": {
+              "description": "Force using `ToNot`, `ShouldNot` instead of `To(Not())`.",
+              "type": "boolean",
+              "default": false
             }
           }
         },
