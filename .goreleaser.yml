@@ -36,6 +36,10 @@ builds:
     ignore:
       - goos: darwin
         goarch: 386
+      # Deprecated in go1.25, Removed in go1.26
+      # https://go.dev/doc/go1.25#windows
+      - goos: windows
+        goarch: arm
 
 archives:
   - formats: [ 'tar.gz' ]
