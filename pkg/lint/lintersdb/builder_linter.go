@@ -56,7 +56,6 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/goprintffuncname"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/gosec"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/gosmopolitan"
-	"github.com/golangci/golangci-lint/v2/pkg/golinters/unqueryvet"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/govet"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/grouper"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/iface"
@@ -110,6 +109,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/tparallel"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/unconvert"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/unparam"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/unqueryvet"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/unused"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/usestdlibvars"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/usetesting"
@@ -404,10 +404,6 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/xen0n/gosmopolitan"),
 
-		linter.NewConfig(unqueryvet.New(&cfg.Linters.Settings.Unqueryvet)).
-			WithSince("v2.5.0").
-			WithURL("https://github.com/MirrexOne/unqueryvet"),
-
 		linter.NewConfig(govet.New(&cfg.Linters.Settings.Govet)).
 			WithGroups(config.GroupStandard).
 			WithSince("v1.0.0").
@@ -666,6 +662,10 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.9.0").
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/mvdan/unparam"),
+
+		linter.NewConfig(unqueryvet.New(&cfg.Linters.Settings.Unqueryvet)).
+			WithSince("v2.5.0").
+			WithURL("https://github.com/MirrexOne/unqueryvet"),
 
 		linter.NewConfig(unused.New(&cfg.Linters.Settings.Unused)).
 			WithGroups(config.GroupStandard).

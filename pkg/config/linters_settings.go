@@ -86,9 +86,6 @@ var defaultLintersSettings = LintersSettings{
 		EscapeHatches:   []string{},
 		WatchForScripts: []string{"Han"},
 	},
-	Unqueryvet: UnqueryvetSettings{
-		CheckSQLBuilders: true,
-	},
 	Inamedparam: INamedParamSettings{
 		SkipSingleParam: false,
 	},
@@ -164,6 +161,9 @@ var defaultLintersSettings = LintersSettings{
 	Testpackage: TestpackageSettings{
 		SkipRegexp:    `(export|internal)_test\.go`,
 		AllowPackages: []string{"main"},
+	},
+	Unqueryvet: UnqueryvetSettings{
+		CheckSQLBuilders: true,
 	},
 	Unused: UnusedSettings{
 		FieldWritesAreUses:     true,
@@ -253,7 +253,7 @@ type LintersSettings struct {
 	Gomodguard               GoModGuardSettings               `mapstructure:"gomodguard"`
 	Gosec                    GoSecSettings                    `mapstructure:"gosec"`
 	Gosmopolitan             GosmopolitanSettings             `mapstructure:"gosmopolitan"`
-	Unqueryvet                 UnqueryvetSettings                 `mapstructure:"unqueryvet"`
+	Unqueryvet               UnqueryvetSettings               `mapstructure:"unqueryvet"`
 	Govet                    GovetSettings                    `mapstructure:"govet"`
 	Grouper                  GrouperSettings                  `mapstructure:"grouper"`
 	Iface                    IfaceSettings                    `mapstructure:"iface"`
@@ -612,11 +612,6 @@ type GosmopolitanSettings struct {
 	AllowTimeLocal  bool     `mapstructure:"allow-time-local"`
 	EscapeHatches   []string `mapstructure:"escape-hatches"`
 	WatchForScripts []string `mapstructure:"watch-for-scripts"`
-}
-
-type UnqueryvetSettings struct {
-	CheckSQLBuilders bool     `mapstructure:"check-sql-builders"`
-	AllowedPatterns  []string `mapstructure:"allowed-patterns"`
 }
 
 type GovetSettings struct {
@@ -1011,6 +1006,11 @@ type UnconvertSettings struct {
 
 type UnparamSettings struct {
 	CheckExported bool `mapstructure:"check-exported"`
+}
+
+type UnqueryvetSettings struct {
+	CheckSQLBuilders bool     `mapstructure:"check-sql-builders"`
+	AllowedPatterns  []string `mapstructure:"allowed-patterns"`
 }
 
 type UnusedSettings struct {
