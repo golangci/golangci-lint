@@ -120,6 +120,7 @@ linters:
     - tparallel
     - unconvert
     - unparam
+    - unqueryvet
     - unused
     - usestdlibvars
     - usetesting
@@ -233,6 +234,7 @@ linters:
     - tparallel
     - unconvert
     - unparam
+    - unqueryvet
     - unused
     - usestdlibvars
     - usetesting
@@ -3887,6 +3889,21 @@ linters:
       #
       # Default: false
       check-exported: true
+
+    unqueryvet:
+      # Enable SQL builder checking.
+      # Default: true
+      check-sql-builders: false
+      # Regex patterns for acceptable SELECT * usage.
+      # Default:
+      # - "SELECT \\* FROM information_schema\\..*"
+      # - "SELECT \\* FROM pg_catalog\\..*"
+      # - "SELECT COUNT\\(\\*\\)"
+      # - "SELECT MAX\\(\\*\\)"
+      # - "SELECT MIN\\(\\*\\)"
+      allowed-patterns:
+        - "SELECT \\* FROM temp_.*"
+        - "SELECT \\* FROM.*-- migration"
 
     unused:
       # Mark all struct fields that have been written to as used.

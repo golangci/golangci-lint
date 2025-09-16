@@ -4005,6 +4005,24 @@
             }
           }
         },
+        "unqueryvetSettings": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "check-sql-builders": {
+              "description": "Enable SQL builder checking.",
+              "type": "boolean",
+              "default": true
+            },
+            "allowed-patterns": {
+              "description": "Regex patterns for acceptable SELECT * usage.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
         "unusedSettings": {
           "type": "object",
           "additionalProperties": false,
@@ -4800,6 +4818,9 @@
             },
             "unparam": {
               "$ref": "#/definitions/settings/definitions/unparamSettings"
+            },
+            "unqueryvet": {
+              "$ref": "#/definitions/settings/definitions/unqueryvetSettings"
             },
             "unused": {
               "$ref": "#/definitions/settings/definitions/unusedSettings"
