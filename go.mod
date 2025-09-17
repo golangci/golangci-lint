@@ -14,7 +14,7 @@ require (
 	github.com/Antonboom/nilnil v1.1.1
 	github.com/Antonboom/testifylint v1.6.4
 	github.com/BurntSushi/toml v1.5.0
-	github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24
+	github.com/Djarvur/go-err113 v0.1.1
 	github.com/MirrexOne/unqueryvet v1.2.1
 	github.com/OpenPeeDeeP/depguard/v2 v2.2.1
 	github.com/alecthomas/chroma/v2 v2.20.0
