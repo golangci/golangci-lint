@@ -1,0 +1,5 @@
+version: 2
+
+linters-settings:
+  namedreturns:
+    report-error-in-defer: true

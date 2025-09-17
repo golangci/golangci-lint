@@ -82,6 +82,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/nlreturn"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/noctx"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/noinlineerr"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/namedreturns"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/nolintlint"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/nonamedreturns"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/nosprintfhostport"
@@ -527,6 +528,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v2.2.0").
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/AlwxSin/noinlineerr"),
+
+		linter.NewConfig(namedreturns.New(&cfg.Linters.Settings.NamedReturns)).
+			WithSince("v2.5.0").
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/nikogura/namedreturns"),
 
 		linter.NewConfig(nonamedreturns.New(&cfg.Linters.Settings.NoNamedReturns)).
 			WithSince("v1.46.0").

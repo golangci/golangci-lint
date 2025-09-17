@@ -271,6 +271,7 @@ type LintersSettings struct {
 	Mnd                      MndSettings                      `mapstructure:"mnd"`
 	MustTag                  MustTagSettings                  `mapstructure:"musttag"`
 	Nakedret                 NakedretSettings                 `mapstructure:"nakedret"`
+	NamedReturns             NamedReturnsSettings             `mapstructure:"namedreturns"`
 	Nestif                   NestifSettings                   `mapstructure:"nestif"`
 	NilNil                   NilNilSettings                   `mapstructure:"nilnil"`
 	Nlreturn                 NlreturnSettings                 `mapstructure:"nlreturn"`
@@ -735,6 +736,10 @@ type MustTagFunction struct {
 
 type NakedretSettings struct {
 	MaxFuncLines uint `mapstructure:"max-func-lines"`
+}
+
+type NamedReturnsSettings struct {
+	ReportErrorInDefer bool `mapstructure:"report-error-in-defer"`
 }
 
 type NestifSettings struct {
