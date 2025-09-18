@@ -55,13 +55,13 @@ require (
 	github.com/golangci/gofmt v0.0.0-20250106114630-d62b90e6713d
 	github.com/golangci/golines v0.0.0-20250217134842-442fd0091d95
 	github.com/golangci/misspell v0.7.0
+	github.com/golangci/nilerr v0.0.0-20250918000102-015671e622fe
 	github.com/golangci/plugin-module-register v0.1.2
 	github.com/golangci/revgrep v0.8.0
 	github.com/golangci/swaggoswag v0.0.0-20250504205917-77f2aca3143e
 	github.com/golangci/unconvert v0.0.0-20250410112200-a129a6e6413e
 	github.com/gordonklaus/ineffassign v0.2.0
 	github.com/gostaticanalysis/forcetypeassert v0.2.0
-	github.com/gostaticanalysis/nilerr v0.1.1
 	github.com/hashicorp/go-version v1.7.0
 	github.com/jgautheron/goconst v1.8.2
 	github.com/jingyugao/rowserrcheck v1.1.1
@@ -218,7 +218,7 @@ require (
 	go.uber.org/zap v1.27.0 // indirect
 	golang.org/x/exp v0.0.0-20240909161429-701f63a606c0 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20250911091902-df9299821621 // indirect
-	golang.org/x/text v0.28.0 // indirect
+	golang.org/x/text v0.29.0 // indirect
 	golang.org/x/tools/go/expect v0.1.1-deprecated // indirect
 	golang.org/x/tools/go/packages/packagestest v0.1.1-deprecated // indirect
 	google.golang.org/protobuf v1.36.6 // indirect
