@@ -159,7 +159,7 @@ func someLegacyFunction() *string {
 }
 ```
 
-You can see more examples of using `nolint` directives direct in [our tests](https://github.com/golangci/golangci-lint/tree/HEAD/pkg/result/processors/testdata) for it.
+You can see more examples of using `nolint` directives in [our tests](https://github.com/golangci/golangci-lint/tree/HEAD/pkg/result/processors/testdata) for it.
 
 ### Syntax
 
