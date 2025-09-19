@@ -704,8 +704,8 @@ linters:
       # Disable all checks.
       # Default: false
       disable-all: true
-      # Which checks should be enabled in addition to default checks; can't be combined with 'disabled-checks'.
-      # By default, list of stable checks is used (https://go-critic.com/overview#checks-overview):
+      # Which checks should be enabled in addition to default checks (or at all, if disable-all is true).
+      # The default checks are gocritic's stable checks (https://go-critic.com/overview#checks-overview):
       #   appendAssign, argOrder, assignOp, badCall, badCond, captLocal, caseOrder, codegenComment, commentFormatting,
       #   defaultCaseOrder, deprecatedComment, dupArg, dupBranchBody, dupCase, dupSubExpr, elseif, exitAfterDefer,
       #   flagDeref, flagName, ifElseChain, mapKey, newDeref, offBy1, regexpMust, singleCaseSwitch, sloppyLen,
@@ -1034,7 +1034,7 @@ linters:
       # Enable all checks.
       # Default: false
       enable-all: true
-      # Which checks should be disabled; can't be combined with 'enabled-checks'.
+      # Which checks should be disabled.
       # Default: []
       disabled-checks:
         - appendAssign
