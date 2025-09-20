@@ -150,7 +150,7 @@ Also, you can exclude all issues in a file by:
 package pkg
 ```
 
-You may add a comment explaining or justifying why `//nolint` is being used on the same line as the flag itself:
+You may add a comment explaining or justifying why a `nolint` directive is being used on the same line as the flag itself:
 
 ```go
 //nolint:gocyclo // This legacy function is complex, but the team too busy to simplify it
@@ -159,9 +159,32 @@ func someLegacyFunction() *string {
 }
 ```
 
-You can see more examples of using `//nolint` in [our tests](https://github.com/golangci/golangci-lint/tree/HEAD/pkg/result/processors/testdata) for it.
+You can see more examples of using `nolint` directives in [our tests](https://github.com/golangci/golangci-lint/tree/HEAD/pkg/result/processors/testdata) for it.
 
-Use `//nolint` instead of `// nolint` because directives should have no space by Go convention.
+### Syntax
+
+`nolint` is not regular comment but a directive.
+
+> A directive comment is a line matching the regular expression `//(line |extern |export |[a-z0-9]+:[a-z0-9])`.
+> https://go.dev/doc/comment#syntax
+
+This means that no spaces are allowed between:
+- `//` and `nolint`
+- `nolint` and `:`
+- `:` and the name of the linter.
+
+Invalid syntax:
+```go
+// nolint
+// nolint:xxx
+//nolint :xxx
+//nolint: xxx
+```
+
+Valid syntax:
+```go
+//nolint:xxx
+```
 
 ## Exclusion Presets
 
