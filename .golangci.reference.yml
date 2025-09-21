@@ -59,6 +59,7 @@ linters:
     - goconst
     - gocritic
     - gocyclo
+    - godoclint
     - godot
     - godox
     - goheader
@@ -75,6 +76,7 @@ linters:
     - ineffassign
     - interfacebloat
     - intrange
+    - iotamixing
     - ireturn
     - lll
     - loggercheck
@@ -118,6 +120,7 @@ linters:
     - tparallel
     - unconvert
     - unparam
+    - unqueryvet
     - unused
     - usestdlibvars
     - usetesting
@@ -170,6 +173,7 @@ linters:
     - goconst
     - gocritic
     - gocyclo
+    - godoclint
     - godot
     - godox
     - goheader
@@ -186,6 +190,7 @@ linters:
     - ineffassign
     - interfacebloat
     - intrange
+    - iotamixing
     - ireturn
     - lll
     - loggercheck
@@ -229,6 +234,7 @@ linters:
     - tparallel
     - unconvert
     - unparam
+    - unqueryvet
     - unused
     - usestdlibvars
     - usetesting
@@ -392,6 +398,9 @@ linters:
         - "0C0C"
 
     embeddedstructfieldcheck:
+      # Checks that there is an empty space between the embedded fields and regular fields.
+      # Default: true
+      empty-line: false
       # Checks that sync.Mutex and sync.RWMutex are not used as embedded fields.
       # Default: false
       forbid-mutex: true
@@ -653,6 +662,10 @@ linters:
       # Force adding assertion descriptions to gomega matchers.
       # Default: false
       force-assertion-description: true
+
+      # Force using `ToNot`, `ShouldNot` instead of `To(Not())`.
+      # Default: false
+      force-tonot: true
 
     gochecksumtype:
       # Presence of `default` case in switch statements satisfies exhaustiveness, if all members are not listed.
@@ -1263,6 +1276,74 @@ linters:
       # Default: 30 (but we recommend 10-20)
       min-complexity: 10
 
+    godoclint:
+      # Default set of rules to enable.
+      # Possible values are: `basic`, `all` or `none`.
+      # Default: `basic` (enables `pkg-doc`, `single-pkg-doc`, `start-with-name`, and `deprecated`)
+      default: all
+
+      # List of rules to enable in addition to the default set.
+      # Default: empty
+      enable:
+        # Check proper package-level godoc, if any.
+        # https://github.com/godoc-lint/godoc-lint?tab=readme-ov-file#pkg-doc
+        - pkg-doc
+        # Assert at most one godoc per package.
+        # https://github.com/godoc-lint/godoc-lint?tab=readme-ov-file#single-pkg-doc
+        - single-pkg-doc
+        # Require all packages to have a godoc.
+        # https://github.com/godoc-lint/godoc-lint?tab=readme-ov-file#require-pkg-doc
+        - require-pkg-doc
+        # Assert symbol godocs start with the symbol name.
+        # https://github.com/godoc-lint/godoc-lint?tab=readme-ov-file#start-with-name
+        - start-with-name
+        # Require godoc for all public symbols.
+        # https://github.com/godoc-lint/godoc-lint?tab=readme-ov-file#require-doc
+        - require-doc
+        # Assert correct formatting of deprecation notes.
+        # https://github.com/godoc-lint/godoc-lint?tab=readme-ov-file#deprecated
+        - deprecated
+        # Assert maximum line length for godocs.
+        # https://github.com/godoc-lint/godoc-lint?tab=readme-ov-file#max-len
+        - max-len
+        # Assert no unused link in godocs.
+        # https://github.com/godoc-lint/godoc-lint?tab=readme-ov-file#no-unused-link
+        - no-unused-link
+
+      # List of rules to disable.
+      # Default: empty
+      disable:
+        - pkg-doc
+        - single-pkg-doc
+        - require-pkg-doc
+        - start-with-name
+        - require-doc
+        - deprecated
+        - max-len
+        - no-unused-link
+
+      # A map for fine-tuning individual rules.
+      # All subkeys are optional.
+      options:
+        max-len:
+          # Maximum line length for godocs, not including the `// `, or `/*` or `*/` tokens.
+          # Default: 77
+          length: 127
+
+        require-doc:
+          # Ignore exported (public) symbols when applying the `require-doc` rule.
+          # Default: false
+          ignore-exported: true
+
+          # Ignore unexported (private) symbols when applying the `require-doc` rule.
+          # Default: true
+          ignore-unexported: false
+
+        start-with-name:
+          # Include unexported symbols when applying the `start-with-name` rule.
+          # Default: false
+          include-unexported: true
+
     godot:
       # Comments to be checked: `declarations`, `toplevel`, `noinline` or `all`.
       # Default: declarations
@@ -1870,10 +1951,20 @@ linters:
       # Default: false
       skip-single-param: true
 
+    ineffassign:
+      # Check escaping variables of type error, may cause false positives.
+      # Default: false
+      check-escaping-errors: true
+
     interfacebloat:
       # The maximum number of methods allowed for an interface.
       # Default: 10
       max: 5
+
+    iotamixing:
+      # Whether to report individual consts rather than just the const block.
+      # Default: false
+      report-individual: true
 
     ireturn:
       # List of interfaces to allow.
@@ -2510,6 +2601,26 @@ linters:
           severity: warning
           disabled: false
           exclude: [""]
+        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#identical-ifelseif-branches
+        - name: identical-ifelseif-branches
+          severity: warning
+          disabled: false
+          exclude: [""]
+        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#identical-ifelseif-conditions
+        - name: identical-ifelseif-conditions
+          severity: warning
+          disabled: false
+          exclude: [""]
+        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#identical-switch-branches
+        - name: identical-switch-branches
+          severity: warning
+          disabled: false
+          exclude: [""]
+        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#identical-switch-conditions
+        - name: identical-switch-conditions
+          severity: warning
+          disabled: false
+          exclude: [""]
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#if-return
         - name: if-return
           severity: warning
@@ -2593,6 +2704,13 @@ linters:
           severity: warning
           disabled: false
           exclude: [""]
+        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#package-directory-mismatch
+        - name: package-directory-mismatch
+          severity: warning
+          disabled: false
+          exclude: [""]
+          arguments:
+            - ignore-directories: ["testcases", "testinfo"]
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#range
         - name: range
           severity: warning
@@ -2730,6 +2848,11 @@ linters:
           severity: warning
           disabled: false
           exclude: [""]
+        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#unsecure-url-scheme
+        - name: unsecure-url-scheme
+          severity: warning
+          disabled: false
+          exclude: [""]
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#unused-parameter
         - name: unused-parameter
           severity: warning
@@ -2759,8 +2882,18 @@ linters:
           severity: warning
           disabled: false
           exclude: [""]
+        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#use-waitgroup-go
+        - name: use-waitgroup-go
+          severity: warning
+          disabled: false
+          exclude: [""]
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#useless-break
         - name: useless-break
+          severity: warning
+          disabled: false
+          exclude: [""]
+        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#useless-fallthrough
+        - name: useless-fallthrough
           severity: warning
           disabled: false
           exclude: [""]
@@ -3756,6 +3889,21 @@ linters:
       #
       # Default: false
       check-exported: true
+
+    unqueryvet:
+      # Enable SQL builder checking.
+      # Default: true
+      check-sql-builders: false
+      # Regex patterns for acceptable SELECT * usage.
+      # Default:
+      # - "SELECT \\* FROM information_schema\\..*"
+      # - "SELECT \\* FROM pg_catalog\\..*"
+      # - "SELECT COUNT\\(\\*\\)"
+      # - "SELECT MAX\\(\\*\\)"
+      # - "SELECT MIN\\(\\*\\)"
+      allowed-patterns:
+        - "SELECT \\* FROM temp_.*"
+        - "SELECT \\* FROM.*-- migration"
 
     unused:
       # Mark all struct fields that have been written to as used.

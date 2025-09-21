@@ -243,6 +243,14 @@
     "avatar": "https://github.com/go-critic.png"
   },
   {
+    "name": "godoc-lint",
+    "linters": [
+      "godoclint"
+    ],
+    "profile": "https://github.com/sponsors/godoc-lint",
+    "avatar": "https://github.com/godoc-lint.png"
+  },
+  {
     "name": "golang",
     "linters": [
       "gofmt",
@@ -425,6 +433,14 @@
     ],
     "profile": "https://github.com/sponsors/mibk",
     "avatar": "https://github.com/mibk.png"
+  },
+  {
+    "name": "MirrexOne",
+    "linters": [
+      "unqueryvet"
+    ],
+    "profile": "https://github.com/sponsors/MirrexOne",
+    "avatar": "https://github.com/MirrexOne.png"
   },
   {
     "name": "moricho",
