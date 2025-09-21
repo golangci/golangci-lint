@@ -477,18 +477,6 @@
         "-QF1012"
       ]
     },
-    "godoclint-rules": {
-      "enum": [
-        "pkg-doc",
-        "single-pkg-doc",
-        "require-pkg-doc",
-        "start-with-name",
-        "require-doc",
-        "deprecated",
-        "max-len",
-        "no-unused-link"
-      ]
-    },
     "gosec-rules": {
       "enum": [
         "G101",
@@ -625,10 +613,6 @@
         "function-result-limit",
         "get-return",
         "identical-branches",
-        "identical-ifelseif-branches",
-        "identical-ifelseif-conditions",
-        "identical-switch-branches",
-        "identical-switch-conditions",
         "if-return",
         "import-alias-naming",
         "import-shadowing",
@@ -643,7 +627,6 @@
         "nested-structs",
         "optimize-operands-order",
         "package-comments",
-        "package-directory-mismatch",
         "range-val-address",
         "range-val-in-closure",
         "range",
@@ -667,15 +650,12 @@
         "unnecessary-format",
         "unnecessary-stmt",
         "unreachable-code",
-        "unsecure-url-scheme",
         "unused-parameter",
         "unused-receiver",
         "use-any",
         "use-errors-new",
         "use-fmt-print",
-        "use-waitgroup-go",
         "useless-break",
-        "useless-fallthrough",
         "var-declaration",
         "var-naming",
         "waitgroup-by-value"
@@ -807,7 +787,6 @@
             "goconst",
             "gocritic",
             "gocyclo",
-            "godoclint",
             "godot",
             "godox",
             "err113",
@@ -826,7 +805,6 @@
             "ineffassign",
             "interfacebloat",
             "intrange",
-            "iotamixing",
             "ireturn",
             "lll",
             "loggercheck",
@@ -1148,11 +1126,6 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "empty-line": {
-              "description": "Checks that there is an empty space between the embedded fields and regular fields.",
-              "type": "boolean",
-              "default": false
-            },
             "forbid-mutex": {
               "description": "Checks that sync.Mutex and sync.RWMutex are not used as embedded fields.",
               "type": "boolean",
@@ -1564,11 +1537,6 @@
               "description": "Force adding assertion descriptions to gomega matchers.",
               "type": "boolean",
               "default": false
-            },
-            "force-tonot": {
-              "description": "Force using `ToNot`, `ShouldNot` instead of `To(Not())`.",
-              "type": "boolean",
-              "default": false
             }
           }
         },
@@ -1864,74 +1832,6 @@
               "description": "Minimum code complexity to report (we recommend 10-20).",
               "type": "integer",
               "default": 30
-            }
-          }
-        },
-        "godoclintSettings": {
-          "type": "object",
-          "properties": {
-            "default": {
-              "type": "string",
-              "enum": ["all", "basic", "none"],
-              "default": "basic",
-              "description": "Default set of rules to enable."
-            },
-            "enable": {
-              "description": "List of rules to enable in addition to the default set.",
-              "type": "array",
-              "uniqueItems": true,
-              "items": {
-                "$ref": "#/definitions/godoclint-rules"
-              }
-            },
-            "disable": {
-              "description": "List of rules to disable.",
-              "type": "array",
-              "uniqueItems": true,
-              "items": {
-                "$ref": "#/definitions/godoclint-rules"
-              }
-            },
-            "options": {
-              "type": "object",
-              "description": "A map for setting individual rule options.",
-              "properties": {
-                "max-len": {
-                  "type": "object",
-                  "properties": {
-                    "length": {
-                      "type": "integer",
-                      "description": "Maximum line length for godocs, not including the `// `, or `/*` or `*/` tokens.",
-                      "default": 77
-                    }
-                  }
-                },
-                "require-doc": {
-                  "type": "object",
-                  "properties": {
-                    "ignore-exported": {
-                      "type": "boolean",
-                      "description": "Ignore exported (public) symbols when applying the `require-doc` rule.",
-                      "default": false
-                    },
-                    "ignore-unexported": {
-                      "type": "boolean",
-                      "description": "Ignore unexported (private) symbols when applying the `require-doc` rule.",
-                      "default": true
-                    }
-                  }
-                },
-                "start-with-name": {
-                  "type": "object",
-                  "properties": {
-                    "include-unexported": {
-                      "type": "boolean",
-                      "description": "Include unexported symbols when applying the `start-with-name` rule.",
-                      "default": false
-                    }
-                  }
-                }
-              }
             }
           }
         },
@@ -2500,28 +2400,6 @@
           "properties": {
             "skip-single-param": {
               "description": "Skips check for interface methods with only a single parameter.",
-              "type": "boolean",
-              "default": false
-            }
-          }
-        },
-        "ineffassignSettings": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "check-escaping-errors": {
-              "description": "Check escaping variables of type error, may cause false positives.",
-              "type": "boolean",
-              "default": false
-            }
-          }
-        },
-        "iotamixingSettings": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "report-individual": {
-              "description": "Whether to report individual consts rather than just the const block.",
               "type": "boolean",
               "default": false
             }
@@ -4005,24 +3883,6 @@
             }
           }
         },
-        "unqueryvetSettings": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "check-sql-builders": {
-              "description": "Enable SQL builder checking.",
-              "type": "boolean",
-              "default": true
-            },
-            "allowed-patterns": {
-              "description": "Regex patterns for acceptable SELECT * usage.",
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          }
-        },
         "unusedSettings": {
           "type": "object",
           "additionalProperties": false,
@@ -4663,9 +4523,6 @@
             "gocyclo": {
               "$ref": "#/definitions/settings/definitions/gocycloSettings"
             },
-            "godoclint": {
-              "$ref": "#/definitions/settings/definitions/godoclintSettings"
-            },
             "godot": {
               "$ref": "#/definitions/settings/definitions/godotSettings"
             },
@@ -4704,12 +4561,6 @@
             },
             "inamedparam": {
               "$ref": "#/definitions/settings/definitions/inamedparamSettings"
-            },
-            "ineffassign": {
-              "$ref": "#/definitions/settings/definitions/ineffassignSettings"
-            },
-            "iotamixing": {
-              "$ref": "#/definitions/settings/definitions/iotamixingSettings"
             },
             "ireturn": {
               "$ref": "#/definitions/settings/definitions/ireturnSettings"
@@ -4818,9 +4669,6 @@
             },
             "unparam": {
               "$ref": "#/definitions/settings/definitions/unparamSettings"
-            },
-            "unqueryvet": {
-              "$ref": "#/definitions/settings/definitions/unqueryvetSettings"
             },
             "unused": {
               "$ref": "#/definitions/settings/definitions/unusedSettings"

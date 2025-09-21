@@ -111,6 +111,9 @@ func extractInfo(lc *linter.Config) authorInfo {
 	case "fatcontext":
 		return authorInfo{Author: "Crocmagnon", Host: hostGitHub}
 
+	case "godoclint":
+		return authorInfo{Author: "babakks", Host: hostGitHub}
+
 	default:
 		if strings.HasPrefix(lc.OriginalURL, "https://pkg.go.dev/") {
 			return authorInfo{Author: "golang", Host: hostGitHub}

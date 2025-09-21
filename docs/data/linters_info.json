@@ -352,6 +352,15 @@
     "since": "v1.0.0"
   },
   {
+    "name": "godoclint",
+    "desc": "Checks Golang's documentation practice (godoc)",
+    "loadMode": 8199,
+    "originalURL": "https://github.com/godoc-lint/godoc-lint",
+    "internal": false,
+    "isSlow": false,
+    "since": "v2.5.0"
+  },
+  {
     "name": "godot",
     "desc": "Check if comments end in a period",
     "loadMode": 8199,
@@ -497,7 +506,7 @@
   },
   {
     "name": "ineffassign",
-    "desc": "Detects when assignments to existing variables are not used",
+    "desc": "detects when assignments to existing variables are not used",
     "groups": [
       "standard"
     ],
@@ -525,6 +534,15 @@
     "canAutoFix": true,
     "isSlow": true,
     "since": "v1.57.0"
+  },
+  {
+    "name": "iotamixing",
+    "desc": "checks if iotas are being used in const blocks with other non-iota declarations.",
+    "loadMode": 8199,
+    "originalURL": "https://github.com/AdminBenni/iota-mixing",
+    "internal": false,
+    "isSlow": false,
+    "since": "v2.5.0"
   },
   {
     "name": "ireturn",
@@ -874,7 +892,7 @@
   },
   {
     "name": "thelper",
-    "desc": "thelper detects tests helpers which is not start with t.Helper() method.",
+    "desc": "thelper detects tests helpers which do not start with the t.Helper() method.",
     "loadMode": 8767,
     "originalURL": "https://github.com/kulti/thelper",
     "internal": false,
@@ -915,6 +933,15 @@
     "internal": false,
     "isSlow": true,
     "since": "v1.9.0"
+  },
+  {
+    "name": "unqueryvet",
+    "desc": "detects SELECT * in SQL queries and SQL builders, preventing performance issues and encouraging explicit column selection",
+    "loadMode": 8199,
+    "originalURL": "https://github.com/MirrexOne/unqueryvet",
+    "internal": false,
+    "isSlow": false,
+    "since": "v2.5.0"
   },
   {
     "name": "unused",
