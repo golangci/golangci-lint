@@ -16,6 +16,14 @@
     "avatar": "https://github.com/Abirdcfly.png"
   },
   {
+    "name": "AdminBenni",
+    "linters": [
+      "iotamixing"
+    ],
+    "profile": "https://github.com/sponsors/AdminBenni",
+    "avatar": "https://github.com/AdminBenni.png"
+  },
+  {
     "name": "alecthomas",
     "linters": [
       "gochecksumtype"
@@ -68,6 +76,14 @@
     ],
     "profile": "https://github.com/sponsors/ashanbrown",
     "avatar": "https://github.com/ashanbrown.png"
+  },
+  {
+    "name": "babakks",
+    "linters": [
+      "godoclint"
+    ],
+    "profile": "https://github.com/sponsors/babakks",
+    "avatar": "https://github.com/babakks.png"
   },
   {
     "name": "bkielbasa",
@@ -241,14 +257,6 @@
     ],
     "profile": "https://github.com/sponsors/go-critic",
     "avatar": "https://github.com/go-critic.png"
-  },
-  {
-    "name": "godoc-lint",
-    "linters": [
-      "godoclint"
-    ],
-    "profile": "https://github.com/sponsors/godoc-lint",
-    "avatar": "https://github.com/godoc-lint.png"
   },
   {
     "name": "golang",

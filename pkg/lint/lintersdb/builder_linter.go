@@ -449,7 +449,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 
 		linter.NewConfig(iotamixing.New(&cfg.Linters.Settings.IotaMixing)).
 			WithSince("v2.5.0").
-			WithURL("github.com/AdminBenni/iota-mixing"),
+			WithURL("https://github.com/AdminBenni/iota-mixing"),
 
 		linter.NewConfig(ireturn.New(&cfg.Linters.Settings.Ireturn)).
 			WithSince("v1.43.0").

@@ -539,7 +539,7 @@
     "name": "iotamixing",
     "desc": "checks if iotas are being used in const blocks with other non-iota declarations.",
     "loadMode": 8199,
-    "originalURL": "github.com/AdminBenni/iota-mixing",
+    "originalURL": "https://github.com/AdminBenni/iota-mixing",
     "internal": false,
     "isSlow": false,
     "since": "v2.5.0"
