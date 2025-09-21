@@ -8,6 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/asciicheck"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/bidichk"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/bodyclose"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/boolset"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/canonicalheader"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/containedctx"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/contextcheck"
@@ -164,6 +165,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.18.0").
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/timakin/bodyclose"),
+
+		linter.NewConfig(boolset.New()).
+			WithSince("v2.6.0").
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/arturmelanchyk/boolset"),
 
 		linter.NewConfig(canonicalheader.New()).
 			WithSince("v1.58.0").
