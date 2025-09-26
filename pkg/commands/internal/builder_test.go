@@ -104,3 +104,62 @@ go 1.24.0
 	require.Len(t, goMod.Replace, 1)
 	assert.Contains(t, goMod.Replace[0].New.Path, "testdata/plugin/target")
 }
+
+func TestMergeReplaceDirectives_DuplicateReplace(t *testing.T) {
+	t.Parallel()
+
+	tmp := t.TempDir()
+	require.NoError(t, os.WriteFile(filepath.Join(tmp, "go.mod"), []byte(`
+module github.com/golangci/golangci-lint/v2
+go 1.24.0
+`), 0o600))
+	require.NoError(t, os.Mkdir(filepath.Join(tmp, "golangci-lint"), 0o700))
+
+	// Both plugins define a replace directive for example.com/target.
+	b := NewBuilder(nil, &Configuration{Plugins: []*Plugin{
+		{Module: "example.com/plugin", Path: "testdata/plugin"},
+		{Module: "example.com/plugin2", Path: "testdata/plugin2"},
+	}}, tmp)
+
+	err := b.mergeReplaceDirectives(t.Context(), filepath.Join("testdata", "plugin"))
+	require.NoError(t, err)
+
+	err = b.mergeReplaceDirectives(t.Context(), filepath.Join("testdata", "plugin2"))
+	assert.ErrorContains(t, err, "duplicate replace directive for example.com/target")
+}
+
+func TestMergeReplaceDirectives_DuplicateButDifferentVersion(t *testing.T) {
+	t.Parallel()
+
+	tmp := t.TempDir()
+	require.NoError(t, os.WriteFile(filepath.Join(tmp, "go.mod"), []byte(`
+module github.com/golangci/golangci-lint/v2
+go 1.24.0
+`), 0o600))
+	require.NoError(t, os.Mkdir(filepath.Join(tmp, "golangci-lint"), 0o700))
+
+	// Both plugins define a replace directive for example.com/target.
+	b := NewBuilder(nil, &Configuration{Plugins: []*Plugin{
+		{Module: "example.com/plugin", Path: "testdata/plugin"},
+		{Module: "example.com/plugin3", Path: "testdata/plugin3"},
+	}}, tmp)
+
+	err := b.mergeReplaceDirectives(t.Context(), filepath.Join("testdata", "plugin"))
+	require.NoError(t, err)
+
+	err = b.mergeReplaceDirectives(t.Context(), filepath.Join("testdata", "plugin3"))
+	require.NoError(t, err)
+
+	cmd := exec.CommandContext(t.Context(), "go", "mod", "edit", "-json")
+	cmd.Dir = b.repo
+	output, err := cmd.CombinedOutput()
+	require.NoError(t, err)
+
+	var goMod struct {
+		Replace []struct{ New struct{ Path string } }
+	}
+	err = json.Unmarshal(output, &goMod)
+	require.NoError(t, err)
+
+	assert.Len(t, goMod.Replace, 2)
+}

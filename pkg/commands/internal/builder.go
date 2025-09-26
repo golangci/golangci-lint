@@ -168,29 +168,51 @@ func (b Builder) addReplaceDirective(ctx context.Context, plugin *Plugin) error 
 	return nil
 }
 
-func (b Builder) mergeReplaceDirectives(ctx context.Context, pluginPath string) error {
+type goModReplace struct {
+	Replace []struct {
+		Old struct{ Path, Version string }
+		New struct{ Path, Version string }
+	}
+}
+
+func readGoModReplace(ctx context.Context, dir string) (*goModReplace, error) {
 	cmd := exec.CommandContext(ctx, "go", "mod", "edit", "-json")
-	cmd.Dir = pluginPath
+	cmd.Dir = dir
 
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		b.log.Warnf("%s", string(output))
-
-		return fmt.Errorf("%s: %w", strings.Join(cmd.Args, " "), err)
+		return nil, fmt.Errorf("%s: %w", strings.Join(cmd.Args, " "), err)
 	}
 
-	var goMod struct {
-		Replace []struct {
-			Old struct{ Path, Version string }
-			New struct{ Path, Version string }
-		}
-	}
+	var goMod goModReplace
 	err = json.Unmarshal(output, &goMod)
 	if err != nil {
-		return fmt.Errorf("unmarshal go mod json: %w", err)
+		return nil, fmt.Errorf("unmarshal go.mod json: %w", err)
 	}
 
-	for _, r := range goMod.Replace {
+	return &goMod, nil
+}
+
+func (b Builder) mergeReplaceDirectives(ctx context.Context, pluginPath string) error {
+	pluginGoMod, err := readGoModReplace(ctx, pluginPath)
+	if err != nil {
+		return err
+	}
+
+	rootGoMod, err := readGoModReplace(ctx, b.repo)
+	if err != nil {
+		return err
+	}
+
+	for _, r := range pluginGoMod.Replace {
+		for _, rr := range rootGoMod.Replace {
+			if r.Old.Path == rr.Old.Path && r.Old.Version == rr.Old.Version {
+				return fmt.Errorf("duplicate replace directive for %s@%s", r.Old.Path, r.Old.Version)
+			}
+		}
+	}
+
+	for _, r := range pluginGoMod.Replace {
 		abs, err := filepath.Abs(filepath.Join(pluginPath, r.New.Path))
 		if err != nil {
 			return fmt.Errorf("get absolute path: %w", err)
