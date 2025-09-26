@@ -257,7 +257,7 @@ func (b Builder) createVersion(orig string) (string, error) {
 			continue
 		}
 
-		dh, err := dirhash.HashDir(plugin.Path, "", dirhash.DefaultHash)
+		dh, err := hashDir(plugin.Path, "", dirhash.DefaultHash)
 		if err != nil {
 			return "", fmt.Errorf("hash plugin directory: %w", err)
 		}
