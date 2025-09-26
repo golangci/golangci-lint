@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/sha256"
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"io"
 	"os"
@@ -115,6 +116,11 @@ func (b Builder) addToGoMod(ctx context.Context) error {
 				return err
 			}
 
+			err = b.mergeReplaceDirectives(ctx, plugin.Path)
+			if err != nil {
+				return err
+			}
+
 			continue
 		}
 
@@ -159,6 +165,63 @@ func (b Builder) addReplaceDirective(ctx context.Context, plugin *Plugin) error 
 		return fmt.Errorf("%s: %w", strings.Join(cmd.Args, " "), err)
 	}
 
+	return nil
+}
+
+func (b Builder) mergeReplaceDirectives(ctx context.Context, pluginPath string) error {
+	cmd := exec.CommandContext(ctx, "go", "mod", "edit", "-json")
+	cmd.Dir = pluginPath
+
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		b.log.Warnf("%s", string(output))
+
+		return fmt.Errorf("%s: %w", strings.Join(cmd.Args, " "), err)
+	}
+
+	var goMod struct {
+		Replace []struct {
+			Old struct{ Path, Version string }
+			New struct{ Path, Version string }
+		}
+	}
+	err = json.Unmarshal(output, &goMod)
+	if err != nil {
+		return fmt.Errorf("unmarshal go mod json: %w", err)
+	}
+
+	for _, r := range goMod.Replace {
+		abs := filepath.Join(pluginPath, r.New.Path)
+		stat, err := os.Stat(abs)
+		if err != nil {
+			return fmt.Errorf("%s: %w", abs, err)
+		}
+		if stat.IsDir() {
+			r.New.Path = filepath.Join(pluginPath, r.New.Path)
+		}
+
+		replace := fmt.Sprintf("%s=%s", r.Old.Path, r.New.Path)
+		if r.Old.Version != "" {
+			replace += "@" + r.Old.Version
+		}
+		if r.New.Version != "" {
+			replace += "@" + r.New.Version
+		}
+
+		cmd := exec.CommandContext(ctx, "go", "mod", "edit", "-replace", replace)
+		cmd.Dir = b.repo
+
+		output, err := cmd.CombinedOutput()
+		if err != nil {
+			b.log.Warnf("%s", string(output))
+
+			return fmt.Errorf("%s: %w", strings.Join(cmd.Args, " "), err)
+		}
+	}
+
+	// NOTE(sublee): We don't need to follow nested replace directives because
+	// the directives are effective only at the main module. All necessary
+	// replacements should be handled at this level.
 	return nil
 }
 
