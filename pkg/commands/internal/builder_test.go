@@ -71,8 +71,8 @@ func TestMergeReplaceDirectives(t *testing.T) {
 	require.NoError(t, os.WriteFile(filepath.Join(tmp, "go.mod"), []byte(`
 module github.com/golangci/golangci-lint/v2
 go 1.24.0
-`), 0o644))
-	require.NoError(t, os.Mkdir(filepath.Join(tmp, "golangci-lint"), 0o755))
+`), 0o600))
+	require.NoError(t, os.Mkdir(filepath.Join(tmp, "golangci-lint"), 0o700))
 
 	b := NewBuilder(nil, &Configuration{Plugins: []*Plugin{
 		{Module: "example.com/plugin", Path: "testdata/plugin"},
@@ -84,7 +84,7 @@ go 1.24.0
 	err := b.mergeReplaceDirectives(t.Context(), filepath.Join("testdata", "plugin"))
 	require.NoError(t, err)
 
-	cmd := exec.Command("go", "mod", "edit", "-json")
+	cmd := exec.CommandContext(t.Context(), "go", "mod", "edit", "-json")
 	cmd.Dir = b.repo
 	output, err := cmd.CombinedOutput()
 	require.NoError(t, err)
