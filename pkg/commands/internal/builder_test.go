@@ -63,7 +63,7 @@ func Test_sanitizeVersion(t *testing.T) {
 func TestMergeReplaceDirectives(t *testing.T) {
 	t.Parallel()
 
-	// Create a temporary module structure:
+	// Create a temporary module with the following structure:
 	// tmp/
 	//   go.mod
 	//   golangci-lint/
@@ -78,6 +78,9 @@ go 1.24.0
 		{Module: "example.com/plugin", Path: "testdata/plugin"},
 	}}, tmp)
 
+	// Merge replace directives from the plugin's go.mod into the temporary
+	// repo. Only the plugin's own replace rules are applied; transitive
+	// replaces from its dependencies are not automatically merged.
 	err := b.mergeReplaceDirectives(t.Context(), filepath.Join("testdata", "plugin"))
 	require.NoError(t, err)
 
@@ -92,6 +95,12 @@ go 1.24.0
 	err = json.Unmarshal(output, &goMod)
 	require.NoError(t, err)
 
+	// The go.mod file should include a replace directive for
+	// example.com/target, pointing to the local path, because
+	// example.com/plugin's go.mod defines it. However, it should not include a
+	// replace directive for example.com/other, since example.com/plugin does
+	// not directly depend on it, and go mod ignores such transitive
+	// replacements.
 	require.Len(t, goMod.Replace, 1)
 	assert.Contains(t, goMod.Replace[0].New.Path, "testdata/plugin/target")
 }
