@@ -191,13 +191,17 @@ func (b Builder) mergeReplaceDirectives(ctx context.Context, pluginPath string) 
 	}
 
 	for _, r := range goMod.Replace {
-		abs := filepath.Join(pluginPath, r.New.Path)
+		abs, err := filepath.Abs(filepath.Join(pluginPath, r.New.Path))
+		if err != nil {
+			return fmt.Errorf("get absolute path: %w", err)
+		}
+
 		stat, err := os.Stat(abs)
 		if err != nil {
 			return fmt.Errorf("%s: %w", abs, err)
 		}
 		if stat.IsDir() {
-			r.New.Path = filepath.Join(pluginPath, r.New.Path)
+			r.New.Path = abs
 		}
 
 		replace := fmt.Sprintf("%s=%s", r.Old.Path, r.New.Path)
