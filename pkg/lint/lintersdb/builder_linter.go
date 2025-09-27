@@ -92,6 +92,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/promlinter"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/protogetter"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/reassign"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/recovercheck"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/recvcheck"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/revive"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/rowserrcheck"
@@ -575,6 +576,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.62.0").
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/raeperd/recvcheck"),
+
+		linter.NewConfig(recovercheck.New()).
+			WithSince("v2.6.0").
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/cksidharthan/reovercheck"),
 
 		linter.NewConfig(revive.New(&cfg.Linters.Settings.Revive)).
 			WithSince("v1.37.0").
