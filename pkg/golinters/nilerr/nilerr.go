@@ -1,7 +1,7 @@
 package nilerr
 
 import (
-	"github.com/golangci/nilerr"
+	"github.com/gostaticanalysis/nilerr"
 
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
 )
