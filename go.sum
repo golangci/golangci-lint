@@ -273,8 +273,6 @@ github.com/golangci/golines v0.0.0-20250217134842-442fd0091d95 h1:AkK+w9FZBXlU/x
 github.com/golangci/golines v0.0.0-20250217134842-442fd0091d95/go.mod h1:k9mmcyWKSTMcPPvQUCfRWWQ9VHJ1U9Dc0R7kaXAgtnQ=
 github.com/golangci/misspell v0.7.0 h1:4GOHr/T1lTW0hhR4tgaaV1WS/lJ+ncvYCoFKmqJsj0c=
 github.com/golangci/misspell v0.7.0/go.mod h1:WZyyI2P3hxPY2UVHs3cS8YcllAeyfquQcKfdeE9AFVg=
-github.com/golangci/nilerr v0.0.0-20250918000102-015671e622fe h1:F1pK9tBy41i7eesBFkSNMldwtiAaWiU+3fT/24sTnNI=
-github.com/golangci/nilerr v0.0.0-20250918000102-015671e622fe/go.mod h1:CtTxAluxD2ng9aIT9bPrVoMuISFWCD+SaxtvYtdWA2k=
 github.com/golangci/plugin-module-register v0.1.2 h1:e5WM6PO6NIAEcij3B053CohVp3HIYbzSuP53UAYgOpg=
 github.com/golangci/plugin-module-register v0.1.2/go.mod h1:1+QGTsKBvAIvPvoY/os+G5eoqxWn70HYDm2uvUyGuVw=
 github.com/golangci/revgrep v0.8.0 h1:EZBctwbVd0aMeRnNUsFogoyayvKHyxlV3CdUA46FX2s=
@@ -323,6 +321,8 @@ github.com/gostaticanalysis/comment v1.5.0 h1:X82FLl+TswsUMpMh17srGRuKaaXprTaytm
 github.com/gostaticanalysis/comment v1.5.0/go.mod h1:V6eb3gpCv9GNVqb6amXzEUX3jXLVK/AdA+IrAMSqvEc=
 github.com/gostaticanalysis/forcetypeassert v0.2.0 h1:uSnWrrUEYDr86OCxWa4/Tp2jeYDlogZiZHzGkWFefTk=
 github.com/gostaticanalysis/forcetypeassert v0.2.0/go.mod h1:M5iPavzE9pPqWyeiVXSFghQjljW1+l/Uke3PXHS6ILY=
+github.com/gostaticanalysis/nilerr v0.1.2 h1:S6nk8a9N8g062nsx63kUkF6AzbHGw7zzyHMcpu52xQU=
+github.com/gostaticanalysis/nilerr v0.1.2/go.mod h1:A19UHhoY3y8ahoL7YKz6sdjDtduwTSI4CsymaC2htPA=
 github.com/gostaticanalysis/testutil v0.3.1-0.20210208050101-bfb5c8eec0e4/go.mod h1:D+FIZ+7OahH3ePw/izIEeH5I06eKs1IKI4Xr64/Am3M=
 github.com/gostaticanalysis/testutil v0.5.0 h1:Dq4wT1DdTwTGCQQv3rl3IvD5Ld0E6HiY+3Zh0sUGqw8=
 github.com/gostaticanalysis/testutil v0.5.0/go.mod h1:OLQSbuM6zw2EvCcXTz1lVq5unyoNft372msDY0nY5Hs=
