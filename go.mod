@@ -74,7 +74,7 @@ require (
 	github.com/kunwardeep/paralleltest v1.0.14
 	github.com/lasiar/canonicalheader v1.1.2
 	github.com/ldez/exptostd v0.4.4
-	github.com/ldez/gomoddirectives v0.7.0
+	github.com/ldez/gomoddirectives v0.7.1
 	github.com/ldez/grignotin v0.10.1
 	github.com/ldez/tagliatelle v0.7.2
 	github.com/ldez/usetesting v0.5.0
