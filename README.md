@@ -1,4 +1,4 @@
-<p align="center">
+ <p align="center">
   <img alt="golangci-lint logo" src="assets/go.png" height="150" />
   <h3 align="center">golangci-lint</h3>
   <p align="center">Fast linters runner for Go</p>
@@ -9,7 +9,7 @@
 `golangci-lint` is a fast Go linters runner.
 
 It runs linters in parallel, uses caching, supports YAML configuration,
-integrates with all major IDEs, and includes over a hundred linters.
+integrates with all major IDEs, and includes over a hundr ed linters.
 
 ## Install `golangci-lint`
 
