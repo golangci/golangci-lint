@@ -104,8 +104,8 @@ linters:
     - promlinter
     - protogetter
     - reassign
-    - recvcheck
     - recovercheck
+    - recvcheck
     - revive
     - rowserrcheck
     - sloglint
@@ -219,8 +219,8 @@ linters:
     - promlinter
     - protogetter
     - reassign
-    - recvcheck
     - recovercheck
+    - recvcheck
     - revive
     - rowserrcheck
     - sloglint
