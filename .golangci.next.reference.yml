@@ -63,6 +63,7 @@ linters:
     - godot
     - godox
     - goheader
+    - gomodclean
     - gomoddirectives
     - gomodguard
     - goprintffuncname
@@ -177,6 +178,7 @@ linters:
     - godot
     - godox
     - goheader
+    - gomodclean
     - gomoddirectives
     - gomodguard
     - goprintffuncname
