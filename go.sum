@@ -142,8 +142,8 @@ github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e/go.mod h1:nSuG5e5P
 github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1/go.mod h1:Q3SI9o4m/ZMnBNeIyt5eFwwo7qiLfzFZmjNmxjkiQlU=
 github.com/ckaznocha/intrange v0.3.1 h1:j1onQyXvHUsPWujDH6WIjhyH26gkRt/txNlV7LspvJs=
 github.com/ckaznocha/intrange v0.3.1/go.mod h1:QVepyz1AkUoFQkpEqksSYpNpUo3c5W7nWh/s6SHIJJk=
-github.com/cksidharthan/recovercheck v1.3.1-0.20251003195230-fe224edb6c30 h1:JWMU7r+e3r7Z5dB07En30PejQMB+0l66m74dYQ7V4bo=
-github.com/cksidharthan/recovercheck v1.3.1-0.20251003195230-fe224edb6c30/go.mod h1:f/PCJTLKN0JBvKTgx2XLyaJ255kPPScSF68qhqcmXzo=
+github.com/cksidharthan/recovercheck v1.4.0 h1:A8y5holhKRLtz75GZOCOpxs5PBay18RhxiTThYTIHd4=
+github.com/cksidharthan/recovercheck v1.4.0/go.mod h1:f/PCJTLKN0JBvKTgx2XLyaJ255kPPScSF68qhqcmXzo=
 github.com/client9/misspell v0.3.4/go.mod h1:qj6jICC3Q7zFZvVWo7KLAzC3yx5G7kyvSDkc90ppPyw=
 github.com/cncf/udpa/go v0.0.0-20191209042840-269d4d468f6f/go.mod h1:M8M6+tZqaGXZJjfX53e64911xZQV5JYwmTeXPW+k8Sc=
 github.com/cpuguy83/go-md2man/v2 v2.0.6/go.mod h1:oOW0eioCTA6cOiMLiUPZOpcVxMig6NIQQ7OS05n1F4g=
