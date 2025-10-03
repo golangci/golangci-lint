@@ -2290,6 +2290,11 @@ linters:
       patterns:
         - ".*"
 
+    recovercheck:
+      # Skip checking recover calls in *_test.go files.
+      # Default: false
+      skip-test-files: true
+
     recvcheck:
       # Disables the built-in method exclusions:
       # - `MarshalText`

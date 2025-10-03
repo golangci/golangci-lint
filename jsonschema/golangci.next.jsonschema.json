@@ -2870,6 +2870,17 @@
             }
           }
         },
+		"recovercheckSettings": {
+		  "type": "object",
+		  "additionalProperties": false,
+		  "properties": {
+            "skip-test-files": {
+              "description": "Skip checking recover calls in *_test.go files.",
+              "type": "boolean",
+              "default": false
+            }
+		  }
+		},
         "recvcheckSettings": {
           "type": "object",
           "additionalProperties": false,
