@@ -8,10 +8,12 @@ import (
 )
 
 func New(settings *config.RecovercheckSettings) *goanalysis.Linter {
-	var cfg recovercheck.
+	var cfg recovercheck.RecovercheckSettings
 
 	if settings != nil {
-		cfg.
+		cfg.SkipTestFiles = settings.SkipTestFiles
+	}
+
 	return goanalysis.
 		NewLinterFromAnalyzer(recovercheck.New()).
 		WithLoadMode(goanalysis.LoadModeTypesInfo)
