@@ -283,8 +283,8 @@ type LintersSettings struct {
 	Promlinter               PromlinterSettings               `mapstructure:"promlinter"`
 	ProtoGetter              ProtoGetterSettings              `mapstructure:"protogetter"`
 	Reassign                 ReassignSettings                 `mapstructure:"reassign"`
-	Recvcheck                RecvcheckSettings                `mapstructure:"recvcheck"`
 	Recovercheck             RecovercheckSettings             `mapstructure:"recovercheck"`
+	Recvcheck                RecvcheckSettings                `mapstructure:"recvcheck"`
 	Revive                   ReviveSettings                   `mapstructure:"revive"`
 	RowsErrCheck             RowsErrCheckSettings             `mapstructure:"rowserrcheck"`
 	SlogLint                 SlogLintSettings                 `mapstructure:"sloglint"`
@@ -819,13 +819,13 @@ type ReassignSettings struct {
 	Patterns []string `mapstructure:"patterns"`
 }
 
+type RecovercheckSettings struct {
+	SkipTestFiles bool `mapstructure:"skip-test-files"`
+}
+
 type RecvcheckSettings struct {
 	DisableBuiltin bool     `mapstructure:"disable-builtin"`
 	Exclusions     []string `mapstructure:"exclusions"`
-}
-
-type RecovercheckSettings struct {
-	SkipTestFiles bool `mapstructure:"skip-test-files"`
 }
 
 type ReviveSettings struct {
