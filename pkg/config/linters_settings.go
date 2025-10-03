@@ -284,6 +284,7 @@ type LintersSettings struct {
 	ProtoGetter              ProtoGetterSettings              `mapstructure:"protogetter"`
 	Reassign                 ReassignSettings                 `mapstructure:"reassign"`
 	Recvcheck                RecvcheckSettings                `mapstructure:"recvcheck"`
+	Recovercheck             RecovercheckSettings             `mapstructure:"recovercheck"`
 	Revive                   ReviveSettings                   `mapstructure:"revive"`
 	RowsErrCheck             RowsErrCheckSettings             `mapstructure:"rowserrcheck"`
 	SlogLint                 SlogLintSettings                 `mapstructure:"sloglint"`

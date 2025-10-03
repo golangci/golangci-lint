@@ -68,11 +68,11 @@ func SafeGoroutine3() {
 	}()
 }
 
-// Mock errgroup for testing
+// Group - Mock errgroup for testing
 type Group struct{}
 
 func (g *Group) Go(f func() error) {
-	go f()
+	go f() // want "goroutine created without panic recovery"
 }
 
 func (g *Group) Wait() error {

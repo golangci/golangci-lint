@@ -577,10 +577,10 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/raeperd/recvcheck"),
 
-		linter.NewConfig(recovercheck.New()).
+		linter.NewConfig(recovercheck.New(&cfg.Linters.Settings.Recovercheck)).
 			WithSince("v2.6.0").
 			WithLoadForGoAnalysis().
-			WithURL("https://github.com/cksidharthan/reovercheck"),
+			WithURL("https://github.com/cksidharthan/recovercheck"),
 
 		linter.NewConfig(revive.New(&cfg.Linters.Settings.Revive)).
 			WithSince("v1.37.0").
