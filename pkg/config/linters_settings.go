@@ -823,6 +823,10 @@ type RecvcheckSettings struct {
 	Exclusions     []string `mapstructure:"exclusions"`
 }
 
+type RecovercheckSettings struct {
+	SkipTestFiles bool `mapstructure:"skip-test-files"`
+}
+
 type ReviveSettings struct {
 	Go             string            `mapstructure:"-"`
 	MaxOpenFiles   int               `mapstructure:"max-open-files"`

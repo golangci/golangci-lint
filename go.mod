@@ -37,7 +37,7 @@ require (
 	github.com/charithe/durationcheck v0.0.10
 	github.com/charmbracelet/lipgloss v1.1.0
 	github.com/ckaznocha/intrange v0.3.1
-	github.com/cksidharthan/recovercheck v0.0.3
+	github.com/cksidharthan/recovercheck v1.3.0
 	github.com/curioswitch/go-reassign v0.3.0
 	github.com/daixiang0/gci v0.13.7
 	github.com/denis-tingaikin/go-header v0.5.0
