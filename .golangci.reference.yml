@@ -2330,6 +2330,9 @@ linters:
       # This means that linting errors with less than 0.8 confidence will be ignored.
       # Default: 0.8
       confidence: 0.1
+      # Revive handles the default rules in a way that can be unexpected:
+      # - If there are no explicit rules, the default rules are used.
+      # - If there is at least one explicit rule, the default rules are not used.
       # Run `GL_DEBUG=revive golangci-lint run --enable-only=revive` to see default, all available rules, and enabled rules.
       rules:
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#add-constant
