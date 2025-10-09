@@ -1,7 +1,7 @@
 /*
-	Copyright 2024 The Awesome Project Authors
+Copyright 2024 The Awesome Project Authors
 
-	Use of this source code is governed by LICENSE
+Use of this source code is governed by LICENSE
 */
 
 //golangcitest:args -Egoheader
