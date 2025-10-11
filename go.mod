@@ -108,6 +108,7 @@ require (
 	github.com/shirou/gopsutil/v4 v4.25.8
 	github.com/sirupsen/logrus v1.9.3
 	github.com/sivchari/containedctx v1.0.3
+	github.com/sollniss/unnecessaryerror v0.1.0
 	github.com/sonatard/noctx v0.4.0
 	github.com/sourcegraph/go-diff v0.7.0
 	github.com/spf13/cobra v1.10.1

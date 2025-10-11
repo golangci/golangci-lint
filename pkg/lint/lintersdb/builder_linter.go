@@ -108,6 +108,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/thelper"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/tparallel"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/unconvert"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/unnecessaryerror"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/unparam"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/unqueryvet"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/unused"
@@ -657,6 +658,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/mdempsky/unconvert"),
+
+		linter.NewConfig(unnecessaryerror.New()).
+			WithSince("v2.6.0").
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/sollniss/unnecessaryerror"),
 
 		linter.NewConfig(unparam.New(&cfg.Linters.Settings.Unparam)).
 			WithSince("v1.9.0").

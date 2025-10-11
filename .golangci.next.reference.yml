@@ -119,6 +119,7 @@ linters:
     - thelper
     - tparallel
     - unconvert
+    - unnecessaryerror
     - unparam
     - unqueryvet
     - unused
@@ -233,6 +234,7 @@ linters:
     - thelper
     - tparallel
     - unconvert
+    - unnecessaryerror
     - unparam
     - unqueryvet
     - unused

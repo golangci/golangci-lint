@@ -869,6 +869,7 @@
             "thelper",
             "tparallel",
             "unconvert",
+						"unnecessaryerror",
             "unparam",
             "unused",
             "usestdlibvars",
