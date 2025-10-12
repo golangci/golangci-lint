@@ -109,7 +109,7 @@ var (
 		waitgroup.Analyzer,
 	}
 
-	// https://github.com/golang/go/blob/go1.23.0/src/cmd/vet/main.go#L55-L87
+	// https://github.com/golang/go/blob/go1.25.2/src/cmd/vet/main.go#L57-L91
 	defaultAnalyzers = []*analysis.Analyzer{
 		appends.Analyzer,
 		asmdecl.Analyzer,
@@ -124,6 +124,7 @@ var (
 		directive.Analyzer,
 		errorsas.Analyzer,
 		framepointer.Analyzer,
+		hostport.Analyzer,
 		httpresponse.Analyzer,
 		ifaceassert.Analyzer,
 		loopclosure.Analyzer,
@@ -144,6 +145,7 @@ var (
 		unreachable.Analyzer,
 		unsafeptr.Analyzer,
 		unusedresult.Analyzer,
+		waitgroup.Analyzer,
 	}
 )
 
