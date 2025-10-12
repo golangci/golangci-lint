@@ -73,6 +73,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/mirror"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/misspell"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/mnd"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/modernize"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/musttag"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/nakedret"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/nestif"
@@ -381,6 +382,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 		linter.NewConfig(mnd.New(&cfg.Linters.Settings.Mnd)).
 			WithSince("v1.22.0").
 			WithURL("https://github.com/tommy-muehle/go-mnd"),
+
+		linter.NewConfig(modernize.New(&cfg.Linters.Settings.Modernize)).
+			WithSince("v2.6.0").
+			WithLoadForGoAnalysis().
+			WithURL("https://pkg.go.dev/golang.org/x/tools/go/analysis/passes/modernize"),
 
 		linter.NewConfig(gomoddirectives.New(&cfg.Linters.Settings.GoModDirectives)).
 			WithSince("v1.39.0").

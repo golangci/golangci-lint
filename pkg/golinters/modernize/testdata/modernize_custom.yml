@@ -1,0 +1,7 @@
+version: "2"
+
+linters:
+  settings:
+    modernize:
+      disable:
+        - any
