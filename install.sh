@@ -68,6 +68,7 @@ get_binaries() {
     darwin/s390x) BINARIES="golangci-lint" ;;
     freebsd/386) BINARIES="golangci-lint" ;;
     freebsd/amd64) BINARIES="golangci-lint" ;;
+    freebsd/arm64) BINARIES="golangci-lint" ;;
     freebsd/armv6) BINARIES="golangci-lint" ;;
     freebsd/armv7) BINARIES="golangci-lint" ;;
     freebsd/mips64) BINARIES="golangci-lint" ;;
