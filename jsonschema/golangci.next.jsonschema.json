@@ -706,6 +706,28 @@
         "header"
       ]
     },
+    "modernize-analyzers": {
+      "enum": [
+        "any",
+        "bloop",
+        "fmtappendf",
+        "forvar",
+        "mapsloop",
+        "minmax",
+        "newexpr",
+        "omitzero",
+        "rangeint",
+        "reflecttypefor",
+        "slicescontains",
+        "slicessort",
+        "stditerators",
+        "stringscutprefix",
+        "stringsseq",
+        "stringsbuilder",
+        "testingcontext",
+        "waitgroup"
+      ]
+    },
     "wsl-checks": {
       "enum": [
         "assign",
@@ -835,6 +857,7 @@
             "mirror",
             "misspell",
             "mnd",
+            "modernize",
             "musttag",
             "nakedret",
             "nestif",
@@ -2829,6 +2852,19 @@
             }
           }
         },
+        "modernizeSettings": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "disable": {
+              "description": "List of analyzers to disable.",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/modernize-analyzers"
+              }
+            }
+          }
+        },
         "nolintlintSettings": {
           "type": "object",
           "additionalProperties": false,
@@ -4746,6 +4782,9 @@
             },
             "mnd": {
               "$ref": "#/definitions/settings/definitions/mndSettings"
+            },
+            "modernize": {
+              "$ref": "#/definitions/settings/definitions/modernizeSettings"
             },
             "nolintlint":{
               "$ref": "#/definitions/settings/definitions/nolintlintSettings"

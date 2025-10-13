@@ -269,6 +269,7 @@ type LintersSettings struct {
 	Makezero                 MakezeroSettings                 `mapstructure:"makezero"`
 	Misspell                 MisspellSettings                 `mapstructure:"misspell"`
 	Mnd                      MndSettings                      `mapstructure:"mnd"`
+	Modernize                ModernizeSettings                `mapstructure:"modernize"`
 	MustTag                  MustTagSettings                  `mapstructure:"musttag"`
 	Nakedret                 NakedretSettings                 `mapstructure:"nakedret"`
 	Nestif                   NestifSettings                   `mapstructure:"nestif"`
@@ -756,6 +757,10 @@ type MndSettings struct {
 	IgnoredNumbers   []string `mapstructure:"ignored-numbers"`
 	IgnoredFiles     []string `mapstructure:"ignored-files"`
 	IgnoredFunctions []string `mapstructure:"ignored-functions"`
+}
+
+type ModernizeSettings struct {
+	Disable []string `mapstructure:"disable"`
 }
 
 type NoLintLintSettings struct {
