@@ -67,7 +67,9 @@ func (lp *loadingPackage) analyze(ctx context.Context, cancel context.CancelFunc
 	case <-ctx.Done():
 		return
 	case loadSem <- struct{}{}:
-		defer func() { <-loadSem }()
+		defer func() {
+			<-loadSem
+		}()
 	}
 
 	// Save memory on unused more fields.
