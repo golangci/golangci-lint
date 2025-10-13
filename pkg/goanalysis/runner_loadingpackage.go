@@ -63,15 +63,13 @@ func (lp *loadingPackage) analyzeRecursive(ctx context.Context, cancel context.C
 }
 
 func (lp *loadingPackage) analyze(ctx context.Context, cancel context.CancelFunc, loadMode LoadMode, loadSem chan struct{}) {
-	loadSem <- struct{}{}
-	defer func() {
-		<-loadSem
-	}()
-
 	select {
 	case <-ctx.Done():
 		return
-	default:
+	case loadSem <- struct{}{}:
+		defer func() {
+			<-loadSem
+		}()
 	}
 
 	// Save memory on unused more fields.
