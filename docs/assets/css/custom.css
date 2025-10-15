@@ -42,9 +42,9 @@
 }
 
 .hextra-banner {
-    background: #6BB43A;
-    background: linear-gradient(135deg, rgba(107, 180, 58, 1) 0%, rgba(29, 253, 253, 1) 50%, rgba(69, 145, 252, 1) 100%);
-    color: var(--hx-color-slate-900);
+    background: #833AB4;
+    background: linear-gradient(90deg,rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
+    /*color: var(--hx-color-slate-900);*/
 }
 
 .extra-banner-close-button {

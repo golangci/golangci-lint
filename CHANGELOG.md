@@ -8,6 +8,35 @@ If you value it, consider supporting us, we appreciate it!
 
 <!-- START --->
 
+### v2.6.0
+
+1. New linters
+   * Add `modernize` analyzer suite
+2. Linters new features or changes
+   * `arangolint`: from 0.2.0 to 0.3.1
+   * `dupword`: from 0.1.6 to 0.1.7 (new option `comments-only`)
+   * `go-critic`: from 0.13.0 to 0.14.0 (new rules/checkers: `zeroByteRepeat`, `dupOption`)
+   * `gofumpt`: from 0.9.1 to 0.9.2 ("clothe" naked returns is now controlled by the `extra-rules` option)
+   * `perfsprint`: from 0.9.1 to 0.10.0 (new options: `concat-loop`, `loop-other-ops`)
+   * `wsl`: from 5.2.0 to 5.3.0
+3. Linters bug fixes
+   * `dupword`: from 0.1.6 to 0.1.7
+   * `durationcheck`: from 0.0.10 to 0.0.11
+   * `exptostd`: from 0.4.4 to 0.4.5
+   * `fatcontext`: from 0.8.1 to 0.9.0
+   * `forbidigo`: from 2.1.0 to 2.3.0
+   * `ginkgolinter`: from 0.21.0 to 0.21.2
+   * `godoc-lint`: from 0.10.0 to 0.10.1
+   * `gomoddirectives`: from 0.7.0 to 0.7.1
+   * `gosec`: from 2.22.8 to 2.22.10
+   * `makezero`: from 2.0.1 to 2.1.0
+   * `nilerr`: from 0.1.1 to 0.1.2
+   * `paralleltest`: from 1.0.14 to 1.0.15
+   * `protogetter`: from 0.3.16 to 0.3.17
+   * `unparam`: from 0df0534333a4 to 5beb8c8f8f15
+4. Misc.
+   * fix: ignore some files to hash the version for custom build
+
 ### v2.5.0
 
 1. New linters
