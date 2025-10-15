@@ -131,6 +131,7 @@ var defaultLintersSettings = LintersSettings{
 		StrConcat:     true,
 		BoolFormat:    true,
 		HexFormat:     true,
+		ConcatLoop:    true,
 	},
 	Prealloc: PreallocSettings{
 		Simple:     true,
@@ -794,6 +795,9 @@ type PerfSprintSettings struct {
 
 	BoolFormat bool `mapstructure:"bool-format"`
 	HexFormat  bool `mapstructure:"hex-format"`
+
+	ConcatLoop   bool `mapstructure:"concat-loop"`
+	LoopOtherOps bool `mapstructure:"loop-other-ops"`
 }
 
 type PreallocSettings struct {

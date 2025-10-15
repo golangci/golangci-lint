@@ -2253,6 +2253,12 @@ linters:
       # Enable/disable optimization of hex formatting.
       # Default: true
       hex-format: false
+      # Enable/disable optimization of concat loop.
+      # Default: true
+      concat-loop: false
+      # Optimization of `concat-loop` even with other operations.
+      # Default: false
+      loop-other-ops: true
 
     prealloc:
       # IMPORTANT: we don't recommend using this linter before doing performance profiling.

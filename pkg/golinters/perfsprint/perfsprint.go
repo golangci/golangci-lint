@@ -28,6 +28,9 @@ func New(settings *config.PerfSprintSettings) *goanalysis.Linter {
 
 		cfg["bool-format"] = settings.BoolFormat
 		cfg["hex-format"] = settings.HexFormat
+
+		cfg["concat-loop"] = settings.ConcatLoop
+		cfg["loop-other-ops"] = settings.LoopOtherOps
 	}
 
 	return goanalysis.

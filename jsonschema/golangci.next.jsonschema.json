@@ -3004,6 +3004,16 @@
               "description": "Enable/disable optimization of hex formatting.",
               "type": "boolean",
               "default": true
+            },
+            "concat-loop": {
+              "description": "Enable/disable optimization of concat loop.",
+              "type": "boolean",
+              "default": true
+            },
+            "loop-other-ops": {
+              "description": "Optimization of `concat-loop` even with other operations.",
+              "type": "boolean",
+              "default": false
             }
           }
         },
