@@ -811,6 +811,9 @@ linters:
         # Detects multiple imports of the same package under different aliases.
         # https://go-critic.com/overview.html#dupimport
         - dupImport
+        # Detects duplicated option function arguments in variadic function calls.
+        # https://go-critic.com/overview.html#dupoption
+        - dupOption
         # Detects suspicious duplicated sub-expressions.
         # https://go-critic.com/overview.html#dupsubexpr
         - dupSubExpr
@@ -1045,6 +1048,9 @@ linters:
         # Detects Yoda style expressions and suggests to replace them.
         # https://go-critic.com/overview.html#yodastyleexpr
         - yodaStyleExpr
+        # Detects bytes.Repeat with 0 value.
+        # https://go-critic.com/overview.html#zerobyterepeat
+        - zeroByteRepeat
 
       # Enable all checks.
       # Default: false
