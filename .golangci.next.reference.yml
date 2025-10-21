@@ -398,6 +398,9 @@ linters:
       # Default: []
       ignore:
         - "0C0C"
+      # Checks only comments, skip strings.
+      # Default: false
+      comments-only: true
 
     embeddedstructfieldcheck:
       # Checks that there is an empty space between the embedded fields and regular fields.

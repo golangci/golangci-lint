@@ -945,6 +945,11 @@
                 "type": "string",
                 "examples": ["0C0C"]
               }
+            },
+            "comments-only": {
+              "description": "Checks only comments, skip strings.",
+              "type": "boolean",
+              "default": false
             }
           }
         },

@@ -43,8 +43,8 @@ dev.gaijin.team/go/golib v0.6.0/go.mod h1:uY1mShx8Z/aNHWDyAkZTkX+uCi5PdX7KsG1eDQ
 dmitri.shuralyov.com/gpu/mtl v0.0.0-20190408044501-666a987793e9/go.mod h1:H6x//7gZCb22OMCxBHrMx7a5I7Hp++hsVxbQ4BYO7hU=
 github.com/4meepo/tagalign v1.4.3 h1:Bnu7jGWwbfpAie2vyl63Zup5KuRv21olsPIha53BJr8=
 github.com/4meepo/tagalign v1.4.3/go.mod h1:00WwRjiuSbrRJnSVeGWPLp2epS5Q/l4UEy0apLLS37c=
-github.com/Abirdcfly/dupword v0.1.6 h1:qeL6u0442RPRe3mcaLcbaCi2/Y/hOcdtw6DE9odjz9c=
-github.com/Abirdcfly/dupword v0.1.6/go.mod h1:s+BFMuL/I4YSiFv29snqyjwzDp4b65W2Kvy+PKzZ6cw=
+github.com/Abirdcfly/dupword v0.1.7 h1:2j8sInznrje4I0CMisSL6ipEBkeJUJAmK1/lfoNGWrQ=
+github.com/Abirdcfly/dupword v0.1.7/go.mod h1:K0DkBeOebJ4VyOICFdppB23Q0YMOgVafM0zYW0n9lF4=
 github.com/AdminBenni/iota-mixing v1.0.0 h1:Os6lpjG2dp/AE5fYBPAA1zfa2qMdCAWwPMCgpwKq7wo=
 github.com/AdminBenni/iota-mixing v1.0.0/go.mod h1:i4+tpAaB+qMVIV9OK3m4/DAynOd5bQFaOu+2AhtBCNY=
 github.com/AlwxSin/noinlineerr v1.0.5 h1:RUjt63wk1AYWTXtVXbSqemlbVTb23JOSRiNsshj7TbY=
