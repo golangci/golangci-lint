@@ -14,8 +14,9 @@ func New(settings *config.DupWordSettings) *goanalysis.Linter {
 
 	if settings != nil {
 		cfg = map[string]any{
-			"keyword": strings.Join(settings.Keywords, ","),
-			"ignore":  strings.Join(settings.Ignore, ","),
+			"keyword":       strings.Join(settings.Keywords, ","),
+			"ignore":        strings.Join(settings.Ignore, ","),
+			"comments-only": settings.CommentsOnly,
 		}
 	}
 

@@ -1,0 +1,6 @@
+version: "2"
+
+linters:
+  settings:
+    dupword:
+      comments-only: true
