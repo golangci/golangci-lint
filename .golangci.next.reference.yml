@@ -25,6 +25,7 @@ linters:
     - asciicheck
     - bidichk
     - bodyclose
+    - boolset
     - canonicalheader
     - containedctx
     - contextcheck
@@ -140,6 +141,7 @@ linters:
     - asciicheck
     - bidichk
     - bodyclose
+    - boolset
     - canonicalheader
     - containedctx
     - contextcheck
