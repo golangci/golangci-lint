@@ -1,0 +1,36 @@
+//golangcitest:config_path testdata/revive-enable-default.yml
+//golangcitest:args -Erevive
+package testdata
+
+import (
+	"net/http"
+	"time"
+)
+
+// This function tests that default rules are still active (indent-error-flow is a default rule)
+func testEnableDefaultRules(t *time.Duration) error {
+	if t == nil {
+		return nil
+	} else { // want "indent-error-flow: if block ends with a return statement, .*"
+		return nil
+	}
+}
+
+// ExportedFunctionWithoutComment should not trigger because we disabled the exported rule
+func ExportedFunctionWithoutComment() {
+	// This is fine because 'exported' rule is disabled in the config
+}
+
+func testReviveComplexity(s string) { // want "cyclomatic: function testReviveComplexity has cyclomatic complexity 22"
+	if s == http.MethodGet || s == "2" || s == "3" || s == "4" || s == "5" || s == "6" || s == "7" {
+		return
+	}
+
+	if s == "1" || s == "2" || s == "3" || s == "4" || s == "5" || s == "6" || s == "7" {
+		return
+	}
+
+	if s == "1" || s == "2" || s == "3" || s == "4" || s == "5" || s == "6" || s == "7" {
+		return
+	}
+}

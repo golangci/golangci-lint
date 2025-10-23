@@ -193,7 +193,7 @@ func getConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
 		}
 	}
 
-	normalizeConfig(conf)
+	normalizeConfig(conf, cfg.EnableDefaultRules)
 
 	for k, r := range conf.Rules {
 		err := r.Initialize()
@@ -208,11 +208,12 @@ func getConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
 
 func createConfigMap(cfg *config.ReviveSettings) map[string]any {
 	rawRoot := map[string]any{
-		"confidence":     cfg.Confidence,
-		"severity":       cfg.Severity,
-		"errorCode":      cfg.ErrorCode,
-		"warningCode":    cfg.WarningCode,
-		"enableAllRules": cfg.EnableAllRules,
+		"confidence":         cfg.Confidence,
+		"severity":           cfg.Severity,
+		"errorCode":          cfg.ErrorCode,
+		"warningCode":        cfg.WarningCode,
+		"enableAllRules":     cfg.EnableAllRules,
+		"enableDefaultRules": cfg.EnableDefaultRules,
 
 		// Should be managed with `linters.exclusions.generated`.
 		"ignoreGeneratedHeader": false,
@@ -376,7 +377,7 @@ const defaultConfidence = 0.8
 
 // This element is not exported by revive, so we need copy the code.
 // Extracted from https://github.com/mgechev/revive/blob/v1.12.0/config/config.go#L206
-func normalizeConfig(cfg *lint.Config) {
+func normalizeConfig(cfg *lint.Config, enableDefaultRules bool) {
 	// NOTE(ldez): this custom section for golangci-lint should be kept.
 	// ---
 	cfg.Confidence = cmp.Or(cfg.Confidence, defaultConfidence)
@@ -395,6 +396,17 @@ func normalizeConfig(cfg *lint.Config) {
 				continue
 			}
 			// Add the rule with an empty conf for
+			cfg.Rules[ruleName] = lint.RuleConfig{}
+		}
+	}
+	if enableDefaultRules {
+		// Add to the configuration all default rules not yet present in it
+		for _, r := range defaultRules {
+			ruleName := r.Name()
+			_, alreadyInConf := cfg.Rules[ruleName]
+			if alreadyInConf {
+				continue
+			}
 			cfg.Rules[ruleName] = lint.RuleConfig{}
 		}
 	}

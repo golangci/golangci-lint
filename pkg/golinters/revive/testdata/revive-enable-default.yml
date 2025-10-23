@@ -1,0 +1,13 @@
+version: "2"
+
+linters:
+  settings:
+    revive:
+      enable-default-rules: true
+      rules:
+        # Disable one of the default rules
+        - name: exported
+          disabled: true
+        # Enable a non-default rule
+        - name: cyclomatic
+          arguments: [ 10 ]
