@@ -114,6 +114,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/unused"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/usestdlibvars"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/usetesting"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/varasconst"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/varnamelen"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/wastedassign"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/whitespace"
@@ -691,6 +692,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithAutoFix().
 			WithURL("https://github.com/ldez/usetesting"),
+
+		linter.NewConfig(varasconst.New()).
+			WithSince("v2.5.1").
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/MeenaAlfons/varasconst"),
 
 		linter.NewConfig(varnamelen.New(&cfg.Linters.Settings.Varnamelen)).
 			WithSince("v1.43.0").

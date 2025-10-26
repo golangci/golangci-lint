@@ -125,6 +125,7 @@ linters:
     - unused
     - usestdlibvars
     - usetesting
+    - varasconst
     - varnamelen
     - wastedassign
     - whitespace
@@ -240,6 +241,7 @@ linters:
     - unused
     - usestdlibvars
     - usetesting
+    - varasconst
     - varnamelen
     - wastedassign
     - whitespace
