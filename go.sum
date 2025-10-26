@@ -90,8 +90,8 @@ github.com/alingse/asasalint v0.0.11 h1:SFwnQXJ49Kx/1GghOFz1XGqHYKp21Kq1nHad/0WQ
 github.com/alingse/asasalint v0.0.11/go.mod h1:nCaoMhw7a9kSJObvQyVzNTPBDbNpdocqrSP7t/cW5+I=
 github.com/alingse/nilnesserr v0.2.0 h1:raLem5KG7EFVb4UIDAXgrv3N2JIaffeKNtcEXkEWd/w=
 github.com/alingse/nilnesserr v0.2.0/go.mod h1:1xJPrXonEtX7wyTq8Dytns5P2hNzoWymVUIaKm4HNFg=
-github.com/ashanbrown/forbidigo/v2 v2.1.0 h1:NAxZrWqNUQiDz19FKScQ/xvwzmij6BiOw3S0+QUQ+Hs=
-github.com/ashanbrown/forbidigo/v2 v2.1.0/go.mod h1:0zZfdNAuZIL7rSComLGthgc/9/n2FqspBOH90xlCHdA=
+github.com/ashanbrown/forbidigo/v2 v2.3.0 h1:OZZDOchCgsX5gvToVtEBoV2UWbFfI6RKQTir2UZzSxo=
+github.com/ashanbrown/forbidigo/v2 v2.3.0/go.mod h1:5p6VmsG5/1xx3E785W9fouMxIOkvY2rRV9nMdWadd6c=
 github.com/ashanbrown/makezero/v2 v2.0.1 h1:r8GtKetWOgoJ4sLyUx97UTwyt2dO7WkGFHizn/Lo8TY=
 github.com/ashanbrown/makezero/v2 v2.0.1/go.mod h1:kKU4IMxmYW1M4fiEHMb2vc5SFoPzXvgbMR9gIp5pjSw=
 github.com/aymanbagabas/go-osc52/v2 v2.0.1 h1:HwpRHbFMcZLEVr42D4p7XBqjyuxQH5SMiErDT4WkJ2k=
