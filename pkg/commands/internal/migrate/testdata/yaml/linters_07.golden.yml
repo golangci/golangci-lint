@@ -74,6 +74,7 @@ linters:
     - nonamedreturns
     - nosprintfhostport
     - paralleltest
+    - perfcheck
     - perfsprint
     - prealloc
     - predeclared

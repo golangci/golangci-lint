@@ -848,6 +848,7 @@
             "nonamedreturns",
             "nosprintfhostport",
             "paralleltest",
+            "perfcheck",
             "perfsprint",
             "prealloc",
             "predeclared",
@@ -2915,6 +2916,10 @@
             }
           }
         },
+        "perfcheckSettings": {
+          "type": "object",
+          "additionalProperties": false
+        },
         "perfsprintSettings": {
           "type": "object",
           "additionalProperties": false,
@@ -4761,6 +4766,9 @@
             },
             "paralleltest": {
               "$ref": "#/definitions/settings/definitions/paralleltestSettings"
+            },
+            "perfcheck": {
+              "$ref": "#/definitions/settings/definitions/perfcheckSettings"
             },
             "perfsprint": {
               "$ref": "#/definitions/settings/definitions/perfsprintSettings"

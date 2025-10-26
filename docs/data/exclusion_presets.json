@@ -49,6 +49,12 @@
         "gosec"
       ],
       "text": "G304: Potential file inclusion via variable"
+    },
+    {
+      "linters": [
+        "perfcheck"
+      ],
+      "text": "perf_prefer_stack_alloc"
     }
   ],
   "legacy": [

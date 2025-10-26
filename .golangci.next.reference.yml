@@ -99,6 +99,7 @@ linters:
     - nonamedreturns
     - nosprintfhostport
     - paralleltest
+    - perfcheck
     - perfsprint
     - prealloc
     - predeclared
@@ -214,6 +215,7 @@ linters:
     - nonamedreturns
     - nosprintfhostport
     - paralleltest
+    - perfcheck
     - perfsprint
     - prealloc
     - predeclared
@@ -2232,6 +2234,9 @@ linters:
       # still required to have `t.Parallel`, but subtests are allowed to skip it.
       # Default: false
       ignore-missing-subtests: true
+
+    # Perfcheck currently offers no configuration settings.
+    perfcheck: {}
 
     perfsprint:
       # Enable/disable optimization of integer formatting.

@@ -87,6 +87,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/nonamedreturns"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/nosprintfhostport"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/paralleltest"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/perfcheck"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/perfsprint"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/prealloc"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/predeclared"
@@ -547,6 +548,12 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.33.0").
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/kunwardeep/paralleltest"),
+
+		linter.NewConfig(perfcheck.New()).
+			WithSince("v2.6.0").
+			WithLoadForGoAnalysis().
+			ConsiderSlow().
+			WithURL("https://github.com/m-v-kalashnikov/perfcheck"),
 
 		linter.NewConfig(perfsprint.New(&cfg.Linters.Settings.PerfSprint)).
 			WithSince("v1.55.0").

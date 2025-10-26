@@ -409,6 +409,15 @@
     "since": "v1.22.0"
   },
   {
+    "name": "modernize",
+    "desc": "A suite of analyzers that suggest simplifications to Go code, using modern language and library features.",
+    "loadMode": 8767,
+    "originalURL": "https://pkg.go.dev/golang.org/x/tools/go/analysis/passes/modernize",
+    "internal": false,
+    "isSlow": true,
+    "since": "v2.6.0"
+  },
+  {
     "name": "gomoddirectives",
     "desc": "Manage the use of 'replace', 'retract', and 'excludes' directives in go.mod.",
     "loadMode": 8199,
@@ -717,6 +726,15 @@
     "internal": false,
     "isSlow": true,
     "since": "v1.33.0"
+  },
+  {
+    "name": "perfcheck",
+    "desc": "Performance-by-default analyzers",
+    "loadMode": 8767,
+    "originalURL": "https://github.com/m-v-kalashnikov/perfcheck",
+    "internal": false,
+    "isSlow": true,
+    "since": "v2.6.0"
   },
   {
     "name": "perfsprint",

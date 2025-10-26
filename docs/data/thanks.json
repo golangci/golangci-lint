@@ -263,6 +263,7 @@
     "linters": [
       "gofmt",
       "goimports",
+      "modernize",
       "govet"
     ],
     "profile": "https://github.com/sponsors/golang",
@@ -383,6 +384,14 @@
     ],
     "profile": "https://github.com/sponsors/leonklingele",
     "avatar": "https://github.com/leonklingele.png"
+  },
+  {
+    "name": "m-v-kalashnikov",
+    "linters": [
+      "perfcheck"
+    ],
+    "profile": "https://github.com/sponsors/m-v-kalashnikov",
+    "avatar": "https://github.com/m-v-kalashnikov.png"
   },
   {
     "name": "macabu",

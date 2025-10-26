@@ -1,6 +1,6 @@
 module github.com/golangci/golangci-lint/v2
 
-go 1.24.0
+go 1.25.0
 
 require (
 	4d63.com/gocheckcompilerdirectives v1.3.0
@@ -79,6 +79,7 @@ require (
 	github.com/ldez/tagliatelle v0.7.2
 	github.com/ldez/usetesting v0.5.0
 	github.com/leonklingele/grouper v1.1.2
+	github.com/m-v-kalashnikov/perfcheck/go v0.1.1
 	github.com/macabu/inamedparam v0.2.0
 	github.com/manuelarte/embeddedstructfieldcheck v0.4.0
 	github.com/manuelarte/funcorder v0.5.0

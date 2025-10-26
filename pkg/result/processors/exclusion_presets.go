@@ -86,6 +86,15 @@ var LinterExclusionPresets = map[string][]config.ExcludeRule{
 				InternalReference: "EXC0010",
 			},
 		},
+		{
+			// perfcheck complains about tiny unsafe.Pointer indirections even though
+			// they stay on stack and are intentional in low-level code.
+			BaseRule: config.BaseRule{
+				Text:              "perf_prefer_stack_alloc",
+				Linters:           []string{"perfcheck"},
+				InternalReference: "EXC0016",
+			},
+		},
 	},
 	config.ExclusionPresetLegacy: {
 		{

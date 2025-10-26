@@ -175,7 +175,7 @@ Presets:
 | import | `depguard`, `gci`, `goimports`, `gomodguard` |
 | metalinter | `gocritic`, `govet`, `revive`, `staticcheck` |
 | module | `depguard`, `gomoddirectives`, `gomodguard` |
-| performance | `bodyclose`, `fatcontext`, `noctx`, `perfsprint`, `prealloc` |
+| performance | `bodyclose`, `fatcontext`, `noctx`, `perfcheck`, `perfsprint`, `prealloc` |
 | sql | `rowserrcheck`, `sqlclosecheck` |
 | style | `asciicheck`, `canonicalheader`, `containedctx`, `copyloopvar`, `decorder`, `depguard`, `dogsled`, `dupl`, `err113`, `errname`, `exhaustruct`, `exptostd`, `forbidigo`, `forcetypeassert`, `ginkgolinter`, `gochecknoglobals`, `gochecknoinits`, `goconst`, `gocritic`, `godot`, `godox`, `goheader`, `gomoddirectives`, `gomodguard`, `goprintffuncname`, `gosimple`, `grouper`, `iface`, `importas`, `inamedparam`, `interfacebloat`, `intrange`, `ireturn`, `lll`, `loggercheck`, `makezero`, `mirror`, `misspell`, `mnd`, `musttag`, `nakedret`, `nilnil`, `nlreturn`, `nolintlint`, `nonamedreturns`, `nosprintfhostport`, `paralleltest`, `predeclared`, `promlinter`, `revive`, `sloglint`, `stylecheck`, `tagalign`, `tagliatelle`, `testpackage`, `tparallel`, `unconvert`, `usestdlibvars`, `varnamelen`, `wastedassign`, `whitespace`, `wrapcheck`, `wsl` |
 | test | `exhaustruct`, `paralleltest`, `testableexamples`, `testifylint`, `testpackage`, `thelper`, `tparallel`, `usetesting` |

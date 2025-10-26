@@ -53,6 +53,7 @@ linters:
     - noctx
     - nonamedreturns
     - paralleltest
+    - perfcheck
     - perfsprint
     - protogetter
     - reassign

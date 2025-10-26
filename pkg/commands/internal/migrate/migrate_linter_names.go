@@ -566,6 +566,11 @@ func allLinters() []LinterInfo {
 			Slow:    true,
 		},
 		{
+			Name:    "perfcheck",
+			Presets: []string{"performance"},
+			Slow:    true,
+		},
+		{
 			Name:    "perfsprint",
 			Presets: []string{"performance"},
 			Slow:    true,
