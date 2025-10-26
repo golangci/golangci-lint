@@ -34,7 +34,7 @@ require (
 	github.com/butuzov/ireturn v0.4.0
 	github.com/butuzov/mirror v1.3.0
 	github.com/catenacyber/perfsprint v0.10.0
-	github.com/charithe/durationcheck v0.0.10
+	github.com/charithe/durationcheck v0.0.11
 	github.com/charmbracelet/lipgloss v1.1.0
 	github.com/ckaznocha/intrange v0.3.1
 	github.com/curioswitch/go-reassign v0.3.0
