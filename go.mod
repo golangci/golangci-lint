@@ -3,7 +3,7 @@ module github.com/golangci/golangci-lint/v2
 // The minimum Go version must always be latest-1.
 // This version should never be changed outside of the PR to add the support of newer Go version.
 // Only golangci-lint maintainers are allowed to change it.
-go 1.24.0
+go 1.25.0
 
 require (
 	4d63.com/gocheckcompilerdirectives v1.3.0
