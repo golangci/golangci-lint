@@ -116,6 +116,9 @@ brews:
     test: |
       system "#{bin}/golangci-lint --version"
 
+## chocolatey is disabled because mono has been removed from GitHub Actions runners due to security and maintenance concerns.
+## The release is done manually and locally, with goreleaser after the release of the other elements.
+## Note(ldez): add documentation about how to do it.
 #chocolateys:
 #  - summary: Fast linters Runner for Go
 #    description: |
