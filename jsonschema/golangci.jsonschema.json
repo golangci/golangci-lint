@@ -32,6 +32,7 @@
         "dupBranchBody",
         "dupCase",
         "dupImport",
+        "dupOption",
         "dupSubExpr",
         "dynamicFmtString",
         "elseif",
@@ -53,7 +54,6 @@
         "importShadow",
         "indexAlloc",
         "initClause",
-        "ioutilDeprecated",
         "mapKey",
         "methodExprCall",
         "nestingReduce",
@@ -110,7 +110,8 @@
         "weakCond",
         "whyNoLint",
         "wrapperFunc",
-        "yodaStyleExpr"
+        "yodaStyleExpr",
+        "zeroByteRepeat"
       ]
     },
     "gocritic-tags": {
@@ -706,6 +707,28 @@
         "header"
       ]
     },
+    "modernize-analyzers": {
+      "enum": [
+        "any",
+        "bloop",
+        "fmtappendf",
+        "forvar",
+        "mapsloop",
+        "minmax",
+        "newexpr",
+        "omitzero",
+        "rangeint",
+        "reflecttypefor",
+        "slicescontains",
+        "slicessort",
+        "stditerators",
+        "stringscutprefix",
+        "stringsseq",
+        "stringsbuilder",
+        "testingcontext",
+        "waitgroup"
+      ]
+    },
     "wsl-checks": {
       "enum": [
         "assign",
@@ -835,6 +858,7 @@
             "mirror",
             "misspell",
             "mnd",
+            "modernize",
             "musttag",
             "nakedret",
             "nestif",
@@ -921,6 +945,11 @@
                 "type": "string",
                 "examples": ["0C0C"]
               }
+            },
+            "comments-only": {
+              "description": "Checks only comments, skip strings.",
+              "type": "boolean",
+              "default": false
             }
           }
         },
@@ -2829,6 +2858,19 @@
             }
           }
         },
+        "modernizeSettings": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "disable": {
+              "description": "List of analyzers to disable.",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/modernize-analyzers"
+              }
+            }
+          }
+        },
         "nolintlintSettings": {
           "type": "object",
           "additionalProperties": false,
@@ -2968,6 +3010,16 @@
               "description": "Enable/disable optimization of hex formatting.",
               "type": "boolean",
               "default": true
+            },
+            "concat-loop": {
+              "description": "Enable/disable optimization of concat loop.",
+              "type": "boolean",
+              "default": true
+            },
+            "loop-other-ops": {
+              "description": "Optimization of `concat-loop` even with other operations.",
+              "type": "boolean",
+              "default": false
             }
           }
         },
@@ -4746,6 +4798,9 @@
             },
             "mnd": {
               "$ref": "#/definitions/settings/definitions/mndSettings"
+            },
+            "modernize": {
+              "$ref": "#/definitions/settings/definitions/modernizeSettings"
             },
             "nolintlint":{
               "$ref": "#/definitions/settings/definitions/nolintlintSettings"

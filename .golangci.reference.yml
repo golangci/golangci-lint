@@ -85,6 +85,7 @@ linters:
     - mirror
     - misspell
     - mnd
+    - modernize
     - musttag
     - nakedret
     - nestif
@@ -199,6 +200,7 @@ linters:
     - mirror
     - misspell
     - mnd
+    - modernize
     - musttag
     - nakedret
     - nestif
@@ -396,6 +398,9 @@ linters:
       # Default: []
       ignore:
         - "0C0C"
+      # Checks only comments, skip strings.
+      # Default: false
+      comments-only: true
 
     embeddedstructfieldcheck:
       # Checks that there is an empty space between the embedded fields and regular fields.
@@ -809,6 +814,9 @@ linters:
         # Detects multiple imports of the same package under different aliases.
         # https://go-critic.com/overview.html#dupimport
         - dupImport
+        # Detects duplicated option function arguments in variadic function calls.
+        # https://go-critic.com/overview.html#dupoption
+        - dupOption
         # Detects suspicious duplicated sub-expressions.
         # https://go-critic.com/overview.html#dupsubexpr
         - dupSubExpr
@@ -1043,6 +1051,9 @@ linters:
         # Detects Yoda style expressions and suggests to replace them.
         # https://go-critic.com/overview.html#yodastyleexpr
         - yodaStyleExpr
+        # Detects bytes.Repeat with 0 value.
+        # https://go-critic.com/overview.html#zerobyterepeat
+        - zeroByteRepeat
 
       # Enable all checks.
       # Default: false
@@ -2106,6 +2117,47 @@ linters:
         - '^math\.'
         - '^http\.StatusText$'
 
+    modernize:
+      # List of analyzers to disable.
+      # By default, all analyzers are enabled.
+      disable:
+        # Replace interface{} with any.
+        - any
+        # Replace for-range over b.N with b.Loop.
+        - bloop
+        # Replace []byte(fmt.Sprintf) with fmt.Appendf.
+        - fmtappendf
+        # Remove redundant re-declaration of loop variables.
+        - forvar
+        # Replace explicit loops over maps with calls to maps package.
+        - mapsloop
+        # Replace if/else statements with calls to min or max.
+        - minmax
+        # Simplify code by using go1.26's new(expr).
+        - newexpr
+        # Suggest replacing omitempty with omitzero for struct fields.
+        - omitzero
+        # Replace 3-clause for loops with for-range over integers.
+        - rangeint
+        # Replace reflect.TypeOf(x) with TypeFor[T]().
+        - reflecttypefor
+        # Replace loops with slices.Contains or slices.ContainsFunc.
+        - slicescontains
+        # Replace sort.Slice with slices.Sort for basic types.
+        - slicessort
+        # Use iterators instead of Len/At-style APIs.
+        - stditerators
+        # Replace HasPrefix/TrimPrefix with CutPrefix.
+        - stringscutprefix
+        # Replace ranging over Split/Fields with SplitSeq/FieldsSeq.
+        - stringsseq
+        # Replace += with strings.Builder.
+        - stringsbuilder
+        # Replace context.WithCancel with t.Context in tests.
+        - testingcontext
+        # Replace wg.Add(1)/go/wg.Done() with wg.Go.
+        - waitgroup
+
     musttag:
       # A set of custom functions to check in addition to the builtin ones.
       # Default: json, xml, gopkg.in/yaml.v3, BurntSushi/toml, mitchellh/mapstructure, jmoiron/sqlx
@@ -2212,6 +2264,12 @@ linters:
       # Enable/disable optimization of hex formatting.
       # Default: true
       hex-format: false
+      # Enable/disable optimization of concat loop.
+      # Default: true
+      concat-loop: false
+      # Optimization of `concat-loop` even with other operations.
+      # Default: false
+      loop-other-ops: true
 
     prealloc:
       # IMPORTANT: we don't recommend using this linter before doing performance profiling.
