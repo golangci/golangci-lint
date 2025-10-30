@@ -23,5 +23,6 @@ func _() {
 }
 
 func _() {
-	_ = fmt.Sprintf("gopher://%s:%d", "myHost", 70) // want "host:port in url should be constructed with net.JoinHostPort and not directly with fmt.Sprintf"
+	ip := "fd00::1"
+	_ = fmt.Sprintf("http://%s:1936/healthz", ip) // want "host:port in url should be constructed with net.JoinHostPort and not directly with fmt.Sprintf"
 }
