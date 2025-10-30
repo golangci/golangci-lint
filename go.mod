@@ -67,7 +67,7 @@ require (
 	github.com/jingyugao/rowserrcheck v1.1.1
 	github.com/jjti/go-spancheck v0.6.5
 	github.com/julz/importas v0.2.0
-	github.com/karamaru-alpha/copyloopvar v1.2.1
+	github.com/karamaru-alpha/copyloopvar v1.2.2
 	github.com/kisielk/errcheck v1.9.0
 	github.com/kkHAIKE/contextcheck v1.1.6
 	github.com/kulti/thelper v0.7.1
