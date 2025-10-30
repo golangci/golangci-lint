@@ -114,7 +114,7 @@ require (
 	github.com/spf13/pflag v1.0.10
 	github.com/spf13/viper v1.12.0
 	github.com/ssgreg/nlreturn/v2 v2.2.1
-	github.com/stbenjam/no-sprintf-host-port v0.2.0
+	github.com/stbenjam/no-sprintf-host-port v0.3.1
 	github.com/stretchr/testify v1.11.1
 	github.com/tetafro/godot v1.5.4
 	github.com/timakin/bodyclose v0.0.0-20241222091800-1db5c5ca4d67
