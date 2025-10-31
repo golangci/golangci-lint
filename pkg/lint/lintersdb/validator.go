@@ -1,7 +1,6 @@
 package lintersdb
 
 import (
-	"fmt"
 	"os"
 	"strings"
 
@@ -61,7 +60,7 @@ func (v Validator) validateLintersNames(cfg *config.Linters) error {
 	}
 
 	if len(unknownNames) > 0 {
-		return fmt.Errorf("unknown linters: '%v', run 'golangci-lint help linters' to see the list of supported linters",
+		v.m.log.Warnf("unknown linters: '%v', run 'golangci-lint help linters' to see the list of supported linters",
 			strings.Join(unknownNames, ","))
 	}
 
