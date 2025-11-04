@@ -4,6 +4,11 @@ on:
     tags:
       - v*
 
+permissions:
+  # Allow the workflow to write attestations.
+  id-token: write
+  attestations: write
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -80,6 +85,8 @@ jobs:
       - uses: actions/attest-build-provenance@v3
         with:
           subject-checksums: ./dist/golangci-lint-*-checksums.txt
+          github-token: ${{ secrets.GOLANGCI_LINT_TOKEN }}
       - uses: actions/attest-build-provenance@v3
         with:
           subject-checksums: ./dist/digests.txt
+          github-token: ${{ secrets.GOLANGCI_LINT_TOKEN }}

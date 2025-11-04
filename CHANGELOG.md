@@ -10,6 +10,12 @@ If you value it, consider supporting us, we appreciate it!
 
 ### v2.6.0
 
+1. Linters bug fixes
+   * `copyloopvar`: from 1.2.1 to 1.2.2
+   * `go-critic`: from 0.14.0 to 0.14.2
+
+### v2.6.0
+
 1. New linters
    * Add `modernize` analyzer suite
 2. Linters new features or changes
