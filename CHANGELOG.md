@@ -8,7 +8,7 @@ If you value it, consider supporting us, we appreciate it!
 
 <!-- START --->
 
-### v2.6.0
+### v2.6.1
 
 1. Linters bug fixes
    * `copyloopvar`: from 1.2.1 to 1.2.2
