@@ -138,5 +138,5 @@ func setupIssuesFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 	internal.AddFlagAndBind(v, fs, fs.Bool, "whole-files", "issues.whole-files", false,
 		color.GreenString("Show issues in any part of update files (requires new-from-rev or new-from-patch)"))
 	internal.AddFlagAndBind(v, fs, fs.Bool, "fix", "issues.fix", false,
-		color.GreenString("Fix found issues (if it's supported by the linter)"))
+		color.GreenString("Apply the fixes detected by the linters and formatters (if it's supported by the linter)"))
 }
