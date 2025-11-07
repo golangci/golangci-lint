@@ -166,7 +166,7 @@ func (c *Cache) computePkgHash(pkg *packages.Package) (hashResults, error) {
 
 	fmt.Fprintf(key, "pkgpath %s\n", pkg.PkgPath)
 
-	for _, f := range pkg.CompiledGoFiles {
+	for _, f := range slices.Concat(pkg.CompiledGoFiles, pkg.IgnoredFiles) {
 		h, fErr := c.fileHash(f)
 		if fErr != nil {
 			return nil, fmt.Errorf("failed to calculate file %s hash: %w", f, fErr)
