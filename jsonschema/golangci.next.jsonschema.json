@@ -5064,7 +5064,7 @@
           "examples": ["path/to/patch/file"]
         },
         "fix": {
-          "description": "Fix found issues (if it's supported by the linter).",
+          "description": "Apply the fixes detected by the linters and formatters (if it's supported by the linter).",
           "type": "boolean",
           "default": false
         },
