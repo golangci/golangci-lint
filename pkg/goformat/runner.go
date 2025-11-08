@@ -223,8 +223,13 @@ func NewRunnerOptions(cfg *config.Config, diff, diffColored, stdin bool) (Runner
 		return RunnerOptions{}, fmt.Errorf("get base path: %w", err)
 	}
 
+	evaluatedBasePath, err := fsutils.EvalSymlinks(basePath)
+	if err != nil {
+		return RunnerOptions{}, fmt.Errorf("evaluate base path: %w", err)
+	}
+
 	opts := RunnerOptions{
-		basePath:            basePath,
+		basePath:            evaluatedBasePath,
 		generated:           cfg.Formatters.Exclusions.Generated,
 		diff:                diff || diffColored,
 		colors:              diffColored,
@@ -251,7 +256,6 @@ func (o RunnerOptions) MatchAnyPattern(path string) (bool, error) {
 		return false, nil
 	}
 
-	// The basePath is already resolved via `fsutils.Getwd()` in `NewRunnerOptions`.
 	evaluatedPath, err := fsutils.EvalSymlinks(path)
 	if err != nil {
 		return false, err

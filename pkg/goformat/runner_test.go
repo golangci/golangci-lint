@@ -3,14 +3,12 @@ package goformat
 import (
 	"os"
 	"path/filepath"
-	"runtime"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
-	"github.com/golangci/golangci-lint/v2/pkg/fsutils"
 )
 
 func TestRunnerOptions_MatchAnyPattern(t *testing.T) {
@@ -121,14 +119,6 @@ func TestRunnerOptions_MatchAnyPattern_withSymlinks(t *testing.T) {
 	}
 
 	cfg.SetConfigDir(realDir)
-
-	if runtime.GOOS == "windows" || runtime.GOOS == "darwin" {
-		// IMPORTANT: On macOS, `tmpDir` might be` /var/..`. which is itself a symlink to `/private/var/...`
-		resolvedBasePath, errEval := fsutils.EvalSymlinks(realDir)
-		require.NoError(t, errEval)
-
-		cfg.SetConfigDir(resolvedBasePath)
-	}
 
 	opts, err := NewRunnerOptions(cfg, false, false, false)
 	require.NoError(t, err)
