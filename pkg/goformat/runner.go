@@ -251,15 +251,13 @@ func (o RunnerOptions) MatchAnyPattern(path string) (bool, error) {
 		return false, nil
 	}
 
-	// Resolve symlinks in the file path to ensure filepath.Rel works correctly
-	// when running inside symlinked directories. The basePath is already resolved
-	// via fsutils.Getwd() in NewRunnerOptions.
-	evalPath, err := fsutils.EvalSymlinks(path)
+	// The basePath is already resolved via `fsutils.Getwd()` in `NewRunnerOptions`.
+	evaluatedPath, err := fsutils.EvalSymlinks(path)
 	if err != nil {
 		return false, err
 	}
 
-	rel, err := filepath.Rel(o.basePath, evalPath)
+	rel, err := filepath.Rel(o.basePath, evaluatedPath)
 	if err != nil {
 		return false, err
 	}
