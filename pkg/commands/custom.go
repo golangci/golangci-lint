@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 
 	"github.com/golangci/golangci-lint/v2/pkg/commands/internal"
@@ -13,10 +14,18 @@ import (
 
 const envKeepTempFiles = "CUSTOM_GCL_KEEP_TEMP_FILES"
 
+type customOptions struct {
+	version     string
+	name        string
+	destination string
+}
+
 type customCommand struct {
 	cmd *cobra.Command
 
 	cfg *internal.Configuration
+
+	opts customOptions
 
 	log logutils.Log
 }
@@ -33,6 +42,13 @@ func newCustomCommand(logger logutils.Log) *customCommand {
 		SilenceUsage: true,
 	}
 
+	flagSet := customCmd.PersistentFlags()
+	flagSet.SortFlags = false // sort them as they are defined here
+
+	flagSet.StringVar(&c.opts.version, "version", "", color.GreenString("The golangci-lint version used to build the custom binary"))
+	flagSet.StringVar(&c.opts.name, "name", "", color.GreenString("The name of the custom binary"))
+	flagSet.StringVar(&c.opts.destination, "destination", "", color.GreenString("The directory path used to store the custom binary"))
+
 	c.cmd = customCmd
 
 	return c
@@ -42,6 +58,18 @@ func (c *customCommand) preRunE(_ *cobra.Command, _ []string) error {
 	cfg, err := internal.LoadConfiguration()
 	if err != nil {
 		return err
+	}
+
+	if c.opts.version != "" {
+		cfg.Version = c.opts.version
+	}
+
+	if c.opts.name != "" {
+		cfg.Name = c.opts.name
+	}
+
+	if c.opts.destination != "" {
+		cfg.Destination = c.opts.destination
 	}
 
 	err = cfg.Validate()
