@@ -227,6 +227,7 @@ type LintersSettings struct {
 	Cyclop                   CyclopSettings                   `mapstructure:"cyclop"`
 	Decorder                 DecorderSettings                 `mapstructure:"decorder"`
 	Depguard                 DepGuardSettings                 `mapstructure:"depguard"`
+	Docnametypo              DocnameTypoSettings              `mapstructure:"docnametypo"`
 	Dogsled                  DogsledSettings                  `mapstructure:"dogsled"`
 	Dupl                     DuplSettings                     `mapstructure:"dupl"`
 	DupWord                  DupWordSettings                  `mapstructure:"dupword"`
@@ -375,6 +376,17 @@ type DecorderSettings struct {
 	DisableVarDecNumCheck     bool     `mapstructure:"disable-var-dec-num-check"`
 	DisableDecOrderCheck      bool     `mapstructure:"disable-dec-order-check"`
 	DisableInitFuncFirstCheck bool     `mapstructure:"disable-init-func-first-check"`
+}
+
+type DocnameTypoSettings struct {
+	MaxDist                  int    `mapstructure:"maxdist"`
+	IncludeUnexported        bool   `mapstructure:"include-unexported"`
+	IncludeExported          bool   `mapstructure:"include-exported"`
+	IncludeTypes             bool   `mapstructure:"include-types"`
+	IncludeGenerated         bool   `mapstructure:"include-generated"`
+	IncludeInterfaceMethods  bool   `mapstructure:"include-interface-methods"`
+	AllowedLeadingWords      string `mapstructure:"allowed-leading-words"`
+	AllowedPrefixes          string `mapstructure:"allowed-prefixes"`
 }
 
 type DogsledSettings struct {

@@ -15,6 +15,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/cyclop"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/decorder"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/depguard"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/docnametypo"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/dogsled"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/dupl"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/dupword"
@@ -199,6 +200,10 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 		linter.NewConfig(depguard.New(&cfg.Linters.Settings.Depguard, placeholderReplacer)).
 			WithSince("v1.4.0").
 			WithURL("https://github.com/OpenPeeDeeP/depguard"),
+
+		linter.NewConfig(docnametypo.New(&cfg.Linters.Settings.Docnametypo)).
+			WithSince("v2.7.0").
+			WithURL("https://github.com/cce/docnametypo"),
 
 		linter.NewConfig(dogsled.New(&cfg.Linters.Settings.Dogsled)).
 			WithSince("v1.19.0").

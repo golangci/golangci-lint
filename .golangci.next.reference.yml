@@ -32,6 +32,7 @@ linters:
     - cyclop
     - decorder
     - depguard
+    - docnametypo
     - dogsled
     - dupl
     - dupword
@@ -147,6 +148,7 @@ linters:
     - cyclop
     - decorder
     - depguard
+    - docnametypo
     - dogsled
     - dupl
     - dupword
@@ -375,6 +377,33 @@ linters:
               desc: not allowed
             - pkg: "github.com/pkg/errors"
               desc: Should be replaced by standard lib errors package
+
+    # https://github.com/cce/docnametypo
+    docnametypo:
+      # Maximum Damerau-Levenshtein distance before a pair of words stops being considered a typo.
+      # Default: 1
+      maxdist: 2
+      # Check unexported functions/methods/types.
+      # Default: true
+      include-unexported: false
+      # Check exported declarations.
+      # Default: false
+      include-exported: true
+      # Extend the check to type declarations.
+      # Default: false
+      include-types: true
+      # Include files that carry the "// Code generated ... DO NOT EDIT." header.
+      # Default: false
+      include-generated: true
+      # Check interface method declarations.
+      # Default: false
+      include-interface-methods: true
+      # Comma-separated verbs treated as narrative intros (e.g. "Create", "Configure", "Tests"); matching comments are skipped.
+      # Default: "create,creates,creating,initialize,initializes,init,configure,configures,setup,setups,start,starts,read,reads,write,writes,send,sends,generate,generates,decode,decodes,encode,encodes,marshal,marshals,unmarshal,unmarshals,apply,applies,process,processes,make,makes,build,builds,test,tests"
+      allowed-leading-words: "create,configure,setup,validate,process"
+      # Comma-separated list of symbol prefixes (such as "op") that may be stripped before comparing to the doc token.
+      # Default: ""
+      allowed-prefixes: "op,ui"
 
     dogsled:
       # Checks assignments with too many blank identifiers.

@@ -1,0 +1,7 @@
+linters-settings:
+  docnametypo:
+    include-exported: true
+    include-types: true
+    allowed-prefixes: "op,ui"
+    allowed-leading-words: "validate,validates"
+    maxdist: 2
