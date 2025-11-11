@@ -223,8 +223,14 @@ func NewRunnerOptions(cfg *config.Config, diff, diffColored, stdin bool) (Runner
 		return RunnerOptions{}, fmt.Errorf("get base path: %w", err)
 	}
 
+	// Required to be consistent with `RunnerOptions.MatchAnyPattern`.
+	absBasePath, err := filepath.Abs(basePath)
+	if err != nil {
+		return RunnerOptions{}, err
+	}
+
 	opts := RunnerOptions{
-		basePath:            basePath,
+		basePath:            absBasePath,
 		generated:           cfg.Formatters.Exclusions.Generated,
 		diff:                diff || diffColored,
 		colors:              diffColored,
@@ -251,7 +257,12 @@ func (o RunnerOptions) MatchAnyPattern(path string) (bool, error) {
 		return false, nil
 	}
 
-	rel, err := filepath.Rel(o.basePath, path)
+	abs, err := filepath.Abs(path)
+	if err != nil {
+		return false, err
+	}
+
+	rel, err := filepath.Rel(o.basePath, abs)
 	if err != nil {
 		return false, err
 	}
@@ -272,7 +283,7 @@ func skipDir(name string) bool {
 		return true
 
 	default:
-		return strings.HasPrefix(name, ".")
+		return strings.HasPrefix(name, ".") && name != "."
 	}
 }
 

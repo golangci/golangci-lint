@@ -113,14 +113,11 @@ func (c *fmtCommand) preRunE(_ *cobra.Command, _ []string) error {
 }
 
 func (c *fmtCommand) execute(_ *cobra.Command, args []string) error {
-	paths, err := cleanArgs(args)
-	if err != nil {
-		return fmt.Errorf("failed to clean arguments: %w", err)
-	}
+	paths := cleanArgs(args)
 
 	c.log.Infof("Formatting Go files...")
 
-	err = c.runner.Run(paths)
+	err := c.runner.Run(paths)
 	if err != nil {
 		return fmt.Errorf("failed to process files: %w", err)
 	}
@@ -134,25 +131,15 @@ func (c *fmtCommand) persistentPostRun(_ *cobra.Command, _ []string) {
 	}
 }
 
-func cleanArgs(args []string) ([]string, error) {
+func cleanArgs(args []string) []string {
 	if len(args) == 0 {
-		abs, err := filepath.Abs(".")
-		if err != nil {
-			return nil, err
-		}
-
-		return []string{abs}, nil
+		return []string{"."}
 	}
 
 	var expanded []string
 	for _, arg := range args {
-		abs, err := filepath.Abs(strings.ReplaceAll(arg, "...", ""))
-		if err != nil {
-			return nil, err
-		}
-
-		expanded = append(expanded, abs)
+		expanded = append(expanded, filepath.Clean(strings.ReplaceAll(arg, "...", "")))
 	}
 
-	return expanded, nil
+	return expanded
 }
