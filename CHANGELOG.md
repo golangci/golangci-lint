@@ -8,6 +8,24 @@ If you value it, consider supporting us, we appreciate it!
 
 <!-- START --->
 
+### v2.7.0
+
+1. Bug fixes
+   * fix: clone args used by `custom` command
+2. Linters new features or changes
+   * `no-sprintf-host-port`: from 0.2.0 to 0.3.1 (ignore string literals without a colon)
+   * `unqueryvet`: from 1.2.1 to 1.3.0 (handles `const` and `var` declarations)
+   * `revive`: from 1.12.0 to 1.13.0 (new option: `enable-default-rules`, new rules: `forbidden-call-in-wg-go`, `unnecessary-if`, `inefficient-map-lookup`)
+   * `modernize`: from 0.38.0 to 0.39.0 (new analyzers: `plusbuild`, `stringscut`)
+3. Linters bug fixes
+   * `perfsprint`: from 0.10.0 to 0.10.1
+   * `wrapcheck`: from 2.11.0 to 2.12.0
+   * `godoc-lint`: from 0.10.1 to 0.10.2
+4. Misc.
+   * Add some flags to the `custom` command
+5. Documentation
+   * docs: split changelog v1 and v2
+
 ### v2.6.2
 
 _Released on 2025-11-14_
