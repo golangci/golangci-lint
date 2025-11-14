@@ -2382,6 +2382,12 @@ linters:
       # Default: false
       enable-all-rules: true
 
+      # By default, the default rules are enabled,
+      # but if you provide a custom configuration, the default rules will be disabled.
+      # This option allows you to not explicitly enable the default rules.
+      # Default: false
+      enable-default-rules: true
+
       # Enable validation of comment directives.
       # See https://github.com/mgechev/revive#comment-directives
       directives:
@@ -2644,6 +2650,11 @@ linters:
           severity: warning
           disabled: false
           exclude: [""]
+        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#forbidden-call-in-wg-go
+        - name: forbidden-call-in-wg-go
+          severity: warning
+          disabled: false
+          exclude: [""]
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#function-length
         - name: function-length
           severity: warning
@@ -2726,6 +2737,11 @@ linters:
           exclude: [""]
           arguments:
             - "preserve-scope"
+        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#inefficient-map-lookup
+        - name: inefficient-map-lookup
+          severity: warning
+          disabled: false
+          exclude: [""]
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#line-length-limit
         - name: line-length-limit
           severity: warning
@@ -2844,6 +2860,7 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
+            - "!validate"
             - "json,inline"
             - "bson,outline,gnu"
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#superfluous-else
@@ -2900,6 +2917,11 @@ linters:
             - "myFunction"
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#unnecessary-format
         - name: unnecessary-format
+          severity: warning
+          disabled: false
+          exclude: [""]
+        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#unnecessary-if
+        - name: unnecessary-if
           severity: warning
           disabled: false
           exclude: [""]
@@ -2978,6 +3000,7 @@ linters:
             - - skip-initialism-name-checks: true
                 upper-case-const: true
                 skip-package-name-checks: true
+                skip-package-name-collision-with-go-std: true
                 extra-bad-package-names:
                   - helpers
                   - models
