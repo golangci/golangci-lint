@@ -8,6 +8,15 @@ If you value it, consider supporting us, we appreciate it!
 
 <!-- START --->
 
+### v2.6.2
+
+1. Bug fixes
+   * `fmt` command with symlinks
+   * use file depending on build configuration to invalidate cache
+2. Linters bug fixes
+   * `testableexamples`: from 1.0.0 to 1.0.1
+   * `testpackage`: from 1.1.1 to 1.1.2
+
 ### v2.6.1
 
 1. Linters bug fixes
