@@ -38,11 +38,8 @@ func assignTrueBreak(slice []int, needle int) {
 	print(found)
 }
 
-func assignFalseBreak(slice []int, needle int) { // TODO: treat this specially like booleanTrue
-	found := true
-	if slices.Contains(slice, needle) {
-		found = false
-	}
+func assignFalseBreak(slice []int, needle int) {
+	found := !slices.Contains(slice, needle)
 	print(found)
 }
 

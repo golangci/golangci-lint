@@ -12,17 +12,14 @@ import (
 // supported case for pattern 1.
 func _() {
 	var wg sync.WaitGroup
-	// want "Goroutine creation can be simplified using WaitGroup.Go"
 	wg.Go(func() {
 		fmt.Println()
 	})
 
-	// want "Goroutine creation can be simplified using WaitGroup.Go"
 	wg.Go(func() {
 	})
 
 	for range 10 {
-		// want "Goroutine creation can be simplified using WaitGroup.Go"
 		wg.Go(func() {
 			fmt.Println()
 		})
@@ -32,17 +29,14 @@ func _() {
 // supported case for pattern 2.
 func _() {
 	var wg sync.WaitGroup
-	// want "Goroutine creation can be simplified using WaitGroup.Go"
 	wg.Go(func() {
 		fmt.Println()
 	})
 
-	// want "Goroutine creation can be simplified using WaitGroup.Go"
 	wg.Go(func() {
 	})
 
 	for range 10 {
-		// want "Goroutine creation can be simplified using WaitGroup.Go"
 		wg.Go(func() {
 			fmt.Println()
 		})
@@ -52,19 +46,16 @@ func _() {
 // this function puts some wrong usages but waitgroup modernizer will still offer fixes.
 func _() {
 	var wg sync.WaitGroup
-	// want "Goroutine creation can be simplified using WaitGroup.Go"
 	wg.Go(func() {
 		defer wg.Done()
 		fmt.Println()
 	})
 
-	// want "Goroutine creation can be simplified using WaitGroup.Go"
 	wg.Go(func() {
 		fmt.Println()
 		wg.Done()
 	})
 
-	// want "Goroutine creation can be simplified using WaitGroup.Go"
 	wg.Go(func() {
 		fmt.Println()
 		wg.Done()
@@ -156,20 +147,17 @@ type ServerContainer struct {
 
 func _() {
 	var s Server
-	// want "Goroutine creation can be simplified using WaitGroup.Go"
 	s.wg.Go(func() {
 		print()
 	})
 
 	var sc ServerContainer
-	// want "Goroutine creation can be simplified using WaitGroup.Go"
 	sc.serv.wg.Go(func() {
 		print()
 	})
 
 	var wg sync.WaitGroup
 	arr := [1]*sync.WaitGroup{&wg}
-	// want "Goroutine creation can be simplified using WaitGroup.Go"
 	arr[0].Go(func() {
 		print()
 	})

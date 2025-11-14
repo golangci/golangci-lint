@@ -2137,6 +2137,8 @@ linters:
         - newexpr
         # Suggest replacing omitempty with omitzero for struct fields.
         - omitzero
+        # Remove obsolete //+build comments.
+        - plusbuild
         # Replace 3-clause for loops with for-range over integers.
         - rangeint
         # Replace reflect.TypeOf(x) with TypeFor[T]().
@@ -2147,6 +2149,8 @@ linters:
         - slicessort
         # Use iterators instead of Len/At-style APIs.
         - stditerators
+        # Replace strings.Index etc. with strings.Cut.
+        - stringscut
         # Replace HasPrefix/TrimPrefix with CutPrefix.
         - stringscutprefix
         # Replace ranging over Split/Fields with SplitSeq/FieldsSeq.
