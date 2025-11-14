@@ -64,6 +64,8 @@ func testOneSource(t *testing.T, log *logutils.StderrLog, binPath, sourcePath st
 		"--max-issues-per-linter=100",
 	}
 
+	cacheDir := t.TempDir()
+
 	for _, addArg := range []string{"", "-Etypecheck"} {
 		caseArgs := slices.Clone(args)
 
@@ -73,6 +75,7 @@ func testOneSource(t *testing.T, log *logutils.StderrLog, binPath, sourcePath st
 
 		cmd := testshared.NewRunnerBuilder(t).
 			WithBinPath(binPath).
+			WithEnviron("GOCACHE=" + cacheDir).
 			WithArgs(caseArgs...).
 			WithRunContext(rc).
 			WithTargetPath(sourcePath).
