@@ -834,15 +834,16 @@ type RecvcheckSettings struct {
 }
 
 type ReviveSettings struct {
-	Go             string            `mapstructure:"-"`
-	MaxOpenFiles   int               `mapstructure:"max-open-files"`
-	Confidence     float64           `mapstructure:"confidence"`
-	Severity       string            `mapstructure:"severity"`
-	EnableAllRules bool              `mapstructure:"enable-all-rules"`
-	Rules          []ReviveRule      `mapstructure:"rules"`
-	ErrorCode      int               `mapstructure:"error-code"`
-	WarningCode    int               `mapstructure:"warning-code"`
-	Directives     []ReviveDirective `mapstructure:"directives"`
+	Go                 string            `mapstructure:"-"`
+	MaxOpenFiles       int               `mapstructure:"max-open-files"`
+	Confidence         float64           `mapstructure:"confidence"`
+	Severity           string            `mapstructure:"severity"`
+	EnableAllRules     bool              `mapstructure:"enable-all-rules"`
+	EnableDefaultRules bool              `mapstructure:"enable-default-rules"`
+	Rules              []ReviveRule      `mapstructure:"rules"`
+	ErrorCode          int               `mapstructure:"error-code"`
+	WarningCode        int               `mapstructure:"warning-code"`
+	Directives         []ReviveDirective `mapstructure:"directives"`
 }
 
 type ReviveRule struct {

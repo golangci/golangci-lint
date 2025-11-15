@@ -169,8 +169,8 @@ func (w *wrapper) toIssue(pass *analysis.Pass, failure *lint.Failure) *goanalysi
 // This function mimics the GetConfig function of revive.
 // This allows to get default values and right types.
 // https://github.com/golangci/golangci-lint/issues/1745
-// https://github.com/mgechev/revive/blob/v1.6.0/config/config.go#L230
-// https://github.com/mgechev/revive/blob/v1.6.0/config/config.go#L182-L188
+// https://github.com/mgechev/revive/blob/v1.13.0/config/config.go#L249
+// https://github.com/mgechev/revive/blob/v1.13.0/config/config.go#L198-L204
 func getConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
 	conf := defaultConfig()
 
@@ -269,7 +269,7 @@ func safeTomlSlice(r []any) []any {
 }
 
 // This element is not exported by revive, so we need copy the code.
-// Extracted from https://github.com/mgechev/revive/blob/v1.12.0/config/config.go#L16
+// Extracted from https://github.com/mgechev/revive/blob/v1.13.0/config/config.go#L16
 var defaultRules = []lint.Rule{
 	&rule.VarDeclarationsRule{},
 	&rule.PackageCommentsRule{},
@@ -325,6 +325,7 @@ var allRules = append([]lint.Rule{
 	&rule.FileLengthLimitRule{},
 	&rule.FilenameFormatRule{},
 	&rule.FlagParamRule{},
+	&rule.ForbiddenCallInWgGoRule{},
 	&rule.FunctionLength{},
 	&rule.FunctionResultsLimitRule{},
 	&rule.GetReturnRule{},
@@ -337,6 +338,7 @@ var allRules = append([]lint.Rule{
 	&rule.ImportAliasNamingRule{},
 	&rule.ImportsBlocklistRule{},
 	&rule.ImportShadowingRule{},
+	&rule.InefficientMapLookupRule{},
 	&rule.LineLengthLimitRule{},
 	&rule.MaxControlNestingRule{},
 	&rule.MaxPublicStructsRule{},
@@ -360,6 +362,7 @@ var allRules = append([]lint.Rule{
 	&rule.UnexportedNamingRule{},
 	&rule.UnhandledErrorRule{},
 	&rule.UnnecessaryFormatRule{},
+	&rule.UnnecessaryIfRule{},
 	&rule.UnnecessaryStmtRule{},
 	&rule.UnsecureURLSchemeRule{},
 	&rule.UnusedReceiverRule{},
@@ -375,7 +378,7 @@ var allRules = append([]lint.Rule{
 const defaultConfidence = 0.8
 
 // This element is not exported by revive, so we need copy the code.
-// Extracted from https://github.com/mgechev/revive/blob/v1.12.0/config/config.go#L206
+// Extracted from https://github.com/mgechev/revive/blob/v1.13.0/config/config.go#L209
 func normalizeConfig(cfg *lint.Config) {
 	// NOTE(ldez): this custom section for golangci-lint should be kept.
 	// ---
@@ -386,17 +389,20 @@ func normalizeConfig(cfg *lint.Config) {
 	if len(cfg.Rules) == 0 {
 		cfg.Rules = map[string]lint.RuleConfig{}
 	}
-	if cfg.EnableAllRules {
-		// Add to the configuration all rules not yet present in it
-		for _, r := range allRules {
+
+	addRules := func(config *lint.Config, rules []lint.Rule) {
+		for _, r := range rules {
 			ruleName := r.Name()
-			_, alreadyInConf := cfg.Rules[ruleName]
-			if alreadyInConf {
-				continue
+			if _, ok := config.Rules[ruleName]; !ok {
+				config.Rules[ruleName] = lint.RuleConfig{}
 			}
-			// Add the rule with an empty conf for
-			cfg.Rules[ruleName] = lint.RuleConfig{}
 		}
+	}
+
+	if cfg.EnableAllRules {
+		addRules(cfg, allRules)
+	} else if cfg.EnableDefaultRules {
+		addRules(cfg, defaultRules)
 	}
 
 	severity := cfg.Severity
@@ -417,7 +423,7 @@ func normalizeConfig(cfg *lint.Config) {
 }
 
 // This element is not exported by revive, so we need copy the code.
-// Extracted from https://github.com/mgechev/revive/blob/v1.12.0/config/config.go#L274
+// Extracted from https://github.com/mgechev/revive/blob/v1.13.0/config/config.go#L280
 func defaultConfig() *lint.Config {
 	defaultConfig := lint.Config{
 		Confidence: defaultConfidence,
@@ -463,7 +469,7 @@ func extractRulesName(rules []lint.Rule) []string {
 	return names
 }
 
-// Extracted from https://github.com/mgechev/revive/blob/v1.12.0/formatter/severity.go
+// Extracted from https://github.com/mgechev/revive/blob/v1.13.0/formatter/severity.go
 // Modified to use pointers (related to hugeParam rule).
 func severity(cfg *lint.Config, failure *lint.Failure) lint.Severity {
 	if cfg, ok := cfg.Rules[failure.RuleName]; ok && cfg.Severity == lint.SeverityError {

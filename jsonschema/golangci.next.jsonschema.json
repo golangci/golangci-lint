@@ -622,6 +622,7 @@
         "file-length-limit",
         "filename-format",
         "flag-parameter",
+        "forbidden-call-in-wg-go",
         "function-length",
         "function-result-limit",
         "get-return",
@@ -636,6 +637,7 @@
         "imports-blocklist",
         "increment-decrement",
         "indent-error-flow",
+        "inefficient-map-lookup",
         "line-length-limit",
         "max-control-nesting",
         "max-public-structs",
@@ -666,6 +668,7 @@
         "unexported-return",
         "unhandled-error",
         "unnecessary-format",
+        "unnecessary-if",
         "unnecessary-stmt",
         "unreachable-code",
         "unsecure-url-scheme",
@@ -3156,6 +3159,10 @@
               "enum": ["warning", "error"]
             },
             "enable-all-rules": {
+              "type": "boolean",
+              "default": false
+            },
+            "enable-default-rules": {
               "type": "boolean",
               "default": false
             },

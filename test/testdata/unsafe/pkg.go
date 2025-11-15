@@ -1,5 +1,5 @@
-// Package pkg ...
-package pkg
+// Package pkgunsafe ...
+package pkgunsafe
 
 import (
 	"log"
