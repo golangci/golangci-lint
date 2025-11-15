@@ -17,7 +17,7 @@ var (
 	_ = reflect.TypeFor[*error]()        // want "reflect.TypeOf call can be simplified using TypeFor"
 	_ = reflect.TypeOf(io.Reader(nil))   // nope (likely a mistake)
 	_ = reflect.TypeFor[*io.Reader]()    // want "reflect.TypeOf call can be simplified using TypeFor"
-	_ = reflect.TypeOf(*new(time.Time))  // nope (false negative of noEffects)
+	_ = reflect.TypeFor[time.Time]()     // want "reflect.TypeOf call can be simplified using TypeFor"
 	_ = reflect.TypeFor[time.Time]()     // want "reflect.TypeOf call can be simplified using TypeFor"
 	_ = reflect.TypeFor[time.Duration]() // want "reflect.TypeOf call can be simplified using TypeFor"
 )

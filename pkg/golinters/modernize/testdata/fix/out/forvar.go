@@ -5,37 +5,28 @@ package forvar
 func _(m map[int]int, s []int) {
 	// changed
 	for i := range s {
-		// want "copying variable is unneeded"
 		go f(i)
 	}
 	for _, v := range s {
-		// want "copying variable is unneeded"
 		go f(v)
 	}
 	for k, v := range m {
-		// want "copying variable is unneeded"
-		// want "copying variable is unneeded"
 		go f(k)
 		go f(v)
 	}
 	for k, v := range m {
-		// want "copying variable is unneeded"
-		// want "copying variable is unneeded"
 		go f(k)
 		go f(v)
 	}
 	for k, v := range m {
-		// want "copying variable is unneeded"
 		go f(k)
 		go f(v)
 	}
 	for k, v := range m {
-		// want "copying variable is unneeded"
 		go f(k)
 		go f(v)
 	}
 	for i := range s {
-		/* hi */ // want "copying variable is unneeded"
 		go f(i)
 	}
 	// nope

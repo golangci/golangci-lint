@@ -15,9 +15,9 @@ func _(scope *types.Scope) {
 		print(child)
 	}
 	{
-		const child = 0                        // shadowing of preferred name at def
-		for child0 := range scope.Children() { // want "NumChildren/Child loop can simplified using Scope.Children iteration"
-			print(child0)
+		const child = 0                       // shadowing of preferred name at def
+		for child := range scope.Children() { // want "NumChildren/Child loop can simplified using Scope.Children iteration"
+			print(child)
 		}
 	}
 	{

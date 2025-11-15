@@ -149,7 +149,10 @@ func evaluateBuildTags(tb testing.TB, line string) bool {
 }
 
 func buildTagGoVersion(tag string) bool {
-	vRuntime, err := hcversion.NewVersion(strings.TrimPrefix(runtime.Version(), "go"))
+	// `runtime.Version()` returns the go version with extra info. (ex: go1.25.1 X:nodwarf5)
+	before, _, _ := strings.Cut(runtime.Version(), " ")
+
+	vRuntime, err := hcversion.NewVersion(strings.TrimPrefix(before, "go"))
 	if err != nil {
 		return false
 	}

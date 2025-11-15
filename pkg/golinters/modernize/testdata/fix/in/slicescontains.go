@@ -52,7 +52,7 @@ func assignTrueBreak(slice []int, needle int) {
 	print(found)
 }
 
-func assignFalseBreak(slice []int, needle int) { // TODO: treat this specially like booleanTrue
+func assignFalseBreak(slice []int, needle int) {
 	found := true
 	for _, elem := range slice { // want "Loop can be simplified using slices.Contains"
 		if elem == needle {
