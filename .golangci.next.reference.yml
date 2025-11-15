@@ -2383,8 +2383,8 @@ linters:
       enable-all-rules: true
 
       # By default, the default rules are enabled,
-      # but if you provide a custom configuration, the default rules will be disabled.
-      # This option allows you to not explicitly enable the default rules.
+      # but if you explicitly define or configure a rule, the default rules will be disabled.
+      # This option, when set to `true`, allows you to avoid explicitly redefining default rules when adding a rule.
       # Default: false
       enable-default-rules: true
 
@@ -2400,7 +2400,7 @@ linters:
       confidence: 0.1
       # Revive handles the default rules in a way that can be unexpected:
       # - If there are no explicit rules, the default rules are used.
-      # - If there is at least one explicit rule, the default rules are not used.
+      # - If there is at least one explicit rule, the default rules are not used, unless `enable-default-rules` is `true`.
       # Run `GL_DEBUG=revive golangci-lint run --enable-only=revive` to see default, all available rules, and enabled rules.
       rules:
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#add-constant
