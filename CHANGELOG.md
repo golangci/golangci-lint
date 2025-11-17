@@ -10,6 +10,8 @@ If you value it, consider supporting us, we appreciate it!
 
 ### v2.6.2
 
+_Released on 2025-11-14_
+
 1. Bug fixes
    * `fmt` command with symlinks
    * use file depending on build configuration to invalidate cache
@@ -19,11 +21,15 @@ If you value it, consider supporting us, we appreciate it!
 
 ### v2.6.1
 
+_Released on 2025-11-04_
+
 1. Linters bug fixes
    * `copyloopvar`: from 1.2.1 to 1.2.2
    * `go-critic`: from 0.14.0 to 0.14.2
 
 ### v2.6.0
+
+_Released on 2025-10-29_
 
 1. New linters
    * Add `modernize` analyzer suite
@@ -53,6 +59,8 @@ If you value it, consider supporting us, we appreciate it!
    * fix: ignore some files to hash the version for custom build
 
 ### v2.5.0
+
+_Released on 2025-09-21_
 
 1. New linters
    * Add `godoclint` linter https://github.com/godoc-lint/godoc-lint
@@ -87,6 +95,8 @@ If you value it, consider supporting us, we appreciate it!
 
 ### v2.4.0
 
+_Released on 2025-08-14_
+
 1. Enhancements
     * 🎉 go1.25 support
 2. Linters new features or changes
@@ -100,6 +110,8 @@ If you value it, consider supporting us, we appreciate it!
 
 ### v2.3.1
 
+_Released on 2025-08-02_
+
 1. Linters bug fixes
    * `gci`: from 0.13.6 to 0.13.7
    * `gosec`: from 2.22.6 to 2.22.7
@@ -108,6 +120,8 @@ If you value it, consider supporting us, we appreciate it!
    * tagliatelle: force upper case for custom initialisms
 
 ### v2.3.0
+
+_Released on 2025-07-21_
 
 1. Linters new features or changes
    * `ginkgolinter`: from 0.19.1 to 0.20.0 (new option: `force-assertion-description`)
@@ -124,6 +138,8 @@ If you value it, consider supporting us, we appreciate it!
 
 ### v2.2.2
 
+_Released on 2025-07-11_
+
 1. Linters bug fixes
    * `noinlineerr`: from 1.0.3 to 1.0.4
 2. Documentation
@@ -134,10 +150,14 @@ If you value it, consider supporting us, we appreciate it!
 
 ### v2.2.1
 
+_Released on 2025-06-28_
+
 1. Linters bug fixes
   * `varnamelen`: fix configuration
 
 ### v2.2.0
+
+_Released on 2025-06-28_
 
 1. New linters
    * Add `arangolint` linter https://github.com/Crocmagnon/arangolint
@@ -182,6 +202,8 @@ If you value it, consider supporting us, we appreciate it!
 
 ### v2.1.6
 
+_Released on 2025-05-15_
+
 1. Linters bug fixes
    * `godot`: from 1.5.0 to 1.5.1
    * `musttag`: from 0.13.0 to 0.13.1
@@ -190,17 +212,23 @@ If you value it, consider supporting us, we appreciate it!
 
 ### v2.1.5
 
+_Released on 2025-04-24_
+
 Due to an error related to Snapcraft, some artifacts of the v2.1.4 release have not been published.
 
 This release contains the same things as v2.1.3.
 
 ### v2.1.4
 
+_Released on 2025-04-24_
+
 Due to an error related to Snapcraft, some artifacts of the v2.1.3 release have not been published.
 
 This release contains the same things as v2.1.3.
 
 ### v2.1.3
+
+_Released on 2025-04-22_
 
 1. Linters bug fixes
    * `fatcontext`: from 0.7.2 to 0.8.0
@@ -212,6 +240,8 @@ This release contains the same things as v2.1.3.
 
 ### v2.1.2
 
+_Released on 2025-04-16_
+
 1. Linters bug fixes
    * `exptostd`: from 0.4.2 to 0.4.3
    * `gofumpt`: from 0.7.0 to 0.8.0
@@ -220,11 +250,15 @@ This release contains the same things as v2.1.3.
 
 ### v2.1.1
 
+_Released on 2025-04-12_
+
 The release process of v2.1.0 failed due to a regression inside goreleaser.
 
 The binaries of v2.1.0 have been published, but not the other artifacts (AUR, Docker, etc.).
 
 ### v2.1.0
+
+_Released on 2025-04-12_
 
 1. Enhancements
    * Add an option to display absolute paths (`--path-mode=abs`)
@@ -264,6 +298,8 @@ The binaries of v2.1.0 have been published, but not the other artifacts (AUR, Do
 
 ### v2.0.2
 
+_Released on 2025-03-25_
+
 1. Misc.
    * Fixes flags parsing for formatters
    * Fixes the filepath used by the exclusion `source` option
@@ -273,6 +309,8 @@ The binaries of v2.1.0 have been published, but not the other artifacts (AUR, Do
 
 ### v2.0.1
 
+_Released on 2025-03-24_
+
 1. Linters/formatters bug fixes
    * `golines`: fix settings during linter load
 2. Misc.
@@ -280,6 +318,8 @@ The binaries of v2.1.0 have been published, but not the other artifacts (AUR, Do
    * `forbidigo`: fix migration
 
 ### v2.0.0
+
+_Released on 2025-03-23_
 
 1. Enhancements
    * 🌟 New `golangci-lint fmt` command with dedicated [formatter configuration](https://golangci-lint.run/docs/welcome/quick-start/#formatting)

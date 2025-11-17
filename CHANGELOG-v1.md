@@ -10,9 +10,13 @@ If you value it, consider supporting us, we appreciate it!
 
 ### v1.64.8
 
+_Released on 2025-03-17_
+
 * Detects use of configuration files from golangci-lint v2
 
 ### v1.64.7
+
+_Released on 2025-03-10_
 
 1. Linters bug fixes
    * `depguard`: from 2.2.0 to 2.2.1
@@ -23,6 +27,8 @@ If you value it, consider supporting us, we appreciate it!
    * Add GitLab documentation
 
 ### v1.64.6
+
+_Released on 2025-03-03_
 
 1. Linters bug fixes
    * `asciicheck`: from 0.4.0 to 0.4.1
@@ -39,6 +45,8 @@ If you value it, consider supporting us, we appreciate it!
 
 ### v1.64.5
 
+_Released on 2025-02-13_
+
 1. Bug fixes
    * Add missing flag `new-from-merge-base-flag`
 2. Linters bug fixes
@@ -48,10 +56,14 @@ If you value it, consider supporting us, we appreciate it!
 
 ### v1.64.4
 
+_Released on 2025-02-12_
+
 1. Linters bug fixes
    * `gci`: fix standard packages list for go1.24
 
 ### v1.64.3
+
+_Released on 2025-02-12_
 
 1. Linters bug fixes
    * `ginkgolinter`: from 0.18.4 to 0.19.0
@@ -62,6 +74,8 @@ If you value it, consider supporting us, we appreciate it!
    * Build Docker images with go1.24
 
 ### v1.64.2
+
+_Released on 2025-02-11_
 
 This is the last minor release of golangci-lint v1.
 The next release will be golangci-lint [v2](https://github.com/golangci/golangci-lint/issues/5300).
@@ -98,18 +112,26 @@ The next release will be golangci-lint [v2](https://github.com/golangci/golangci
 
 ### v1.64.1
 
+_Released on 2025-02-11_
+
 Cancelled due to CI failure.
 
 ### v1.64.0
+
+_Released on 2025-02-11_
 
 Cancelled due to CI failure.
 
 ### v1.63.4
 
+_Released on 2025-01-03_
+
 1. Linters bug fixes
    * `dupl`, `gomodguard`, `revive`: keep only Go-files.
 
 ### v1.63.3
+
+_Released on 2025-01-02_
 
 1. Linters bug fixes
    * `gofmt`, `gofumpt`, `goimports`, `gci`: panic with several trailing EOL
@@ -117,16 +139,22 @@ Cancelled due to CI failure.
 
 ### v1.63.2
 
+_Released on 2025-01-02_
+
 1. Linters bug fixes
    * `gofmt`, `gofumpt`, `goimports`, `gci`: panic with missing trailing EOL
 
 ### v1.63.1
+
+_Released on 2025-01-01_
 
 1. Linters bug fixes
    * `cgi`: invalid reports with cgo
    * `gofumpt`: panic with autofix and cgo
 
 ### v1.63.0
+
+_Released on 2025-01-01_
 
 1. Enhancements
    * Add support for SuggestedFixes 🎉 (35 linters can "autofix" reports).
@@ -178,6 +206,8 @@ Cancelled due to CI failure.
 
 ### v1.62.2
 
+_Released on 2024-11-25_
+
 1. Linters bug fixes
    * `fatcontext`: from 0.5.2 to 0.5.3
    * `ginkgolinter`: from 0.18.0 to 0.18.3
@@ -190,9 +220,13 @@ Cancelled due to CI failure.
 
 ### v1.62.1
 
+_Released on 2024-11-25_
+
 Cancelled due to CI failure.
 
 ### v1.62.0
+
+_Released on 2024-11-10_
 
 1. New linters
    * Add `recvcheck` linter https://github.com/raeperd/recvcheck
@@ -240,6 +274,8 @@ Cancelled due to CI failure.
 
 ### v1.61.0
 
+_Released on 2024-09-09_
+
 1. Enhancements
    * Add `junit-xml-extended` format
    * Exclude Swagger Codegen files by default
@@ -262,12 +298,16 @@ Cancelled due to CI failure.
 
 ### v1.60.3
 
+_Released on 2024-08-23_
+
 1. Updated linters
    * `gosec`: from 81cda2f91fbe to ab3f6c1c83a0 (fix `G115` false positives)
 2. Misc.
    * Check that the Go version use to build is greater or equals to the Go version of the project
 
 ### v1.60.2
+
+_Released on 2024-08-20_
 
 1. Linters new features
    * `gosec`: from 5f0084eb01a9 to 81cda2f91fbe (adds `G115`, `G405`, `G406`, `G506`, `G507`)
@@ -282,6 +322,8 @@ Cancelled due to CI failure.
    * ⚠️ `exportloopref`: deprecation
 
 ### v1.60.1
+
+_Released on 2024-08-14_
 
 1. Misc.
    * 🎉 go1.23 support
@@ -315,9 +357,13 @@ Cancelled due to CI failure.
 
 ### v1.60.0
 
+_Released on 2024-08-13_
+
 Cancelled due to a CI problem.
 
 ### v1.59.1
+
+_Released on 2024-06-09_
 
 1. Updated linters
    * `errorlint`: from 1.5.1 to 1.5.2
@@ -336,6 +382,8 @@ Cancelled due to a CI problem.
 
 ### v1.59.0
 
+_Released on 2024-05-26_
+
 1. Enhancements
    * Add SARIF output format
    * Allow the analysis of generated files (`issues.exclude-generated: disable`)
@@ -352,6 +400,8 @@ Cancelled due to a CI problem.
 
 ### v1.58.2
 
+_Released on 2024-05-19_
+
 1. Updated linters
    * `canonicalheader`: from 1.0.6 to 1.1.1
    * `gosec`: from 2.19.0 to 2.20.0
@@ -362,6 +412,8 @@ Cancelled due to a CI problem.
 
 ### v1.58.1
 
+_Released on 2024-05-08_
+
 1. Updated linters
    * `tagalign`: from 1.3.3 to 1.3.4
    * `protogetter`: from 0.3.5 to 0.3.6
@@ -370,6 +422,8 @@ Cancelled due to a CI problem.
    * Restores previous `github-actions` output format (removes GitHub Action problem matchers)
 
 ### v1.58.0
+
+_Released on 2024-05-03_
 
 1. New linters
    * `fatcontext`: https://github.com/Crocmagnon/fatcontext
@@ -430,6 +484,8 @@ GitHub Action (v5.1.0) for golangci-lint:
 
 ### v1.57.2
 
+_Released on 2024-03-28_
+
 1. Updated linters
    * `contextcheck`: from 1.1.4 to 1.1.5
    * `copyloopvar`: from 1.0.8 to 1.0.10
@@ -447,10 +503,14 @@ GitHub Action (v5.1.0) for golangci-lint:
 
 ### v1.57.1
 
+_Released on 2024-03-20_
+
 1. Fixes
    * Ignore issues with invalid position (e.g. `contextcheck`).
 
 ### v1.57.0
+
+_Released on 2024-03-19_
 
 1. New linters
    * `copyloopvar`: https://github.com/karamaru-alpha/copyloopvar
@@ -512,6 +572,8 @@ GitHub Action (v5.1.0) for golangci-lint:
 
 ### v1.56.2
 
+_Released on 2024-02-15_
+
 1. updated linters
    * `go-critic`: from 0.11.0 to 0.11.1
    * `gosec`: from 2.18.2 to 2.19.0
@@ -525,6 +587,8 @@ GitHub Action (v5.1.0) for golangci-lint:
 
 ### v1.56.1
 
+_Released on 2024-02-08_
+
 1. updated linters
    * `errcheck`: from 1.6.3 to 1.7.0
    * `govet`: disable `loopclosure` with go1.22
@@ -532,6 +596,8 @@ GitHub Action (v5.1.0) for golangci-lint:
    * `testifylint`: from 1.1.0 to 1.1.1
 
 ### v1.56.0
+
+_Released on 2024-02-07_
 
 1. new linters
    * `spancheck`: https://github.com/jjti/go-spancheck
@@ -613,11 +679,15 @@ GitHub Action (v5.1.0) for golangci-lint:
 
 ### v1.55.2
 
+_Released on 2023-11-03_
+
 1. updated linters
    * `ireturn`: from 0.2.1 to 0.2.2
    * `ginkgolinter`: from 0.14.0 to 0.14.1
 
 ### v1.55.1
+
+_Released on 2023-10-25_
 
 1. updated linters
    * `gosec`: from 2.18.1 to 2.18.2
@@ -626,6 +696,8 @@ GitHub Action (v5.1.0) for golangci-lint:
    * output: convert backslashes to forward slashes for GitHub Action annotations printer
 
 ### v1.55.0
+
+_Released on 2023-10-20_
 
 1. new linters
    * `gochecksumtype`: https://github.com/alecthomas/go-check-sumtype
@@ -666,6 +738,8 @@ GitHub Action (v5.1.0) for golangci-lint:
 
 ### v1.54.2
 
+_Released on 2023-08-21_
+
 1. updated linters:
    * `errname`: from 0.1.10 to 0.1.12
    * `ginkgolinter`: from 0.13.3 to 0.13.5
@@ -680,12 +754,16 @@ GitHub Action (v5.1.0) for golangci-lint:
 
 ### v1.54.1
 
+_Released on 2023-08-11_
+
 1. updated linters:
    * `go-critic`:  from 0.8.2 to 0.9.0
 2. misc.
    * plugin: temporarily hide warning about using plugins using the old API
 
 ### v1.54.0
+
+_Released on 2023-08-09_
 
 1. updated linters:
    * `decorder`: from 0.2.3 to 0.4.0
@@ -723,6 +801,8 @@ GitHub Action (v5.1.0) for golangci-lint:
 
 ### v1.53.3
 
+_Released on 2023-06-15_
+
 1. updated linters:
    * `cyclop`: from 1.2.0 to 1.2.1
    * `exhaustive`: from 0.10.0 to 0.11.0
@@ -737,6 +817,8 @@ GitHub Action (v5.1.0) for golangci-lint:
 
 ### v1.53.2
 
+_Released on 2023-06-03_
+
 1. updated linters
    * `depguard`: from v2.0.1 to 2.1.0
 2. misc.
@@ -744,11 +826,15 @@ GitHub Action (v5.1.0) for golangci-lint:
 
 ### v1.53.1
 
+_Released on 2023-06-02_
+
 1. misc.
    * `depguard`: fix GOROOT detection
    * `importas`: fix duplication detection when aliases use regular expression replacement pattern
 
 ### v1.53.0
+
+_Released on 2023-06-01_
 
 1. new linters
    * `gosmopolitan`: https://github.com/xen0n/gosmopolitan
@@ -794,6 +880,8 @@ GitHub Action (v5.1.0) for golangci-lint:
 
 ### v1.52.2
 
+_Released on 2023-03-25_
+
 1. updated linters
    * `tparallel`: from 0.3.0 to 0.3.1
 2. misc.
@@ -801,11 +889,15 @@ GitHub Action (v5.1.0) for golangci-lint:
 
 ### v1.52.1
 
+_Released on 2023-03-21_
+
 1. misc.
    * fix: improve panic management
    * fix: the combination of --fix and --path-prefix
 
 ### v1.52.0
+
+_Released on 2023-03-18_
 
 1. updated linters
    * `asciicheck`: from 0.1.1 to 0.2.0
@@ -844,6 +936,8 @@ GitHub Action (v5.1.0) for golangci-lint:
 
 ### v1.51.2
 
+_Released on 2023-02-19_
+
 1. updated linters
    * `forbidigo`: from 1.3.0 to 1.4.0
    * `gci`: from 0.9.0 to 0.9.1
@@ -865,6 +959,8 @@ GitHub Action (v5.1.0) for golangci-lint:
 
 ### v1.51.1
 
+_Released on 2023-02-05_
+
 1. updated linters
    * `ginkgolinter`: from 0.7.1 to 0.8.1
    * `ineffassign`: bump to HEAD
@@ -875,6 +971,8 @@ GitHub Action (v5.1.0) for golangci-lint:
    * `wrapcheck`: from 2.7.0 to 2.8.0
 
 ### v1.51.0
+
+_Released on 2023-02-02_
 
 1. new linters
    * `ginkgolinter`: https://github.com/nunnatsa/ginkgolinter
@@ -922,6 +1020,8 @@ GitHub Action (v5.1.0) for golangci-lint:
 
 ### v1.50.1
 
+_Released on 2022-10-22_
+
 1. updated linters
    * `contextcheck`: from 1.1.2 to 1.1.3
    * `go-mnd`: from 2.5.0 to 2.5.1
@@ -933,6 +1033,8 @@ GitHub Action (v5.1.0) for golangci-lint:
    * code-climate: add default severity
 
 ### v1.50.0
+
+_Released on 2022-10-04_
 
 1. new linters
    * `dupword`: https://github.com/Abirdcfly/dupword
@@ -963,6 +1065,8 @@ GitHub Action (v5.1.0) for golangci-lint:
    * cli: remove reference to old service
 
 ### v1.49.0
+
+_Released on 2022-08-24_
 
 IMPORTANT: `varcheck` and `deadcode` has been removed of default linters.
 
@@ -997,6 +1101,8 @@ IMPORTANT: `varcheck` and `deadcode` has been removed of default linters.
 
 ### v1.48.0
 
+_Released on 2022-08-04_
+
 1. new linters
    * `usestdlibvars`:https://github.com/sashamelentyev/usestdlibvars
 2. updated linters
@@ -1014,6 +1120,8 @@ IMPORTANT: `varcheck` and `deadcode` has been removed of default linters.
 
 ### v1.47.3
 
+_Released on 2022-08-01_
+
 1. updated linters:
    * remove some go1.18 limitations
    * `asasalint`: from 0.0.10 to 0.0.11
@@ -1029,10 +1137,14 @@ IMPORTANT: `varcheck` and `deadcode` has been removed of default linters.
 
 ### v1.47.2
 
+_Released on 2022-07-21_
+
 1. updated linters:
    * `revive`: ignore slow rules
 
 ### v1.47.1
+
+_Released on 2022-07-19_
 
 1. updated linters:
    * `gci`: from 0.4.2 to 0.4.3
@@ -1042,6 +1154,8 @@ IMPORTANT: `varcheck` and `deadcode` has been removed of default linters.
    * `unparam`: bump to HEAD
 
 ### v1.47.0
+
+_Released on 2022-07-18_
 
 1. new linters:
    * `asasalint`: https://github.com/alingse/asasalint
@@ -1082,6 +1196,8 @@ IMPORTANT: `varcheck` and `deadcode` has been removed of default linters.
 
 ### v1.46.2
 
+_Released on 2022-05-17_
+
 1. updated linters:
    * `execinquery`: bump from v1.2.0 to v1.2.1
    * `errorlint`: bump to v1.0.0
@@ -1092,12 +1208,16 @@ IMPORTANT: `varcheck` and `deadcode` has been removed of default linters.
 
 ### v1.46.1
 
+_Released on 2022-05-12_
+
 1. updated linters:
    * `execinquery`: bump from v0.6.0 to v0.6.1
 2. documentation:
    * add missing linters
 
 ### v1.46.0
+
+_Released on 2022-05-09_
 
 1. new linters:
    * `execinquery`: https://github.com/lufeee/execinquery
@@ -1134,10 +1254,14 @@ IMPORTANT: `varcheck` and `deadcode` has been removed of default linters.
 
 ### v1.45.2
 
+_Released on 2022-03-24_
+
 1. misc:
    * fix: help command
 
 ### v1.45.1
+
+_Released on 2022-03-24_
 
 1. updated linters:
    * `interfacer`: inactivate with go1.18
@@ -1150,6 +1274,8 @@ IMPORTANT: `varcheck` and `deadcode` has been removed of default linters.
    * docker: update base images (go1.18)
 
 ### v1.45.0
+
+_Released on 2022-03-29_
 
 1. updated linters:
    * `cobra`: from 1.3.0 to 1.4.0
@@ -1175,6 +1301,8 @@ IMPORTANT: `varcheck` and `deadcode` has been removed of default linters.
 
 ### v1.44.2
 
+_Released on 2022-02-17_
+
 1. updated linters:
    * `gci`: bump to HEAD
    * `gci`: restore defaults for sections
@@ -1183,6 +1311,8 @@ IMPORTANT: `varcheck` and `deadcode` has been removed of default linters.
    * add link to configuration in the linters list
 
 ### v1.44.1
+
+_Released on 2022-02-17_
 
 1. updated linters:
    * `bidichk`: from 0.2.1 to 0.2.2
@@ -1200,6 +1330,8 @@ IMPORTANT: `varcheck` and `deadcode` has been removed of default linters.
    * fix debug output
 
 ### v1.44.0
+
+_Released on 2022-01-25_
 
 1. new linters:
    * `containedctx`: https://github.com/sivchari/containedctx
