@@ -202,7 +202,7 @@ _Released on 2025-06-28_
 
 ### v2.1.6
 
-_Released on 2025-05-15_
+_Released on 2025-05-04_
 
 1. Linters bug fixes
    * `godot`: from 1.5.0 to 1.5.1
@@ -228,7 +228,7 @@ This release contains the same things as v2.1.3.
 
 ### v2.1.3
 
-_Released on 2025-04-22_
+_Released on 2025-04-24_
 
 1. Linters bug fixes
    * `fatcontext`: from 0.7.2 to 0.8.0
@@ -240,7 +240,7 @@ _Released on 2025-04-22_
 
 ### v2.1.2
 
-_Released on 2025-04-16_
+_Released on 2025-04-15_
 
 1. Linters bug fixes
    * `exptostd`: from 0.4.2 to 0.4.3
@@ -319,7 +319,7 @@ _Released on 2025-03-24_
 
 ### v2.0.0
 
-_Released on 2025-03-23_
+_Released on 2025-03-24_
 
 1. Enhancements
    * 🌟 New `golangci-lint fmt` command with dedicated [formatter configuration](https://golangci-lint.run/docs/welcome/quick-start/#formatting)

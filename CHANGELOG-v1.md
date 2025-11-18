@@ -16,7 +16,7 @@ _Released on 2025-03-17_
 
 ### v1.64.7
 
-_Released on 2025-03-10_
+_Released on 2025-03-11_
 
 1. Linters bug fixes
    * `depguard`: from 2.2.0 to 2.2.1
@@ -28,7 +28,7 @@ _Released on 2025-03-10_
 
 ### v1.64.6
 
-_Released on 2025-03-03_
+_Released on 2025-03-02_
 
 1. Linters bug fixes
    * `asciicheck`: from 0.4.0 to 0.4.1
@@ -298,7 +298,7 @@ _Released on 2024-09-09_
 
 ### v1.60.3
 
-_Released on 2024-08-23_
+_Released on 2024-08-22_
 
 1. Updated linters
    * `gosec`: from 81cda2f91fbe to ab3f6c1c83a0 (fix `G115` false positives)
