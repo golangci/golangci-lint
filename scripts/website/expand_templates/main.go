@@ -40,7 +40,7 @@ func saveTmp(tmpDir string) error {
 		return fmt.Errorf("copy plugin reference: %w", err)
 	}
 
-	err = copyChangelog(tmpDir)
+	err = copyChangelogs(tmpDir)
 	if err != nil {
 		return fmt.Errorf("copy changelog: %w", err)
 	}
