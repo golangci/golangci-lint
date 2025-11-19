@@ -92,7 +92,7 @@ func (b Builder) clone(ctx context.Context) error {
 	//nolint:gosec // the variable is sanitized.
 	cmd := exec.CommandContext(ctx,
 		"git", "clone", "--branch", sanitizeVersion(b.cfg.Version),
-		"--single-branch", "--depth", "1", "-c advice.detachedHead=false", "-q",
+		"--single-branch", "--depth", "1", "-c", "advice.detachedHead=false", "-q",
 		"https://github.com/golangci/golangci-lint.git",
 	)
 	cmd.Dir = b.root
