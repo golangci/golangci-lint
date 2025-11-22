@@ -3969,11 +3969,11 @@ linters:
 
     unparam:
       # Inspect exported functions.
-      #
       # Set to true if no external program/library imports your code.
-      # XXX: if you enable this setting, unparam will report a lot of false-positives in text editors:
-      # if it's called for subdir of a project it can't find external interfaces. All text editor integrations
-      # with golangci-lint call it on a directory with the changed file.
+      #
+      # IMPORTANT: If you enable this setting, unparam reports many false positives in text editors:
+      # when run on a subdirectory it cannot find external interfaces.
+      # Most editor integrations invoke golangci-lint on the directory containing the changed file.
       #
       # Default: false
       check-exported: true
