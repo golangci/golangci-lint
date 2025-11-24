@@ -15,7 +15,7 @@ jobs:
   add-comment:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Add checklist
         run: |
           # Avoid adding multiple comments for the same PR.

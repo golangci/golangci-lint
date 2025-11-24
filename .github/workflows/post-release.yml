@@ -18,7 +18,7 @@ jobs:
     env:
       GITHUB_TOKEN: ${{ secrets.GOLANGCI_LINT_TOKEN }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v6
         with:
           go-version: ${{ env.GO_VERSION }}
@@ -41,7 +41,7 @@ jobs:
     env:
       GITHUB_TOKEN: ${{ secrets.GOLANGCI_LINT_TOKEN }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v6
         with:
           go-version: ${{ env.GO_VERSION }}

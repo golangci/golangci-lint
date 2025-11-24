@@ -17,7 +17,7 @@ jobs:
   go-mod:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v6
         with:
           go-version: ${{ env.GO_VERSION }}
@@ -32,7 +32,7 @@ jobs:
   golangci-lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v6
         with:
           # https://github.com/actions/setup-go#supported-version-syntax
@@ -41,7 +41,7 @@ jobs:
           # - 1.18rc1 -> 1.18.0-rc.1
           go-version: ${{ env.GO_VERSION }}
       - name: lint
-        uses: golangci/golangci-lint-action@v9.0.0
+        uses: golangci/golangci-lint-action@v9.1.0
         with:
           version: latest
 
@@ -49,7 +49,7 @@ jobs:
     needs: golangci-lint # run after golangci-lint action to not produce duplicated errors
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v6
         with:
           go-version: ${{ env.GO_VERSION }} # test only the latest go version to speed up CI
@@ -60,7 +60,7 @@ jobs:
     needs: golangci-lint # run after golangci-lint action to not produce duplicated errors
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v6
         with:
           go-version: ${{ env.GO_VERSION }} # test only the latest go version to speed up CI
@@ -79,7 +79,7 @@ jobs:
           - '1.25'
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v6
         with:
           go-version: ${{ matrix.golang }}
