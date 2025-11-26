@@ -14,6 +14,7 @@ require (
 	github.com/Antonboom/nilnil v1.1.1
 	github.com/Antonboom/testifylint v1.6.4
 	github.com/BurntSushi/toml v1.5.0
+	github.com/CyberAgent/iotyper-lint v0.0.0-20251126071057-12b4d357612a
 	github.com/Djarvur/go-err113 v0.1.1
 	github.com/MirrexOne/unqueryvet v1.3.0
 	github.com/OpenPeeDeeP/depguard/v2 v2.2.1
@@ -218,7 +219,7 @@ require (
 	go.uber.org/zap v1.27.0 // indirect
 	golang.org/x/exp v0.0.0-20240909161429-701f63a606c0 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20251023183803-a4bb9ffd2546 // indirect
-	golang.org/x/text v0.30.0 // indirect
+	golang.org/x/text v0.31.0 // indirect
 	golang.org/x/tools/go/expect v0.1.1-deprecated // indirect
 	golang.org/x/tools/go/packages/packagestest v0.1.1-deprecated // indirect
 	google.golang.org/protobuf v1.36.8 // indirect
