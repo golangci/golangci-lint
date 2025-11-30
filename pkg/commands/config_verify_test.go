@@ -136,7 +136,7 @@ func Test_createSchemaURL_error(t *testing.T) {
 			info: BuildInfo{
 				Version: "example",
 			},
-			expected: "parse version: Malformed version: example",
+			expected: "parse version: malformed version: example",
 		},
 		{
 			desc: "invalid composite commit info",
