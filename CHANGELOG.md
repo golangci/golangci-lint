@@ -10,6 +10,8 @@ If you value it, consider supporting us, we appreciate it!
 
 ### v2.7.0
 
+_Released on 2025-12-03_
+
 1. Bug fixes
    * fix: clone args used by `custom` command
 2. Linters new features or changes
