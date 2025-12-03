@@ -2137,6 +2137,8 @@ linters:
         - newexpr
         # Suggest replacing omitempty with omitzero for struct fields.
         - omitzero
+        # Remove obsolete //+build comments.
+        - plusbuild
         # Replace 3-clause for loops with for-range over integers.
         - rangeint
         # Replace reflect.TypeOf(x) with TypeFor[T]().
@@ -2147,6 +2149,8 @@ linters:
         - slicessort
         # Use iterators instead of Len/At-style APIs.
         - stditerators
+        # Replace strings.Index etc. with strings.Cut.
+        - stringscut
         # Replace HasPrefix/TrimPrefix with CutPrefix.
         - stringscutprefix
         # Replace ranging over Split/Fields with SplitSeq/FieldsSeq.
@@ -2378,6 +2382,12 @@ linters:
       # Default: false
       enable-all-rules: true
 
+      # By default, the default rules are enabled,
+      # but if you explicitly define or configure a rule, the default rules will be disabled.
+      # This option, when set to `true`, allows you to avoid explicitly redefining default rules when adding a rule.
+      # Default: false
+      enable-default-rules: true
+
       # Enable validation of comment directives.
       # See https://github.com/mgechev/revive#comment-directives
       directives:
@@ -2390,7 +2400,7 @@ linters:
       confidence: 0.1
       # Revive handles the default rules in a way that can be unexpected:
       # - If there are no explicit rules, the default rules are used.
-      # - If there is at least one explicit rule, the default rules are not used.
+      # - If there is at least one explicit rule, the default rules are not used, unless `enable-default-rules` is `true`.
       # Run `GL_DEBUG=revive golangci-lint run --enable-only=revive` to see default, all available rules, and enabled rules.
       rules:
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#add-constant
@@ -2640,6 +2650,11 @@ linters:
           severity: warning
           disabled: false
           exclude: [""]
+        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#forbidden-call-in-wg-go
+        - name: forbidden-call-in-wg-go
+          severity: warning
+          disabled: false
+          exclude: [""]
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#function-length
         - name: function-length
           severity: warning
@@ -2722,6 +2737,11 @@ linters:
           exclude: [""]
           arguments:
             - "preserve-scope"
+        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#inefficient-map-lookup
+        - name: inefficient-map-lookup
+          severity: warning
+          disabled: false
+          exclude: [""]
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#line-length-limit
         - name: line-length-limit
           severity: warning
@@ -2840,6 +2860,7 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
+            - "!validate"
             - "json,inline"
             - "bson,outline,gnu"
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#superfluous-else
@@ -2896,6 +2917,11 @@ linters:
             - "myFunction"
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#unnecessary-format
         - name: unnecessary-format
+          severity: warning
+          disabled: false
+          exclude: [""]
+        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#unnecessary-if
+        - name: unnecessary-if
           severity: warning
           disabled: false
           exclude: [""]
@@ -2974,6 +3000,7 @@ linters:
             - - skip-initialism-name-checks: true
                 upper-case-const: true
                 skip-package-name-checks: true
+                skip-package-name-collision-with-go-std: true
                 extra-bad-package-names:
                   - helpers
                   - models
