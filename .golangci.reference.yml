@@ -2149,8 +2149,6 @@ linters:
         - slicessort
         # Use iterators instead of Len/At-style APIs.
         - stditerators
-        # Replace strings.Index etc. with strings.Cut.
-        - stringscut
         # Replace HasPrefix/TrimPrefix with CutPrefix.
         - stringscutprefix
         # Replace ranging over Split/Fields with SplitSeq/FieldsSeq.

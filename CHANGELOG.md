@@ -8,6 +8,13 @@ If you value it, consider supporting us, we appreciate it!
 
 <!-- START --->
 
+### v2.7.1
+
+_Released on 2025-12-04_
+
+1. Linter bug fixes
+   * `modernize`: disable `stringscut` analyzer
+
 ### v2.7.0
 
 _Released on 2025-12-03_
