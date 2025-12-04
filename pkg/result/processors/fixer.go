@@ -301,6 +301,10 @@ func diff3Conflict(path, xlabel, ylabel string, xedits, yedits []diff.Edit) erro
 		return err
 	}
 
-	return fmt.Errorf("conflicting edits from %s and %s on %s\nfirst edits:\n%s\nsecond edits:\n%s",
-		xlabel, ylabel, path, xdiff, ydiff)
+	from := xlabel
+	if from != ylabel {
+		from += " and " + ylabel
+	}
+	return fmt.Errorf("conflicting edits from %s on %s\nfirst edits:\n%s\nsecond edits:\n%s",
+		from, path, xdiff, ydiff)
 }
