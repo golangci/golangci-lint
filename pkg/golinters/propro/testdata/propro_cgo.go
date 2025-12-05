@@ -1,3 +1,4 @@
+//golangcitest:args -Epropro
 package testdata
 
 /*
@@ -31,5 +32,5 @@ func (s *CgoEntity) SetProtectedField(value int) {
 func CgoFunc1() {
 	e := &CgoEntity{}
 	e.SetProtectedField(1)
-	e.IntField = 10 // want "assignment to exported field Entity.IntField is forbidden outside its methods"
+	e.IntField = 10 // want "assignment to exported field CgoEntity.IntField is forbidden outside its methods"
 }

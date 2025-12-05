@@ -1,7 +1,7 @@
+//golangcitest:args -Epropro
 package testdata
 
-type UnProtectedEntity struct {
-	StringField string
+type Entity2 struct {
 	IntField    int
 	IntPtrField *int
 }
@@ -101,17 +101,16 @@ func SomeFunc9() {
 }
 
 func SomeFunc10() {
-	e := &UnProtectedEntity{}
-	e.StringField = "value"
-	e.IntField++
-	e.IntField--
-	e.IntField += 10
-	e.IntField -= 10
-	e.IntField *= 10
-	e.IntField /= 10
-	e.IntField = 10
-	*(&e.IntField)++
-	*(&e.IntField)--
-	e.IntPtrField = new(int)
-	*e.IntPtrField = 20
+	e := &Entity2{}
+	e.IntField++             // want "assignment to exported field Entity2.IntField is forbidden outside its methods"
+	e.IntField--             // want "assignment to exported field Entity2.IntField is forbidden outside its methods"
+	e.IntField += 10         // want "assignment to exported field Entity2.IntField is forbidden outside its methods"
+	e.IntField -= 10         // want "assignment to exported field Entity2.IntField is forbidden outside its methods"
+	e.IntField *= 10         // want "assignment to exported field Entity2.IntField is forbidden outside its methods"
+	e.IntField /= 10         // want "assignment to exported field Entity2.IntField is forbidden outside its methods"
+	e.IntField = 10          // want "assignment to exported field Entity2.IntField is forbidden outside its methods"
+	*(&e.IntField)++         // want "assignment to exported field Entity2.IntField is forbidden outside its methods"
+	*(&e.IntField)--         // want "assignment to exported field Entity2.IntField is forbidden outside its methods"
+	e.IntPtrField = new(int) // want "assignment to exported field Entity2.IntPtrField is forbidden outside its methods"
+	*e.IntPtrField = 20      // want "assignment to exported field Entity2.IntPtrField is forbidden outside its methods"
 }
