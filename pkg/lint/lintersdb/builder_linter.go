@@ -91,6 +91,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/prealloc"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/predeclared"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/promlinter"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/propro"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/protogetter"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/reassign"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/recvcheck"
@@ -565,6 +566,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 		linter.NewConfig(promlinter.New(&cfg.Linters.Settings.Promlinter)).
 			WithSince("v1.40.0").
 			WithURL("https://github.com/yeya24/promlinter"),
+
+		linter.NewConfig(propro.New(&cfg.Linters.Settings.ProPro)).
+			WithSince("v2.8.0").
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/digitalstraw/propro"),
 
 		linter.NewConfig(protogetter.New(&cfg.Linters.Settings.ProtoGetter)).
 			WithSince("v1.55.0").

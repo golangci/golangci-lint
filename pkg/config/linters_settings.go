@@ -283,6 +283,7 @@ type LintersSettings struct {
 	Prealloc                 PreallocSettings                 `mapstructure:"prealloc"`
 	Predeclared              PredeclaredSettings              `mapstructure:"predeclared"`
 	Promlinter               PromlinterSettings               `mapstructure:"promlinter"`
+	ProPro                   ProProSettings                   `mapstructure:"propro"`
 	ProtoGetter              ProtoGetterSettings              `mapstructure:"protogetter"`
 	Reassign                 ReassignSettings                 `mapstructure:"reassign"`
 	Recvcheck                RecvcheckSettings                `mapstructure:"recvcheck"`
@@ -815,6 +816,11 @@ type PredeclaredSettings struct {
 type PromlinterSettings struct {
 	Strict          bool     `mapstructure:"strict"`
 	DisabledLinters []string `mapstructure:"disabled-linters"`
+}
+
+type ProProSettings struct {
+	EntityListFile string   `mapstructure:"entity-list-file"`
+	Structs        []string `mapstructure:"structs"`
 }
 
 type ProtoGetterSettings struct {

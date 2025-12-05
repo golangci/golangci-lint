@@ -765,6 +765,15 @@
     "since": "v1.40.0"
   },
   {
+    "name": "propro",
+    "desc": "public fields' write protection in structs (entities)",
+    "loadMode": 384,
+    "originalURL": "https://github.com/digitalstraw/propro",
+    "internal": false,
+    "isSlow": false,
+    "since": "v2.6.3"
+  },
+  {
     "name": "protogetter",
     "desc": "Reports direct reads from proto message fields when getters should be used",
     "loadMode": 8767,
