@@ -158,8 +158,8 @@ github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/denis-tingaikin/go-header v0.5.0 h1:SRdnP5ZKvcO9KKRP1KJrhFR3RrlGuD+42t4429eC9k8=
 github.com/denis-tingaikin/go-header v0.5.0/go.mod h1:mMenU5bWrok6Wl2UsZjy+1okegmwQ3UgWl4V1D8gjlY=
-github.com/digitalstraw/propro v1.0.0 h1:xLrElmkX6zB0cVQea2QgTWrRjbbzLSeU6p9SBIPnChI=
-github.com/digitalstraw/propro v1.0.0/go.mod h1:+71vzW8yjWE3EW8NEWRmm8GvjPanHrxqS4OQehP5gfU=
+github.com/digitalstraw/propro v1.2.0 h1:5b7tjnNQcMKcSVBtiR3IWPEXN3qtnAppoVegA9iN8Ys=
+github.com/digitalstraw/propro v1.2.0/go.mod h1:+71vzW8yjWE3EW8NEWRmm8GvjPanHrxqS4OQehP5gfU=
 github.com/dlclark/regexp2 v1.11.5 h1:Q/sSnsKerHeCkc/jSTNq1oCm7KiVgUMZRDUoRu0JQZQ=
 github.com/dlclark/regexp2 v1.11.5/go.mod h1:DHkYz0B9wPfa6wondMfaivmHpzrQ3v9q8cnmRbL6yW8=
 github.com/ebitengine/purego v0.9.1 h1:a/k2f2HQU3Pi399RPW1MOaZyhKJL9w/xFpKAg4q1s0A=

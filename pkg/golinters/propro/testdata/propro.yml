@@ -3,6 +3,6 @@ version: "2"
 linters:
   settings:
     propro:
-      entity-list-file: "testdata/entities/entities.go"
+      entity-list-file: "pkg/golinters/propro/testdata/entities/entities.go"
       structs:
-        - "SubEntity"
+        - SubEntity
