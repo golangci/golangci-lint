@@ -19,8 +19,12 @@ aliases:
 
 ### Special thanks
 
-Thanks to [alecthomas/gometalinter](https://github.com/alecthomas/gometalinter) for inspiration and amazing work.
+Thanks to Ludovic Fernandez ([@ldez](https://github.com/ldez)) for actively maintaining the golangci-lint project.
 
-Thanks to [bradleyfalzon/revgrep](https://github.com/bradleyfalzon/revgrep) for cool diff tool.
+Thanks to Denis Isaev ([@jirfag](https://github.com/jirfag)) for creating golangci-lint and the GitHub Action [golangci-lint-action](https://github.com/golangci/golangci-lint-action).
+
+Thanks to Alec Thomas ([@alecthomas](https://github.com/alecthomas)) and [alecthomas/gometalinter](https://github.com/alecthomas/gometalinter) for inspiration and amazing work.
+
+Thanks to Bradley Falzon ([@bradleyfalzon](https://github.com/bradleyfalzon)) and [bradleyfalzon/revgrep](https://github.com/bradleyfalzon/revgrep) for cool diff tool.
 
 The golangci-lint logo is inspired by the Go gopher designed by Renee French [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/).

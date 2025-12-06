@@ -294,6 +294,14 @@
     "avatar": "https://github.com/jingyugao.png"
   },
   {
+    "name": "jirfag",
+    "linters": [
+      "goprintffuncname"
+    ],
+    "profile": "https://github.com/sponsors/jirfag",
+    "avatar": "https://github.com/jirfag.png"
+  },
+  {
     "name": "jjti",
     "linters": [
       "spancheck"
