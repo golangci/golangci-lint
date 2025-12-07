@@ -8,6 +8,13 @@ If you value it, consider supporting us, we appreciate it!
 
 <!-- START --->
 
+### v2.7.2
+
+_Released on 2025-12-07_
+
+1. Linter bug fixes
+   * `gosec`: from 2.22.10 to daccba6b93d7
+
 ### v2.7.1
 
 _Released on 2025-12-04_
