@@ -1488,6 +1488,13 @@ linters:
         # Default: false
         local-replace-directives: false
 
+    goroutinedeferguard:
+      # Target function name to check for deferred calls inside goroutines
+      # Format: fully qualified identifier in the form full/pkg/path.Foo.
+      # When package path not specified, matching is done only by function name.
+      # Default: "HandlePanic"
+      target: github.com/my-org/my-repo/common.PanicHandler
+
     gosec:
       # To select a subset of rules to run.
       # Available rules: https://github.com/securego/gosec#available-rules

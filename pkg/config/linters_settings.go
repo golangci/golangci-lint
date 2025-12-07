@@ -252,6 +252,7 @@ type LintersSettings struct {
 	Goheader                 GoHeaderSettings                 `mapstructure:"goheader"`
 	GoModDirectives          GoModDirectivesSettings          `mapstructure:"gomoddirectives"`
 	Gomodguard               GoModGuardSettings               `mapstructure:"gomodguard"`
+	GoroutineDeferGuard      GoroutineDeferGuardSettings      `mapstructure:"goroutinedeferguard"`
 	Gosec                    GoSecSettings                    `mapstructure:"gosec"`
 	Gosmopolitan             GosmopolitanSettings             `mapstructure:"gosmopolitan"`
 	Unqueryvet               UnqueryvetSettings               `mapstructure:"unqueryvet"`
@@ -601,6 +602,10 @@ type GoModGuardModule struct {
 type GoModGuardVersion struct {
 	Version string `mapstructure:"version"`
 	Reason  string `mapstructure:"reason"`
+}
+
+type GoroutineDeferGuardSettings struct {
+	Target string `mapstructure:"target"`
 }
 
 type GoSecSettings struct {

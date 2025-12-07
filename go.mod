@@ -114,6 +114,7 @@ require (
 	github.com/spf13/pflag v1.0.10
 	github.com/spf13/viper v1.12.0
 	github.com/ssgreg/nlreturn/v2 v2.2.1
+	github.com/status-im/goroutine-defer-guard v0.2.1
 	github.com/stbenjam/no-sprintf-host-port v0.3.1
 	github.com/stretchr/testify v1.11.1
 	github.com/tetafro/godot v1.5.4
@@ -193,6 +194,7 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/muesli/termenv v0.16.0 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
+	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/power-devops/perfstat v0.0.0-20240221224432-82ca36839d55 // indirect
 	github.com/prometheus/client_golang v1.12.1 // indirect

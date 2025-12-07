@@ -1,0 +1,3 @@
+package right
+
+func MyPanicHandler() {}

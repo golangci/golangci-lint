@@ -1,0 +1,6 @@
+version: "2"
+
+linters:
+  settings:
+    goroutinedeferguard:
+      target: "github.com/golangci/golangci-lint/v2/pkg/golinters/goroutinedeferguard/testdata/right.MyPanicHandler"
