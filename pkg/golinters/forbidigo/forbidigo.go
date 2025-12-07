@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/ashanbrown/forbidigo/v2/forbidigo"
+	"go.yaml.in/yaml/v3"
 	"golang.org/x/tools/go/analysis"
-	"gopkg.in/yaml.v3"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"

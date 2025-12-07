@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"fmt"
 
+	"go.yaml.in/yaml/v3"
 	"golang.org/x/tools/go/packages"
-	"gopkg.in/yaml.v3"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 )
