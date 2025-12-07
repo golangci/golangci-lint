@@ -26,8 +26,8 @@ import (
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"go.uber.org/automaxprocs/maxprocs"
+	"go.yaml.in/yaml/v3"
 	"golang.org/x/mod/sumdb/dirhash"
-	"gopkg.in/yaml.v3"
 
 	"github.com/golangci/golangci-lint/v2/internal/cache"
 	"github.com/golangci/golangci-lint/v2/pkg/config"

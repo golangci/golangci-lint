@@ -3,7 +3,7 @@ package versionone
 import (
 	"encoding"
 
-	"gopkg.in/yaml.v3"
+	"go.yaml.in/yaml/v3"
 
 	"github.com/golangci/golangci-lint/v2/pkg/commands/internal/migrate/ptr"
 )
