@@ -19,7 +19,7 @@ some linters and/or internal pieces of golangci-lint could need to be adapted to
 
 Run golangci-lint in CI and check the exit code. If it's non-zero - fail the build.
 
-See [how to properly install golangci-lint in CI](/docs/welcome/install/#ci-installation)
+See [how to properly install golangci-lint in CI](/docs/welcome/install/ci)
 
 ## golangci-lint doesn't work
 
