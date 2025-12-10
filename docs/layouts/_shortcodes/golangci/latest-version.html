@@ -5,4 +5,11 @@ Based on the data file `data/version.json`.
 @example {{< golangci/latest-version >}}
 */ -}}
 
-{{- index $.Site.Data.version.version | default .Page.GitInfo.AbbreviatedHash | default "devel" -}}
+{{- $v := index $.Site.Data.version.version -}}
+{{- if $v -}}
+  {{- $v -}}
+{{- else if .Page.GitInfo -}}
+  {{- .Page.GitInfo.AbbreviatedCommit -}}
+{{- else -}}
+  devel
+{{- end -}}

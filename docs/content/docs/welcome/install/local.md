@@ -1,103 +1,21 @@
 ---
-title: "Install"
-weight: 1
-aliases:
-  - /welcome/install/
+title: "Local Installation"
+weight: 2
 ---
 
-## CI installation
-
-Most installations of golangci-lint are performed for CI.
-
-It's important to have reproducible CI: don't start to fail all builds at the same time.
-With golangci-lint this can happen if you use option `linters.default: all` and a new linter is added
-or even without `linters.default: all` when one upstream linter is upgraded.
-
-> [!IMPORTANT]
-> It's highly recommended installing a specific version of golangci-lint available on the [releases page](https://github.com/golangci/golangci-lint/releases).
-
-### GitHub Actions
-
-We recommend using [our GitHub Action](https://github.com/golangci/golangci-lint-action) for running golangci-lint in CI for GitHub projects.
-
-It's [fast and uses smart caching](https://github.com/golangci/golangci-lint-action#performance) inside,
-and it can be much faster than the simple binary installation.
-
-Also, the action creates GitHub annotations for found issues (you don't need to dig into build log to see found by golangci-lint issues).
-
-{{< cards cols=2 >}}
-    {{< golangci/image-card src="/images/colored-line-number.png" title="Console Output" >}}
-    {{< golangci/image-card src="/images/annotations.png" title="Annotations" >}}
-{{< /cards >}}
-
-### GitLab CI
-
-GitLab provides a [guide for integrating golangci-lint into the Code Quality widget](https://docs.gitlab.com/ci/testing/code_quality/#golangci-lint).
-A simple quickstart is their [CI component](https://gitlab.com/explore/catalog/components/code-quality-oss/codequality-os-scanners-integration), which can be used like this:
-
-```yaml {filename=".gitlab-ci.yml"} 
-include:
-  - component: $CI_SERVER_FQDN/components/code-quality-oss/codequality-os-scanners-integration/golangci@1.0.1
-```
-
-Note that you [can only reference components in the same GitLab instance as your project](https://docs.gitlab.com/ci/components/#use-a-component)
-
-### Buildkite
-
-Buildkite offers a [plugin](https://buildkite.com/resources/plugins/buildkite-plugins/golangci-lint-buildkite-plugin/) for running golangci-lint in Buildkite pipelines.
-
-It utilizes the official [Docker image](https://hub.docker.com/r/golangci/golangci-lint) by default, but can be set to use a binary if available on the agent.
-
-The plugin will annotate builds with results, providing an easily readable summary of fixes.
-
-```yaml {filename=".pipeline.yml"}
-plugins:
-  - golangci-lint#v1.0.0:
-      config: .golangci.yml
-```
-
-### Other CI
-
-Here is the other way to install golangci-lint:
-
-```bash
-# binary will be $(go env GOPATH)/bin/golangci-lint
-curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b $(go env GOPATH)/bin {{< golangci/latest-version >}}
-
-# or install it into ./bin/
-curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s {{< golangci/latest-version >}}
-
-# In Alpine Linux (as it does not come with curl by default)
-wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s {{< golangci/latest-version >}}
-
-golangci-lint --version
-```
-
-It is advised that you periodically update the version of golangci-lint as the project is under active development and is constantly being improved.
-For any problems with golangci-lint, check out recent [GitHub issues](https://github.com/golangci/golangci-lint/issues) and update if needed.
-
-## Local Installation
-
-[![Packaging status](https://repology.org/badge/vertical-allrepos/golangci-lint.svg)](https://repology.org/project/golangci-lint/versions)
-
-### Binaries
-
-```bash
-# binary will be $(go env GOPATH)/bin/golangci-lint
-curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b $(go env GOPATH)/bin {{< golangci/latest-version >}}
-
-golangci-lint --version
-```
-
-On Windows, you can run the above commands with Git Bash, which comes with [Git for Windows](https://git-scm.com/download/win).
-
-### Linux
+## Linux
 
 Golangci-lint is available inside the majority of the package managers.
 
-### macOS
+{{% details closed="true" title="Packaging status" %}}
 
-#### Homebrew
+[![Packaging status](https://repology.org/badge/vertical-allrepos/golangci-lint.svg)](https://repology.org/project/golangci-lint/versions)
+
+{{% /details %}}
+
+## macOS
+
+### Homebrew
 
 Note: Homebrew can use an unexpected version of Go to build the binary,
 so we recommend either using our binaries or ensuring the version of Go used to build.
@@ -120,7 +38,7 @@ brew tap golangci/tap
 brew install golangci/tap/golangci-lint
 ```
 
-#### MacPorts
+### MacPorts
 
 It can also be installed through [MacPorts](https://www.macports.org/)
 The MacPorts installation mode is community-driven and not officially maintained by the golangci team.
@@ -129,9 +47,9 @@ The MacPorts installation mode is community-driven and not officially maintained
 sudo port install golangci-lint
 ```
 
-### Windows
+## Windows
 
-#### Chocolatey
+### Chocolatey
 
 You can install a binary on Windows using [chocolatey](https://community.chocolatey.org/packages/golangci-lint).
 
@@ -139,7 +57,7 @@ You can install a binary on Windows using [chocolatey](https://community.chocola
 choco install golangci-lint
 ```
 
-#### Scoop
+### Scoop
 
 You can install a binary on Windows using [scoop](https://scoop.sh).
 
@@ -149,7 +67,9 @@ scoop install main/golangci-lint
 
 The scoop package is not officially maintained by golangci team.
 
-### Docker
+## Docker
+
+The Docker image is available on [Docker Hub](https://hub.docker.com/r/golangci/golangci-lint).
 
 ```bash
 docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:{{< golangci/latest-version >}} golangci-lint run
@@ -170,7 +90,7 @@ docker run --rm -t -v $(pwd):/app -w /app \
 golangci/golangci-lint:{{< golangci/latest-version >}} golangci-lint run
 ```
 
-### Install from Sources
+## Install from Sources
 
 > [!WARNING]
 > Using `go install`/`go get`, "tools pattern", and `tool` command/directives installations aren't guaranteed to work.  
