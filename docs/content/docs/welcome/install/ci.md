@@ -36,6 +36,20 @@ include:
 
 Note that you [can only reference components in the same GitLab instance as your project](https://docs.gitlab.com/ci/components/#use-a-component)
 
+## Buildkite
+
+Buildkite provides a [plugin](https://buildkite.com/resources/plugins/buildkite-plugins/golangci-lint-buildkite-plugin/) for running golangci-lint in Buildkite pipelines.
+
+It utilizes the [Docker image of golangci-lint](/docs/welcome/install/local/#docker) by default, but can be set to use a binary if available on the agent.
+
+The plugin will annotate builds with results, providing an easily readable summary of fixes.
+
+```yaml {filename=".pipeline.yml"}
+plugins:
+  - golangci-lint#v1.0.0:
+      config: .golangci.yml
+```
+
 ## Other CI
 
 Here are the other ways to install golangci-lint:
@@ -44,5 +58,3 @@ Here are the other ways to install golangci-lint:
   {{< card link="/docs/welcome/install/local/#binaries" title="Bash/Binaries" icon="archive" >}}
   {{< card link="/docs/welcome/install/local/#docker" title="Docker" icon="archive" >}}
 {{< /cards >}}
-
-
