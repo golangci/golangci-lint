@@ -3,6 +3,23 @@ title: "Local Installation"
 weight: 2
 ---
 
+### Binaries
+
+```bash
+# binary will be $(go env GOPATH)/bin/golangci-lint
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b $(go env GOPATH)/bin {{< golangci/latest-version >}}
+
+# or install it into ./bin/
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s {{< golangci/latest-version >}}
+
+# In Alpine Linux (as it does not come with curl by default)
+wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s {{< golangci/latest-version >}}
+
+golangci-lint --version
+```
+
+On Windows, you can run the above commands with Git Bash, which comes with [Git for Windows](https://git-scm.com/download/win).
+
 ## Linux
 
 Golangci-lint is available inside the majority of the package managers.
