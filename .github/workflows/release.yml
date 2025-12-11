@@ -72,6 +72,7 @@ jobs:
         run: docker login -u golangci -p ${{ secrets.GOLANGCI_LINT_DOCKER_TOKEN }}
 
       - name: Create release
+        id: goreleaser
         uses: goreleaser/goreleaser-action@v6
         with:
           version: latest
@@ -84,7 +85,7 @@ jobs:
 
       - uses: actions/attest-build-provenance@v3
         with:
-          subject-checksums: ./dist/golangci-lint-*-checksums.txt
+          subject-checksums: ./dist/golangci-lint-${{ fromJSON(steps.goreleaser.outputs.metadata).version }}-checksums.txt
           github-token: ${{ secrets.GOLANGCI_LINT_TOKEN }}
       - uses: actions/attest-build-provenance@v3
         with:
