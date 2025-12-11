@@ -29,6 +29,7 @@ func New(settings *config.GoModDirectivesSettings) *goanalysis.Linter {
 		opts.ToolchainForbidden = settings.ToolchainForbidden
 		opts.ToolForbidden = settings.ToolForbidden
 		opts.GoDebugForbidden = settings.GoDebugForbidden
+		opts.CheckModulePath = settings.CheckModulePath
 
 		if settings.ToolchainPattern != "" {
 			exp, err := regexp.Compile(settings.ToolchainPattern)

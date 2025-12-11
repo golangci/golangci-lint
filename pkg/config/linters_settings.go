@@ -575,6 +575,7 @@ type GoModDirectivesSettings struct {
 	ToolForbidden             bool     `mapstructure:"tool-forbidden"`
 	GoDebugForbidden          bool     `mapstructure:"go-debug-forbidden"`
 	GoVersionPattern          string   `mapstructure:"go-version-pattern"`
+	CheckModulePath           bool     `mapstructure:"check-module-path"`
 }
 
 type GoModGuardSettings struct {

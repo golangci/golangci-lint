@@ -2220,6 +2220,11 @@
               "description": "Defines a pattern to validate `go` minimum version directive.",
               "type": "string",
               "default": ""
+            },
+            "check-module-path": {
+              "description": "Check the validity of the module path.",
+              "type": "boolean",
+              "default": false
             }
           }
         },

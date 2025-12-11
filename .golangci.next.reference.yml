@@ -1453,6 +1453,9 @@ linters:
       # Defines a pattern to validate `go` minimum version directive.
       # Default: '' (no match)
       go-version-pattern: '\d\.\d+(\.0)?'
+      # Check the validity of the module path.
+      # Default: false
+      check-module-path: true
 
     gomodguard:
       allowed:
