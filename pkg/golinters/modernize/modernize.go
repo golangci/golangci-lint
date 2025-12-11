@@ -14,9 +14,9 @@ func New(settings *config.ModernizeSettings) *goanalysis.Linter {
 	var analyzers []*analysis.Analyzer
 
 	if settings == nil {
-		analyzers = cleanSuite()
+		analyzers = modernize.Suite
 	} else {
-		for _, analyzer := range cleanSuite() {
+		for _, analyzer := range modernize.Suite {
 			if slices.Contains(settings.Disable, analyzer.Name) {
 				continue
 			}
@@ -31,20 +31,4 @@ func New(settings *config.ModernizeSettings) *goanalysis.Linter {
 		analyzers,
 		nil).
 		WithLoadMode(goanalysis.LoadModeTypesInfo)
-}
-
-func cleanSuite() []*analysis.Analyzer {
-	var analyzers []*analysis.Analyzer
-
-	for _, analyzer := range modernize.Suite {
-		// Disabled because of false positives
-		// https://github.com/golang/go/issues/76687
-		if analyzer.Name == "stringscut" {
-			continue
-		}
-
-		analyzers = append(analyzers, analyzer)
-	}
-
-	return analyzers
 }

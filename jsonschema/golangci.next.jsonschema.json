@@ -726,10 +726,12 @@
         "slicescontains",
         "slicessort",
         "stditerators",
+        "stringscut",
         "stringscutprefix",
         "stringsseq",
         "stringsbuilder",
         "testingcontext",
+        "unsafefuncs",
         "waitgroup"
       ]
     },

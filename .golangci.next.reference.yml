@@ -2152,6 +2152,8 @@ linters:
         - slicessort
         # Use iterators instead of Len/At-style APIs.
         - stditerators
+        # Replace strings.Index etc. with strings.Cut.
+        - stringscut
         # Replace HasPrefix/TrimPrefix with CutPrefix.
         - stringscutprefix
         # Replace ranging over Split/Fields with SplitSeq/FieldsSeq.
@@ -2160,6 +2162,8 @@ linters:
         - stringsbuilder
         # Replace context.WithCancel with t.Context in tests.
         - testingcontext
+        # Replace unsafe pointer arithmetic with function calls.
+        - unsafefuncs
         # Replace wg.Add(1)/go/wg.Done() with wg.Go.
         - waitgroup
 
