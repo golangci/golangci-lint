@@ -3,7 +3,7 @@ title: "Local Installation"
 weight: 2
 ---
 
-### Binaries
+## Binaries
 
 ```bash
 # binary will be $(go env GOPATH)/bin/golangci-lint
