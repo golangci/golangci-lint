@@ -8,6 +8,27 @@ If you value it, consider supporting us, we appreciate it!
 
 <!-- START --->
 
+### v2.8.0
+
+_Released on 2026-01-07_
+
+1. Linters new features or changes
+   * `godoc-lint`: from 0.10.2 to 0.11.1 (new rule: `require-stdlib-doclink`)
+   * `golines`: from 442fd0091d95 to 0.14.0
+   * `gomoddirectives`: from 0.7.1 to 0.8.0
+   * `gosec`: from daccba6b93d7 to 2.22.11 (new rule: `G116`)
+   * `modernize`: from 0.39.0 to 0.40.0 (new analyzers: `stringscut`, `unsafefuncs`)
+   * `prealloc`: from 1.0.0 to 1.0.1 (message changes)
+   * `unqueryvet`: from 1.3.0 to 1.4.0 (new options: `check-aliased-wildcard`, `check-string-concat`, `check-format-strings`, `check-string-builder`, `check-subqueries`, `ignored-functions`, `sql-builders`)
+2. Linters bug fixes
+   * `go-critic`: from 0.14.2 to 0.14.3
+   * `go-errorlint`: from 1.8.0 to 1.9.0
+   * `govet`: from 0.39.0 to 0.40.0
+   * `protogetter`: from 0.3.17 to 0.3.18
+   * `revive`: add missing enable-default-rules setting
+3. Documentation
+   * docs: split installation page
+
 ### v2.7.2
 
 _Released on 2025-12-07_
