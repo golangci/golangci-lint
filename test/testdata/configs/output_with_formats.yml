@@ -1,0 +1,19 @@
+version: "2"
+
+linters:
+  settings:
+    misspell:
+      locale: US
+      ignore-rules:
+        - langauge
+        - Dialogue
+
+output:
+  formats:
+    json:
+      path: '{{TEMPDIR}}/config-json-output.json'
+    html:
+      path: '{{TEMPDIR}}/config-html-output.html'
+
+run:
+  relative-path-mode: wd
