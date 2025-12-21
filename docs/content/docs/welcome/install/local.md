@@ -107,6 +107,18 @@ docker run --rm -t -v $(pwd):/app -w /app \
 golangci/golangci-lint:{{< golangci/latest-version >}} golangci-lint run
 ```
 
+## mise
+
+Note: `mise` is using the [aqua](https://aquaproj.github.io/) backend for this tool, so binaries installed came from GitHub assets (recommended).
+
+You can install golangci-lint by using [`mise`](https://github.com/jdx/mise).
+
+```bash
+mise use -g golangci-lint@{{< golangci/latest-version >}}
+```
+
+The `mise` integration is not officially maintained by golangci team.
+
 ## Install from Sources
 
 > [!WARNING]
