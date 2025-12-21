@@ -1,7 +1,7 @@
 package golines
 
 import (
-	"github.com/golangci/golines"
+	"github.com/golangci/golines/shorten"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 )
@@ -9,27 +9,25 @@ import (
 const Name = "golines"
 
 type Formatter struct {
-	shortener *golines.Shortener
+	shortener *shorten.Shortener
 }
 
 func New(settings *config.GoLinesSettings) *Formatter {
-	options := golines.ShortenerConfig{}
+	cfg := &shorten.Config{}
 
 	if settings != nil {
-		options = golines.ShortenerConfig{
-			MaxLen:           settings.MaxLen,
-			TabLen:           settings.TabLen,
-			KeepAnnotations:  false, // golines debug (not usable inside golangci-lint)
-			ShortenComments:  settings.ShortenComments,
-			ReformatTags:     settings.ReformatTags,
-			IgnoreGenerated:  false, // handle globally
-			DotFile:          "",    // golines debug (not usable inside golangci-lint)
-			ChainSplitDots:   settings.ChainSplitDots,
-			BaseFormatterCmd: "go fmt", // fake cmd
+		cfg = &shorten.Config{
+			MaxLen:          settings.MaxLen,
+			TabLen:          settings.TabLen,
+			KeepAnnotations: false, // golines debug (not usable inside golangci-lint)
+			ShortenComments: settings.ShortenComments,
+			ReformatTags:    settings.ReformatTags,
+			DotFile:         "", // golines debug (not usable inside golangci-lint)
+			ChainSplitDots:  settings.ChainSplitDots,
 		}
 	}
 
-	return &Formatter{shortener: golines.NewShortener(options)}
+	return &Formatter{shortener: shorten.NewShortener(cfg)}
 }
 
 func (*Formatter) Name() string {
@@ -37,5 +35,5 @@ func (*Formatter) Name() string {
 }
 
 func (f *Formatter) Format(_ string, src []byte) ([]byte, error) {
-	return f.shortener.Shorten(src)
+	return f.shortener.Process(src)
 }
