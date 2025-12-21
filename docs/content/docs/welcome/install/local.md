@@ -20,16 +20,6 @@ golangci-lint --version
 
 On Windows, you can run the above commands with Git Bash, which comes with [Git for Windows](https://git-scm.com/download/win).
 
-## Using mise on Linux/MacOS/Windows
-
-If you are using [mise](https://github.com/jdx/mise), you can use the version you want with a command like this (here choosing the latest alias which always point to the last one version available):
-
-```bash
-mise use -g golangci-lint@latest
-```
-
-*Note: mise is using the aqua backend for this tool, so binaries installed came from github assets.*
-
 ## Linux
 
 Golangci-lint is available inside the majority of the package managers.
@@ -116,6 +106,18 @@ docker run --rm -t -v $(pwd):/app -w /app \
 -v ~/.cache/golangci-lint:/.cache/golangci-lint -e GOLANGCI_LINT_CACHE=/.cache/golangci-lint \
 golangci/golangci-lint:{{< golangci/latest-version >}} golangci-lint run
 ```
+
+## mise
+
+Note: `mise` is using the [aqua](https://aquaproj.github.io/) backend for this tool, so binaries installed came from GitHub assets (recommended).
+
+If you are using [`mise`](https://github.com/jdx/mise), you can use the version you want with a command like this:
+
+```bash
+mise use -g golangci-lint@{{< golangci/latest-version >}}
+```
+
+The `mise` integration is not officially maintained by golangci team.
 
 ## Install from Sources
 
