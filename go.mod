@@ -17,7 +17,7 @@ require (
 	github.com/Djarvur/go-err113 v0.1.1
 	github.com/MirrexOne/unqueryvet v1.3.0
 	github.com/OpenPeeDeeP/depguard/v2 v2.2.1
-	github.com/alecthomas/chroma/v2 v2.20.0
+	github.com/alecthomas/chroma/v2 v2.21.1
 	github.com/alecthomas/go-check-sumtype v0.3.1
 	github.com/alexkohler/nakedret/v2 v2.0.6
 	github.com/alexkohler/prealloc v1.0.0
