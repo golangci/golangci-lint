@@ -111,7 +111,7 @@ golangci/golangci-lint:{{< golangci/latest-version >}} golangci-lint run
 
 Note: `mise` is using the [aqua](https://aquaproj.github.io/) backend for this tool, so binaries installed came from GitHub assets (recommended).
 
-You can install a binary on your OS (Linuw/Windows/macOS) using [`mise`](https://github.com/jdx/mise).
+You can install golangci-lint by using [`mise`](https://github.com/jdx/mise).
 
 ```bash
 mise use -g golangci-lint@{{< golangci/latest-version >}}
