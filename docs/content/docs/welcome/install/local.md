@@ -20,6 +20,16 @@ golangci-lint --version
 
 On Windows, you can run the above commands with Git Bash, which comes with [Git for Windows](https://git-scm.com/download/win).
 
+## Using mise on Linux/MacOS/Windows
+
+If you are using [mise](https://github.com/jdx/mise), you can use the version you want with a command like this (here choosing the latest alias which always point to the last one version available):
+
+```bash
+mise use -g golangci-lint@latest
+```
+
+*Note: mise is using the aqua backend for this tool, so binaries installed came from github assets.*
+
 ## Linux
 
 Golangci-lint is available inside the majority of the package managers.
