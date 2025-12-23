@@ -33,7 +33,7 @@ trap cleanBinaries EXIT
 
 ## Download version
 
-curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b "./temp-${VERSION}" "${VERSION}"
+curl -sSfL https://golangci-lint.run/install.sh | sh -s -- -b "./temp-${VERSION}" "${VERSION}"
 
 mv "temp-${VERSION}/golangci-lint" "./golangci-lint-${VERSION}"
 rm -rf "temp-${VERSION}"
