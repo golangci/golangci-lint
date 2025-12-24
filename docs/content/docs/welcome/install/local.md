@@ -7,13 +7,13 @@ weight: 2
 
 ```bash
 # binary will be $(go env GOPATH)/bin/golangci-lint
-curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b $(go env GOPATH)/bin {{< golangci/latest-version >}}
+curl -sSfL https://golangci-lint.run/install.sh | sh -s -- -b $(go env GOPATH)/bin {{< golangci/latest-version >}}
 
 # or install it into ./bin/
-curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s {{< golangci/latest-version >}}
+curl -sSfL https://golangci-lint.run/install.sh | sh -s {{< golangci/latest-version >}}
 
 # In Alpine Linux (as it does not come with curl by default)
-wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s {{< golangci/latest-version >}}
+wget -O- -nv https://golangci-lint.run/install.sh | sh -s {{< golangci/latest-version >}}
 
 golangci-lint --version
 ```

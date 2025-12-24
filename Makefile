@@ -109,7 +109,7 @@ docs_clean:
 	@make -C ./docs clean
 .PHONY: docs_clean
 
-docs_build: website_copy_jsonschema website_expand_templates
+docs_build: website_copy_install_sh website_copy_jsonschema website_expand_templates
 	@make -C ./docs build
 .PHONY: docs_build
 
@@ -119,6 +119,10 @@ docs/static/demo.gif: FORCE
 website_copy_jsonschema:
 	 go run ./scripts/website/copy_jsonschema/
 .PHONY: website_copy_jsonschema
+
+website_copy_install_sh:
+	 cp install.sh ./docs/static/
+.PHONY: website_copy_install_sh
 
 website_expand_templates:
 	go run ./scripts/website/expand_templates/
