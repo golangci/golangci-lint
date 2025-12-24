@@ -1,6 +1,11 @@
 module github.com/golangci/golangci-lint/v2
 
-go 1.24.0
+go 1.25.0
+
+ignore (
+	./docs
+	./jsonschema
+)
 
 require (
 	4d63.com/gocheckcompilerdirectives v1.3.0
@@ -135,7 +140,6 @@ require (
 	go-simpler.org/sloglint v0.11.1
 	go.augendre.info/arangolint v0.3.1
 	go.augendre.info/fatcontext v0.9.0
-	go.uber.org/automaxprocs v1.6.0
 	go.yaml.in/yaml/v3 v3.0.4
 	golang.org/x/mod v0.31.0
 	golang.org/x/sync v0.19.0
