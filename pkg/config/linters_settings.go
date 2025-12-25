@@ -536,7 +536,8 @@ type GodoclintSettings struct {
 	Disable []string `mapstructure:"disable"`
 	Options struct {
 		MaxLen struct {
-			Length *uint `mapstructure:"length"`
+			Length         *uint    `mapstructure:"length"`
+			IgnorePatterns []string `mapstructure:"ignore-patterns"`
 		} `mapstructure:"max-len"`
 		RequireDoc struct {
 			IgnoreExported   *bool `mapstructure:"ignore-exported"`
