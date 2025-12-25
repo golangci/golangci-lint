@@ -22,5 +22,5 @@ linters:
         max-len:
           length: 127
           ignore-patterns:
-            - ^IGNORE-ME:'
+            - '^IGNORE-ME:'
             - ALSO-IGNORE-ME
