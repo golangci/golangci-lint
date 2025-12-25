@@ -105,3 +105,8 @@ const DeprecatedConstB = 1
 //
 // deprecated:do not use
 const DeprecatedConstC = 1
+
+// constWithStdlibDoclink has a potential doc link to encoding/json.Encoder. // want `text "encoding/json\.Encoder" should be replaced with "\[encoding/json\.Encoder\]" to link to stdlib type`
+//
+//godoclint:disable max-len
+const constWithStdlibDoclink = 1
