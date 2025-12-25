@@ -61,6 +61,12 @@ const constWithUnusedLink = 1
 // constWithTooLongGodoc has a very long godoc that does not exceed the maximum allowed length for godoc comments.
 const constWithTooLongGodoc = 1
 
+// constWithTooLongGodocButIgnored has very long godoc lines but all should be ignored
+//
+// IGNORE-ME: This is a very loooooooooooooooooooooooooooooooooooooooong godoc line that should be ignored by the max-len rule.
+// ALSO-IGNORE-ME: Another very loooooooooooooooooooooooooooooooong godoc line that should also be ignored by the max-len rule.
+const constWithTooLongGodocButIgnored = 1
+
 // DeprecatedConstA is...
 //
 // Deprecated: do not use
@@ -68,3 +74,6 @@ const DeprecatedConstA = 1
 
 // Deprecated: do not use
 const DeprecatedConstB = 1
+
+// constWithStdlibDoclink has a doc link to [encoding/json.Encoder].
+const constWithStdlibDoclink = 1

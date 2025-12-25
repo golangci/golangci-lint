@@ -56,3 +56,7 @@ const DeprecatedConstB = 1
 //
 // DEPRECATED: invalid deprecation note but okay since the symbol is not exported
 const deprecatedConstC = 1
+
+// constWithStdlibDoclink has a potential doc link to encoding/json.Encoder but
+// should be ignored since the rule is not enabled by default.
+const constWithStdlibDoclink = 1

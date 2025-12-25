@@ -12,6 +12,7 @@ linters:
         - deprecated
         - max-len
         - no-unused-link
+        - require-stdlib-doclink
       options:
         start-with-name:
           include-unexported: true
@@ -20,3 +21,6 @@ linters:
           ignore-unexported: false
         max-len:
           length: 127
+          ignore-patterns:
+            - ^IGNORE-ME:'
+            - ALSO-IGNORE-ME
