@@ -94,7 +94,7 @@ require (
 	github.com/nishanths/predeclared v0.2.2
 	github.com/nunnatsa/ginkgolinter v0.21.2
 	github.com/pelletier/go-toml/v2 v2.2.4
-	github.com/polyfloyd/go-errorlint v1.8.0
+	codeberg.org/polyfloyd/go-errorlint v1.9.0
 	github.com/quasilyte/go-ruleguard/dsl v0.3.23
 	github.com/raeperd/recvcheck v0.2.0
 	github.com/rogpeppe/go-internal v1.14.1
