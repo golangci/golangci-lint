@@ -242,7 +242,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.32.0").
 			WithLoadForGoAnalysis().
 			WithAutoFix().
-			WithURL("https://github.com/polyfloyd/go-errorlint"),
+			WithURL("https://codeberg.org/polyfloyd/go-errorlint"),
 
 		linter.NewConfig(exhaustive.New(&cfg.Linters.Settings.Exhaustive)).
 			WithSince("v1.28.0").

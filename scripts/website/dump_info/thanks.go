@@ -13,8 +13,9 @@ import (
 )
 
 const (
-	hostGitHub = "github"
-	hostGitLab = "gitlab"
+	hostGitHub   = "github"
+	hostGitLab   = "gitlab"
+	hostCodeberg = "codeberg"
 )
 
 type authorDetails struct {
@@ -77,6 +78,18 @@ func getThanksList() []*authorDetails {
 					Avatar:  fmt.Sprintf("https://github.com/%[1]s.png", ghAuthor),
 				}
 			}
+
+		case info.FromCodeberg():
+			if _, ok := addedAuthors[info.Author]; ok {
+				addedAuthors[info.Author].Linters = append(addedAuthors[info.Author].Linters, lc.Name())
+			} else {
+				addedAuthors[info.Author] = &authorDetails{
+					Name:    info.Author,
+					Linters: []string{lc.Name()},
+					Profile: fmt.Sprintf("https://codeberg.org/%[1]s", info.Author),
+					Avatar:  fmt.Sprintf("https://codeberg.org/%[1]s.png", info.Author),
+				}
+			}
 		}
 	}
 
@@ -99,7 +112,7 @@ type authorInfo struct {
 }
 
 func extractInfo(lc *linter.Config) authorInfo {
-	exp := regexp.MustCompile(`https://(github|gitlab)\.com/([^/]+)/.*`)
+	exp := regexp.MustCompile(`https://(github|gitlab|codeberg)\.(?:com|org)/([^/]+)/.*`)
 
 	switch lc.Name() {
 	case "exhaustruct":
@@ -163,4 +176,8 @@ func (i authorInfo) FromGitHub() bool {
 
 func (i authorInfo) FromGitLab() bool {
 	return i.Host == hostGitLab
+}
+
+func (i authorInfo) FromCodeberg() bool {
+	return i.Host == hostCodeberg
 }

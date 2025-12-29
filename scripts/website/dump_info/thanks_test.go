@@ -49,6 +49,14 @@ func Test_extractInfo(t *testing.T) {
 			expected: authorInfo{Author: "owner", Host: "gitlab"},
 		},
 		{
+			desc: "from Codeberg",
+			lc: &linter.Config{
+				Linter:      &FakeLinter{name: "fake"},
+				OriginalURL: "https://codeberg.org/owner/linter",
+			},
+			expected: authorInfo{Author: "owner", Host: "codeberg"},
+		},
+		{
 			desc: "gostaticanalysis",
 			lc: &linter.Config{
 				Linter:      &FakeLinter{name: "fake"},
