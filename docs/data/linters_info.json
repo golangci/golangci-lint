@@ -189,7 +189,7 @@
     "name": "errorlint",
     "desc": "Find code that can cause problems with the error wrapping scheme introduced in Go 1.13.",
     "loadMode": 8767,
-    "originalURL": "https://codeberg.org/polyfloyd/go-errorlint",
+    "originalURL": "https://github.com/polyfloyd/go-errorlint",
     "internal": false,
     "canAutoFix": true,
     "isSlow": true,
