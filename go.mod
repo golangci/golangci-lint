@@ -5,6 +5,7 @@ go 1.24.0
 require (
 	4d63.com/gocheckcompilerdirectives v1.3.0
 	4d63.com/gochecknoglobals v0.2.2
+	codeberg.org/polyfloyd/go-errorlint v1.9.0
 	dev.gaijin.team/go/exhaustruct/v4 v4.0.0
 	github.com/4meepo/tagalign v1.4.3
 	github.com/Abirdcfly/dupword v0.1.7
@@ -94,7 +95,6 @@ require (
 	github.com/nishanths/predeclared v0.2.2
 	github.com/nunnatsa/ginkgolinter v0.21.2
 	github.com/pelletier/go-toml/v2 v2.2.4
-	codeberg.org/polyfloyd/go-errorlint v1.9.0
 	github.com/quasilyte/go-ruleguard/dsl v0.3.23
 	github.com/raeperd/recvcheck v0.2.0
 	github.com/rogpeppe/go-internal v1.14.1
