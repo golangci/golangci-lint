@@ -21,6 +21,3 @@ linters:
           ignore-unexported: false
         max-len:
           length: 127
-          ignore-patterns:
-            - '^IGNORE-ME:'
-            - ALSO-IGNORE-ME

@@ -1940,14 +1940,6 @@
                       "type": "integer",
                       "description": "Maximum line length for godocs, not including the `//`, `/*` or `*/` tokens.",
                       "default": 77
-                    },
-                    "ignore-patterns": {
-                      "type": "array",
-                      "description": "List of regexp patterns matching lines to be excluded, not including the `//`, `/*` or `*/` tokens.",
-                      "items": {
-                        "type": "string"
-                      },
-                      "default": []
                     }
                   }
                 },

@@ -61,12 +61,6 @@ const constWithUnusedLink = 1
 // constWithTooLongGodoc has a very long godoc that does not exceed the maximum allowed length for godoc comments.
 const constWithTooLongGodoc = 1
 
-// constWithTooLongGodocButIgnored has very long godoc lines but all should be ignored
-//
-// IGNORE-ME: This is a very loooooooooooooooooooooooooooooooooooooooooooooooooong godoc line that should be ignored by the max-len rule.
-// ALSO-IGNORE-ME: Another very looooooooooooooooooooooooooooooooooooooooooooooong godoc line that should also be ignored by the max-len rule.
-const constWithTooLongGodocButIgnored = 1
-
 // DeprecatedConstA is...
 //
 // Deprecated: do not use

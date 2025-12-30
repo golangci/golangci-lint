@@ -37,6 +37,9 @@ func New(settings *config.GodoclintSettings) *goanalysis.Linter {
 		// - Options.NoUnusedLinkIncludeTests
 		// - Options.RequireStdlibDoclinkIncludeTests
 
+		// Also, Options.MaxLenIgnorePatterns is ignored because the Golangci-lint's idiomatic way to ignore such issues
+		// is exclusion by source text patterns.
+
 		pcfg = glconfig.PlainConfig{
 			Default: settings.Default,
 			Enable:  settings.Enable,
@@ -44,7 +47,6 @@ func New(settings *config.GodoclintSettings) *goanalysis.Linter {
 			Options: &glconfig.PlainRuleOptions{
 				MaxLenLength:                     settings.Options.MaxLen.Length,
 				MaxLenIncludeTests:               pointer(true),
-				MaxLenIgnorePatterns:             settings.Options.MaxLen.IgnorePatterns,
 				PkgDocIncludeTests:               pointer(false),
 				SinglePkgDocIncludeTests:         pointer(true),
 				RequirePkgDocIncludeTests:        pointer(false),

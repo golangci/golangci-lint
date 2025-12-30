@@ -1345,11 +1345,6 @@ linters:
           # Default: 77
           length: 127
 
-          # List of regexp patterns matching lines to be excluded, not including the `//`, `/*` or `*/` tokens.
-          # Default: []
-          ignore-patterns:
-            - "^IGNORE:"
-
         require-doc:
           # Ignore exported (public) symbols when applying the `require-doc` rule.
           # Default: false
