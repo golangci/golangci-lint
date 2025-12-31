@@ -47,7 +47,7 @@ func New(settings *config.GodoclintSettings) *goanalysis.Linter {
 			Options: &glconfig.PlainRuleOptions{
 				MaxLenLength:                     settings.Options.MaxLen.Length,
 				MaxLenIncludeTests:               pointer(true),
-				MaxLenIgnorePatterns:             []string{`\+kubebuilder:`},
+				MaxLenIgnorePatterns:             []string{`^\+kubebuilder:`},
 				PkgDocIncludeTests:               pointer(false),
 				SinglePkgDocIncludeTests:         pointer(true),
 				RequirePkgDocIncludeTests:        pointer(false),
