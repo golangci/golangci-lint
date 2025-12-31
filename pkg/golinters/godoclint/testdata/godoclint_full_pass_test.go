@@ -68,3 +68,6 @@ const DeprecatedConstA = 1
 
 // Deprecated: do not use
 const DeprecatedConstB = 1
+
+// constWithStdlibDoclink has a doc link to [encoding/json.Encoder].
+const constWithStdlibDoclink = 1

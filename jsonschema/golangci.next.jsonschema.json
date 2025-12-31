@@ -487,7 +487,8 @@
         "require-doc",
         "deprecated",
         "max-len",
-        "no-unused-link"
+        "no-unused-link",
+        "require-stdlib-doclink"
       ]
     },
     "gosec-rules": {
@@ -1937,7 +1938,7 @@
                   "properties": {
                     "length": {
                       "type": "integer",
-                      "description": "Maximum line length for godocs, not including the `// `, or `/*` or `*/` tokens.",
+                      "description": "Maximum line length for godocs, not including the `//`, `/*` or `*/` tokens.",
                       "default": 77
                     }
                   }

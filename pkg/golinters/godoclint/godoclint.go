@@ -35,24 +35,34 @@ func New(settings *config.GodoclintSettings) *goanalysis.Linter {
 		// - Options.RequireDocIncludeTests
 		// - Options.StartWithNameIncludeTests
 		// - Options.NoUnusedLinkIncludeTests
+		// - Options.RequireStdlibDoclinkIncludeTests
+
+		// Also, Options.MaxLenIgnorePatterns is ignored because the Golangci-lint's idiomatic way to ignore such issues
+		// is exclusion by source text patterns.
 
 		pcfg = glconfig.PlainConfig{
 			Default: settings.Default,
 			Enable:  settings.Enable,
 			Disable: settings.Disable,
 			Options: &glconfig.PlainRuleOptions{
-				MaxLenLength:                   settings.Options.MaxLen.Length,
-				MaxLenIncludeTests:             pointer(true),
-				PkgDocIncludeTests:             pointer(false),
-				SinglePkgDocIncludeTests:       pointer(true),
-				RequirePkgDocIncludeTests:      pointer(false),
-				RequireDocIncludeTests:         pointer(true),
-				RequireDocIgnoreExported:       settings.Options.RequireDoc.IgnoreExported,
-				RequireDocIgnoreUnexported:     settings.Options.RequireDoc.IgnoreUnexported,
-				StartWithNameIncludeTests:      pointer(false),
-				StartWithNameIncludeUnexported: settings.Options.StartWithName.IncludeUnexported,
-				NoUnusedLinkIncludeTests:       pointer(true),
+				MaxLenLength:                     settings.Options.MaxLen.Length,
+				MaxLenIncludeTests:               pointer(true),
+				MaxLenIgnorePatterns:             []string{`^\+kubebuilder:`},
+				PkgDocIncludeTests:               pointer(false),
+				SinglePkgDocIncludeTests:         pointer(true),
+				RequirePkgDocIncludeTests:        pointer(false),
+				RequireDocIncludeTests:           pointer(true),
+				RequireDocIgnoreExported:         settings.Options.RequireDoc.IgnoreExported,
+				RequireDocIgnoreUnexported:       settings.Options.RequireDoc.IgnoreUnexported,
+				StartWithNameIncludeTests:        pointer(false),
+				StartWithNameIncludeUnexported:   settings.Options.StartWithName.IncludeUnexported,
+				RequireStdlibDoclinkIncludeTests: pointer(true),
+				NoUnusedLinkIncludeTests:         pointer(true),
 			},
+		}
+
+		if err := pcfg.Validate(); err != nil {
+			internal.LinterLogger.Fatalf("godoclint: %v", err)
 		}
 	}
 

@@ -1320,6 +1320,9 @@ linters:
         # Assert no unused link in godocs.
         # https://github.com/godoc-lint/godoc-lint?tab=readme-ov-file#no-unused-link
         - no-unused-link
+        # Require proper doc links to standard library declarations where applicable.
+        # https://github.com/godoc-lint/godoc-lint?tab=readme-ov-file#require-stdlib-doclink
+        - require-stdlib-doclink
 
       # List of rules to disable.
       # Default: empty
@@ -1332,12 +1335,13 @@ linters:
         - deprecated
         - max-len
         - no-unused-link
+        - require-stdlib-doclink
 
       # A map for fine-tuning individual rules.
       # All subkeys are optional.
       options:
         max-len:
-          # Maximum line length for godocs, not including the `// `, or `/*` or `*/` tokens.
+          # Maximum line length for godocs, not including the `//`, `/*` or `*/` tokens.
           # Default: 77
           length: 127
 
