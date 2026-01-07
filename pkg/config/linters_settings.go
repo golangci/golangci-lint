@@ -164,7 +164,22 @@ var defaultLintersSettings = LintersSettings{
 		AllowPackages: []string{"main"},
 	},
 	Unqueryvet: UnqueryvetSettings{
-		CheckSQLBuilders: true,
+		CheckSQLBuilders:     true,
+		CheckAliasedWildcard: true,
+		CheckStringConcat:    true,
+		CheckFormatStrings:   true,
+		CheckStringBuilder:   true,
+		CheckSubqueries:      true,
+		SQLBuilders: UnqueryvetSQLBuildersSettings{
+			Squirrel:  true,
+			GORM:      true,
+			SQLx:      true,
+			Ent:       true,
+			PGX:       true,
+			Bun:       true,
+			SQLBoiler: true,
+			Jet:       true,
+		},
 	},
 	Unused: UnusedSettings{
 		FieldWritesAreUses:     true,
@@ -1022,8 +1037,26 @@ type UnparamSettings struct {
 }
 
 type UnqueryvetSettings struct {
-	CheckSQLBuilders bool     `mapstructure:"check-sql-builders"`
-	AllowedPatterns  []string `mapstructure:"allowed-patterns"`
+	CheckSQLBuilders     bool                          `mapstructure:"check-sql-builders"`
+	AllowedPatterns      []string                      `mapstructure:"allowed-patterns"`
+	IgnoredFunctions     []string                      `mapstructure:"ignored-functions"`
+	CheckAliasedWildcard bool                          `mapstructure:"check-aliased-wildcard"`
+	CheckStringConcat    bool                          `mapstructure:"check-string-concat"`
+	CheckFormatStrings   bool                          `mapstructure:"check-format-strings"`
+	CheckStringBuilder   bool                          `mapstructure:"check-string-builder"`
+	CheckSubqueries      bool                          `mapstructure:"check-subqueries"`
+	SQLBuilders          UnqueryvetSQLBuildersSettings `mapstructure:"sql-builders"`
+}
+
+type UnqueryvetSQLBuildersSettings struct {
+	Squirrel  bool `mapstructure:"squirrel"`
+	GORM      bool `mapstructure:"gorm"`
+	SQLx      bool `mapstructure:"sqlx"`
+	Ent       bool `mapstructure:"ent"`
+	PGX       bool `mapstructure:"pgx"`
+	Bun       bool `mapstructure:"bun"`
+	SQLBoiler bool `mapstructure:"sqlboiler"`
+	Jet       bool `mapstructure:"jet"`
 }
 
 type UnusedSettings struct {
