@@ -1320,6 +1320,9 @@ linters:
         # Assert no unused link in godocs.
         # https://github.com/godoc-lint/godoc-lint?tab=readme-ov-file#no-unused-link
         - no-unused-link
+        # Require proper doc links to standard library declarations where applicable.
+        # https://github.com/godoc-lint/godoc-lint?tab=readme-ov-file#require-stdlib-doclink
+        - require-stdlib-doclink
 
       # List of rules to disable.
       # Default: empty
@@ -1332,12 +1335,13 @@ linters:
         - deprecated
         - max-len
         - no-unused-link
+        - require-stdlib-doclink
 
       # A map for fine-tuning individual rules.
       # All subkeys are optional.
       options:
         max-len:
-          # Maximum line length for godocs, not including the `// `, or `/*` or `*/` tokens.
+          # Maximum line length for godocs, not including the `//`, `/*` or `*/` tokens.
           # Default: 77
           length: 127
 
@@ -1453,6 +1457,9 @@ linters:
       # Defines a pattern to validate `go` minimum version directive.
       # Default: '' (no match)
       go-version-pattern: '\d\.\d+(\.0)?'
+      # Check the validity of the module path.
+      # Default: false
+      check-module-path: true
 
     gomodguard:
       allowed:
@@ -1493,36 +1500,37 @@ linters:
       # Available rules: https://github.com/securego/gosec#available-rules
       # Default: [] - means include all rules
       includes:
-        - G101 # Look for hard coded credentials
+        - G101 # Look for hardcoded credentials
         - G102 # Bind to all interfaces
         - G103 # Audit the use of unsafe block
         - G104 # Audit errors not checked
-        - G106 # Audit the use of ssh.InsecureIgnoreHostKey
+        - G106 # Audit the use of ssh.InsecureIgnoreHostKey function
         - G107 # Url provided to HTTP request as taint input
-        - G108 # Profiling endpoint automatically exposed on /debug/pprof
-        - G109 # Potential Integer overflow made by strconv.Atoi result conversion to int16/32
-        - G110 # Potential DoS vulnerability via decompression bomb
-        - G111 # Potential directory traversal
-        - G112 # Potential slowloris attack
+        - G108 # Profiling endpoint is automatically exposed
+        - G109 # Converting strconv.Atoi result to int32/int16
+        - G110 # Detect io.Copy instead of io.CopyN when decompression
+        - G111 # Detect http.Dir('/') as a potential risk
+        - G112 # Detect ReadHeaderTimeout not configured as a potential risk
         - G114 # Use of net/http serve function that has no support for setting timeouts
-        - G115 # Potential integer overflow when converting between integer types
+        - G115 # Type conversion which leads to integer overflow
+        - G116 # Detect Trojan Source attacks using bidirectional Unicode characters
         - G201 # SQL query construction using format string
         - G202 # SQL query construction using string concatenation
         - G203 # Use of unescaped data in HTML templates
         - G204 # Audit use of command execution
         - G301 # Poor file permissions used when creating a directory
-        - G302 # Poor file permissions used with chmod
+        - G302 # Poor file permissions used when creation file or using chmod
         - G303 # Creating tempfile using a predictable path
         - G304 # File path provided as taint input
-        - G305 # File traversal when extracting zip/tar archive
-        - G306 # Poor file permissions used when writing to a new file
+        - G305 # File path traversal when extracting zip archive
+        - G306 # Poor file permissions used when writing to a file
         - G307 # Poor file permissions used when creating a file with os.Create
         - G401 # Detect the usage of MD5 or SHA1
         - G402 # Look for bad TLS connection settings
         - G403 # Ensure minimum RSA key length of 2048 bits
         - G404 # Insecure random number source (rand)
         - G405 # Detect the usage of DES or RC4
-        - G406 # Detect the usage of MD4 or RIPEMD160
+        - G406 # Detect the usage of deprecated MD4 or RIPEMD160
         - G501 # Import blocklist: crypto/md5
         - G502 # Import blocklist: crypto/des
         - G503 # Import blocklist: crypto/rc4
@@ -1530,43 +1538,44 @@ linters:
         - G505 # Import blocklist: crypto/sha1
         - G506 # Import blocklist: golang.org/x/crypto/md4
         - G507 # Import blocklist: golang.org/x/crypto/ripemd160
-        - G601 # Implicit memory aliasing of items from a range statement
-        - G602 # Slice access out of bounds
+        - G601 # Implicit memory aliasing in RangeStmt
+        - G602 # Possible slice bounds out of range
 
       # To specify a set of rules to explicitly exclude.
       # Available rules: https://github.com/securego/gosec#available-rules
       # Default: []
       excludes:
-        - G101 # Look for hard coded credentials
+        - G101 # Look for hardcoded credentials
         - G102 # Bind to all interfaces
         - G103 # Audit the use of unsafe block
         - G104 # Audit errors not checked
-        - G106 # Audit the use of ssh.InsecureIgnoreHostKey
+        - G106 # Audit the use of ssh.InsecureIgnoreHostKey function
         - G107 # Url provided to HTTP request as taint input
-        - G108 # Profiling endpoint automatically exposed on /debug/pprof
-        - G109 # Potential Integer overflow made by strconv.Atoi result conversion to int16/32
-        - G110 # Potential DoS vulnerability via decompression bomb
-        - G111 # Potential directory traversal
-        - G112 # Potential slowloris attack
+        - G108 # Profiling endpoint is automatically exposed
+        - G109 # Converting strconv.Atoi result to int32/int16
+        - G110 # Detect io.Copy instead of io.CopyN when decompression
+        - G111 # Detect http.Dir('/') as a potential risk
+        - G112 # Detect ReadHeaderTimeout not configured as a potential risk
         - G114 # Use of net/http serve function that has no support for setting timeouts
-        - G115 # Potential integer overflow when converting between integer types
+        - G115 # Type conversion which leads to integer overflow
+        - G116 # Detect Trojan Source attacks using bidirectional Unicode characters
         - G201 # SQL query construction using format string
         - G202 # SQL query construction using string concatenation
         - G203 # Use of unescaped data in HTML templates
         - G204 # Audit use of command execution
         - G301 # Poor file permissions used when creating a directory
-        - G302 # Poor file permissions used with chmod
+        - G302 # Poor file permissions used when creation file or using chmod
         - G303 # Creating tempfile using a predictable path
         - G304 # File path provided as taint input
-        - G305 # File traversal when extracting zip/tar archive
-        - G306 # Poor file permissions used when writing to a new file
+        - G305 # File path traversal when extracting zip archive
+        - G306 # Poor file permissions used when writing to a file
         - G307 # Poor file permissions used when creating a file with os.Create
         - G401 # Detect the usage of MD5 or SHA1
         - G402 # Look for bad TLS connection settings
         - G403 # Ensure minimum RSA key length of 2048 bits
         - G404 # Insecure random number source (rand)
         - G405 # Detect the usage of DES or RC4
-        - G406 # Detect the usage of MD4 or RIPEMD160
+        - G406 # Detect the usage of deprecated MD4 or RIPEMD160
         - G501 # Import blocklist: crypto/md5
         - G502 # Import blocklist: crypto/des
         - G503 # Import blocklist: crypto/rc4
@@ -1574,8 +1583,8 @@ linters:
         - G505 # Import blocklist: crypto/sha1
         - G506 # Import blocklist: golang.org/x/crypto/md4
         - G507 # Import blocklist: golang.org/x/crypto/ripemd160
-        - G601 # Implicit memory aliasing of items from a range statement
-        - G602 # Slice access out of bounds
+        - G601 # Implicit memory aliasing in RangeStmt
+        - G602 # Possible slice bounds out of range
 
       # Filter out the issues with a lower severity than the given value.
       # Valid options are: low, medium, high.
@@ -2149,6 +2158,8 @@ linters:
         - slicessort
         # Use iterators instead of Len/At-style APIs.
         - stditerators
+        # Replace strings.Index etc. with strings.Cut.
+        - stringscut
         # Replace HasPrefix/TrimPrefix with CutPrefix.
         - stringscutprefix
         # Replace ranging over Split/Fields with SplitSeq/FieldsSeq.
@@ -2157,6 +2168,8 @@ linters:
         - stringsbuilder
         # Replace context.WithCancel with t.Context in tests.
         - testingcontext
+        # Replace unsafe pointer arithmetic with function calls.
+        - unsafefuncs
         # Replace wg.Add(1)/go/wg.Done() with wg.Go.
         - waitgroup
 
@@ -3980,7 +3993,22 @@ linters:
       # Enable SQL builder checking.
       # Default: true
       check-sql-builders: false
-      # Regex patterns for acceptable SELECT * usage.
+      # Enable aliased wildcard detection like `SELECT t.*`.
+      # Default: true
+      check-aliased-wildcard: false
+      # Enable string concatenation analysis.
+      # Default: true
+      check-string-concat: false
+      # Enable format string analysis like `fmt.Sprintf`.
+      # Default: true
+      check-format-strings: false
+      # Enable strings.Builder analysis.
+      # Default: true
+      check-string-builder: false
+      # Enable subquery analysis.
+      # Default: true
+      check-subqueries: false
+      # Regex patterns for acceptable `SELECT *` usage.
       # Default:
       # - "SELECT \\* FROM information_schema\\..*"
       # - "SELECT \\* FROM pg_catalog\\..*"
@@ -3990,6 +4018,22 @@ linters:
       allowed-patterns:
         - "SELECT \\* FROM temp_.*"
         - "SELECT \\* FROM.*-- migration"
+      # Functions to ignore (regex patterns)
+      # Default: []
+      ignored-functions:
+        - "debug\\..*"
+        - "test.*"
+      # SQL builder libraries to check.
+      # Default: all true.
+      sql-builders:
+        squirrel: false
+        gorm: false
+        sqlx: false
+        ent: false
+        pgx: false
+        bun: false
+        sqlboiler: false
+        jet: false
 
     unused:
       # Mark all struct fields that have been written to as used.

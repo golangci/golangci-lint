@@ -506,8 +506,8 @@
     "linters": [
       "errorlint"
     ],
-    "profile": "https://github.com/sponsors/polyfloyd",
-    "avatar": "https://github.com/polyfloyd.png"
+    "profile": "https://codeberg.org/polyfloyd",
+    "avatar": "https://codeberg.org/polyfloyd.png"
   },
   {
     "name": "raeperd",
