@@ -155,9 +155,11 @@ func (w *wrapper) toIssue(pass *analysis.Pass, failure *lint.Failure) *goanalysi
 		if failure.Filename() == f.Name() {
 			issue.SuggestedFixes = []analysis.SuggestedFix{{
 				TextEdits: []analysis.TextEdit{{
-					Pos:     f.LineStart(failure.Position.Start.Line),
-					End:     goanalysis.EndOfLinePos(f, failure.Position.End.Line),
-					NewText: []byte(failure.ReplacementLine),
+					Pos: f.LineStart(failure.Position.Start.Line),
+					End: goanalysis.EndOfLinePos(f, failure.Position.End.Line),
+					// ReplacementLine doesn't contain the full line (missing newline), so we have to add a newline.
+					// Also `failure.Position.End.Offset` is at the end of the node but not the line.
+					NewText: []byte(failure.ReplacementLine + "\n"),
 				}},
 			}}
 		}
