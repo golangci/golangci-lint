@@ -156,10 +156,10 @@ func (w *wrapper) toIssue(pass *analysis.Pass, failure *lint.Failure) *goanalysi
 			issue.SuggestedFixes = []analysis.SuggestedFix{{
 				TextEdits: []analysis.TextEdit{{
 					Pos: f.LineStart(failure.Position.Start.Line),
-					// ReplacementLine doesn't contain the full line (missing newline), so we have to remove 1 from the position of the EOL.
-					// Also `failure.Position.End.Offset` is at the end of the element but not of the line.
-					End:     goanalysis.EndOfLinePos(f, failure.Position.End.Line) - token.Pos(1),
-					NewText: []byte(failure.ReplacementLine),
+					End: goanalysis.EndOfLinePos(f, failure.Position.End.Line),
+					// ReplacementLine doesn't contain the full line (missing newline), so we have to add a newline.
+					// Also `failure.Position.End.Offset` is at the end of the node but not the line.
+					NewText: []byte(failure.ReplacementLine + "\n"),
 				}},
 			}}
 		}
