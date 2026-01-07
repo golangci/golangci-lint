@@ -4083,11 +4083,81 @@
               "type": "boolean",
               "default": true
             },
+            "check-aliased-wildcard": {
+              "description": "Enable aliased wildcard detection like SELECT t.*.",
+              "type": "boolean",
+              "default": true
+            },
+            "check-string-concat": {
+              "description": "Enable string concatenation analysis.",
+              "type": "boolean",
+              "default": true
+            },
+            "check-format-strings": {
+              "description": "Enable format string analysis like fmt.Sprintf.",
+              "type": "boolean",
+              "default": true
+            },
+            "check-string-builder": {
+              "description": "Enable strings.Builder analysis.",
+              "type": "boolean",
+              "default": true
+            },
+            "check-subqueries": {
+              "description": "Enable subquery analysis.",
+              "type": "boolean",
+              "default": true
+            },
             "allowed-patterns": {
               "description": "Regex patterns for acceptable SELECT * usage.",
               "type": "array",
               "items": {
                 "type": "string"
+              }
+            },
+            "ignored-functions": {
+              "description": "Functions to ignore.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "sql-builders": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "squirrel": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "gorm": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "sqlx": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "ent": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "pgx": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "bun": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "sqlboiler": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "jet": {
+                  "type": "boolean",
+                  "default": true
+                }
               }
             }
           }

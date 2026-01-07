@@ -3993,7 +3993,22 @@ linters:
       # Enable SQL builder checking.
       # Default: true
       check-sql-builders: false
-      # Regex patterns for acceptable SELECT * usage.
+      # Enable aliased wildcard detection like `SELECT t.*`.
+      # Default: true
+      check-aliased-wildcard: false
+      # Enable string concatenation analysis.
+      # Default: true
+      check-string-concat: false
+      # Enable format string analysis like `fmt.Sprintf`.
+      # Default: true
+      check-format-strings: false
+      # Enable strings.Builder analysis.
+      # Default: true
+      check-string-builder: false
+      # Enable subquery analysis.
+      # Default: true
+      check-subqueries: false
+      # Regex patterns for acceptable `SELECT *` usage.
       # Default:
       # - "SELECT \\* FROM information_schema\\..*"
       # - "SELECT \\* FROM pg_catalog\\..*"
@@ -4003,6 +4018,22 @@ linters:
       allowed-patterns:
         - "SELECT \\* FROM temp_.*"
         - "SELECT \\* FROM.*-- migration"
+      # Functions to ignore (regex patterns)
+      # Default: []
+      ignored-functions:
+        - "debug\\..*"
+        - "test.*"
+      # SQL builder libraries to check.
+      # Default: all true.
+      sql-builders:
+        squirrel: false
+        gorm: false
+        sqlx: false
+        ent: false
+        pgx: false
+        bun: false
+        sqlboiler: false
+        jet: false
 
     unused:
       # Mark all struct fields that have been written to as used.
