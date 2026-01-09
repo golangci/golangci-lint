@@ -1,0 +1,6 @@
+version: "2"
+
+linters:
+  settings:
+    regolint:
+      policy-dir: ${config-path}/policies

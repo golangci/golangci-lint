@@ -887,6 +887,7 @@
             "protogetter",
             "reassign",
             "recvcheck",
+            "regolint",
             "revive",
             "rowserrcheck",
             "sloglint",
@@ -2943,6 +2944,38 @@
             }
           }
         },
+        "regolintSettings": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "policy-dir": {
+              "description": "Directory containing Rego policy files.",
+              "type": "string",
+              "default": ".regolint/policies"
+            },
+            "policy-files": {
+              "description": "Specific policy files to load.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "disabled": {
+              "description": "Rule IDs to disable.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "exclude": {
+              "description": "File patterns to exclude from analysis.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
         "nonamedreturnsSettings": {
           "type": "object",
           "additionalProperties": false,
@@ -4897,6 +4930,9 @@
             },
             "recvcheck": {
               "$ref": "#/definitions/settings/definitions/recvcheckSettings"
+            },
+            "regolint": {
+              "$ref": "#/definitions/settings/definitions/regolintSettings"
             },
             "nonamedreturns": {
               "$ref": "#/definitions/settings/definitions/nonamedreturnsSettings"

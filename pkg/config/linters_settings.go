@@ -301,6 +301,7 @@ type LintersSettings struct {
 	ProtoGetter              ProtoGetterSettings              `mapstructure:"protogetter"`
 	Reassign                 ReassignSettings                 `mapstructure:"reassign"`
 	Recvcheck                RecvcheckSettings                `mapstructure:"recvcheck"`
+	Regolint                 RegolintSettings                 `mapstructure:"regolint"`
 	Revive                   ReviveSettings                   `mapstructure:"revive"`
 	RowsErrCheck             RowsErrCheckSettings             `mapstructure:"rowserrcheck"`
 	SlogLint                 SlogLintSettings                 `mapstructure:"sloglint"`
@@ -847,6 +848,13 @@ type ReassignSettings struct {
 type RecvcheckSettings struct {
 	DisableBuiltin bool     `mapstructure:"disable-builtin"`
 	Exclusions     []string `mapstructure:"exclusions"`
+}
+
+type RegolintSettings struct {
+	PolicyDir   string   `mapstructure:"policy-dir"`
+	PolicyFiles []string `mapstructure:"policy-files"`
+	Disabled    []string `mapstructure:"disabled"`
+	Exclude     []string `mapstructure:"exclude"`
 }
 
 type ReviveSettings struct {

@@ -2378,6 +2378,23 @@ linters:
       exclusions:
         - "*.Value"
 
+    regolint:
+      # Directory containing Rego policy files.
+      # Default: ".regolint/policies"
+      policy-dir: ".regolint/policies"
+      # Specific policy files to load (alternative to policy-dir).
+      # Default: []
+      policy-files:
+        - "policies/imports.rego"
+      # Rule IDs to disable.
+      # Default: []
+      disabled:
+        - "IMP001"
+      # File patterns to exclude from analysis.
+      # Default: []
+      exclude:
+        - "**/*_test.go"
+
     revive:
       # Maximum number of open files at the same time.
       # See https://github.com/mgechev/revive#command-line-flags
