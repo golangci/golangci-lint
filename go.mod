@@ -136,7 +136,7 @@ require (
 	gitlab.com/bosi/decorder v0.4.2
 	go-simpler.org/musttag v0.14.0
 	go-simpler.org/sloglint v0.11.1
-	go.augendre.info/arangolint v0.3.1
+	go.augendre.info/arangolint v0.4.0
 	go.augendre.info/fatcontext v0.9.0
 	go.uber.org/automaxprocs v1.6.0
 	go.yaml.in/yaml/v3 v3.0.4
