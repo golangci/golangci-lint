@@ -1,0 +1,8 @@
+version: "2"
+
+linters:
+  settings:
+    tfproviderlint:
+      disable-all: true
+      enable:
+        - R018

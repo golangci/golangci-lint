@@ -29,6 +29,7 @@ require (
 	github.com/alingse/nilnesserr v0.2.0
 	github.com/ashanbrown/forbidigo/v2 v2.3.0
 	github.com/ashanbrown/makezero/v2 v2.1.0
+	github.com/bflad/tfproviderlint v0.31.0
 	github.com/bkielbasa/cyclop v1.2.3
 	github.com/blizzy78/varnamelen v0.8.0
 	github.com/bombsimon/wsl/v4 v4.7.0
@@ -156,6 +157,7 @@ require (
 	github.com/alfatraining/structtag v1.0.0 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
+	github.com/bflad/gopaniccheck v0.1.0 // indirect
 	github.com/ccojocar/zxcvbn-go v1.0.4 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/charmbracelet/colorprofile v0.2.3-0.20250311203215-f60798e515dc // indirect

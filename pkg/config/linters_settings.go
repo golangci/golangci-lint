@@ -310,6 +310,7 @@ type LintersSettings struct {
 	Tagliatelle              TagliatelleSettings              `mapstructure:"tagliatelle"`
 	Testifylint              TestifylintSettings              `mapstructure:"testifylint"`
 	Testpackage              TestpackageSettings              `mapstructure:"testpackage"`
+	Tfproviderlint           TfproviderlintSettings           `mapstructure:"tfproviderlint"`
 	Thelper                  ThelperSettings                  `mapstructure:"thelper"`
 	Unconvert                UnconvertSettings                `mapstructure:"unconvert"`
 	Unparam                  UnparamSettings                  `mapstructure:"unparam"`
@@ -327,6 +328,10 @@ type LintersSettings struct {
 
 func (s *LintersSettings) Validate() error {
 	if err := s.Govet.Validate(); err != nil {
+		return err
+	}
+
+	if err := s.Tfproviderlint.Validate(); err != nil {
 		return err
 	}
 
@@ -988,6 +993,65 @@ type TestifylintSuiteExtraAssertCall struct {
 type TestpackageSettings struct {
 	SkipRegexp    string   `mapstructure:"skip-regexp"`
 	AllowPackages []string `mapstructure:"allow-packages"`
+}
+
+type TfproviderlintSettings struct {
+	Enable      []string `mapstructure:"enable"`
+	Disable     []string `mapstructure:"disable"`
+	EnableAll   *bool    `mapstructure:"enable-all"`
+	DisableAll  bool     `mapstructure:"disable-all"`
+	EnableExtra *bool    `mapstructure:"enable-extra"`
+
+	AT001 TfproviderlintAT001Settings `mapstructure:"AT001"`
+	AT012 TfproviderlintAT012Settings `mapstructure:"AT012"`
+	R006  TfproviderlintR006Settings  `mapstructure:"R006"`
+	R019  TfproviderlintR019Settings  `mapstructure:"R019"`
+}
+
+func (cfg *TfproviderlintSettings) Validate() error {
+	if cfg.IsAllEnabled() && cfg.DisableAll {
+		return errors.New("tfproviderlint: enable-all and disable-all can't be combined")
+	}
+	if cfg.IsAllEnabled() && len(cfg.Enable) != 0 {
+		return errors.New("tfproviderlint: enable-all and enable can't be combined")
+	}
+	if cfg.DisableAll && len(cfg.Disable) != 0 {
+		return errors.New("tfproviderlint: disable-all and disable can't be combined")
+	}
+	return nil
+}
+
+// IsAllEnabled returns true if all standard passes should be enabled (default: true).
+func (cfg *TfproviderlintSettings) IsAllEnabled() bool {
+	if cfg.EnableAll == nil {
+		return true
+	}
+	return *cfg.EnableAll
+}
+
+// IsExtraEnabled returns true if extra passes should be enabled (default: true).
+func (cfg *TfproviderlintSettings) IsExtraEnabled() bool {
+	if cfg.EnableExtra == nil {
+		return true
+	}
+	return *cfg.EnableExtra
+}
+
+type TfproviderlintAT001Settings struct {
+	IgnoredFilenamePrefixes string `mapstructure:"ignored-filename-prefixes"`
+	IgnoredFilenameSuffixes string `mapstructure:"ignored-filename-suffixes"`
+}
+
+type TfproviderlintAT012Settings struct {
+	IgnoredFilenames string `mapstructure:"ignored-filenames"`
+}
+
+type TfproviderlintR006Settings struct {
+	PackageAliases string `mapstructure:"package-aliases"`
+}
+
+type TfproviderlintR019Settings struct {
+	Threshold int `mapstructure:"threshold"`
 }
 
 type ThelperSettings struct {
