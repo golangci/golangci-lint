@@ -228,3 +228,111 @@ func TestGovetSettings_Validate_error(t *testing.T) {
 		})
 	}
 }
+
+func TestTfproviderlintSettings_Validate(t *testing.T) {
+	boolFalse := false
+
+	testCases := []struct {
+		desc     string
+		settings *TfproviderlintSettings
+	}{
+		{
+			desc:     "empty",
+			settings: &TfproviderlintSettings{},
+		},
+		{
+			desc: "disable-all and enable",
+			settings: &TfproviderlintSettings{
+				EnableAll:  &boolFalse, // Must set enable-all to false to use disable-all
+				Enable:     []string{"R018"},
+				DisableAll: true,
+			},
+		},
+		{
+			desc: "enable-all and disable",
+			settings: &TfproviderlintSettings{
+				Disable: []string{"R018"},
+				// EnableAll is nil, which means true by default via IsAllEnabled()
+			},
+		},
+		{
+			desc: "enable-all false and enable",
+			settings: &TfproviderlintSettings{
+				EnableAll: &boolFalse,
+				Enable:    []string{"R018"},
+			},
+		},
+	}
+
+	for _, test := range testCases {
+		t.Run(test.desc, func(t *testing.T) {
+			t.Parallel()
+
+			err := test.settings.Validate()
+			assert.NoError(t, err)
+		})
+	}
+}
+
+func TestTfproviderlintSettings_Validate_error(t *testing.T) {
+	boolTrue := true
+	boolFalse := false
+
+	testCases := []struct {
+		desc     string
+		settings *TfproviderlintSettings
+		expected string
+	}{
+		{
+			desc: "enable-all and disable-all",
+			settings: &TfproviderlintSettings{
+				EnableAll:  &boolTrue,
+				DisableAll: true,
+			},
+			expected: "tfproviderlint: enable-all and disable-all can't be combined",
+		},
+		{
+			desc: "default enable-all and disable-all",
+			settings: &TfproviderlintSettings{
+				// EnableAll is nil, which means true by default via IsAllEnabled()
+				DisableAll: true,
+			},
+			expected: "tfproviderlint: enable-all and disable-all can't be combined",
+		},
+		{
+			desc: "enable-all and enable",
+			settings: &TfproviderlintSettings{
+				EnableAll: &boolTrue,
+				Enable:    []string{"R018"},
+			},
+			expected: "tfproviderlint: enable-all and enable can't be combined",
+		},
+		{
+			desc: "default enable-all and enable",
+			settings: &TfproviderlintSettings{
+				// EnableAll is nil, which means true by default via IsAllEnabled()
+				Enable: []string{"R018"},
+			},
+			expected: "tfproviderlint: enable-all and enable can't be combined",
+		},
+		{
+			desc: "disable-all and disable",
+			settings: &TfproviderlintSettings{
+				EnableAll:  &boolFalse, // Must set enable-all to false to test disable-all + disable error
+				DisableAll: true,
+				Disable:    []string{"R018"},
+			},
+			expected: "tfproviderlint: disable-all and disable can't be combined",
+		},
+	}
+
+	for _, test := range testCases {
+		t.Run(test.desc, func(t *testing.T) {
+			t.Parallel()
+
+			err := test.settings.Validate()
+
+			assert.EqualError(t, err, test.expected)
+		})
+	}
+}
