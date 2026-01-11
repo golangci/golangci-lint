@@ -898,6 +898,7 @@
             "testableexamples",
             "testifylint",
             "testpackage",
+            "tfproviderlint",
             "thelper",
             "tparallel",
             "unconvert",
@@ -3864,6 +3865,88 @@
             }
           }
         },
+        "tfproviderlintSettings": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enable": {
+              "description": "Enable specific analyzers by name.",
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
+            },
+            "disable": {
+              "description": "Disable specific analyzers by name.",
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
+            },
+            "enable-all": {
+              "description": "Enable all standard analyzers.",
+              "type": "boolean",
+              "default": true
+            },
+            "disable-all": {
+              "description": "Disable all analyzers, then selectively enable with 'enable'.",
+              "type": "boolean",
+              "default": false
+            },
+            "enable-extra": {
+              "description": "Enable extra analyzers (XAT*, XR*, XS*).",
+              "type": "boolean",
+              "default": true
+            },
+            "AT001": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "ignored-filename-prefixes": {
+                  "description": "Comma-separated list of file name prefixes to ignore.",
+                  "type": "string"
+                },
+                "ignored-filename-suffixes": {
+                  "description": "Comma-separated list of file name suffixes to ignore.",
+                  "type": "string"
+                }
+              }
+            },
+            "AT012": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "ignored-filenames": {
+                  "description": "Comma-separated list of file names to ignore.",
+                  "type": "string"
+                }
+              }
+            },
+            "R006": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "package-aliases": {
+                  "description": "Comma-separated list of additional Go import paths to consider as aliases for helper/resource.",
+                  "type": "string"
+                }
+              }
+            },
+            "R019": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "threshold": {
+                  "description": "Number of arguments for reporting.",
+                  "type": "integer",
+                  "default": 5
+                }
+              }
+            }
+          }
+        },
         "thelperSettings": {
           "type": "object",
           "additionalProperties": false,
@@ -4945,6 +5028,9 @@
             },
             "testpackage": {
               "$ref": "#/definitions/settings/definitions/testpackageSettings"
+            },
+            "tfproviderlint": {
+              "$ref": "#/definitions/settings/definitions/tfproviderlintSettings"
             },
             "thelper": {
               "$ref": "#/definitions/settings/definitions/thelperSettings"

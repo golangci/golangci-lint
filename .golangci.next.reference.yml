@@ -117,6 +117,7 @@ linters:
     - testableexamples
     - testifylint
     - testpackage
+    - tfproviderlint
     - thelper
     - tparallel
     - unconvert
@@ -232,6 +233,7 @@ linters:
     - testableexamples
     - testifylint
     - testpackage
+    - tfproviderlint
     - thelper
     - tparallel
     - unconvert
@@ -3860,6 +3862,50 @@ linters:
       allow-packages:
         - example
         - main
+
+    tfproviderlint:
+      # Enable specific analyzers by name.
+      # Run `tfproviderlint help` to see available analyzers.
+      # Default: [] (all checks enabled)
+      enable:
+        - AT001
+        - R018
+      # Disable specific analyzers by name.
+      # Default: []
+      disable:
+        - S001
+      # Enable all analyzers.
+      # Default: true
+      enable-all: true
+      # Disable all analyzers.
+      # Default: false
+      disable-all: false
+      # Enable extra analyzers (XAT*, XR*, XS*).
+      # Default: true
+      enable-extra: true
+      # AT001: Check for TestCase missing CheckDestroy.
+      AT001:
+        # Comma-separated list of file name prefixes to ignore.
+        # Default: "data_source_"
+        ignored-filename-prefixes: "data_source_"
+        # Comma-separated list of file name suffixes to ignore.
+        # Default: ""
+        ignored-filename-suffixes: ""
+      # AT012: Check for test files with multiple acceptance test name prefixes.
+      AT012:
+        # Comma-separated list of file names to ignore.
+        # Default: ""
+        ignored-filenames: ""
+      # R006: Check for RetryFunc that omit retryable errors.
+      R006:
+        # Comma-separated list of additional Go import paths to consider as aliases for helper/resource.
+        # Default: ""
+        package-aliases: ""
+      # R019: Check for Resource having Timeouts with unconfigurable durations.
+      R019:
+        # Number of arguments for reporting.
+        # Default: 5
+        threshold: 5
 
     thelper:
       test:
