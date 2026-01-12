@@ -53,7 +53,7 @@
     "name": "swaggo",
     "desc": "Check if swaggo comments are formatted",
     "loadMode": 8199,
-    "originalURL": "https://github.com/swaggo/swaggo",
+    "originalURL": "https://github.com/swaggo/swag",
     "internal": false,
     "canAutoFix": true,
     "isSlow": false,
