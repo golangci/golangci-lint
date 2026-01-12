@@ -117,6 +117,7 @@ linters:
     - testableexamples
     - testifylint
     - testpackage
+    - tfproviderlint
     - thelper
     - tparallel
     - unconvert
@@ -232,6 +233,7 @@ linters:
     - testableexamples
     - testifylint
     - testpackage
+    - tfproviderlint
     - thelper
     - tparallel
     - unconvert
@@ -3860,6 +3862,305 @@ linters:
       allow-packages:
         - example
         - main
+
+    tfproviderlint:
+      # Default set of analyzers.
+      # - "none": disable all analyzers. It could be used with the ` enable ` option.
+      # - "standard": enable all standard analyzers. It could be used with the `disable` option.
+      # - "extra": enable all standard and extra analyzers. It could be used with the `disable` option.
+      # Default: standard
+      default: none
+      enable:
+        # check for TestCase missing CheckDestroy
+        - AT001
+        # check for acceptance test function names including the word import
+        - AT002
+        # check for acceptance test function names missing an underscore
+        - AT003
+        # check for TestStep Config containing provider configuration
+        - AT004
+        # check for acceptance test function names missing TestAcc prefix
+        - AT005
+        # check for acceptance tests containing multiple resource.Test() invocations
+        - AT006
+        # check for acceptance tests containing multiple resource.ParallelTest() invocations
+        - AT007
+        # check for acceptance test function declaration *testing.T parameter naming
+        - AT008
+        # check for acctest.RandStringFromCharSet() calls that can be acctest.RandString()
+        - AT009
+        # check for TestCase including IDRefreshName implementation
+        - AT010
+        # check for TestCase including IDRefreshIgnore implementation without IDRefreshName
+        - AT011
+        # check for test files containing multiple acceptance test function name prefixes
+        - AT012
+        # check for ResourceData.Set() calls using complex key argument
+        - R001
+        # check for ResourceData.Set() calls using * dereferences
+        - R002
+        # check for Resource having Exists functions
+        - R003
+        # check for ResourceData.Set() calls using incompatible value types
+        - R004
+        # check for ResourceData.HasChange() calls that can be combined into a single HasChanges() call
+        - R005
+        # check for RetryFunc that omit retryable errors
+        - R006
+        # check for deprecated github.com/hashicorp/terraform-plugin-sdk/helper/schema.ResourceData usage
+        - R007
+        # REMOVED check
+        - R008
+        # check for Go panic usage
+        - R009
+        # check for (schema.ResourceData).GetChange() usage that should prefer (schema.ResourceData).Get()
+        - R010
+        # check for Resource with MigrateState configured
+        - R011
+        # check for data source Resource with CustomizeDiff configured
+        - R012
+        # check for resource names that do not contain at least one underscore
+        - R013
+        # check for CreateFunc, CreateContextFunc, DeleteFunc, DeleteContextFunc, ReadFunc, ReadContextFunc, UpdateFunc, and UpdateContextFunc parameter naming
+        - R014
+        # check for (*schema.ResourceData).SetId() usage with unstable resource.UniqueId() value
+        - R015
+        # check for (*schema.ResourceData).SetId() usage with unstable resource.PrefixedUniqueId() value
+        - R016
+        # check for (*schema.ResourceData).SetId() usage with unstable time.Now() value
+        - R017
+        # check for time.Sleep() function usage
+        - R018
+        # check for (*schema.ResourceData).HasChanges() calls with many arguments
+        - R019
+        # check for Schema of TypeList or TypeSet missing Elem
+        - S001
+        # check for Schema with both Required and Optional enabled
+        - S002
+        # check for Schema with both Required and Computed enabled
+        - S003
+        # check for Schema with Required enabled and Default configured
+        - S004
+        # check for Schema with Computed enabled and Default configured
+        - S005
+        # check for Schema of TypeMap missing Elem
+        - S006
+        # check for Schema with Required enabled and ConflictsWith configured
+        - S007
+        # check for Schema of TypeList or TypeSet with Default configured
+        - S008
+        # check for Schema of TypeList or TypeSet with ValidateFunc configured
+        - S009
+        # check for Schema with only Computed enabled and ValidateFunc configured
+        - S010
+        # check for Schema with only Computed enabled and DiffSuppressFunc configured
+        - S011
+        # check for Schema that Type is configured
+        - S012
+        # check for Schema that are missing required fields
+        - S013
+        # check for Schema that Elem does not contain extraneous fields
+        - S014
+        # check for Schema that attribute names are valid
+        - S015
+        # check for Schema including Set without TypeSet
+        - S016
+        # check for Schema including MaxItems or MinItems without proper Type
+        - S017
+        # check for Schema that should prefer TypeList with MaxItems 1
+        - S018
+        # check for Schema that should omit Computed, Optional, or Required set to false
+        - S019
+        # check for Schema with only Computed enabled and ForceNew enabled
+        - S020
+        # check for Schema that should omit ComputedWhen
+        - S021
+        # check for Schema of TypeMap with invalid Elem of *schema.Resource
+        - S022
+        # check for Schema that should omit Elem with incompatible Type
+        - S023
+        # check for Schema that should omit ForceNew in data source schema attributes
+        - S024
+        # check for Schema with only Computed enabled and AtLeastOneOf configured
+        - S025
+        # check for Schema with only Computed enabled and ConflictsWith configured
+        - S026
+        # check for Schema with only Computed enabled and Default configured
+        - S027
+        # check for Schema with only Computed enabled and DefaultFunc configured
+        - S028
+        # check for Schema with only Computed enabled and ExactlyOneOf configured
+        - S029
+        # check for Schema with only Computed enabled and InputDefault configured
+        - S030
+        # check for Schema with only Computed enabled and MaxItems configured
+        - S031
+        # check for Schema with only Computed enabled and MinItems configured
+        - S032
+        # check for Schema with only Computed enabled and StateFunc configured
+        - S033
+        # REMOVED check
+        - S034
+        # check for Schema with invalid AtLeastOneOf references
+        - S035
+        # check for Schema with invalid ConflictsWith references
+        - S036
+        # check for Schema with invalid ExactlyOneOf references
+        - S037
+        # check for custom SchemaValidateFunc that implement validation.StringMatch()
+        - V001
+        # REMOVED check
+        - V002
+        # REMOVED check
+        - V003
+        # REMOVED check
+        - V004
+        # REMOVED check
+        - V005
+        # REMOVED check
+        - V006
+        # REMOVED check
+        - V007
+        # REMOVED check
+        - V008
+        # check for validation.StringMatch() calls with empty message argument
+        - V009
+        # check for validation.StringDoesNotMatch() calls with empty message argument
+        - V010
+        # check for custom SchemaValidateFunc that implement validation.StringLenBetween()
+        - V011
+        # check for custom SchemaValidateFunc that implement validation.IntAtLeast(), validation.IntAtMost(), or validation.IntBetween()
+        - V012
+        # check for custom SchemaValidateFunc that implement validation.StringInSlice() or validation.StringNotInSlice()
+        - V013
+        # check for custom SchemaValidateFunc that implement validation.IntInSlice() or validation.IntNotInSlice()
+        - V014
+        # (extra) check for TestCase missing ErrorCheck
+        - XAT001
+        # (extra) check for ResourceData.GetOkExists() calls
+        - XR001
+        # (extra) check for Resource that should implement Importer
+        - XR002
+        # (extra) check for Resource that should implement Timeouts
+        - XR003
+        # (extra) check for ResourceData.Set() calls missing error checking with complex values
+        - XR004
+        # (extra) check for Resource that Description is configured
+        - XR005
+        # (extra) check for Resource that implements Timeouts for missing Create, Delete, Read, or Update implementation
+        - XR006
+        # (extra) check for os/exec.Command usage to avoid
+        - XR007
+        # (extra) check for os/exec.CommandContext usage to avoid
+        - XR008
+        # (extra) check for Schema that Description is configured
+        - XS001
+        # (extra) check for Schema that attribute names are in alphabetical order
+        - XS002
+      disable:
+        - AT001
+        - AT002
+        - AT003
+        - AT004
+        - AT005
+        - AT006
+        - AT007
+        - AT008
+        - AT009
+        - AT010
+        - AT011
+        - AT012
+        - R001
+        - R002
+        - R003
+        - R004
+        - R005
+        - R006
+        - R007
+        - R008
+        - R009
+        - R010
+        - R011
+        - R012
+        - R013
+        - R014
+        - R015
+        - R016
+        - R017
+        - R018
+        - R019
+        - S001
+        - S002
+        - S003
+        - S004
+        - S005
+        - S006
+        - S007
+        - S008
+        - S009
+        - S010
+        - S011
+        - S012
+        - S013
+        - S014
+        - S015
+        - S016
+        - S017
+        - S018
+        - S019
+        - S020
+        - S021
+        - S022
+        - S023
+        - S024
+        - S025
+        - S026
+        - S027
+        - S028
+        - S029
+        - S030
+        - S031
+        - S032
+        - S033
+        - S034
+        - S035
+        - S036
+        - S037
+        - V001
+        - V002
+        - V003
+        - V004
+        - V005
+        - V006
+        - V007
+        - V008
+        - V009
+        - V010
+        - V011
+        - V012
+        - V013
+        - V014
+        - XAT001
+        - XR001
+        - XR002
+        - XR003
+        - XR004
+        - XR005
+        - XR006
+        - XR007
+        - XR008
+        - XS001
+        - XS002
+      settings:
+        R006:
+          # Comma-separated list of additional Go import paths to consider as aliases for helper/resource.
+          # Default: ""
+          package-aliases: "foo"
+        R019:
+          # Number of arguments for reporting.
+          # Default: 5
+          threshold: 3
+
 
     thelper:
       test:

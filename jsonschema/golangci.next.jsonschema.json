@@ -712,6 +712,103 @@
         "header"
       ]
     },
+    "tfproviderlint-analyzers": {
+      "enum": [
+        "AT001",
+        "AT002",
+        "AT003",
+        "AT004",
+        "AT005",
+        "AT006",
+        "AT007",
+        "AT008",
+        "AT009",
+        "AT010",
+        "AT011",
+        "AT012",
+        "R001",
+        "R002",
+        "R003",
+        "R004",
+        "R005",
+        "R006",
+        "R007",
+        "R008",
+        "R009",
+        "R010",
+        "R011",
+        "R012",
+        "R013",
+        "R014",
+        "R015",
+        "R016",
+        "R017",
+        "R018",
+        "R019",
+        "S001",
+        "S002",
+        "S003",
+        "S004",
+        "S005",
+        "S006",
+        "S007",
+        "S008",
+        "S009",
+        "S010",
+        "S011",
+        "S012",
+        "S013",
+        "S014",
+        "S015",
+        "S016",
+        "S017",
+        "S018",
+        "S019",
+        "S020",
+        "S021",
+        "S022",
+        "S023",
+        "S024",
+        "S025",
+        "S026",
+        "S027",
+        "S028",
+        "S029",
+        "S030",
+        "S031",
+        "S032",
+        "S033",
+        "S034",
+        "S035",
+        "S036",
+        "S037",
+        "V001",
+        "V002",
+        "V003",
+        "V004",
+        "V005",
+        "V006",
+        "V007",
+        "V008",
+        "V009",
+        "V010",
+        "V011",
+        "V012",
+        "V013",
+        "V014",
+        "XAT001",
+        "XR001",
+        "XR002",
+        "XR003",
+        "XR004",
+        "XR005",
+        "XR006",
+        "XR007",
+        "XR008",
+        "XS001",
+        "XS002"
+      ]
+    },
     "modernize-analyzers": {
       "enum": [
         "any",
@@ -898,6 +995,7 @@
             "testableexamples",
             "testifylint",
             "testpackage",
+            "tfproviderlint",
             "thelper",
             "tparallel",
             "unconvert",
@@ -3864,6 +3962,45 @@
             }
           }
         },
+        "tfproviderlintSettings": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "default": {
+              "enum": [
+                "",
+                "standard",
+                "extra",
+                "none"
+              ],
+              "default": "standard"
+            },
+            "enable": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/tfproviderlint-analyzers"
+              }
+            },
+            "disable": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/tfproviderlint-analyzers"
+              }
+            },
+            "settings": {
+              "description": "Settings per analyzer. Map of analyzer name to specific settings.",
+              "type": "object",
+              "propertyNames": {
+                "$ref": "#/definitions/tfproviderlint-analyzers"
+              },
+              "patternProperties": {
+                "^.*$": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
         "thelperSettings": {
           "type": "object",
           "additionalProperties": false,
@@ -4945,6 +5082,9 @@
             },
             "testpackage": {
               "$ref": "#/definitions/settings/definitions/testpackageSettings"
+            },
+            "tfproviderlint": {
+              "$ref": "#/definitions/settings/definitions/tfproviderlintSettings"
             },
             "thelper": {
               "$ref": "#/definitions/settings/definitions/thelperSettings"

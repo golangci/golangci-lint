@@ -310,6 +310,7 @@ type LintersSettings struct {
 	Tagliatelle              TagliatelleSettings              `mapstructure:"tagliatelle"`
 	Testifylint              TestifylintSettings              `mapstructure:"testifylint"`
 	Testpackage              TestpackageSettings              `mapstructure:"testpackage"`
+	TFProviderLint           TFProviderLintSettings           `mapstructure:"tfproviderlint"`
 	Thelper                  ThelperSettings                  `mapstructure:"thelper"`
 	Unconvert                UnconvertSettings                `mapstructure:"unconvert"`
 	Unparam                  UnparamSettings                  `mapstructure:"unparam"`
@@ -988,6 +989,13 @@ type TestifylintSuiteExtraAssertCall struct {
 type TestpackageSettings struct {
 	SkipRegexp    string   `mapstructure:"skip-regexp"`
 	AllowPackages []string `mapstructure:"allow-packages"`
+}
+
+type TFProviderLintSettings struct {
+	Default  string                    `mapstructure:"default"`
+	Enable   []string                  `mapstructure:"enable"`
+	Disable  []string                  `mapstructure:"disable"`
+	Settings map[string]map[string]any `mapstructure:"settings"`
 }
 
 type ThelperSettings struct {

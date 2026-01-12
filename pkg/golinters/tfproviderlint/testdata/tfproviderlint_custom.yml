@@ -1,0 +1,8 @@
+version: "2"
+
+linters:
+  settings:
+    tfproviderlint:
+      settings:
+        R019:
+          threshold: 3

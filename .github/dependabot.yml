@@ -43,6 +43,7 @@ updates:
       - pkg/golinters/loggercheck/testdata/
       - pkg/golinters/protogetter/testdata/
       - pkg/golinters/spancheck/testdata/
+      - pkg/golinters/tfproviderlint/testdata/
       - pkg/golinters/zerologlint/testdata/
     groups:
       linter-testdata:

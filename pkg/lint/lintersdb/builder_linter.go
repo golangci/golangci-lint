@@ -106,6 +106,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/testableexamples"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/testifylint"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/testpackage"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/tfproviderlint"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/thelper"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/tparallel"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/unconvert"
@@ -649,6 +650,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.34.0").
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/kulti/thelper"),
+
+		linter.NewConfig(tfproviderlint.New(&cfg.Linters.Settings.TFProviderLint)).
+			WithSince("v2.9.0").
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/bflad/tfproviderlint"),
 
 		linter.NewConfig(tparallel.New()).
 			WithSince("v1.32.0").
