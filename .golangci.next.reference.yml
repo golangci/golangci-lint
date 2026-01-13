@@ -2132,8 +2132,6 @@ linters:
       disable:
         # Replace interface{} with any.
         - any
-        # Replace for-range over b.N with b.Loop.
-        - bloop
         # Replace []byte(fmt.Sprintf) with fmt.Appendf.
         - fmtappendf
         # Remove redundant re-declaration of loop variables.

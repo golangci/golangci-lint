@@ -715,7 +715,6 @@
     "modernize-analyzers": {
       "enum": [
         "any",
-        "bloop",
         "fmtappendf",
         "forvar",
         "mapsloop",
