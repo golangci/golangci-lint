@@ -49,7 +49,7 @@ require (
 	github.com/fzipp/gocyclo v0.6.0
 	github.com/ghostiam/protogetter v0.3.18
 	github.com/go-critic/go-critic v0.14.3
-	github.com/go-viper/mapstructure/v2 v2.4.0
+	github.com/go-viper/mapstructure/v2 v2.5.0
 	github.com/go-xmlfmt/xmlfmt v1.1.3
 	github.com/godoc-lint/godoc-lint v0.11.1
 	github.com/gofrs/flock v0.13.0
