@@ -3,6 +3,10 @@ package exptostd
 import (
 	"testing"
 
+	// Without this dependency, the analyzer tests related to fix fails.
+	// The packages `slices` have been randomly chosen to import `golang.org/x/exp`.
+	_ "golang.org/x/exp/slices"
+
 	"github.com/golangci/golangci-lint/v2/test/testshared/integration"
 )
 
