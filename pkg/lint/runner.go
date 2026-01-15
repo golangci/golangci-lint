@@ -59,6 +59,15 @@ func NewRunner(log logutils.Log, cfg *config.Config, goenv *goutil.Env,
 		}
 	}
 
+	switch len(enabledLinters) {
+	case 0:
+		return nil, errors.New("no linters enabled")
+	case 1:
+		if _, ok := enabledLinters["typecheck"]; ok {
+			return nil, errors.New("no linters enabled")
+		}
+	}
+
 	formattersCfg := &config.Formatters{
 		Enable:   enabledFormatters,
 		Settings: cfg.Linters.Settings.FormatterSettings,
