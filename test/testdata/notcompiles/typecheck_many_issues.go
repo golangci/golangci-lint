@@ -1,6 +1,7 @@
 //go:build go1.20
 
-//golangcitest:args -Etypecheck
+//golangcitest:args -Emodernize
+//golangcitest:expected_linter typecheck
 package testdata
 
 func TypeCheckBadCalls() {
