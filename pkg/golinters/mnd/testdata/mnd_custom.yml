@@ -5,3 +5,4 @@ linters:
     mnd:
       ignored-numbers:
         - '5'
+        - '0777'
