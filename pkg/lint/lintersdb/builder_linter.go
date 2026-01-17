@@ -51,6 +51,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/goheader"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/goimports"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/golines"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/gomethods"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/gomoddirectives"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/gomodguard"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/goprintffuncname"
@@ -387,6 +388,10 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v2.6.0").
 			WithLoadForGoAnalysis().
 			WithURL("https://pkg.go.dev/golang.org/x/tools/go/analysis/passes/modernize"),
+
+		linter.NewConfig(gomethods.New()).
+			WithSince("v2.9.0").
+			WithURL("https://github.com/ufukty/gomethods"),
 
 		linter.NewConfig(gomoddirectives.New(&cfg.Linters.Settings.GoModDirectives)).
 			WithSince("v1.39.0").

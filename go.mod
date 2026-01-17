@@ -221,6 +221,7 @@ require (
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
 	go.uber.org/multierr v1.10.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
+	go.ufukty.com/gomethods v0.1.0 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20251125195548-87e1e737ad39 // indirect
 	golang.org/x/text v0.31.0 // indirect
 	golang.org/x/tools/go/expect v0.1.1-deprecated // indirect
