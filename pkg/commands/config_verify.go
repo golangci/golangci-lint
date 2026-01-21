@@ -38,6 +38,8 @@ func (c *configCommand) executeVerify(cmd *cobra.Command, _ []string) error {
 		return fmt.Errorf("get JSON schema: %w", err)
 	}
 
+	c.log.Infof("Verifying the configuration file %q with the JSON Schema from %s", usedConfigFile, schemaURL)
+
 	err = validateConfiguration(schemaURL, usedConfigFile)
 	if err != nil {
 		var v *jsonschema.ValidationError
