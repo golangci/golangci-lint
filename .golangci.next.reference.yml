@@ -4287,6 +4287,7 @@ linters:
         - err
         - leading-whitespace
         - trailing-whitespace
+        - after-block
 
       # Disable checks.
       # Will be subtractive to any preset.
@@ -4315,6 +4316,7 @@ linters:
         - err
         - leading-whitespace
         - trailing-whitespace
+        - after-block
 
     # The custom section can be used to define linter plugins to be loaded at runtime.
     # See README documentation for more info.

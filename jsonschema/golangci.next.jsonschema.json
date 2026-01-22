@@ -759,7 +759,8 @@
         "assign-expr",
         "err",
         "leading-whitespace",
-        "trailing-whitespace"
+        "trailing-whitespace",
+        "after-block"
       ]
     },
     "relative-path-modes": {
