@@ -96,7 +96,7 @@ func parseComments(sourcePath string, fileData []byte) (map[key][]expectation, e
 
 			text = strings.TrimSpace(text)
 
-			if rest := strings.TrimPrefix(text, keyword); rest != text {
+			if rest, ok := strings.CutPrefix(text, keyword); ok {
 				delta, expects, err := parseExpectations(rest)
 				if err != nil {
 					return nil, err

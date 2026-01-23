@@ -110,8 +110,8 @@ func extractCommitHash(buildInfo BuildInfo) (string, error) {
 
 	commit := buildInfo.Commit
 
-	if strings.HasPrefix(commit, "(") {
-		c, _, ok := strings.Cut(strings.TrimPrefix(commit, "("), ",")
+	if after, ok := strings.CutPrefix(commit, "("); ok {
+		c, _, ok := strings.Cut(after, ",")
 		if !ok {
 			return "", errors.New("commit information not found")
 		}
