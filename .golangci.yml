@@ -41,6 +41,7 @@ linters:
     - ineffassign
     - lll
     - misspell
+    - modernize
     - nakedret
     - noctx
     - nolintlint
