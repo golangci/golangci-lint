@@ -180,6 +180,9 @@ var defaultLintersSettings = LintersSettings{
 			SQLBoiler: true,
 			Jet:       true,
 		},
+		CheckN1:           true,
+		CheckSQLInjection: true,
+		CheckTxLeak:       true,
 	},
 	Unused: UnusedSettings{
 		FieldWritesAreUses:     true,
@@ -1045,7 +1048,12 @@ type UnqueryvetSettings struct {
 	CheckFormatStrings   bool                          `mapstructure:"check-format-strings"`
 	CheckStringBuilder   bool                          `mapstructure:"check-string-builder"`
 	CheckSubqueries      bool                          `mapstructure:"check-subqueries"`
+	CheckN1              bool                          `mapstructure:"check-n1"`
+	CheckSQLInjection    bool                          `mapstructure:"check-sql-injection"`
+	CheckTxLeak          bool                          `mapstructure:"check-tx-leaks"`
 	SQLBuilders          UnqueryvetSQLBuildersSettings `mapstructure:"sql-builders"`
+	Allow                []string                      `mapstructure:"allow"`
+	CustomRules          []UnqueryvetCustomRule        `mapstructure:"custom-rules"`
 }
 
 type UnqueryvetSQLBuildersSettings struct {
@@ -1057,6 +1065,15 @@ type UnqueryvetSQLBuildersSettings struct {
 	Bun       bool `mapstructure:"bun"`
 	SQLBoiler bool `mapstructure:"sqlboiler"`
 	Jet       bool `mapstructure:"jet"`
+}
+
+type UnqueryvetCustomRule struct {
+	ID       string   `mapstructure:"id"`
+	Pattern  string   `mapstructure:"pattern"`
+	Patterns []string `mapstructure:"patterns"`
+	When     string   `mapstructure:"when"`
+	Message  string   `mapstructure:"message"`
+	Action   string   `mapstructure:"action"`
 }
 
 type UnusedSettings struct {
