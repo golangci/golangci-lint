@@ -4006,6 +4006,15 @@ linters:
       # Enable subquery analysis.
       # Default: true
       check-subqueries: false
+      # Detects N+1 Query.
+      # Default: true
+      check-n1: false
+      # Detects SQL injection.
+      # Default: true
+      check-sql-injection: false
+      # Detects transaction leaks.
+      # Default: true
+      check-tx-leaks: false
       # Regex patterns for acceptable `SELECT *` usage.
       # Default:
       # - "SELECT \\* FROM information_schema\\..*"
@@ -4016,6 +4025,10 @@ linters:
       allowed-patterns:
         - "SELECT \\* FROM temp_.*"
         - "SELECT \\* FROM.*-- migration"
+      # Allow is a list of SQL patterns to allow (whitelist).
+      # Default: []
+      allow:
+        - foo
       # Functions to ignore (regex patterns)
       # Default: []
       ignored-functions:
@@ -4032,6 +4045,18 @@ linters:
         bun: false
         sqlboiler: false
         jet: false
+      # List of user-defined DSL rules.
+      # https://github.com/MirrexOne/unqueryvet?tab=readme-ov-file#custom-rules-dsl
+      # Default: []
+      custom-rules:
+        - id: allow-temp-tables
+          pattern: "SELECT * FROM $TABLE"
+          when: "isTempTable(table)"
+          action: allow
+        - id: dangerous-delete
+          pattern: "DELETE FROM $TABLE"
+          when: "!has_where"
+          message: "DELETE without WHERE clause"
 
     unused:
       # Mark all struct fields that have been written to as used.

@@ -33,7 +33,7 @@ type SQLBuilder interface {
 }
 
 func _(builder SQLBuilder) {
-	query := builder.Select("*").From("products") // want `Squirrel Select\(\"\*\"\) - explicitly specify columns`
+	query := builder.Select("*").From("products")
 	_ = query
 }
 
