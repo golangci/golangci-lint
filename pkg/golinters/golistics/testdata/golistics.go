@@ -1,3 +1,4 @@
+//golangcitest:args -Egolistics
 package ast
 
 type Dimensional map[string]uint
