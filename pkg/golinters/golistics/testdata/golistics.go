@@ -116,3 +116,9 @@ func (s Dimensions) IsEqual(y Dimensions) bool {
 	return safeEq(s.Height, y.Height) &&
 		safeEq(s.Width, y.Width)
 }
+
+// Suppress is exist to suppress linter error on unused & unexported
+// field that is needed in [Dimensions.Strings] for testing linter behavior
+func (d Dimensions) Suppress() {
+	_ = d.unexported
+}
