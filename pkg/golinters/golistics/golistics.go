@@ -7,5 +7,6 @@ import (
 )
 
 func New() *goanalysis.Linter {
-	return goanalysis.NewLinterFromAnalyzer(analyzer.New())
+	return goanalysis.NewLinterFromAnalyzer(analyzer.New()).
+		WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
