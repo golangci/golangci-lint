@@ -1,6 +1,8 @@
 //golangcitest:args -Egolistics
 package ast
 
+import "image/color"
+
 type Dimensional map[string]uint
 
 type (
@@ -38,7 +40,7 @@ type (
 	Dimensions struct {
 		Height     any
 		Width      any
-		unexported any
+		unexported color.RGBA
 	}
 
 	Styles struct {
