@@ -372,6 +372,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 
 		linter.NewConfig(golistics.New()).
 			WithSince("v2.9.0").
+			WithLoadForGoAnalysis().
 			WithURL("https://github.com/ufukty/golistics"),
 
 		linter.NewConfig(goheader.New(&cfg.Linters.Settings.Goheader, placeholderReplacer)).
