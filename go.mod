@@ -139,6 +139,7 @@ require (
 	go.augendre.info/arangolint v0.4.0
 	go.augendre.info/fatcontext v0.9.0
 	go.uber.org/automaxprocs v1.6.0
+	go.ufukty.com/golistics v0.2.1
 	go.yaml.in/yaml/v3 v3.0.4
 	golang.org/x/exp v0.0.0-20250620022241-b7579e27df2b
 	golang.org/x/mod v0.32.0
@@ -221,7 +222,6 @@ require (
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
 	go.uber.org/multierr v1.10.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
-	go.ufukty.com/gomethods v0.1.0 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20251125195548-87e1e737ad39 // indirect
 	golang.org/x/text v0.31.0 // indirect
 	golang.org/x/tools/go/expect v0.1.1-deprecated // indirect

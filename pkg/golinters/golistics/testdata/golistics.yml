@@ -4,4 +4,4 @@ linters:
   default: standard
 
   enable:
-    - gomethods
+    - golistics
