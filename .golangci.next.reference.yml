@@ -97,6 +97,7 @@ linters:
     - noinlineerr
     - nolintlint
     - nonamedreturns
+    - nosharedparamtype
     - nosprintfhostport
     - paralleltest
     - perfsprint
@@ -212,6 +213,7 @@ linters:
     - noinlineerr
     - nolintlint
     - nonamedreturns
+    - nosharedparamtype
     - nosprintfhostport
     - paralleltest
     - perfsprint
