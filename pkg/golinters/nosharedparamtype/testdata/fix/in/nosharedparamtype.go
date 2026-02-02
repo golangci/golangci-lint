@@ -4,31 +4,31 @@ package testdata
 
 type MyType struct{}
 
-func funcWithSharedParamTypes(x int, y int) int {
+func funcWithSharedParamTypes(x, y int) int {
 	return x + y
 }
 
-func funcWithThreeSharedParams(a string, b string, c string) string {
+func funcWithThreeSharedParams(a, b, c string) string {
 	return a + b + c
 }
 
-func funcWithMixedParams(a string, b int, c int) string {
+func funcWithMixedParams(a string, b, c int) string {
 	return a
 }
 
-func funcWithSharedPointers(x *int, y *int) int {
+func funcWithSharedPointers(x, y *int) int {
 	return *x + *y
 }
 
-func funcWithSharedSlices(x []string, y []string) int {
+func funcWithSharedSlices(x, y []string) int {
 	return len(x) + len(y)
 }
 
-func (m MyType) methodWithSharedParams(x int, y int) int {
+func (m MyType) methodWithSharedParams(x, y int) int {
 	return x + y
 }
 
-func funcWithoutSharedParamTypes(x int, y int) int {
+func funcWithoutSharedParamTypes(x, y int) int {
 	return x + y
 }
 
@@ -40,6 +40,6 @@ func funcWithNoParams() int {
 	return 42
 }
 
-func (m MyType) methodWithSeparateParams(x int, y int) int {
+func (m MyType) methodWithSeparateParams(x, y int) int {
 	return x + y
 }

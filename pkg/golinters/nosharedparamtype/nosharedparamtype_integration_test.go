@@ -1,4 +1,4 @@
-package nosharedparamtype_test
+package nosharedparamtype
 
 import (
 	"testing"

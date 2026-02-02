@@ -543,6 +543,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 		linter.NewConfig(nosharedparamtype.New()).
 			WithSince("v0.1.0").
 			WithLoadForGoAnalysis().
+			WithAutoFix().
 			WithURL("https://github.com/niekdomi/nosharedparamtype"),
 
 		linter.NewConfig(nosprintfhostport.New()).
