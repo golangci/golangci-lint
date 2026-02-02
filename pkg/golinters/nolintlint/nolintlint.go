@@ -16,20 +16,16 @@ import (
 const LinterName = nolintlint.LinterName
 
 func New(settings *config.NoLintLintSettings) *goanalysis.Linter {
-	var (
-		mu        sync.Mutex
-		resIssues []*goanalysis.Issue
-	)
+	var mu sync.Mutex
+	var resIssues []*goanalysis.Issue
 
 	var needs nolintlint.Needs
 	if settings.RequireExplanation {
 		needs |= nolintlint.NeedsExplanation
 	}
-
 	if settings.RequireSpecific {
 		needs |= nolintlint.NeedsSpecific
 	}
-
 	if !settings.AllowUnused {
 		needs |= nolintlint.NeedsUnused
 	}
@@ -54,9 +50,7 @@ func New(settings *config.NoLintLintSettings) *goanalysis.Linter {
 				}
 
 				mu.Lock()
-
 				resIssues = append(resIssues, issues...)
-
 				mu.Unlock()
 
 				return nil, nil
