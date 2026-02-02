@@ -878,6 +878,7 @@
             "noinlineerr",
             "nolintlint",
             "nonamedreturns",
+            "nosharedparamtype",
             "nosprintfhostport",
             "paralleltest",
             "perfsprint",

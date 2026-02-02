@@ -85,6 +85,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/noinlineerr"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/nolintlint"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/nonamedreturns"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/nosharedparamtype"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/nosprintfhostport"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/paralleltest"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/perfsprint"
@@ -538,6 +539,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.46.0").
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/firefart/nonamedreturns"),
+
+		linter.NewConfig(nosharedparamtype.New()).
+			WithSince("v0.1.0").
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/niekdomi/nosharedparamtype"),
 
 		linter.NewConfig(nosprintfhostport.New()).
 			WithSince("v1.46.0").
