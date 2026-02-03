@@ -28,7 +28,7 @@ func (m MyType) methodWithSharedParams(x, y int) int {
 	return x + y
 }
 
-func funcWithoutSharedParamTypes(x, y int) int {
+func funcWithoutSharedParamTypes(x int, y int) int {
 	return x + y
 }
 
@@ -40,6 +40,6 @@ func funcWithNoParams() int {
 	return 42
 }
 
-func (m MyType) methodWithSeparateParams(x, y int) int {
-	return x + y
+func (m MyType) methodWithSeparateParams(x float64, y int) int {
+	return int(x) + y
 }

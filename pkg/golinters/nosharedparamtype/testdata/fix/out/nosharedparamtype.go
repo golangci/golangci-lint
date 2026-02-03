@@ -40,6 +40,6 @@ func funcWithNoParams() int {
 	return 42
 }
 
-func (m MyType) methodWithSeparateParams(x int, y int) int {
-	return x + y
+func (m MyType) methodWithSeparateParams(x float64, y int) int {
+	return int(x) + y
 }
