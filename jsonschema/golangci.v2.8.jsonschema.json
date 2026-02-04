@@ -615,7 +615,6 @@
         "enforce-repeated-arg-type-style",
         "enforce-slice-style",
         "enforce-switch-style",
-        "epoch-naming",
         "error-naming",
         "error-return",
         "error-strings",
@@ -680,7 +679,6 @@
         "use-any",
         "use-errors-new",
         "use-fmt-print",
-        "use-slices-sort",
         "use-waitgroup-go",
         "useless-break",
         "useless-fallthrough",
@@ -717,6 +715,7 @@
     "modernize-analyzers": {
       "enum": [
         "any",
+        "bloop",
         "fmtappendf",
         "forvar",
         "mapsloop",
@@ -761,8 +760,7 @@
         "assign-expr",
         "err",
         "leading-whitespace",
-        "trailing-whitespace",
-        "after-block"
+        "trailing-whitespace"
       ]
     },
     "relative-path-modes": {
@@ -4110,27 +4108,8 @@
               "type": "boolean",
               "default": true
             },
-            "check-n1": {
-              "type": "boolean",
-              "default": false
-            },
-            "check-sql-injection": {
-              "type": "boolean",
-              "default": false
-            },
-            "check-tx-leaks": {
-              "type": "boolean",
-              "default": false
-            },
             "allowed-patterns": {
               "description": "Regex patterns for acceptable SELECT * usage.",
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "allow": {
-              "description": "Allow is a list of SQL patterns to allow (whitelist).",
               "type": "array",
               "items": {
                 "type": "string"
@@ -4178,36 +4157,6 @@
                 "jet": {
                   "type": "boolean",
                   "default": true
-                }
-              }
-            },
-            "custom-rules": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "additionalProperties": false,
-                "properties": {
-                  "id": {
-                    "type": "string"
-                  },
-                  "pattern": {
-                    "type": "string"
-                  },
-                  "patterns": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "when": {
-                    "type": "string"
-                  },
-                  "message": {
-                    "type": "string"
-                  },
-                  "action": {
-                    "type": "string"
-                  }
                 }
               }
             }
@@ -4619,10 +4568,6 @@
         "modules-download-mode": {
           "description": "Option to pass to \"go list -mod={option}\".\nSee \"go help modules\" for more information.",
           "enum": ["mod", "readonly", "vendor"]
-        },
-        "enable-build-vcs": {
-          "type": "boolean",
-          "default": false
         },
         "allow-parallel-runners": {
           "description": "Allow multiple parallel golangci-lint instances running. If disabled, golangci-lint acquires file lock on start.",

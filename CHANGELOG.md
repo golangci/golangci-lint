@@ -8,6 +8,28 @@ If you value it, consider supporting us, we appreciate it!
 
 <!-- START --->
 
+### v2.9.0
+
+_Released on 2026-02-10_
+
+1. Enhancements
+   * 🎉 go1.26 support
+2. Linters new features or changes
+   * `arangolint`: from 0.3.1 to 0.4.0 (new rule: detect potential query injections)
+   * `ginkgolinter`: from 0.21.2 to 0.22.0 (support for wrappers)
+   * `golines`: from 0.14.0 to 0.15.0
+   * `misspell`: from 0.7.0 to 0.8.0
+   * `unqueryvet`: from 1.4.0 to 1.5.3 (new options: `check-n1`, `check-sql-injection`, `check-tx-leaks`, `allow`, `custom-rules`)
+   * `wsl`: from 5.3.0 to 5.6.0 (new rule: `after-block`)
+3. Linters bug fixes
+   * `modernize`: from 0.41.0 to 0.42.0
+   * `prealloc`: from 1.0.1 to 1.0.2
+   * `protogetter`: from 0.3.18 to 0.3.20
+4. Misc.
+   * Log information about files when configuration verification
+   * Emit an error when no linters enabled
+   * Do not collect VCS information when loading code
+
 ### v2.8.0
 
 _Released on 2026-01-07_
@@ -19,6 +41,7 @@ _Released on 2026-01-07_
    * `gosec`: from daccba6b93d7 to 2.22.11 (new rule: `G116`)
    * `modernize`: from 0.39.0 to 0.40.0 (new analyzers: `stringscut`, `unsafefuncs`)
    * `prealloc`: from 1.0.0 to 1.0.1 (message changes)
+   * `revive`: from v1.13.0 to v1.14.0 (new rules: `epoch-naming`, `use-slices-sort`)
    * `unqueryvet`: from 1.3.0 to 1.4.0 (new options: `check-aliased-wildcard`, `check-string-concat`, `check-format-strings`, `check-string-builder`, `check-subqueries`, `ignored-functions`, `sql-builders`)
 2. Linters bug fixes
    * `go-critic`: from 0.14.2 to 0.14.3
