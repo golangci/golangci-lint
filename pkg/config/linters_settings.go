@@ -180,9 +180,9 @@ var defaultLintersSettings = LintersSettings{
 			SQLBoiler: true,
 			Jet:       true,
 		},
-		CheckN1:           true,
-		CheckSQLInjection: true,
-		CheckTxLeak:       true,
+		CheckN1:           false,
+		CheckSQLInjection: false,
+		CheckTxLeak:       false,
 	},
 	Unused: UnusedSettings{
 		FieldWritesAreUses:     true,
