@@ -4740,6 +4740,10 @@ run:
   # Default: ""
   modules-download-mode: readonly
 
+  # Uses version control information during the loading of packages.
+  # Default: false (implies `-buildvcs=false`)
+  enable-build-vcs: true
+
   # Allow multiple parallel golangci-lint instances running.
   # If false, golangci-lint acquires file lock on start.
   # Default: false

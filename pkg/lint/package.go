@@ -230,8 +230,10 @@ func (l *PackageLoader) makeBuildFlags() []string {
 		buildFlags = append(buildFlags, fmt.Sprintf("-mod=%s", l.cfg.Run.ModulesDownloadMode))
 	}
 
-	// disable collecting VCS information
-	buildFlags = append(buildFlags, "-buildvcs=false")
+	if !l.cfg.Run.EnableBuildVCS {
+		// disable collecting VCS information
+		buildFlags = append(buildFlags, "-buildvcs=false")
+	}
 
 	return buildFlags
 }
