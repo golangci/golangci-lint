@@ -4618,6 +4618,10 @@
           "description": "Option to pass to \"go list -mod={option}\".\nSee \"go help modules\" for more information.",
           "enum": ["mod", "readonly", "vendor"]
         },
+        "enable-build-vcs": {
+          "type": "boolean",
+          "default": false
+        },
         "allow-parallel-runners": {
           "description": "Allow multiple parallel golangci-lint instances running. If disabled, golangci-lint acquires file lock on start.",
           "type": "boolean",
