@@ -4007,14 +4007,14 @@ linters:
       # Default: true
       check-subqueries: false
       # Detects N+1 Query.
-      # Default: true
-      check-n1: false
+      # Default: false
+      check-n1: true
       # Detects SQL injection.
-      # Default: true
-      check-sql-injection: false
+      # Default: false
+      check-sql-injection: true
       # Detects transaction leaks.
-      # Default: true
-      check-tx-leaks: false
+      # Default: false
+      check-tx-leaks: true
       # Regex patterns for acceptable `SELECT *` usage.
       # Default:
       # - "SELECT \\* FROM information_schema\\..*"

@@ -4110,15 +4110,15 @@
             },
             "check-n1": {
               "type": "boolean",
-              "default": true
+              "default": false
             },
             "check-sql-injection": {
               "type": "boolean",
-              "default": true
+              "default": false
             },
             "check-tx-leaks": {
               "type": "boolean",
-              "default": true
+              "default": false
             },
             "allowed-patterns": {
               "description": "Regex patterns for acceptable SELECT * usage.",
