@@ -2594,6 +2594,11 @@ linters:
           disabled: false
           exclude: [""]
           arguments: [ "allowNoDefault" ]
+        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#epoch-naming
+        - name: epoch-naming
+          severity: warning
+          disabled: false
+          exclude: [""]
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#error-naming
         - name: error-naming
           severity: warning
@@ -2941,6 +2946,11 @@ linters:
           exclude: [""]
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#unreachable-code
         - name: unreachable-code
+          severity: warning
+          disabled: false
+          exclude: [""]
+        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#use-slices-sort
+        - name: use-slices-sort
           severity: warning
           disabled: false
           exclude: [""]
