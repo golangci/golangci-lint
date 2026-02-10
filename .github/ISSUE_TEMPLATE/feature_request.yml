@@ -77,4 +77,4 @@ body:
     attributes:
       label: Supporter
       options:
-        - label: I am a sponsor through [GitHub](https://github.com/sponsors/golangci/) or [OpenCollective](https://opencollective.com/golangci-lint)
+        - label: I am a [sponsor/backer](https://donate.golangci.org) of this project.

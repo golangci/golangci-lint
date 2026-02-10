@@ -532,6 +532,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 		linter.NewConfig(noinlineerr.New()).
 			WithSince("v2.2.0").
 			WithLoadForGoAnalysis().
+			WithAutoFix().
 			WithURL("https://github.com/AlwxSin/noinlineerr"),
 
 		linter.NewConfig(nonamedreturns.New(&cfg.Linters.Settings.NoNamedReturns)).
