@@ -2132,8 +2132,6 @@ linters:
       disable:
         # Replace interface{} with any.
         - any
-        # Replace for-range over b.N with b.Loop.
-        - bloop
         # Replace []byte(fmt.Sprintf) with fmt.Appendf.
         - fmtappendf
         # Remove redundant re-declaration of loop variables.
@@ -2596,6 +2594,11 @@ linters:
           disabled: false
           exclude: [""]
           arguments: [ "allowNoDefault" ]
+        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#epoch-naming
+        - name: epoch-naming
+          severity: warning
+          disabled: false
+          exclude: [""]
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#error-naming
         - name: error-naming
           severity: warning
@@ -2943,6 +2946,11 @@ linters:
           exclude: [""]
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#unreachable-code
         - name: unreachable-code
+          severity: warning
+          disabled: false
+          exclude: [""]
+        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#use-slices-sort
+        - name: use-slices-sort
           severity: warning
           disabled: false
           exclude: [""]
@@ -4008,6 +4016,15 @@ linters:
       # Enable subquery analysis.
       # Default: true
       check-subqueries: false
+      # Detects N+1 Query.
+      # Default: false
+      check-n1: true
+      # Detects SQL injection.
+      # Default: false
+      check-sql-injection: true
+      # Detects transaction leaks.
+      # Default: false
+      check-tx-leaks: true
       # Regex patterns for acceptable `SELECT *` usage.
       # Default:
       # - "SELECT \\* FROM information_schema\\..*"
@@ -4018,6 +4035,10 @@ linters:
       allowed-patterns:
         - "SELECT \\* FROM temp_.*"
         - "SELECT \\* FROM.*-- migration"
+      # Allow is a list of SQL patterns to allow (whitelist).
+      # Default: []
+      allow:
+        - foo
       # Functions to ignore (regex patterns)
       # Default: []
       ignored-functions:
@@ -4034,6 +4055,18 @@ linters:
         bun: false
         sqlboiler: false
         jet: false
+      # List of user-defined DSL rules.
+      # https://github.com/MirrexOne/unqueryvet?tab=readme-ov-file#custom-rules-dsl
+      # Default: []
+      custom-rules:
+        - id: allow-temp-tables
+          pattern: "SELECT * FROM $TABLE"
+          when: "isTempTable(table)"
+          action: allow
+        - id: dangerous-delete
+          pattern: "DELETE FROM $TABLE"
+          when: "!has_where"
+          message: "DELETE without WHERE clause"
 
     unused:
       # Mark all struct fields that have been written to as used.
@@ -4289,6 +4322,7 @@ linters:
         - err
         - leading-whitespace
         - trailing-whitespace
+        - after-block
 
       # Disable checks.
       # Will be subtractive to any preset.
@@ -4317,6 +4351,7 @@ linters:
         - err
         - leading-whitespace
         - trailing-whitespace
+        - after-block
 
     # The custom section can be used to define linter plugins to be loaded at runtime.
     # See README documentation for more info.
@@ -4714,6 +4749,10 @@ run:
   # Allowed values: readonly|vendor|mod
   # Default: ""
   modules-download-mode: readonly
+
+  # Uses version control information during the loading of packages.
+  # Default: false (implies `-buildvcs=false`)
+  enable-build-vcs: true
 
   # Allow multiple parallel golangci-lint instances running.
   # If false, golangci-lint acquires file lock on start.
