@@ -697,6 +697,7 @@
     "loadMode": 8767,
     "originalURL": "https://github.com/AlwxSin/noinlineerr",
     "internal": false,
+    "canAutoFix": true,
     "isSlow": true,
     "since": "v2.2.0"
   },
