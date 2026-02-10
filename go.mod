@@ -90,7 +90,7 @@ require (
 	github.com/maratori/testpackage v1.1.2
 	github.com/matoous/godox v1.1.0
 	github.com/mattn/go-colorable v0.1.14
-	github.com/mgechev/revive v1.13.0
+	github.com/mgechev/revive v1.14.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/moricho/tparallel v0.3.2
 	github.com/nakabonne/nestif v0.3.1
@@ -222,7 +222,7 @@ require (
 	go.uber.org/multierr v1.10.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20251125195548-87e1e737ad39 // indirect
-	golang.org/x/text v0.31.0 // indirect
+	golang.org/x/text v0.33.0 // indirect
 	golang.org/x/tools/go/expect v0.1.1-deprecated // indirect
 	golang.org/x/tools/go/packages/packagestest v0.1.1-deprecated // indirect
 	google.golang.org/protobuf v1.36.8 // indirect
