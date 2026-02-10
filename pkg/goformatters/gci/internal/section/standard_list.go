@@ -1,6 +1,6 @@
 package section
 
-// Code generated based on go1.25.0 X:boringcrypto,arenas,synctest,jsonv2. DO NOT EDIT.
+// Code generated based on go1.26.0 X:boringcrypto,arenas,jsonv2,runtimesecret. DO NOT EDIT.
 
 var standardPackages = map[string]struct{}{
 	"archive/tar":            {},
@@ -31,8 +31,10 @@ var standardPackages = map[string]struct{}{
 	"crypto/fips140":         {},
 	"crypto/hkdf":            {},
 	"crypto/hmac":            {},
+	"crypto/hpke":            {},
 	"crypto/md5":             {},
 	"crypto/mlkem":           {},
+	"crypto/mlkem/mlkemtest": {},
 	"crypto/pbkdf2":          {},
 	"crypto/rand":            {},
 	"crypto/rc4":             {},
@@ -154,6 +156,7 @@ var standardPackages = map[string]struct{}{
 	"runtime/metrics":        {},
 	"runtime/pprof":          {},
 	"runtime/race":           {},
+	"runtime/secret":         {},
 	"runtime/trace":          {},
 	"slices":                 {},
 	"sort":                   {},
@@ -165,6 +168,7 @@ var standardPackages = map[string]struct{}{
 	"syscall":                {},
 	"syscall/js":             {},
 	"testing":                {},
+	"testing/cryptotest":     {},
 	"testing/fstest":         {},
 	"testing/iotest":         {},
 	"testing/quick":          {},

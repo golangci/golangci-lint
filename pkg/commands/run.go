@@ -25,7 +25,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
-	"go.uber.org/automaxprocs/maxprocs"
 	"go.yaml.in/yaml/v3"
 	"golang.org/x/mod/sumdb/dirhash"
 
@@ -160,16 +159,8 @@ func (c *runCommand) persistentPreRunE(cmd *cobra.Command, args []string) error 
 		return fmt.Errorf("can't load config: %w", err)
 	}
 
-	if c.cfg.Run.Concurrency == 0 {
-		// `runtime.GOMAXPROCS` defaults to the value of `runtime.NumCPU`.
-		backup := runtime.GOMAXPROCS(0)
-
-		// Automatically set GOMAXPROCS to match Linux container CPU quota.
-		_, err := maxprocs.Set(maxprocs.Logger(c.log.Infof))
-		if err != nil {
-			runtime.GOMAXPROCS(backup)
-		}
-	} else {
+	// https://go.dev/doc/go1.25#container-aware-gomaxprocs
+	if c.cfg.Run.Concurrency != 0 {
 		runtime.GOMAXPROCS(c.cfg.Run.Concurrency)
 	}
 
