@@ -51,6 +51,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/goheader"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/goimports"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/golines"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/golistics"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/gomoddirectives"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/gomodguard"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/goprintffuncname"
@@ -368,6 +369,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v2.0.0").
 			WithAutoFix().
 			WithURL("https://github.com/segmentio/golines"),
+
+		linter.NewConfig(golistics.New()).
+			WithSince("v2.9.0").
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/ufukty/golistics"),
 
 		linter.NewConfig(goheader.New(&cfg.Linters.Settings.Goheader, placeholderReplacer)).
 			WithSince("v1.28.0").
