@@ -21,7 +21,7 @@ _Released on 2026-02-10_
    * `misspell`: from 0.7.0 to 0.8.0
    * `revive`: from v1.13.0 to v1.14.0 (new rules: `epoch-naming`, `use-slices-sort`)
    * `unqueryvet`: from 1.4.0 to 1.5.3 (new options: `check-n1`, `check-sql-injection`, `check-tx-leaks`, `allow`, `custom-rules`)
-   * `wsl`: from 5.3.0 to 5.6.0 (new rule: `after-block`)
+   * `wsl_v5`: from 5.3.0 to 5.6.0 (new rule: `after-block`)
 3. Linters bug fixes
    * `modernize`: from 0.41.0 to 0.42.0
    * `prealloc`: from 1.0.1 to 1.0.2
@@ -36,7 +36,7 @@ _Released on 2026-02-10_
 _Released on 2026-01-07_
 
 1. Linters new features or changes
-   * `godoc-lint`: from 0.10.2 to 0.11.1 (new rule: `require-stdlib-doclink`)
+   * `godoclint`: from 0.10.2 to 0.11.1 (new rule: `require-stdlib-doclink`)
    * `golines`: from 442fd0091d95 to 0.14.0
    * `gomoddirectives`: from 0.7.1 to 0.8.0
    * `gosec`: from daccba6b93d7 to 2.22.11 (new rule: `G116`)
@@ -44,8 +44,8 @@ _Released on 2026-01-07_
    * `prealloc`: from 1.0.0 to 1.0.1 (message changes)
    * `unqueryvet`: from 1.3.0 to 1.4.0 (new options: `check-aliased-wildcard`, `check-string-concat`, `check-format-strings`, `check-string-builder`, `check-subqueries`, `ignored-functions`, `sql-builders`)
 2. Linters bug fixes
-   * `go-critic`: from 0.14.2 to 0.14.3
-   * `go-errorlint`: from 1.8.0 to 1.9.0
+   * `gocritic`: from 0.14.2 to 0.14.3
+   * `errorlint`: from 1.8.0 to 1.9.0
    * `govet`: from 0.39.0 to 0.40.0
    * `protogetter`: from 0.3.17 to 0.3.18
    * `revive`: add missing enable-default-rules setting
@@ -73,14 +73,14 @@ _Released on 2025-12-03_
 1. Bug fixes
    * fix: clone args used by `custom` command
 2. Linters new features or changes
-   * `no-sprintf-host-port`: from 0.2.0 to 0.3.1 (ignore string literals without a colon)
+   * `nosprintfhostport`: from 0.2.0 to 0.3.1 (ignore string literals without a colon)
    * `unqueryvet`: from 1.2.1 to 1.3.0 (handles `const` and `var` declarations)
    * `revive`: from 1.12.0 to 1.13.0 (new option: `enable-default-rules`, new rules: `forbidden-call-in-wg-go`, `unnecessary-if`, `inefficient-map-lookup`)
    * `modernize`: from 0.38.0 to 0.39.0 (new analyzers: `plusbuild`, `stringscut`)
 3. Linters bug fixes
    * `perfsprint`: from 0.10.0 to 0.10.1
    * `wrapcheck`: from 2.11.0 to 2.12.0
-   * `godoc-lint`: from 0.10.1 to 0.10.2
+   * `godoclint`: from 0.10.1 to 0.10.2
 4. Misc.
    * Add some flags to the `custom` command
 5. Documentation
@@ -103,7 +103,7 @@ _Released on 2025-11-04_
 
 1. Linters bug fixes
    * `copyloopvar`: from 1.2.1 to 1.2.2
-   * `go-critic`: from 0.14.0 to 0.14.2
+   * `gocritic`: from 0.14.0 to 0.14.2
 
 ### v2.6.0
 
@@ -114,7 +114,7 @@ _Released on 2025-10-29_
 2. Linters new features or changes
    * `arangolint`: from 0.2.0 to 0.3.1
    * `dupword`: from 0.1.6 to 0.1.7 (new option `comments-only`)
-   * `go-critic`: from 0.13.0 to 0.14.0 (new rules/checkers: `zeroByteRepeat`, `dupOption`)
+   * `gocritic`: from 0.13.0 to 0.14.0 (new rules/checkers: `zeroByteRepeat`, `dupOption`)
    * `gofumpt`: from 0.9.1 to 0.9.2 ("clothe" naked returns is now controlled by the `extra-rules` option)
    * `perfsprint`: from 0.9.1 to 0.10.0 (new options: `concat-loop`, `loop-other-ops`)
    * `wsl`: from 5.2.0 to 5.3.0
@@ -125,7 +125,7 @@ _Released on 2025-10-29_
    * `fatcontext`: from 0.8.1 to 0.9.0
    * `forbidigo`: from 2.1.0 to 2.3.0
    * `ginkgolinter`: from 0.21.0 to 0.21.2
-   * `godoc-lint`: from 0.10.0 to 0.10.1
+   * `godoclint`: from 0.10.0 to 0.10.1
    * `gomoddirectives`: from 0.7.0 to 0.7.1
    * `gosec`: from 2.22.8 to 2.22.10
    * `makezero`: from 2.0.1 to 2.1.0
@@ -153,12 +153,12 @@ _Released on 2025-09-21_
    * `musttag`: from 0.13.1 to 0.14.0 (support interface methods)
    * `revive`: from 1.11.0 to 1.12.0 (new options: `identical-ifelseif-branches`, `identical-ifelseif-conditions`, `identical-switch-branches`, `identical-switch-conditions`, `package-directory-mismatch`, `unsecure-url-scheme`, `use-waitgroup-go`, `useless-fallthrough`)
    * `thelper`: from 0.6.3 to 0.7.1 (skip `t.Helper` in functions passed to `synctest.Test`)
-   * `wsl`: from 5.1.1 to 5.2.0 (improvements related to subexpressions)
+   * `wsl_v5`: from 5.1.1 to 5.2.0 (improvements related to subexpressions)
 3. Linters bug fixes
    * `asciicheck`: from 0.4.1 to 0.5.0
    * `errname`: from 1.1.0 to 1.1.1
    * `fatcontext`: from 0.8.0 to 0.8.1
-   * `go-printf-func-name`: from 0.1.0 to 0.1.1
+   * `goprintffuncname`: from 0.1.0 to 0.1.1
    * `godot`: from 1.5.1 to 1.5.4
    * `gosec`: from 2.22.7 to 2.22.8
    * `nilerr`: from 0.1.1 to a temporary fork
@@ -194,7 +194,7 @@ _Released on 2025-08-02_
    * `gci`: from 0.13.6 to 0.13.7
    * `gosec`: from 2.22.6 to 2.22.7
    * `noctx`: from 0.3.5 to 0.4.0
-   * `wsl`: from 5.1.0 to 5.1.1
+   * `wsl_v5`: from 5.1.0 to 5.1.1
    * tagliatelle: force upper case for custom initialisms
 
 ### v2.3.0
@@ -206,7 +206,7 @@ _Released on 2025-07-21_
    * `iface`: from 1.4.0 to 1.4.1 (report message improvements)
    * `noctx`: from 0.3.4 to 0.3.5 (new detections: `log/slog`, `exec`, `crypto/tls`)
    * `revive`: from 1.10.0 to 1.11.0 (new rule: `enforce-switch-style`)
-   * `wsl`: from 5.0.0 to 5.1.0
+   * `wsl_v5`: from 5.0.0 to 5.1.0
 2. Linters bug fixes
    * `gosec`: from 2.22.5 to 2.22.6
    * `noinlineerr`: from 1.0.4 to 1.0.5
@@ -258,7 +258,7 @@ _Released on 2025-06-28_
    * `exptostd`: from 0.4.3 to 0.4.4
    * `forbidigo`: from 1.6.0 to 2.1.0
    * `gci`: consistently format the code
-   * `go-spancheck`: from 0.6.4 to 0.6.5
+   * `spancheck`: from 0.6.4 to 0.6.5
    * `goconst`: from 1.8.1 to 1.8.2
    * `gosec`: from 2.22.3 to 2.22.4
    * `gosec`: from 2.22.4 to 2.22.5
@@ -346,7 +346,7 @@ _Released on 2025-04-12_
 2. New linters
    * Add `funcorder` linter https://github.com/manuelarte/funcorder
 3. Linters new features or changes
-   * `go-errorlint`: from 1.7.1 to 1.8.0 (automatic error comparison and type assertion fixes)
+   * `errorlint`: from 1.7.1 to 1.8.0 (automatic error comparison and type assertion fixes)
    * ⚠️ `goconst`: `ignore-strings` is deprecated and replaced by `ignore-string-values`
    * `goconst`: from 1.7.1 to 1.8.1 (new options: `find-duplicates`, `eval-const-expressions`)
    * `govet`: add `httpmux` analyzer
@@ -414,7 +414,7 @@ _Released on 2025-03-24_
    * Add `golines` formatter https://github.com/segmentio/golines
 3. Linters new features
    * ⚠️ Merge `staticcheck`, `stylecheck`, `gosimple` into one linter (`staticcheck`) (cf. [Migration guide](https://golangci-lint.run/docs/product/migration-guide/#lintersenablestylecheckgosimplestaticcheck))
-   * `go-critic`: from 0.12.0 to 0.13.0
+   * `gocritic`: from 0.12.0 to 0.13.0
    * `gomodguard`: from 1.3.5 to 1.4.1 (block explicit indirect dependencies)
    * `nilnil`: from 1.0.1 to 1.1.0 (new option: `only-two`)
    * `perfsprint`: from 0.8.2 to 0.9.1 (checker name in the diagnostic message)
