@@ -19,6 +19,7 @@ _Released on 2026-02-10_
    * `ginkgolinter`: from 0.21.2 to 0.22.0 (support for wrappers)
    * `golines`: from 0.14.0 to 0.15.0
    * `misspell`: from 0.7.0 to 0.8.0
+   * `revive`: from v1.13.0 to v1.14.0 (new rules: `epoch-naming`, `use-slices-sort`)
    * `unqueryvet`: from 1.4.0 to 1.5.3 (new options: `check-n1`, `check-sql-injection`, `check-tx-leaks`, `allow`, `custom-rules`)
    * `wsl`: from 5.3.0 to 5.6.0 (new rule: `after-block`)
 3. Linters bug fixes
@@ -41,7 +42,6 @@ _Released on 2026-01-07_
    * `gosec`: from daccba6b93d7 to 2.22.11 (new rule: `G116`)
    * `modernize`: from 0.39.0 to 0.40.0 (new analyzers: `stringscut`, `unsafefuncs`)
    * `prealloc`: from 1.0.0 to 1.0.1 (message changes)
-   * `revive`: from v1.13.0 to v1.14.0 (new rules: `epoch-naming`, `use-slices-sort`)
    * `unqueryvet`: from 1.3.0 to 1.4.0 (new options: `check-aliased-wildcard`, `check-string-concat`, `check-format-strings`, `check-string-builder`, `check-subqueries`, `ignored-functions`, `sql-builders`)
 2. Linters bug fixes
    * `go-critic`: from 0.14.2 to 0.14.3
