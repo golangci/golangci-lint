@@ -1514,6 +1514,7 @@ linters:
         - G114 # Use of net/http serve function that has no support for setting timeouts
         - G115 # Type conversion which leads to integer overflow
         - G116 # Detect Trojan Source attacks using bidirectional Unicode characters
+        - G117 # Potential exposure of secrets via JSON marshaling
         - G201 # SQL query construction using format string
         - G202 # SQL query construction using string concatenation
         - G203 # Use of unescaped data in HTML templates
@@ -1540,6 +1541,12 @@ linters:
         - G507 # Import blocklist: golang.org/x/crypto/ripemd160
         - G601 # Implicit memory aliasing in RangeStmt
         - G602 # Possible slice bounds out of range
+        - G701 # SQL injection via taint analysis
+        - G702 # Command injection via taint analysis
+        - G703 # Path traversal via taint analysis
+        - G704 # SSRF via taint analysis
+        - G705 # XSS via taint analysis
+        - G706 # Log injection via taint analysis
 
       # To specify a set of rules to explicitly exclude.
       # Available rules: https://github.com/securego/gosec#available-rules

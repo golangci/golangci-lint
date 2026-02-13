@@ -171,6 +171,11 @@ linters:
         linters: [gosec]
         text: "G306: Expect WriteFile permissions to be 0600 or less"
 
+      # For compatibility with previous versions.
+      # Also, those reports are not relevant.
+      - linters: [gosec]
+        text: "(G704: SSRF via taint analysis|G703: Path traversal via taint analysis|G702: Command injection via taint analysis|G115: integer overflow conversion uintptr)"
+
       # Related to migration command.
       - path: pkg/commands/internal/migrate/two/
         linters:
