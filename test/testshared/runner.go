@@ -266,6 +266,7 @@ func (r *Runner) Command() *exec.Cmd {
 	//nolint:gosec // we don't use user input here
 	cmd := exec.CommandContext(r.tb.Context(), r.binPath, runArgs...)
 	cmd.Env = append(os.Environ(), r.env...)
+	cmd.Env = append(cmd.Env, "GOLANGCI_LINT_CACHE="+r.tb.TempDir())
 
 	return cmd
 }
