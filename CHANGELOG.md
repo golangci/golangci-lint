@@ -8,6 +8,17 @@ If you value it, consider supporting us, we appreciate it!
 
 <!-- START --->
 
+### v2.10.0
+
+_Released on 2026-02-17_
+
+1. Linters new features or changes
+   * `ginkgolinter`: from 0.22.0 to 0.23.0
+   * `gosec`: from 2.22.11 to 2.23.0 (new rules: `G117`, `G602`, `G701`, `G702`, `G703`, `G704`, `G705`, `G706`)
+   * `staticcheck`: from 0.6.1 to 0.7.0
+2. Linters bug fixes
+   * `godoclint`: from 0.11.1 to 0.11.2
+ 
 ### v2.9.0
 
 _Released on 2026-02-10_
