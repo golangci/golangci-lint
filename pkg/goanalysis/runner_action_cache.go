@@ -96,23 +96,22 @@ func (act *action) loadPersistedFacts() bool {
 
 	for _, f := range facts {
 		if f.Path == "" { // this is a package fact
-			key := packageFactKey{act.Package.Types, act.factType(f.Fact)}
+			key := packageFactKey{pkg: act.Package.Types, typ: act.factType(f.Fact)}
 			act.packageFacts[key] = f.Fact
 			continue
 		}
 		obj, err := objectpath.Object(act.Package.Types, objectpath.Path(f.Path))
 		if err != nil {
-			// Be lenient about these errors. For example, when
-			// analyzing io/ioutil from source, we may get a fact
-			// for methods on the devNull type, and objectpath
-			// will happily create a path for them. However, when
-			// we later load io/ioutil from export data, the path
-			// no longer resolves.
+			// Be lenient about these errors.
+			// For example, when analyzing io/ioutil from source,
+			// we may get a fact for methods on the devNull type,
+			// and objectpath will happily create a path for them.
+			// However,
+			// when we later load io/ioutil from export data,
+			// the path no longer resolves.
 			//
 			// If an exported type embeds the unexported type,
-			// then (part of) the unexported type will become part
-			// of the type information and our path will resolve
-			// again.
+			// then (part of) the unexported type will become part of the type information and our path will resolve again.
 			continue
 		}
 		factKey := objectFactKey{obj, act.factType(f.Fact)}
