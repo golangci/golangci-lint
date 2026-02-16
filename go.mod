@@ -56,7 +56,7 @@ require (
 	github.com/go-critic/go-critic v0.14.3
 	github.com/go-viper/mapstructure/v2 v2.5.0
 	github.com/go-xmlfmt/xmlfmt v1.1.3
-	github.com/godoc-lint/godoc-lint v0.11.1
+	github.com/godoc-lint/godoc-lint v0.11.2
 	github.com/gofrs/flock v0.13.0
 	github.com/golangci/asciicheck v0.5.0
 	github.com/golangci/dupl v0.0.0-20250308024227-f665c8d69b32
