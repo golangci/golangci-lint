@@ -7,7 +7,7 @@ import (
 	"golang.org/x/tools/go/packages"
 )
 
-func TestMarkDepsForAnalyzingSource(t *testing.T) {
+func Test_action_markDepsForAnalyzingSource(t *testing.T) {
 	t.Run("marks direct horizontal deps", func(t *testing.T) {
 		pkg := &packages.Package{PkgPath: "pkg/a"}
 
