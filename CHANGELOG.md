@@ -8,6 +8,13 @@ If you value it, consider supporting us, we appreciate it!
 
 <!-- START --->
 
+### v2.10.1
+
+_Released on 2026-02-17_
+
+1. Fixes
+   * buildssa panic 
+
 ### v2.10.0
 
 _Released on 2026-02-17_
