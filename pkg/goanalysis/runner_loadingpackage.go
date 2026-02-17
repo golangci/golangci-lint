@@ -46,14 +46,10 @@ func (lp *loadingPackage) analyzeRecursive(ctx context.Context, cancel context.C
 		// Load the direct dependencies, in parallel.
 		var wg sync.WaitGroup
 
-		wg.Add(len(lp.imports))
-
 		for _, imp := range lp.imports {
-			go func(imp *loadingPackage) {
+			wg.Go(func() {
 				imp.analyzeRecursive(ctx, cancel, loadMode, loadSem)
-
-				wg.Done()
-			}(imp)
+			})
 		}
 
 		wg.Wait()
