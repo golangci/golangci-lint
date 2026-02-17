@@ -63,9 +63,10 @@ func (act *action) markDepsForAnalyzingSource() {
 	// Horizontal deps (analyzer.Requires) must be loaded from source and analyzed before analyzing
 	// this action.
 	for _, dep := range act.Deps {
-		if dep.Package == act.Package {
+		if dep.Package == act.Package && !dep.needAnalyzeSource {
 			// Analyze source only for horizontal dependencies, e.g. from "buildssa".
 			dep.needAnalyzeSource = true // can't be set in parallel
+			dep.markDepsForAnalyzingSource()
 		}
 	}
 }
