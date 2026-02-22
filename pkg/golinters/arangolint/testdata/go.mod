@@ -2,7 +2,7 @@ module arangolint
 
 go 1.25.0
 
-require github.com/arangodb/go-driver/v2 v2.1.6
+require github.com/arangodb/go-driver/v2 v2.2.0
 
 require (
 	github.com/arangodb/go-velocypack v0.0.0-20200318135517-5af53c29c67e // indirect
