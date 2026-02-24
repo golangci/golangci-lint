@@ -28,6 +28,7 @@ import (
 	"golang.org/x/tools/go/analysis/passes/httpmux"
 	"golang.org/x/tools/go/analysis/passes/httpresponse"
 	"golang.org/x/tools/go/analysis/passes/ifaceassert"
+	"golang.org/x/tools/go/analysis/passes/inline"
 	_ "golang.org/x/tools/go/analysis/passes/inspect" // unused internal analyzer
 	"golang.org/x/tools/go/analysis/passes/loopclosure"
 	"golang.org/x/tools/go/analysis/passes/lostcancel"
@@ -83,6 +84,7 @@ var (
 		httpmux.Analyzer,
 		httpresponse.Analyzer,
 		ifaceassert.Analyzer,
+		inline.Analyzer,
 		loopclosure.Analyzer,
 		lostcancel.Analyzer,
 		nilfunc.Analyzer,
