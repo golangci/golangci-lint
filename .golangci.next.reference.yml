@@ -1849,6 +1849,7 @@ linters:
         - httpmux
         - httpresponse
         - ifaceassert
+        - inline
         - loopclosure
         - lostcancel
         - nilfunc
