@@ -513,7 +513,7 @@ func sizeOfValueTreeBytes(v any) int {
 
 func sizeOfReflectValueTreeBytes(rv reflect.Value, visitedPtrs map[uintptr]struct{}) int {
 	switch rv.Kind() {
-	case reflect.Ptr:
+	case reflect.Pointer:
 		ptrSize := int(rv.Type().Size())
 		if rv.IsNil() {
 			return ptrSize

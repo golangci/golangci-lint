@@ -32,7 +32,7 @@ func NewExclusionRules(log logutils.Log, lines *fsutils.LineCache, cfg *config.L
 		skippedCounter: map[string]int{},
 	}
 
-	excludeRules := slices.Concat(slices.Clone(cfg.Rules), getLinterExclusionPresets(cfg.Presets))
+	excludeRules := slices.Concat(cfg.Rules, getLinterExclusionPresets(cfg.Presets))
 
 	p.rules = parseRules(excludeRules, "", newExcludeRule)
 
