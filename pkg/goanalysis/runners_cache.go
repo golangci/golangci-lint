@@ -25,7 +25,7 @@ func saveIssuesToCache(allPkgs []*packages.Package, pkgsFromCache map[*packages.
 		perPkgIssues[issue.Pkg] = append(perPkgIssues[issue.Pkg], issue)
 	}
 
-	var savedIssuesCount int64 = 0
+	var savedIssuesCount int64
 	lintResKey := getIssuesCacheKey(analyzers)
 
 	workerCount := runtime.GOMAXPROCS(-1)

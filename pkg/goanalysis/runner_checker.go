@@ -427,7 +427,7 @@ func (act *action) exportPackageFact(fact analysis.Fact) {
 // NOTE(ldez) altered: add receiver to handle logs.
 func (act *action) factType(fact analysis.Fact) reflect.Type {
 	t := reflect.TypeOf(fact)
-	if t.Kind() != reflect.Ptr {
+	if t.Kind() != reflect.Pointer {
 		act.runner.log.Fatalf("invalid Fact type: got %T, want pointer", fact)
 	}
 	return t
