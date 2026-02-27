@@ -14,18 +14,10 @@ func New(settings *config.PreallocSettings) *goanalysis.Linter {
 			Name: "prealloc",
 			Doc:  "Find slice declarations that could potentially be pre-allocated",
 			Run: func(pass *analysis.Pass) (any, error) {
-				runPreAlloc(pass, settings)
+				pkg.Check(pass, settings.Simple, settings.RangeLoops, settings.ForLoops)
 
 				return nil, nil
 			},
 		}).
-		WithLoadMode(goanalysis.LoadModeSyntax)
-}
-
-func runPreAlloc(pass *analysis.Pass, settings *config.PreallocSettings) {
-	hints := pkg.Check(pass.Files, settings.Simple, settings.RangeLoops, settings.ForLoops)
-
-	for _, hint := range hints {
-		pass.Report(hint)
-	}
+		WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
