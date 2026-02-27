@@ -1511,10 +1511,17 @@ linters:
         - G110 # Detect io.Copy instead of io.CopyN when decompression
         - G111 # Detect http.Dir('/') as a potential risk
         - G112 # Detect ReadHeaderTimeout not configured as a potential risk
+        - G113 # HTTP request smuggling via conflicting headers or bare LF in body parsing
         - G114 # Use of net/http serve function that has no support for setting timeouts
         - G115 # Type conversion which leads to integer overflow
         - G116 # Detect Trojan Source attacks using bidirectional Unicode characters
-        - G117 # Potential exposure of secrets via JSON marshaling
+        - G117 # Potential exposure of secrets via JSON/YAML/XML/TOML marshaling
+        - G118 # Context propagation failure leading to goroutine/resource leaks
+        - G119 # Unsafe redirect policy may propagate sensitive headers
+        - G120 # Unbounded form parsing in HTTP handlers can cause memory exhaustion
+        - G121 # Unsafe CrossOriginProtection bypass patterns
+        - G122 # Filesystem TOCTOU race risk in filepath.Walk/WalkDir callbacks
+        - G123 # TLS resumption may bypass VerifyPeerCertificate when VerifyConnection is unset
         - G201 # SQL query construction using format string
         - G202 # SQL query construction using string concatenation
         - G203 # Use of unescaped data in HTML templates
@@ -1532,6 +1539,7 @@ linters:
         - G404 # Insecure random number source (rand)
         - G405 # Detect the usage of DES or RC4
         - G406 # Detect the usage of deprecated MD4 or RIPEMD160
+        - G408 # Stateful misuse of ssh.PublicKeyCallback leading to auth bypass
         - G501 # Import blocklist: crypto/md5
         - G502 # Import blocklist: crypto/des
         - G503 # Import blocklist: crypto/rc4
@@ -1547,6 +1555,7 @@ linters:
         - G704 # SSRF via taint analysis
         - G705 # XSS via taint analysis
         - G706 # Log injection via taint analysis
+        - G707 # SMTP command/header injection via taint analysis
 
       # To specify a set of rules to explicitly exclude.
       # Available rules: https://github.com/securego/gosec#available-rules
