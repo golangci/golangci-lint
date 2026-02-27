@@ -557,6 +557,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 
 		linter.NewConfig(prealloc.New(&cfg.Linters.Settings.Prealloc)).
 			WithSince("v1.19.0").
+			WithLoadForGoAnalysis().
 			WithURL("https://github.com/alexkohler/prealloc"),
 
 		linter.NewConfig(predeclared.New(&cfg.Linters.Settings.Predeclared)).
