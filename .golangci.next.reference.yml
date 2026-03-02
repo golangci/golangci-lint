@@ -2035,6 +2035,33 @@ linters:
       reject:
         - github.com\/user\/package\/v4\.Type
 
+    kubetyped:
+      # Include test files in the analysis.
+      # Default: false
+      include-test-files: false
+      # Per-check enable/disable map.
+      # Valid checks: map_literal, sprintf_yaml, unstructured_gvk, raw_gvk_string,
+      #   deprecated_api, embedded_yaml, raw_condition_status, raw_condition_type,
+      #   condition_map_literal, unstructured_status
+      # Default: all enabled
+      checks:
+        map_literal: true
+        sprintf_yaml: true
+      # Additional GVK-to-typed-struct mappings.
+      # Default: []
+      extra-known-gvks:
+        - api-version: "example.io/v1"
+          kind: "Widget"
+          typed-package: "example.io/api/v1.Widget"
+      # GVKs to suppress diagnostics for (format: "apiVersion/kind").
+      # Default: []
+      ignore-gvks:
+        - "v1/ConfigMap"
+      # GVKs to reject by policy (format: "apiVersion/kind").
+      # Default: []
+      reject-gvks:
+        - "v1/Pod"
+
     lll:
       # Max line length, lines longer will be reported.
       # '\t' is counted as 1 character by default, and can be changed with the tab-width option.

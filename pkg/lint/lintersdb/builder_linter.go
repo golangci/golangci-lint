@@ -66,6 +66,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/intrange"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/iotamixing"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/ireturn"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/kubetyped"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/lll"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/loggercheck"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/maintidx"
@@ -461,6 +462,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.43.0").
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/butuzov/ireturn"),
+
+		linter.NewConfig(kubetyped.New(&cfg.Linters.Settings.Kubetyped)).
+			WithSince("v2.11.0").
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/jplimack-ai/kubetyped"),
 
 		linter.NewConfig(lll.New(&cfg.Linters.Settings.Lll)).
 			WithSince("v1.8.0"),

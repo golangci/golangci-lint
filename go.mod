@@ -3,7 +3,7 @@ module github.com/golangci/golangci-lint/v2
 // The minimum Go version must always be latest-1.
 // This version should never be changed outside of the PR to add the support of newer Go version.
 // Only golangci-lint maintainers are allowed to change it.
-go 1.25.0
+go 1.26
 
 ignore (
 	./docs
@@ -75,6 +75,7 @@ require (
 	github.com/jgautheron/goconst v1.8.2
 	github.com/jingyugao/rowserrcheck v1.1.1
 	github.com/jjti/go-spancheck v0.6.5
+	github.com/jplimack-ai/kubetyped v1.2.0
 	github.com/julz/importas v0.2.0
 	github.com/karamaru-alpha/copyloopvar v1.2.2
 	github.com/kisielk/errcheck v1.10.0

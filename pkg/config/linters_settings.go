@@ -282,6 +282,7 @@ type LintersSettings struct {
 	InterfaceBloat           InterfaceBloatSettings           `mapstructure:"interfacebloat"`
 	IotaMixing               IotaMixingSettings               `mapstructure:"iotamixing"`
 	Ireturn                  IreturnSettings                  `mapstructure:"ireturn"`
+	Kubetyped                KubetypedSettings                `mapstructure:"kubetyped"`
 	Lll                      LllSettings                      `mapstructure:"lll"`
 	LoggerCheck              LoggerCheckSettings              `mapstructure:"loggercheck"`
 	MaintIdx                 MaintIdxSettings                 `mapstructure:"maintidx"`
@@ -707,6 +708,20 @@ type IotaMixingSettings struct {
 type IreturnSettings struct {
 	Allow  []string `mapstructure:"allow"`
 	Reject []string `mapstructure:"reject"`
+}
+
+type KubetypedSettings struct {
+	IncludeTestFiles bool                `mapstructure:"include-test-files"`
+	Checks           map[string]bool     `mapstructure:"checks"`
+	ExtraKnownGVKs   []KubetypedGVKEntry `mapstructure:"extra-known-gvks"`
+	IgnoreGVKs       []string            `mapstructure:"ignore-gvks"`
+	RejectGVKs       []string            `mapstructure:"reject-gvks"`
+}
+
+type KubetypedGVKEntry struct {
+	APIVersion   string `mapstructure:"api-version"`
+	Kind         string `mapstructure:"kind"`
+	TypedPackage string `mapstructure:"typed-package"`
 }
 
 type LllSettings struct {
