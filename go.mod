@@ -93,6 +93,7 @@ require (
 	github.com/manuelarte/funcorder v0.5.0
 	github.com/maratori/testableexamples v1.0.1
 	github.com/maratori/testpackage v1.1.2
+	github.com/mario-pinderi/goqueryguard v0.1.2
 	github.com/matoous/godox v1.1.0
 	github.com/mattn/go-colorable v0.1.14
 	github.com/mgechev/revive v1.14.0

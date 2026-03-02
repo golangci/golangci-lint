@@ -54,6 +54,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/gomoddirectives"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/gomodguard"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/goprintffuncname"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/goqueryguard"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/gosec"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/gosmopolitan"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/govet"
@@ -399,6 +400,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 		linter.NewConfig(goprintffuncname.New()).
 			WithSince("v1.23.0").
 			WithURL("https://github.com/golangci/go-printf-func-name"),
+
+		linter.NewConfig(goqueryguard.New(&cfg.Linters.Settings.Goqueryguard)).
+			WithSince("v2.11.0").
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/mario-pinderi/goqueryguard"),
 
 		linter.NewConfig(gosec.New(&cfg.Linters.Settings.Gosec)).
 			WithSince("v1.0.0").

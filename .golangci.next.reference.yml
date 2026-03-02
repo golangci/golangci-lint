@@ -66,6 +66,7 @@ linters:
     - gomoddirectives
     - gomodguard
     - goprintffuncname
+    - goqueryguard
     - gosec
     - gosmopolitan
     - govet
@@ -181,6 +182,7 @@ linters:
     - gomoddirectives
     - gomodguard
     - goprintffuncname
+    - goqueryguard
     - gosec
     - gosmopolitan
     - govet
@@ -1494,6 +1496,12 @@ linters:
         # Set to true to raise lint issues for packages that are loaded from a local path via replace directive.
         # Default: false
         local-replace-directives: false
+
+    goqueryguard:
+      # Optional path to a goqueryguard configuration file.
+      # If empty, default config discovery is used.
+      # Default: ""
+      config: .goqueryguard.yaml
 
     gosec:
       # To select a subset of rules to run.

@@ -864,6 +864,7 @@
             "gomoddirectives",
             "gomodguard",
             "goprintffuncname",
+            "goqueryguard",
             "gosec",
             "gosimple",
             "gosmopolitan",
@@ -2337,6 +2338,17 @@
                   "default": true
                 }
               }
+            }
+          }
+        },
+        "goqueryguardSettings": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "config": {
+              "description": "Optional path to a goqueryguard configuration file.",
+              "type": "string",
+              "default": ""
             }
           }
         },
@@ -4893,6 +4905,9 @@
             },
             "gomodguard": {
               "$ref": "#/definitions/settings/definitions/gomodguardSettings"
+            },
+            "goqueryguard": {
+              "$ref": "#/definitions/settings/definitions/goqueryguardSettings"
             },
             "gosec": {
               "$ref": "#/definitions/settings/definitions/gosecSettings"

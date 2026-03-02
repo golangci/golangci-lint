@@ -1,0 +1,6 @@
+version: "2"
+
+linters:
+  settings:
+    goqueryguard:
+      config: goqueryguard_custom_config.cfg
