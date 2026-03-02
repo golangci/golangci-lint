@@ -83,11 +83,11 @@ jobs:
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
           GITHUB_TOKEN: ${{ secrets.GOLANGCI_LINT_TOKEN }}
 
-      - uses: actions/attest-build-provenance@v3
+      - uses: actions/attest-build-provenance@v4
         with:
           subject-checksums: ./dist/golangci-lint-${{ fromJSON(steps.goreleaser.outputs.metadata).version }}-checksums.txt
           github-token: ${{ secrets.GOLANGCI_LINT_TOKEN }}
-      - uses: actions/attest-build-provenance@v3
+      - uses: actions/attest-build-provenance@v4
         with:
           subject-checksums: ./dist/digests.txt
           github-token: ${{ secrets.GOLANGCI_LINT_TOKEN }}
