@@ -504,17 +504,10 @@
         "G110",
         "G111",
         "G112",
-        "G113",
         "G114",
         "G115",
         "G116",
         "G117",
-        "G118",
-        "G119",
-        "G120",
-        "G121",
-        "G122",
-        "G123",
         "G201",
         "G202",
         "G203",
@@ -532,7 +525,6 @@
         "G404",
         "G405",
         "G406",
-        "G408",
         "G501",
         "G502",
         "G503",
@@ -547,8 +539,7 @@
         "G703",
         "G704",
         "G705",
-        "G706",
-        "G707"
+        "G706"
       ]
     },
     "govet-analyzers": {
@@ -665,7 +656,6 @@
         "nested-structs",
         "optimize-operands-order",
         "package-comments",
-        "package-naming",
         "package-directory-mismatch",
         "range-val-address",
         "range-val-in-closure",

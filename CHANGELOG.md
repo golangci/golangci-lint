@@ -8,6 +8,21 @@ If you value it, consider supporting us, we appreciate it!
 
 <!-- START --->
 
+### v2.11.0
+ 
+_Released on 2026-03-06_
+
+1. Linters new features or changes
+   * `errcheck`: from 1.9.0 to 1.10.0 (exclude `crypto/rand.Read` by default)
+   * `gosec`: from 2.23.0 to 2.24.6 (new rules: `G113`, `G118`, `G119`, `G120`, `G121`, `G122`, `G123`, `G408`, `G707`)
+   * `noctx`: from 0.4.0 to 0.5.0 (new detection: `httptest.NewRequestWithContext`)
+   * `prealloc`: from 1.0.2 to 1.1.0
+   * `revive`: from 1.14.0 to 1.15.0 (⚠️ Breaking change: package-related checks moved from `var-naming` to a new rule `package-naming`)
+2. Linters bug fixes
+   * `gocognit`: from 1.2.0 to 1.2.1
+   * `gosec`: from 2.24.6 to 2.24.7
+   * `unqueryvet`: from 1.5.3 to 1.5.4
+
 ### v2.10.1
 
 _Released on 2026-02-17_
