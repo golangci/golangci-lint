@@ -82,7 +82,7 @@
       "linters": [
         "errcheck"
       ],
-      "text": "(?i)Error return value of .((os\\.)?std(out|err)\\..*|.*Close|.*Flush|os\\.Remove(All)?|.*print(f|ln)?|os\\.(Un)?Setenv). is not checked"
+      "text": "(?i)Error return value of .((os\\.)?std(out|err)\\..*|.*Close|.*Flush|os\\.Remove(All)?|.*print(f|ln)?|os\\.(Un)?Setenv|.*Rollback). is not checked"
     }
   ]
 }

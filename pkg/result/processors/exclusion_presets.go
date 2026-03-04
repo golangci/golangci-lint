@@ -55,7 +55,7 @@ var LinterExclusionPresets = map[string][]config.ExcludeRule{
 			// Almost all programs ignore errors on these functions and in most cases it's ok.
 			BaseRule: config.BaseRule{
 				Text: "(?i)Error return value of .((os\\.)?std(out|err)\\..*|.*Close" +
-					"|.*Flush|os\\.Remove(All)?|.*print(f|ln)?|os\\.(Un)?Setenv). is not checked",
+					"|.*Flush|os\\.Remove(All)?|.*print(f|ln)?|os\\.(Un)?Setenv|.*Rollback). is not checked",
 				Linters:           []string{"errcheck"},
 				InternalReference: "EXC0001",
 			},
