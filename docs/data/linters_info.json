@@ -741,10 +741,10 @@
   {
     "name": "prealloc",
     "desc": "Find slice declarations that could potentially be pre-allocated",
-    "loadMode": 8199,
+    "loadMode": 8767,
     "originalURL": "https://github.com/alexkohler/prealloc",
     "internal": false,
-    "isSlow": false,
+    "isSlow": true,
     "since": "v1.19.0"
   },
   {
