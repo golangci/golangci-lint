@@ -665,6 +665,7 @@
         "nested-structs",
         "optimize-operands-order",
         "package-comments",
+        "package-naming",
         "package-directory-mismatch",
         "range-val-address",
         "range-val-in-closure",

@@ -272,7 +272,7 @@ func safeTomlSlice(r []any) []any {
 }
 
 // This element is not exported by revive, so we need copy the code.
-// Extracted from https://github.com/mgechev/revive/blob/v1.13.0/config/config.go#L16
+// Extracted from https://github.com/mgechev/revive/blob/v1.15.0/config/config.go#L16
 var defaultRules = []lint.Rule{
 	&rule.VarDeclarationsRule{},
 	&rule.PackageCommentsRule{},
@@ -324,6 +324,7 @@ var allRules = append([]lint.Rule{
 	&rule.EnforceRepeatedArgTypeStyleRule{},
 	&rule.EnforceSliceStyleRule{},
 	&rule.EnforceSwitchStyleRule{},
+	&rule.EpochNamingRule{},
 	&rule.FileHeaderRule{},
 	&rule.FileLengthLimitRule{},
 	&rule.FilenameFormatRule{},
@@ -350,6 +351,7 @@ var allRules = append([]lint.Rule{
 	&rule.NestedStructs{},
 	&rule.OptimizeOperandsOrderRule{},
 	&rule.PackageDirectoryMismatchRule{},
+	&rule.PackageNamingRule{},
 	&rule.RangeValAddress{},
 	&rule.RangeValInClosureRule{},
 	&rule.RedundantBuildTagRule{},
@@ -374,6 +376,7 @@ var allRules = append([]lint.Rule{
 	&rule.UseFmtPrintRule{},
 	&rule.UselessBreak{},
 	&rule.UselessFallthroughRule{},
+	&rule.UseSlicesSort{},
 	&rule.UseWaitGroupGoRule{},
 	&rule.WaitGroupByValueRule{},
 }, defaultRules...)

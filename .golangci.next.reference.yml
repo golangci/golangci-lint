@@ -2822,6 +2822,22 @@ linters:
           exclude: [""]
           arguments:
             - ignore-directories: ["testcases", "testinfo"]
+        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#package-naming
+        - name: package-naming
+          severity: warning
+          disabled: false
+          exclude: [""]
+          arguments:
+            - - skip-convention-name-check: true
+                convention-name-check-regex: ""
+                skip-top-level-check: true
+                skip-default-bad-name-check: true
+                check-extra-bad-name: true
+                user-defined-bad-names:
+                  - foo
+                  - bar
+                skip-collision-with-common-std: true
+                check-collision-with-all-std: true
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#range
         - name: range
           severity: warning
@@ -3001,6 +3017,11 @@ linters:
           exclude: [""]
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#use-fmt-print
         - name: use-fmt-print
+          severity: warning
+          disabled: false
+          exclude: [""]
+        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#use-slices-sort
+        - name: use-slices-sort
           severity: warning
           disabled: false
           exclude: [""]
