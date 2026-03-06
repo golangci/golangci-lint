@@ -8,6 +8,14 @@ If you value it, consider supporting us, we appreciate it!
 
 <!-- START --->
 
+### v2.11.1
+
+_Released on 2026-03-06_
+
+Due to an error related to AUR, some artifacts of the v2.11.0 release have not been published.
+
+This release contains the same things as v2.11.0.
+
 ### v2.11.0
  
 _Released on 2026-03-06_
