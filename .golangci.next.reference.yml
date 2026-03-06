@@ -2828,16 +2828,16 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
-            - - skip-convention-name-check: true
-                convention-name-check-regex: ""
-                skip-top-level-check: true
-                skip-default-bad-name-check: true
-                check-extra-bad-name: true
-                user-defined-bad-names:
-                  - foo
-                  - bar
-                skip-collision-with-common-std: true
-                check-collision-with-all-std: true
+            - skip-convention-name-check: true
+              convention-name-check-regex: "^[a-z][a-zA-Z0-9]*$"
+              skip-top-level-check: true
+              skip-default-bad-name-check: true
+              check-extra-bad-name: true
+              user-defined-bad-names:
+                - foo
+                - bar
+              skip-collision-with-common-std: true
+              check-collision-with-all-std: true
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#range
         - name: range
           severity: warning
@@ -3055,11 +3055,6 @@ linters:
             - [ "VM" ] # DenyList
             - - skip-initialism-name-checks: true
                 upper-case-const: true
-                skip-package-name-checks: true
-                skip-package-name-collision-with-go-std: true
-                extra-bad-package-names:
-                  - helpers
-                  - models
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#waitgroup-by-value
         - name: waitgroup-by-value
           severity: warning
