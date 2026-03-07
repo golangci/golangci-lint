@@ -8,6 +8,13 @@ If you value it, consider supporting us, we appreciate it!
 
 <!-- START --->
 
+### v2.11.2
+
+_Released on 2026-03-07_
+
+1. Fixes
+   * `fmt`: fix error when using the `fmt` command with explicit paths. 
+
 ### v2.11.1
 
 _Released on 2026-03-06_
