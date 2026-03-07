@@ -79,11 +79,6 @@ func (c *Runner) Run(paths []string) error {
 }
 
 func (c *Runner) walk(root string, stdout *os.File) error {
-	r, err := os.OpenRoot(root)
-	if err != nil {
-		return err
-	}
-
 	return filepath.Walk(root, func(path string, f fs.FileInfo, err error) error {
 		if err != nil {
 			return err
@@ -102,7 +97,10 @@ func (c *Runner) walk(root string, stdout *os.File) error {
 			return err
 		}
 
-		in, err := r.Open(path)
+		//nolint:gosec // See explanation below.
+		// `path` contains the `root` but when using `r, err := os.OpenRoot(root)`, this part is not inside the file tree of `r`.
+		// `filepath.Rel()` can be used but it seems overkill in the context and doesn't work well with a file.
+		in, err := os.Open(path)
 		if err != nil {
 			return err
 		}
