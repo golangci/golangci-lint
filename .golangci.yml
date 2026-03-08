@@ -155,6 +155,35 @@ linters:
           - dupl
           - mnd
           - lll
+          - goconst
+
+      - path: pkg/commands/internal/migrate/.+
+        linters:
+          - goconst
+
+      - path: scripts/website/dump_info/thanks.go
+        linters:
+          - goconst
+
+      - path: pkg/result/processors/.+
+        text: "string `(go\\.mod|errcheck|revive|gosec|error|high)` has \\d+ occurrences, make it a constant"
+        linters:
+          - goconst
+
+      - path: pkg/commands/.+
+        text: "string `(\\(devel\\)|unknown)` has \\d+ occurrences, make it a constant"
+        linters:
+          - goconst
+
+      - path: pkg/printers/.+
+        text: "string `(golangci-lint|warning)` has \\d+ occurrences, make it a constant"
+        linters:
+          - goconst
+
+      - path: pkg/config/output(_test)?.go
+        text: "string `(file|linter|severity)` has \\d+ occurrences, make it a constant"
+        linters:
+          - goconst
 
       # Based on existing code, the modifications should be limited to make maintenance easier.
       - path: pkg/golinters/unused/unused.go

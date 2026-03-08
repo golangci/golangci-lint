@@ -209,9 +209,11 @@ func getConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
 }
 
 func createConfigMap(cfg *config.ReviveSettings) map[string]any {
+	const severity = "severity"
+
 	rawRoot := map[string]any{
 		"confidence":         cfg.Confidence,
-		"severity":           cfg.Severity,
+		severity:             cfg.Severity,
 		"errorCode":          cfg.ErrorCode,
 		"warningCode":        cfg.WarningCode,
 		"enableAllRules":     cfg.EnableAllRules,
@@ -224,7 +226,7 @@ func createConfigMap(cfg *config.ReviveSettings) map[string]any {
 	rawDirectives := map[string]map[string]any{}
 	for _, directive := range cfg.Directives {
 		rawDirectives[directive.Name] = map[string]any{
-			"severity": directive.Severity,
+			severity: directive.Severity,
 		}
 	}
 
@@ -235,7 +237,7 @@ func createConfigMap(cfg *config.ReviveSettings) map[string]any {
 	rawRules := map[string]map[string]any{}
 	for _, s := range cfg.Rules {
 		rawRules[s.Name] = map[string]any{
-			"severity":  s.Severity,
+			severity:    s.Severity,
 			"arguments": safeTomlSlice(s.Arguments),
 			"disabled":  s.Disabled,
 			"exclude":   s.Exclude,
