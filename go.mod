@@ -112,7 +112,7 @@ require (
 	github.com/santhosh-tekuri/jsonschema/v6 v6.0.2
 	github.com/sashamelentyev/interfacebloat v1.1.0
 	github.com/sashamelentyev/usestdlibvars v1.29.0
-	github.com/securego/gosec/v2 v2.24.7
+	github.com/securego/gosec/v2 v2.24.8-0.20260309165252-619ce2117e08
 	github.com/shirou/gopsutil/v4 v4.26.2
 	github.com/sirupsen/logrus v1.9.4
 	github.com/sivchari/containedctx v1.0.3
@@ -146,7 +146,7 @@ require (
 	go.yaml.in/yaml/v3 v3.0.4
 	golang.org/x/exp v0.0.0-20250620022241-b7579e27df2b
 	golang.org/x/mod v0.33.0
-	golang.org/x/sync v0.19.0
+	golang.org/x/sync v0.20.0
 	golang.org/x/sys v0.41.0
 	golang.org/x/tools v0.42.0
 	honnef.co/go/tools v0.7.0
