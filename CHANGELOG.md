@@ -8,6 +8,13 @@ If you value it, consider supporting us, we appreciate it!
 
 <!-- START --->
 
+### v2.11.3
+
+_Released on 2026-03-10_
+
+1. Linters bug fixes
+   * `gosec`: from v2.24.7 to 619ce2117e08
+
 ### v2.11.2
 
 _Released on 2026-03-07_
