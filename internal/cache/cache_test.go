@@ -191,22 +191,22 @@ func TestCache_computeHash_samePackageAcrossWorktrees(t *testing.T) {
 	assert.Equal(t, rootHashesA, rootHashesB)
 }
 
-func createPackageFixture(t *testing.T, root string) (*packages.Package, *packages.Package) {
+func createPackageFixture(t *testing.T, root string) (pkg, dep *packages.Package) {
 	t.Helper()
 
 	require.NoError(t, os.MkdirAll(filepath.Join(root, "dep"), 0o755))
 	require.NoError(t, os.MkdirAll(filepath.Join(root, "pkg"), 0o755))
-	require.NoError(t, os.WriteFile(filepath.Join(root, "dep", "dep.go"), []byte("package dep\n\nconst Name = \"dep\"\n"), 0o644))
-	require.NoError(t, os.WriteFile(filepath.Join(root, "pkg", "main.go"), []byte("package pkg\n\nimport _ \"example.com/project/dep\"\n"), 0o644))
-	require.NoError(t, os.WriteFile(filepath.Join(root, "pkg", "extra.go"), []byte("package pkg\n\nconst value = 1\n"), 0o644))
-	require.NoError(t, os.WriteFile(filepath.Join(root, "pkg", "ignored.go"), []byte("//go:build ignored\n\npackage pkg\n"), 0o644))
+	require.NoError(t, os.WriteFile(filepath.Join(root, "dep", "dep.go"), []byte("package dep\n\nconst Name = \"dep\"\n"), 0o600))
+	require.NoError(t, os.WriteFile(filepath.Join(root, "pkg", "main.go"), []byte("package pkg\n\nimport _ \"example.com/project/dep\"\n"), 0o600))
+	require.NoError(t, os.WriteFile(filepath.Join(root, "pkg", "extra.go"), []byte("package pkg\n\nconst value = 1\n"), 0o600))
+	require.NoError(t, os.WriteFile(filepath.Join(root, "pkg", "ignored.go"), []byte("//go:build ignored\n\npackage pkg\n"), 0o600))
 
 	module := &packages.Module{
 		Path: "example.com/project",
 		Dir:  root,
 	}
 
-	dep := &packages.Package{
+	dep = &packages.Package{
 		PkgPath: "example.com/project/dep",
 		Dir:     filepath.Join(root, "dep"),
 		Module:  module,
@@ -215,7 +215,7 @@ func createPackageFixture(t *testing.T, root string) (*packages.Package, *packag
 		},
 	}
 
-	pkg := &packages.Package{
+	pkg = &packages.Package{
 		PkgPath: "example.com/project/pkg",
 		Dir:     filepath.Join(root, "pkg"),
 		Module:  module,
