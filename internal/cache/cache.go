@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"maps"
+	"path/filepath"
 	"runtime"
 	"slices"
 	"strings"
@@ -172,7 +173,7 @@ func (c *Cache) computePkgHash(pkg *packages.Package) (hashResults, error) {
 			return nil, fmt.Errorf("failed to calculate file %s hash: %w", f, fErr)
 		}
 
-		fmt.Fprintf(key, "file %s %x\n", f, h)
+		fmt.Fprintf(key, "file %s %x\n", packageFileIdentity(pkg, f), h)
 	}
 
 	curSum := key.Sum()
@@ -214,6 +215,37 @@ func (c *Cache) computeDepsHash(depMode HashMode, imps []*packages.Package, key 
 	}
 
 	return nil
+}
+
+func packageFileIdentity(pkg *packages.Package, filename string) string {
+	if rel, ok := stableRelativePath(pkg.Dir, filename); ok {
+		return "pkg:" + rel
+	}
+
+	if pkg.Module != nil {
+		if rel, ok := stableRelativePath(pkg.Module.Dir, filename); ok {
+			return "module:" + rel
+		}
+	}
+
+	return "path:" + filepath.ToSlash(filepath.Clean(filename))
+}
+
+func stableRelativePath(baseDir, filename string) (string, bool) {
+	if baseDir == "" {
+		return "", false
+	}
+
+	rel, err := filepath.Rel(baseDir, filename)
+	if err != nil {
+		return "", false
+	}
+
+	if rel == ".." || strings.HasPrefix(rel, ".."+string(filepath.Separator)) {
+		return "", false
+	}
+
+	return filepath.ToSlash(filepath.Clean(rel)), true
 }
 
 func (c *Cache) putBytes(actionID cache.ActionID, buf *bytes.Buffer) error {
