@@ -24,7 +24,7 @@ require (
 	github.com/Antonboom/testifylint v1.6.4
 	github.com/BurntSushi/toml v1.6.0
 	github.com/Djarvur/go-err113 v0.1.1
-	github.com/MirrexOne/unqueryvet v1.5.3
+	github.com/MirrexOne/unqueryvet v1.5.4
 	github.com/OpenPeeDeeP/depguard/v2 v2.2.1
 	github.com/alecthomas/chroma/v2 v2.23.1
 	github.com/alecthomas/go-check-sumtype v0.3.1
