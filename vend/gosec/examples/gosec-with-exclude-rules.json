@@ -1,0 +1,36 @@
+{
+  "global": {
+    "audit": false,
+    "nosec": false,
+    "show-ignored": false
+  },
+  "G101": {
+    "pattern": "(?i)passwd|pass|password|pwd|secret|private_key|token|api_key",
+    "ignore_entropy": false,
+    "entropy_threshold": "80.0",
+    "per_char_threshold": "3.0",
+    "truncate": "32"
+  },
+  "exclude-rules": [
+    {
+      "path": "cmd/.*",
+      "rules": ["G204", "G304"]
+    },
+    {
+      "path": "internal/testutil/.*",
+      "rules": ["G101", "G401", "G501"]
+    },
+    {
+      "path": "scripts/.*",
+      "rules": ["*"]
+    },
+    {
+      "path": ".*_test\\.go$",
+      "rules": ["G101", "G304"]
+    },
+    {
+      "path": "internal/(mock|fake|stub)s?/.*",
+      "rules": ["*"]
+    }
+  ]
+}

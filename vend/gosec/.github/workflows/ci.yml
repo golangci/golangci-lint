@@ -1,0 +1,70 @@
+name: CI
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+jobs:
+  test:
+    strategy:
+      matrix:
+        version:
+          - go-version: "1.24.13"
+            golangci: "latest"
+          - go-version: "1.25.7"
+            golangci: "latest"
+    runs-on: ubuntu-latest
+    env:
+      GO111MODULE: on
+    steps:
+      - name: Setup go ${{ matrix.version.go-version }}
+        uses: actions/setup-go@v6
+        with:
+          go-version: ${{ matrix.version.go-version }}
+      - name: Checkout Source
+        uses: actions/checkout@v6
+      - uses: actions/cache@v5
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+      - name: lint
+        uses: golangci/golangci-lint-action@v9
+        with:
+          version: ${{ matrix.version.golangci }}
+      - name: Run Gosec Security Scanner
+        uses: securego/gosec@master
+        with:
+          args: '-exclude-dir=testdata ./...'
+      - name: Run Tests
+        run: make test
+      - name: Perf Diff
+        run: make perf-diff
+  coverage:
+    needs: [test]
+    runs-on: ubuntu-latest
+    env:
+      GO111MODULE: on
+    steps:
+      - name: Setup go
+        uses: actions/setup-go@v6
+        with:
+          go-version: "1.25.7"
+      - name: Checkout Source
+        uses: actions/checkout@v6
+      - uses: actions/cache@v5
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+      - name: Create Test Coverage
+        run: make test-coverage
+      - name: Upload Test Coverage
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
