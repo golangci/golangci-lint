@@ -216,7 +216,7 @@ func (ra *RangeAnalyzer) ResolveRange(v ssa.Value, block *ssa.BasicBlock) *range
 			var finalResIf *rangeResult
 			matchCount := 0
 			for i, succ := range currDom.Succs {
-				reach := ra.IsReachable(succ, block)
+				reach := ra.IsReachable(succ, block, currDom)
 				if reach {
 					matchCount++
 					if resIf := ra.getResultRangeForIfEdge(vIf, i == 0, v); resIf != nil {
@@ -258,11 +258,15 @@ func (ra *RangeAnalyzer) ResolveRange(v ssa.Value, block *ssa.BasicBlock) *range
 
 // IsReachable returns true if there is a path from the start block to the target block in the CFG.
 // It uses iterative stack-based traversal and the RangeAnalyzer's BlockMap to avoid allocations.
-func (ra *RangeAnalyzer) IsReachable(start, target *ssa.BasicBlock) bool {
+// An optional exclude block can be provided to prevent traversal through it (used to avoid loop back edges).
+func (ra *RangeAnalyzer) IsReachable(start, target *ssa.BasicBlock, exclude ...*ssa.BasicBlock) bool {
 	if start == target {
 		return true
 	}
 	clear(ra.BlockMap)
+	for _, ex := range exclude {
+		ra.BlockMap[ex] = true
+	}
 	ra.reachStack = ra.reachStack[:0]
 	ra.reachStack = append(ra.reachStack, start)
 
@@ -496,7 +500,9 @@ func (ra *RangeAnalyzer) isNonNegativeRecursive(v ssa.Value) bool {
 	}
 	switch v := v.(type) {
 	case *ssa.Extract:
-		if _, ok := v.Tuple.(*ssa.Next); ok {
+		// For range loops, only the index (extract 0) is guaranteed non-negative.
+		// Extract 1 is the element value which can be any integer.
+		if _, ok := v.Tuple.(*ssa.Next); ok && v.Index == 0 {
 			return true
 		}
 	case *ssa.Call:
@@ -807,6 +813,11 @@ func (ra *RangeAnalyzer) ComputeRange(v ssa.Value, block *ssa.BasicBlock) *range
 			// Dereference (Load)
 			if alloc, ok := v.X.(*ssa.Alloc); ok {
 				return ra.resolveAllocRange(alloc, block, v)
+			}
+			// Don't recurse through IndexAddr: *(&data[i]) yields the element value,
+			// whose range is unrelated to the index i's range.
+			if _, ok := v.X.(*ssa.IndexAddr); ok {
+				break
 			}
 			// Just recurse
 			subRes := ra.ResolveRange(v.X, block)

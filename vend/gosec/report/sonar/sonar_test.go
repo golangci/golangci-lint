@@ -35,10 +35,24 @@ var _ = Describe("Sonar Formatter", func() {
 				},
 			}
 			want := &sonar.Report{
+				Rules: []*sonar.Rule{
+					{
+						ID:                 "test",
+						Name:               "test",
+						Description:        "test",
+						EngineID:           "gosec",
+						CleanCodeAttribute: "TRUSTWORTHY",
+						Impacts: []*sonar.Impact{
+							{
+								SoftwareQuality: "SECURITY",
+								Severity:        "HIGH",
+							},
+						},
+					},
+				},
 				Issues: []*sonar.Issue{
 					{
-						EngineID: "gosec",
-						RuleID:   "test",
+						RuleID: "test",
 						PrimaryLocation: &sonar.Location{
 							Message:  "test",
 							FilePath: "test.go",
@@ -47,8 +61,62 @@ var _ = Describe("Sonar Formatter", func() {
 								EndLine:   2,
 							},
 						},
-						Type:          "VULNERABILITY",
-						Severity:      "BLOCKER",
+						EffortMinutes: sonar.EffortMinutes,
+					},
+				},
+			}
+
+			rootPath := "/home/src/project"
+
+			issues, err := sonar.GenerateReport([]string{rootPath}, data)
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(*issues).To(Equal(*want))
+		})
+
+		It("it should enrich rules with metadata when available", func() {
+			data := &gosec.ReportInfo{
+				Errors: map[string][]gosec.Error{},
+				Issues: []*issue.Issue{
+					{
+						Severity:   issue.Medium,
+						Confidence: 0,
+						RuleID:     "G101",
+						What:       "Potential hardcoded credentials",
+						File:       "/home/src/project/test.go",
+						Code:       "",
+						Line:       "5",
+					},
+				},
+				Stats: &gosec.Metrics{},
+			}
+
+			want := &sonar.Report{
+				Rules: []*sonar.Rule{
+					{
+						ID:                 "G101",
+						Name:               "G101",
+						Description:        "Look for hardcoded credentials",
+						EngineID:           "gosec",
+						CleanCodeAttribute: "TRUSTWORTHY",
+						Impacts: []*sonar.Impact{
+							{
+								SoftwareQuality: "SECURITY",
+								Severity:        "MEDIUM",
+							},
+						},
+					},
+				},
+				Issues: []*sonar.Issue{
+					{
+						RuleID: "G101",
+						PrimaryLocation: &sonar.Location{
+							Message:  "Potential hardcoded credentials",
+							FilePath: "test.go",
+							TextRange: &sonar.TextRange{
+								StartLine: 5,
+								EndLine:   5,
+							},
+						},
 						EffortMinutes: sonar.EffortMinutes,
 					},
 				},
@@ -83,10 +151,24 @@ var _ = Describe("Sonar Formatter", func() {
 				},
 			}
 			want := &sonar.Report{
+				Rules: []*sonar.Rule{
+					{
+						ID:                 "test",
+						Name:               "test",
+						Description:        "test",
+						EngineID:           "gosec",
+						CleanCodeAttribute: "TRUSTWORTHY",
+						Impacts: []*sonar.Impact{
+							{
+								SoftwareQuality: "SECURITY",
+								Severity:        "HIGH",
+							},
+						},
+					},
+				},
 				Issues: []*sonar.Issue{
 					{
-						EngineID: "gosec",
-						RuleID:   "test",
+						RuleID: "test",
 						PrimaryLocation: &sonar.Location{
 							Message:  "test",
 							FilePath: "subfolder/test.go",
@@ -95,8 +177,6 @@ var _ = Describe("Sonar Formatter", func() {
 								EndLine:   2,
 							},
 						},
-						Type:          "VULNERABILITY",
-						Severity:      "BLOCKER",
 						EffortMinutes: sonar.EffortMinutes,
 					},
 				},
@@ -130,6 +210,7 @@ var _ = Describe("Sonar Formatter", func() {
 				},
 			}
 			want := &sonar.Report{
+				Rules:  []*sonar.Rule{},
 				Issues: []*sonar.Issue{},
 			}
 
@@ -171,10 +252,24 @@ var _ = Describe("Sonar Formatter", func() {
 				},
 			}
 			want := &sonar.Report{
+				Rules: []*sonar.Rule{
+					{
+						ID:                 "test",
+						Name:               "test",
+						Description:        "test",
+						EngineID:           "gosec",
+						CleanCodeAttribute: "TRUSTWORTHY",
+						Impacts: []*sonar.Impact{
+							{
+								SoftwareQuality: "SECURITY",
+								Severity:        "HIGH",
+							},
+						},
+					},
+				},
 				Issues: []*sonar.Issue{
 					{
-						EngineID: "gosec",
-						RuleID:   "test",
+						RuleID: "test",
 						PrimaryLocation: &sonar.Location{
 							Message:  "test",
 							FilePath: "test-project1.go",
@@ -183,13 +278,10 @@ var _ = Describe("Sonar Formatter", func() {
 								EndLine:   2,
 							},
 						},
-						Type:          "VULNERABILITY",
-						Severity:      "BLOCKER",
 						EffortMinutes: sonar.EffortMinutes,
 					},
 					{
-						EngineID: "gosec",
-						RuleID:   "test",
+						RuleID: "test",
 						PrimaryLocation: &sonar.Location{
 							Message:  "test",
 							FilePath: "test-project2.go",
@@ -198,8 +290,6 @@ var _ = Describe("Sonar Formatter", func() {
 								EndLine:   2,
 							},
 						},
-						Type:          "VULNERABILITY",
-						Severity:      "BLOCKER",
 						EffortMinutes: sonar.EffortMinutes,
 					},
 				},

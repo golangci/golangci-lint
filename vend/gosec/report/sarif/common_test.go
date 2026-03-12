@@ -3,11 +3,10 @@ package sarif_test
 import (
 	"bufio"
 	"bytes"
+	_ "embed"
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"sync"
-	"time"
 
 	. "github.com/onsi/ginkgo/v2"
 	"github.com/santhosh-tekuri/jsonschema/v6"
@@ -16,30 +15,20 @@ import (
 )
 
 var (
-	sarifSchemaOnce   sync.Once
-	sarifSchema       *jsonschema.Schema
-	sarifSchemaErr    error
-	sarifSchemaClient = &http.Client{Timeout: 30 * time.Second}
+	sarifSchemaOnce sync.Once
+	sarifSchema     *jsonschema.Schema
+	sarifSchemaErr  error
 )
+
+//go:embed testdata/sarif-schema-2.1.0.json
+var sarifSchemaJSON []byte
 
 func validateSarifSchema(report *sarif.Report) error {
 	GinkgoHelper()
 	sarifSchemaOnce.Do(func() {
-		resp, err := sarifSchemaClient.Get(sarif.Schema)
+		schema, err := jsonschema.UnmarshalJSON(bytes.NewReader(sarifSchemaJSON))
 		if err != nil {
-			sarifSchemaErr = fmt.Errorf("fetch sarif schema: %w", err)
-			return
-		}
-		defer resp.Body.Close()
-
-		if resp.StatusCode != http.StatusOK {
-			sarifSchemaErr = fmt.Errorf("fetch sarif schema: unexpected status %s", resp.Status)
-			return
-		}
-
-		schema, err := jsonschema.UnmarshalJSON(resp.Body)
-		if err != nil {
-			sarifSchemaErr = fmt.Errorf("error unmarshaling schema: %w", err)
+			sarifSchemaErr = fmt.Errorf("unmarshal local sarif schema: %w", err)
 			return
 		}
 

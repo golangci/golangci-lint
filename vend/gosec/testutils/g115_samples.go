@@ -1822,4 +1822,116 @@ func main() {
 	}
 }
 `}, 0, gosec.NewConfig()},
+	{[]string{`
+package main
+
+import "math"
+
+// Issue #1501: three guarded conversion patterns inside a loop
+func fetchData(ids []string, lastRunReps uint8) uint8 {
+	repetitions := lastRunReps
+	for len(ids) > 0 {
+		payload := []byte{}
+		calcReps := len(payload) / len(ids)
+
+		repetitions = 255
+		if calcReps > 0 && calcReps < math.MaxUint8 {
+			repetitions = uint8(calcReps)
+		}
+
+		if calcReps < 0 || calcReps >= math.MaxUint8 {
+			repetitions = 255
+		} else {
+			repetitions = uint8(calcReps)
+		}
+
+		if calcReps < 0 || calcReps >= math.MaxUint8 {
+			return 0
+		}
+		repetitions = uint8(calcReps)
+	}
+	return repetitions
+}
+	`}, 0, gosec.NewConfig()},
+	{[]string{`
+package main
+
+import "math"
+
+func rangeLoopSafe(data []int) uint8 {
+	var out uint8
+	for _, v := range data {
+		if v > 0 && v < math.MaxUint8 {
+			out = uint8(v)
+		}
+	}
+	return out
+}
+	`}, 0, gosec.NewConfig()},
+	{[]string{`
+package main
+
+func continueLoopSafe(data []int) uint8 {
+	var out uint8
+	for _, v := range data {
+		if v < 0 || v > 255 {
+			continue
+		}
+		out = uint8(v)
+	}
+	return out
+}
+	`}, 0, gosec.NewConfig()},
+	{[]string{`
+package main
+
+func loopUnsafe(data []int) uint8 {
+	var out uint8
+	for _, v := range data {
+		out = uint8(v)
+	}
+	return out
+}
+	`}, 1, gosec.NewConfig()},
+	{[]string{`
+package main
+
+func loopWithBounds(data []int) uint8 {
+	var out uint8
+	for i := 0; i < len(data); i++ {
+		if data[i] >= 0 && data[i] < 256 {
+			out = uint8(data[i])
+		}
+	}
+	return out
+}
+	`}, 0, gosec.NewConfig()},
+	{[]string{`
+package main
+
+// only lower bound check, missing upper (unsafe)
+func loopMissingUpper(data []int) uint8 {
+	var out uint8
+	for i := 0; i < len(data); i++ {
+		if data[i] >= 0 {
+			out = uint8(data[i])
+		}
+	}
+	return out
+}
+	`}, 1, gosec.NewConfig()},
+	{[]string{`
+package main
+
+// only upper bound check, missing lower (unsafe)
+func loopMissingLower(data []int) uint8 {
+	var out uint8
+	for i := 0; i < len(data); i++ {
+		if data[i] <= 255 {
+			out = uint8(data[i])
+		}
+	}
+	return out
+}
+	`}, 1, gosec.NewConfig()},
 }

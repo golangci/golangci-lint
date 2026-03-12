@@ -293,6 +293,12 @@ func (a *Analyzer) isTainted(v ssa.Value, fn *ssa.Function, visited map[ssa.Valu
 	}
 	visited[v] = true
 
+	// Constants are compile-time literals and can never carry attacker-controlled
+	// data. Short-circuit immediately — no taint possible.
+	if _, ok := v.(*ssa.Const); ok {
+		return false
+	}
+
 	// Check if this value's type is a source
 	if a.isSourceType(v.Type()) {
 		return true

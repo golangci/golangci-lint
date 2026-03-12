@@ -195,6 +195,10 @@ func runSliceBounds(pass *analysis.Pass) (result any, err error) {
 												issue.Low,
 												issue.High)
 										case *ssa.IndexAddr:
+											// Skip IndexAddr that directly accesses the original array (not the slice)
+											if s.X == instr {
+												continue
+											}
 											issues[s] = newIssue(
 												pass.Analyzer.Name,
 												"slice index out of range",
@@ -578,6 +582,8 @@ func (s *sliceBoundsState) extractIntValueIndexAddr(refinstr *ssa.IndexAddr, sli
 		if !isSliceIndexInsideBounds(sliceCap+sliceIncr, finalIdx) {
 			return finalIdx, nil
 		}
+		// Constant index is within bounds; avoid BFS exploring shared SSA constant referrers
+		return 0, errNoFound
 	}
 
 	// Case 2: Base is a Phi node (loop counter)

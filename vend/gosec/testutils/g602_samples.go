@@ -651,4 +651,93 @@ func main() {
 	fmt.Println(s[idx])
 }
 `}, 1, gosec.NewConfig()},
+	// Issue #1495: G602 false positive for array element access with coexisting slice expression
+	{[]string{`
+package main
+import (
+	"log/slog"
+	"runtime"
+	"time"
+)
+func main() {
+	var pcs [1]uintptr
+	runtime.Callers(2, pcs[:])
+	r := slog.NewRecord(time.Now(), slog.LevelError, "test", pcs[0])
+	_ = r
+}
+`}, 0, gosec.NewConfig()},
+	{[]string{`
+package main
+func main() {
+	var buf [4]byte
+	copy(buf[:], []byte("test"))
+	_ = buf[0]
+	_ = buf[1]
+	_ = buf[2]
+	_ = buf[3]
+}
+`}, 0, gosec.NewConfig()},
+	{[]string{`
+package main
+func main() {
+	var buf [2]byte
+	copy(buf[:], []byte("ab"))
+	idx := 3
+	_ = buf[idx]
+}
+`}, 1, gosec.NewConfig()},
+	{[]string{`
+package main
+func doWork(s []int) {}
+func main() {
+	var arr [5]int
+	doWork(arr[:])
+	_ = arr[0]
+	_ = arr[4]
+}
+`}, 0, gosec.NewConfig()},
+	// Issue #1525: G602 false positive for array index in range-over-array loops
+	{[]string{`
+package main
+func main() {
+	var arr [8]int
+	for i := range arr {
+		arr[i] = i
+	}
+}
+`}, 0, gosec.NewConfig()},
+	{[]string{`
+package main
+func main() {
+	var arr [8]int
+	for i := range arr {
+		_ = arr[i+1]
+	}
+}
+`}, 1, gosec.NewConfig()},
+	// Issue #1545: G602 false positive on range-over-array indexing into same-size array
+	{[]string{`
+package main
+
+func main() {
+	ranged := [1]int{1}
+	var accessed [1]*int
+
+	for i, r := range ranged {
+		accessed[i] = &r
+	}
+}
+`}, 0, gosec.NewConfig()},
+	{[]string{`
+package main
+
+func main() {
+	ranged := [2]int{1, 2}
+	var accessed [1]*int
+
+	for i, r := range ranged {
+		accessed[i] = &r
+	}
+}
+`}, 1, gosec.NewConfig()},
 }

@@ -36,12 +36,17 @@ const defaultIssueDescription = "Use of hardcoded IV/nonce for encryption"
 // and the index of the argument that is the nonce/IV.
 // Example: "crypto/cipher.NewCBCEncrypter": {2, 1} means the function accepts 2 arguments,
 // and the nonce arg is at index 1 (the second argument).
+// Note: We only track encryption functions, not decryption functions (like NewCBCDecrypter, NewCFBDecrypter, etc.)
+// because decryption must use the same nonce as encryption, which will naturally appear as a known/hardcoded value.
 var tracked = map[string][]int{
 	"(crypto/cipher.AEAD).Seal":     {4, 1},
 	"crypto/cipher.NewCBCEncrypter": {2, 1},
 	"crypto/cipher.NewCFBEncrypter": {2, 1},
+	"crypto/cipher.NewCTREncrypter": {2, 1},
 	"crypto/cipher.NewCTR":          {2, 1},
 	"crypto/cipher.NewOFB":          {2, 1},
+	"crypto/cipher.NewCFB":          {2, 1},
+	"crypto/cipher.NewCBC":          {2, 1},
 }
 
 var dynamicFuncs = map[string]bool{
@@ -146,6 +151,16 @@ func (s *analysisState) Release() {
 	s.BaseAnalyzerState.Release()
 }
 
+// isAEADOpenCall checks if a call is to AEAD.Open (decryption), which should not be flagged.
+func isAEADOpenCall(c *ssa.Call) bool {
+	if c.Call.IsInvoke() && c.Call.Method != nil {
+		name := c.Call.Method.FullName()
+		// Check if this is (crypto/cipher.AEAD).Open
+		return strings.Contains(name, "AEAD") && strings.HasSuffix(name, "Open")
+	}
+	return false
+}
+
 // getInitialArgs is now unified in util.go TraverseSSA or kept here if specific.
 // It seems specific to tracked functions, so we keep it but can use TraverseSSA.
 func (s *analysisState) getInitialArgs(tracked map[string][]int) []ssaValueAndInstr {
@@ -154,6 +169,10 @@ func (s *analysisState) getInitialArgs(tracked map[string][]int) []ssaValueAndIn
 		if c, ok := i.(*ssa.Call); ok {
 			if c.Call.IsInvoke() {
 				// Handle interface method calls (e.g. (crypto/cipher.AEAD).Seal)
+				// Skip AEAD.Open (decryption) as it must use the same nonce as encryption
+				if isAEADOpenCall(c) {
+					return
+				}
 				name := c.Call.Method.FullName()
 				if info, ok := tracked[name]; ok {
 					if len(c.Call.Args) == info[0] {

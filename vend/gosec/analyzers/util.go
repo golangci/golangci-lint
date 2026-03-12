@@ -284,7 +284,7 @@ func GetIntTypeInfo(t types.Type) (IntTypeInfo, error) {
 // GetConstantInt64 extracts a constant int64 value from an ssa.Value
 func GetConstantInt64(v ssa.Value) (int64, bool) {
 	if c, ok := v.(*ssa.Const); ok {
-		if c.Value != nil {
+		if c.Value != nil && c.Value.Kind() == constant.Int {
 			if val, ok := constant.Int64Val(c.Value); ok {
 				return val, true
 			}
@@ -301,7 +301,7 @@ func GetConstantInt64(v ssa.Value) (int64, bool) {
 // GetConstantUint64 extracts a constant uint64 value from an ssa.Value
 func GetConstantUint64(v ssa.Value) (uint64, bool) {
 	if c, ok := v.(*ssa.Const); ok {
-		if c.Value != nil {
+		if c.Value != nil && c.Value.Kind() == constant.Int {
 			if val, ok := constant.Uint64Val(c.Value); ok {
 				return val, true
 			}
@@ -458,7 +458,7 @@ func GetDominators(block *ssa.BasicBlock) []*ssa.BasicBlock {
 
 // isConstantInRange checks if a constant value fits within the range of the destination type.
 func IsConstantInTypeRange(constVal *ssa.Const, dstInt IntTypeInfo) bool {
-	if constVal.Value == nil {
+	if constVal.Value == nil || constVal.Value.Kind() != constant.Int {
 		return false
 	}
 	if dstInt.Signed {
@@ -641,6 +641,11 @@ func isSameOrRelated(a, b ssa.Value) bool {
 	if aField, ok := aVal.(*ssa.FieldAddr); ok {
 		if bField, ok := bVal.(*ssa.FieldAddr); ok {
 			return aField.Field == bField.Field && isSameOrRelated(aField.X, bField.X)
+		}
+	}
+	if aIndex, ok := aVal.(*ssa.IndexAddr); ok {
+		if bIndex, ok := bVal.(*ssa.IndexAddr); ok {
+			return isSameOrRelated(aIndex.X, bIndex.X) && isSameOrRelated(aIndex.Index, bIndex.Index)
 		}
 	}
 	if aUnOp, ok := aVal.(*ssa.UnOp); ok {

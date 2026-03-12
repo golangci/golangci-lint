@@ -488,6 +488,30 @@ func FindVarIdentities(n *ast.BinaryExpr, c *Context) ([]*ast.Ident, bool) {
 	return nil, false
 }
 
+// FindModuleRoot returns the directory containing the go.mod file that
+// governs the given directory. It walks upward from dir until it finds
+// a go.mod file or reaches the filesystem root.
+// Returns "" if no go.mod is found.
+//
+// This is needed to correctly load packages in multi-module repositories:
+// without setting packages.Config.Dir to the module root, packages.Load
+// uses the current working directory for module resolution, which fails
+// when the CWD belongs to a different module than the package being loaded.
+func FindModuleRoot(dir string) string {
+	dir = filepath.Clean(dir)
+	for {
+		if fi, err := os.Stat(filepath.Join(dir, "go.mod")); err == nil && !fi.IsDir() {
+			return dir
+		}
+		parent := filepath.Dir(dir)
+		if parent == dir {
+			// Reached filesystem root
+			return ""
+		}
+		dir = parent
+	}
+}
+
 // PackagePaths returns a slice with all packages path at given root directory
 func PackagePaths(root string, excludes []*regexp.Regexp) ([]string, error) {
 	if strings.HasSuffix(root, "...") {

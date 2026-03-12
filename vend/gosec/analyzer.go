@@ -420,11 +420,15 @@ func (gosec *Analyzer) load(pkgPath string, buildTags []string) ([]*packages.Pac
 		}
 	}
 
-	// step 2/2: pass in cli encoded build flags to build correctly.
+	// step 2/2: pass in cli encoded build flags to build correctly,
+	// and set Dir to the module root of the package being loaded.
 	conf := &packages.Config{
 		Mode:       LoadMode,
 		BuildFlags: CLIBuildTags(buildTags),
 		Tests:      gosec.tests,
+	}
+	if modRoot := FindModuleRoot(abspath); modRoot != "" {
+		conf.Dir = modRoot
 	}
 	pkgs, err := packages.Load(conf, packageFiles...)
 	if err != nil {

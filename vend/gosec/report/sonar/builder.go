@@ -18,13 +18,30 @@ func NewTextRange(startLine int, endLine int) *TextRange {
 }
 
 // NewIssue instantiate an Issue
-func NewIssue(engineID string, ruleID string, primaryLocation *Location, issueType string, severity string, effortMinutes int) *Issue {
+func NewIssue(ruleID string, primaryLocation *Location, effortMinutes int) *Issue {
 	return &Issue{
-		EngineID:        engineID,
 		RuleID:          ruleID,
 		PrimaryLocation: primaryLocation,
-		Type:            issueType,
-		Severity:        severity,
 		EffortMinutes:   effortMinutes,
+	}
+}
+
+// NewImpact instantiate an Impact.
+func NewImpact(softwareQuality string, severity string) *Impact {
+	return &Impact{
+		SoftwareQuality: softwareQuality,
+		Severity:        severity,
+	}
+}
+
+// NewRule instantiate a Rule.
+func NewRule(id string, name string, description string, engineID string, cleanCodeAttribute string, impacts []*Impact) *Rule {
+	return &Rule{
+		ID:                 id,
+		Name:               name,
+		Description:        description,
+		EngineID:           engineID,
+		CleanCodeAttribute: cleanCodeAttribute,
+		Impacts:            impacts,
 	}
 }

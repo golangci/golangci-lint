@@ -62,6 +62,38 @@ var _ = Describe("Sarif Formatter", func() {
 			Expect(validateSarifSchema(sarifReport)).To(Succeed())
 		})
 
+		It("sarif formatted report should not include null relationships when CWE is missing (issue #1568)", func() {
+			issueWithoutCWE := []*issue.Issue{
+				{
+					File:       "/home/src/project/test.go",
+					Line:       "1",
+					Col:        "1",
+					RuleID:     "G706",
+					What:       "Log injection via taint analysis",
+					Confidence: issue.High,
+					Severity:   issue.Low,
+					Code:       "1: testcode",
+					Cwe:        nil,
+				},
+			}
+
+			reportInfo := gosec.NewReportInfo(issueWithoutCWE, &gosec.Metrics{}, map[string][]gosec.Error{}).WithVersion("v2.24.0")
+
+			sarifReport, err := sarif.GenerateReport([]string{}, reportInfo)
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(validateSarifSchema(sarifReport)).To(Succeed())
+
+			Expect(sarifReport.Runs[0].Tool.Driver.Rules).To(HaveLen(1))
+			Expect(sarifReport.Runs[0].Tool.Driver.Rules[0].Relationships).To(BeNil())
+
+			buf := new(bytes.Buffer)
+			err = sarif.WriteReport(buf, reportInfo, []string{})
+			Expect(err).ShouldNot(HaveOccurred())
+			output := buf.String()
+			Expect(output).NotTo(ContainSubstring(`"relationships":[null]`))
+			Expect(output).NotTo(ContainSubstring(`"relationships": [null]`))
+		})
+
 		It("sarif formatted report should not include fixes when autofix is empty (issue #1482)", func() {
 			ruleID := "G304"
 			cwe := issue.GetCweByRule(ruleID)

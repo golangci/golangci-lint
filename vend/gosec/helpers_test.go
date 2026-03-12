@@ -364,4 +364,41 @@ var _ = Describe("Helpers", func() {
 			Expect(result).To(Equal([]string{"-tags=linux,amd64"}))
 		})
 	})
+
+	Context("when finding module root", func() {
+		It("should find go.mod in parent directory", func() {
+			tmpDir := GinkgoT().TempDir()
+			gomodPath := filepath.Join(tmpDir, "go.mod")
+			err := os.WriteFile(gomodPath, []byte("module test\n"), 0o600)
+			Expect(err).ShouldNot(HaveOccurred())
+
+			subDir := filepath.Join(tmpDir, "sub", "pkg")
+			err = os.MkdirAll(subDir, 0o755)
+			Expect(err).ShouldNot(HaveOccurred())
+
+			result := gosec.FindModuleRoot(subDir)
+			Expect(result).To(Equal(tmpDir))
+		})
+
+		It("should find nearest go.mod in nested module", func() {
+			tmpDir := GinkgoT().TempDir()
+			rootGomod := filepath.Join(tmpDir, "go.mod")
+			err := os.WriteFile(rootGomod, []byte("module example.com/root\n"), 0o600)
+			Expect(err).ShouldNot(HaveOccurred())
+
+			nestedMod := filepath.Join(tmpDir, "nested", "mod")
+			err = os.MkdirAll(nestedMod, 0o755)
+			Expect(err).ShouldNot(HaveOccurred())
+			nestedGomod := filepath.Join(nestedMod, "go.mod")
+			err = os.WriteFile(nestedGomod, []byte("module example.com/nested/mod\n"), 0o600)
+			Expect(err).ShouldNot(HaveOccurred())
+
+			nestedPkg := filepath.Join(nestedMod, "pkg")
+			err = os.MkdirAll(nestedPkg, 0o755)
+			Expect(err).ShouldNot(HaveOccurred())
+
+			result := gosec.FindModuleRoot(nestedPkg)
+			Expect(result).To(Equal(nestedMod))
+		})
+	})
 })

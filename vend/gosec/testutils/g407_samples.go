@@ -1257,4 +1257,104 @@ func main() {
 	_ = cipher.NewCTR(block, iv)
 }
 `}, 1, gosec.NewConfig()},
+
+	// Decryption tests - should NOT be flagged as decryption uses the same nonce as encryption
+	{[]string{`package main
+
+import (
+	"crypto/aes"
+	"crypto/cipher"
+)
+
+func Decrypt(data []byte, key [32]byte) ([]byte, error) {
+	block, _ := aes.NewCipher(key[:32])
+	gcm, _ := cipher.NewGCM(block)
+	// Using a hardcoded nonce for DECRYPTION is safe - must match encryption nonce
+	nonce := []byte("ILoveMyNonce")
+	return gcm.Open(nil, nonce, data[gcm.NonceSize():], nil)
+}
+`}, 0, gosec.NewConfig()},
+
+	{[]string{`package main
+
+import (
+	"crypto/aes"
+	"crypto/cipher"
+)
+
+func main() {
+	block, _ := aes.NewCipher([]byte{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1})
+	aesGCM, _ := cipher.NewGCM(block)
+
+	// Encrypt with hardcoded nonce - SHOULD be flagged
+	cipherText := aesGCM.Seal(nil, []byte("ILoveMyNonce"), []byte("My secret message"), nil)
+
+	// Decrypt with same nonce - should NOT be flagged (same nonce as encryption)
+	cipherText, _ = aesGCM.Open(nil, []byte("ILoveMyNonce"), cipherText, nil)
+}
+`}, 1, gosec.NewConfig()},
+
+	{[]string{`package main
+
+import (
+	"crypto/aes"
+	"crypto/cipher"
+)
+
+func main() {
+	block, _ := aes.NewCipher([]byte{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1})
+	// NewCBCDecrypter should not be flagged - decryption must use same nonce as encryption
+	aesCBC := cipher.NewCBCDecrypter(block, []byte("ILoveMyNonceAlot"))
+	var output = make([]byte, 16)
+	aesCBC.CryptBlocks(output, []byte("encrypted_block!"))
+}
+`}, 0, gosec.NewConfig()},
+
+	{[]string{`package main
+
+import (
+	"crypto/aes"
+	"crypto/cipher"
+)
+
+func main() {
+	block, _ := aes.NewCipher([]byte{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1})
+	// NewCFBDecrypter should not be flagged - decryption must use same nonce as encryption
+	aesCFB := cipher.NewCFBDecrypter(block, []byte("ILoveMyNonceAlot"))
+	var output = make([]byte, 16)
+	aesCFB.XORKeyStream(output, []byte("Very Cool thing!"))
+}
+`}, 0, gosec.NewConfig()},
+
+	{[]string{`package main
+
+import (
+	"crypto/aes"
+	"crypto/cipher"
+)
+
+func main() {
+	block, _ := aes.NewCipher([]byte{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1})
+	// NewCBCEncrypter SHOULD be flagged - encryption should use random nonce
+	aesCBC := cipher.NewCBCEncrypter(block, []byte("ILoveMyNonceAlot"))
+	var output = make([]byte, 16)
+	aesCBC.CryptBlocks(output, []byte("Very Cool thing!"))
+}
+`}, 1, gosec.NewConfig()},
+
+	{[]string{`package main
+
+import (
+	"crypto/aes"
+	"crypto/cipher"
+)
+
+func main() {
+	block, _ := aes.NewCipher([]byte{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1})
+	// NewCFBEncrypter SHOULD be flagged - encryption should use random nonce
+	aesCFB := cipher.NewCFBEncrypter(block, []byte("ILoveMyNonceAlot"))
+	var output = make([]byte, 16)
+	aesCFB.XORKeyStream(output, []byte("Very Cool thing!"))
+}
+`}, 1, gosec.NewConfig()},
 }

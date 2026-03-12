@@ -17,16 +17,30 @@ type Location struct {
 
 // Issue defines a sonar issue
 type Issue struct {
-	EngineID           string      `json:"engineId"`
 	RuleID             string      `json:"ruleId"`
 	PrimaryLocation    *Location   `json:"primaryLocation"`
-	Type               string      `json:"type"`
-	Severity           string      `json:"severity"`
 	EffortMinutes      int         `json:"effortMinutes"`
 	SecondaryLocations []*Location `json:"secondaryLocations,omitempty"`
 }
 
+// Impact defines the impact for a rule.
+type Impact struct {
+	SoftwareQuality string `json:"softwareQuality"`
+	Severity        string `json:"severity"`
+}
+
+// Rule defines a sonar rule.
+type Rule struct {
+	ID                 string    `json:"id"`
+	Name               string    `json:"name"`
+	Description        string    `json:"description"`
+	EngineID           string    `json:"engineId"`
+	CleanCodeAttribute string    `json:"cleanCodeAttribute,omitempty"`
+	Impacts            []*Impact `json:"impacts"`
+}
+
 // Report defines a sonar report
 type Report struct {
+	Rules  []*Rule  `json:"rules"`
 	Issues []*Issue `json:"issues"`
 }

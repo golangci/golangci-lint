@@ -94,7 +94,8 @@ func parseSarifRule(i *issue.Issue) *ReportingDescriptor {
 	if cwe != nil {
 		name = cwe.Name
 	}
-	return &ReportingDescriptor{
+	relationship := buildSarifReportingDescriptorRelationship(i.Cwe)
+	rule := &ReportingDescriptor{
 		ID:               i.RuleID,
 		Name:             name,
 		ShortDescription: NewMultiformatMessageString(i.What),
@@ -108,10 +109,11 @@ func parseSarifRule(i *issue.Issue) *ReportingDescriptor {
 		DefaultConfiguration: &ReportingConfiguration{
 			Level: getSarifLevel(i.Severity.String()),
 		},
-		Relationships: []*ReportingDescriptorRelationship{
-			buildSarifReportingDescriptorRelationship(i.Cwe),
-		},
 	}
+	if relationship != nil {
+		rule.Relationships = []*ReportingDescriptorRelationship{relationship}
+	}
+	return rule
 }
 
 func buildSarifReportingDescriptorRelationship(weakness *cwe.Weakness) *ReportingDescriptorRelationship {
