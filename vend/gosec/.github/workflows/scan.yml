@@ -1,0 +1,26 @@
+name: "Security Scan"
+
+# Run workflow each time code is pushed to your repository and on a schedule.
+# The scheduled workflow runs every at 00:00 on Sunday UTC time.
+on:
+  push:
+  pull_request:
+  schedule:
+  - cron: '0 0 * * 0'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v6
+    - name: Security Scan
+      uses: securego/gosec@master
+      with:
+        # we let the report trigger content trigger a failure using the GitHub Security features.
+        args: '-no-fail -fmt sarif -out results.sarif -exclude-dir=testdata ./...'
+    - name: Upload SARIF file
+      uses: github/codeql-action/upload-sarif@v4
+      with:
+        # Path to SARIF file relative to the root of the repository
+        sarif_file: results.sarif
