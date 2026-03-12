@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package analysisinternal provides gopls' internal analyses with a
-// number of helper functions that operate on typed syntax trees.
-package analysisinternal
+package driverutil
+
+// This file defines helpers for implementing [analysis.Pass.ReadFile].
 
 import (
 	"fmt"
