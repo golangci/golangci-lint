@@ -2,6 +2,8 @@ package cache
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -27,6 +29,11 @@ func setupCache(t *testing.T) *Cache {
 func fakePackage() *packages.Package {
 	return &packages.Package{
 		PkgPath: "github.com/golangci/example",
+		Dir:     "./testdata",
+		Module: &packages.Module{
+			Path: "github.com/golangci/example",
+			Dir:  ".",
+		},
 		CompiledGoFiles: []string{
 			"./testdata/hello.go",
 		},
@@ -93,7 +100,7 @@ func TestCache_buildKey(t *testing.T) {
 	actionID, err := pkgCache.buildKey(pkg, HashModeNeedAllDeps, "")
 	require.NoError(t, err)
 
-	assert.Equal(t, "f32bf1bf010aa9b570e081c64ec9e22e17aafa1e822990ba952905ec5fdf8d9d", fmt.Sprintf("%x", actionID))
+	assert.Equal(t, "f9cad919ea6b70342f66a4bfa689cc1c14bca2cefea26aa1bcb6934ded8b86a8", fmt.Sprintf("%x", actionID))
 }
 
 func TestCache_pkgActionID(t *testing.T) {
@@ -104,7 +111,7 @@ func TestCache_pkgActionID(t *testing.T) {
 	actionID, err := pkgCache.pkgActionID(pkg, HashModeNeedAllDeps)
 	require.NoError(t, err)
 
-	assert.Equal(t, "f690f05acd1024386ae912d9ad9c04080523b9a899f6afe56ab3108d88215c1d", fmt.Sprintf("%x", actionID))
+	assert.Equal(t, "408e9acfe5f8a37af1c4d244a44f1fa416e85397002ce10d44dffd9bb24c1db5", fmt.Sprintf("%x", actionID))
 }
 
 func TestCache_packageHash_load(t *testing.T) {
@@ -128,7 +135,7 @@ func TestCache_packageHash_store(t *testing.T) {
 	hash, err := pkgCache.packageHash(pkg, HashModeNeedAllDeps)
 	require.NoError(t, err)
 
-	assert.Equal(t, "9c602ef861197b6807e82c99caa7c4042eb03c1a92886303fb02893744355131", hash)
+	assert.Equal(t, "f4825f86811c1ee286edbd347d556bdcb9e4fbddeb6fdd61633ab61b80a1bfdf", hash)
 
 	results, ok := pkgCache.pkgHashes.Load(pkg)
 	require.True(t, ok)
@@ -137,9 +144,9 @@ func TestCache_packageHash_store(t *testing.T) {
 
 	require.Len(t, hashRes, 3)
 
-	assert.Equal(t, "8978e3d76c6f99e9663558d7147a7790f229a676804d1fde706a611898547b74", hashRes[HashModeNeedOnlySelf])
-	assert.Equal(t, "b1aef902a0619b5cbfc2d6e2e91a73dd58dd448e58274b2d7a5ff8efd97aefa4", hashRes[HashModeNeedDirectDeps])
-	assert.Equal(t, "9c602ef861197b6807e82c99caa7c4042eb03c1a92886303fb02893744355131", hashRes[HashModeNeedAllDeps])
+	assert.Equal(t, "1ee7a6dda5a5ab959e893844bfb1e456daca72f55c38f900b82e9324cfc84eb9", hashRes[HashModeNeedOnlySelf])
+	assert.Equal(t, "6b7d112bb0bd2834cbc7c3c58ab7bf580bf51c5e0fb5fb366caf4f3d189aded6", hashRes[HashModeNeedDirectDeps])
+	assert.Equal(t, "f4825f86811c1ee286edbd347d556bdcb9e4fbddeb6fdd61633ab61b80a1bfdf", hashRes[HashModeNeedAllDeps])
 }
 
 func TestCache_computeHash(t *testing.T) {
@@ -152,7 +159,77 @@ func TestCache_computeHash(t *testing.T) {
 
 	require.Len(t, results, 3)
 
-	assert.Equal(t, "8978e3d76c6f99e9663558d7147a7790f229a676804d1fde706a611898547b74", results[HashModeNeedOnlySelf])
-	assert.Equal(t, "b1aef902a0619b5cbfc2d6e2e91a73dd58dd448e58274b2d7a5ff8efd97aefa4", results[HashModeNeedDirectDeps])
-	assert.Equal(t, "9c602ef861197b6807e82c99caa7c4042eb03c1a92886303fb02893744355131", results[HashModeNeedAllDeps])
+	assert.Equal(t, "1ee7a6dda5a5ab959e893844bfb1e456daca72f55c38f900b82e9324cfc84eb9", results[HashModeNeedOnlySelf])
+	assert.Equal(t, "6b7d112bb0bd2834cbc7c3c58ab7bf580bf51c5e0fb5fb366caf4f3d189aded6", results[HashModeNeedDirectDeps])
+	assert.Equal(t, "f4825f86811c1ee286edbd347d556bdcb9e4fbddeb6fdd61633ab61b80a1bfdf", results[HashModeNeedAllDeps])
+}
+
+func TestCache_computeHash_samePackageAcrossWorktrees(t *testing.T) {
+	t.Setenv("GOLANGCI_LINT_CACHE", t.TempDir())
+
+	rootA := filepath.Join(t.TempDir(), "repo-a")
+	rootB := filepath.Join(t.TempDir(), "repo-b")
+
+	pkgA, depA := createPackageFixture(t, rootA)
+	pkgB, depB := createPackageFixture(t, rootB)
+
+	pkgCache := setupCache(t)
+
+	rootHashesA, err := pkgCache.computePkgHash(pkgA)
+	require.NoError(t, err)
+
+	rootHashesB, err := pkgCache.computePkgHash(pkgB)
+	require.NoError(t, err)
+
+	depHashesA, err := pkgCache.computePkgHash(depA)
+	require.NoError(t, err)
+
+	depHashesB, err := pkgCache.computePkgHash(depB)
+	require.NoError(t, err)
+
+	assert.Equal(t, depHashesA, depHashesB)
+	assert.Equal(t, rootHashesA, rootHashesB)
+}
+
+func createPackageFixture(t *testing.T, root string) (pkg, dep *packages.Package) {
+	t.Helper()
+
+	require.NoError(t, os.MkdirAll(filepath.Join(root, "dep"), 0o755))
+	require.NoError(t, os.MkdirAll(filepath.Join(root, "pkg"), 0o755))
+	require.NoError(t, os.WriteFile(filepath.Join(root, "dep", "dep.go"), []byte("package dep\n\nconst Name = \"dep\"\n"), 0o600))
+	require.NoError(t, os.WriteFile(filepath.Join(root, "pkg", "main.go"), []byte("package pkg\n\nimport _ \"example.com/project/dep\"\n"), 0o600))
+	require.NoError(t, os.WriteFile(filepath.Join(root, "pkg", "extra.go"), []byte("package pkg\n\nconst value = 1\n"), 0o600))
+	require.NoError(t, os.WriteFile(filepath.Join(root, "pkg", "ignored.go"), []byte("//go:build ignored\n\npackage pkg\n"), 0o600))
+
+	module := &packages.Module{
+		Path: "example.com/project",
+		Dir:  root,
+	}
+
+	dep = &packages.Package{
+		PkgPath: "example.com/project/dep",
+		Dir:     filepath.Join(root, "dep"),
+		Module:  module,
+		CompiledGoFiles: []string{
+			filepath.Join(root, "dep", "dep.go"),
+		},
+	}
+
+	pkg = &packages.Package{
+		PkgPath: "example.com/project/pkg",
+		Dir:     filepath.Join(root, "pkg"),
+		Module:  module,
+		CompiledGoFiles: []string{
+			filepath.Join(root, "pkg", "main.go"),
+			filepath.Join(root, "pkg", "extra.go"),
+		},
+		IgnoredFiles: []string{
+			filepath.Join(root, "pkg", "ignored.go"),
+		},
+		Imports: map[string]*packages.Package{
+			"example.com/project/dep": dep,
+		},
+	}
+
+	return pkg, dep
 }
