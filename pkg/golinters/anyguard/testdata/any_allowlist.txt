@@ -1,0 +1,6 @@
+version: 1
+entries:
+  - path: pkg/golinters/anyguard/testdata/anyguard.go
+    symbols:
+      - AllowedPayload
+    description: approved boundary payload

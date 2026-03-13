@@ -1,0 +1,8 @@
+version: "2"
+
+linters:
+  settings:
+    anyguard:
+      allowlist: pkg/golinters/anyguard/testdata/any_allowlist.txt
+      roots:
+        - pkg/golinters/anyguard/testdata

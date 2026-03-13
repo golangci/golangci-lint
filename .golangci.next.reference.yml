@@ -20,6 +20,7 @@ linters:
 
   # Enable specific linter.
   enable:
+    - anyguard
     - arangolint
     - asasalint
     - asciicheck
@@ -135,6 +136,7 @@ linters:
 
   # Disable specific linters.
   disable:
+    - anyguard
     - arangolint
     - asasalint
     - asciicheck
@@ -250,6 +252,18 @@ linters:
 
   # All available settings of specific linters.
   settings:
+    anyguard:
+      # Path to the anyguard allowlist file.
+      # Default: internal/ci/any_allowlist.yaml
+      allowlist: ci/anyguard-allowlist.yaml
+      # Roots to analyze.
+      # Default: ["./..."]
+      roots:
+        - ./pkg/...
+      # Optional repository root override used to resolve relative paths.
+      # Default: auto-detected
+      repo-root: /abs/path/to/repo
+
     asasalint:
       # To specify a set of function names to exclude.
       # The values are merged with the builtin exclusions.

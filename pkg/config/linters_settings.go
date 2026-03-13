@@ -239,6 +239,7 @@ var defaultLintersSettings = LintersSettings{
 type LintersSettings struct {
 	FormatterSettings `mapstructure:"-"`
 
+	Anyguard                 AnyguardSettings                 `mapstructure:"anyguard"`
 	Asasalint                AsasalintSettings                `mapstructure:"asasalint"`
 	BiDiChk                  BiDiChkSettings                  `mapstructure:"bidichk"`
 	CopyLoopVar              CopyLoopVarSettings              `mapstructure:"copyloopvar"`
@@ -340,6 +341,12 @@ func (s *LintersSettings) Validate() error {
 	}
 
 	return nil
+}
+
+type AnyguardSettings struct {
+	Allowlist string   `mapstructure:"allowlist"`
+	Roots     []string `mapstructure:"roots"`
+	RepoRoot  string   `mapstructure:"repo-root"`
 }
 
 type AsasalintSettings struct {

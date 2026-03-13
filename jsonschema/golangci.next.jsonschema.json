@@ -819,6 +819,7 @@
       "anyOf": [
         {
           "enum": [
+            "anyguard",
             "arangolint",
             "asasalint",
             "asciicheck",
@@ -977,6 +978,29 @@
               "description": "Checks only comments, skip strings.",
               "type": "boolean",
               "default": false
+            }
+          }
+        },
+        "anyguardSettings": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "allowlist": {
+              "description": "Path to the anyguard allowlist file.",
+              "type": "string"
+            },
+            "roots": {
+              "description": "Roots to analyze.",
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "examples": ["./..."]
+              }
+            },
+            "repo-root": {
+              "description": "Optional repository root override used to resolve relative paths.",
+              "type": "string"
             }
           }
         },
@@ -4804,6 +4828,9 @@
           "properties": {
             "dupword": {
               "$ref": "#/definitions/settings/definitions/dupwordSettings"
+            },
+            "anyguard": {
+              "$ref": "#/definitions/settings/definitions/anyguardSettings"
             },
             "asasalint": {
               "$ref": "#/definitions/settings/definitions/asasalintSettings"
