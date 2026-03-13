@@ -35,10 +35,8 @@ func comma() {
 	type S struct{ Bytes []byte }
 	var _ = struct{ A S }{
 		A: S{
-			Bytes: // want "Replace .*Sprint.* with fmt.Appendf"
-			fmt.Appendf(nil, "%d", 0),
+			Bytes: fmt.Appendf(nil, "%d", 0),
 		},
 	}
-	_ = // want "Replace .*Sprint.* with fmt.Appendf"
-		fmt.Appendf(nil, "%d", 0)
+	_ = fmt.Appendf(nil, "%d", 0)
 }

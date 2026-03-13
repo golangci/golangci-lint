@@ -104,7 +104,7 @@ func _() {
 	}
 	var ok bool // define an ok variable to test the fix won't shadow it for its if stmt body
 	_ = ok
-	if after, ok0 := strings.CutPrefix(s, pre); ok0 { // want "TrimPrefix can be simplified to CutPrefix"
+	if after, ok := strings.CutPrefix(s, pre); ok { // want "TrimPrefix can be simplified to CutPrefix"
 		println(after)
 	}
 	var predefined string
