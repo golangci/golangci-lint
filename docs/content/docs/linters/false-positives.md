@@ -34,7 +34,7 @@ linters:
 
 You can use `linters.exclusions.rules` config option for per-path or per-linter configuration.
 
-In the following example, all the reports from the linters (`linters`) that contains the text (`text`) are excluded:
+In the following example, all the reports from the linters (`linters`) that contain the text (`text`) are excluded:
 
 ```yaml
 linters:
@@ -56,7 +56,7 @@ linters:
         source: "^//go:generate "
 ```
 
-In the following example, all the reports that contains the text (`text`) in the path (`path`) are excluded:
+In the following example, all the reports that contain the text (`text`) in the path (`path`) are excluded:
 
 ```yaml
 linters:
@@ -70,7 +70,7 @@ linters:
 
 Exclude issues in path by `linters.exclusions.paths` or `linters.exclusions.rules` config options.
 
-In the following example, all the reports from the linters (`linters`) that concerns the path (`path`) are excluded:
+In the following example, all the reports from the linters (`linters`) that concern the path (`path`) are excluded:
 
 ```yaml
 linters:

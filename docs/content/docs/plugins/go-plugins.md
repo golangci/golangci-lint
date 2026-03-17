@@ -82,5 +82,5 @@ If the 'disable all' option is specified either on command line or in `.golangci
 they can be re-enabled by adding them to the `linters.enable` list,
 or providing the enabled option on the command line, `golangci-lint run -Eexample`.
 
-The configuration inside the `linters.settings` field of linter have some limitations (there are NOT related to the plugin system itself):
-we use Viper to handle the configuration, but Viper put all the keys in lowercase, and `.` cannot be used inside a key.
+The configuration inside the `linters.settings` field of linter has some limitations (these are NOT related to the plugin system itself):
+we use Viper to handle the configuration, but Viper puts all the keys in lowercase, and `.` cannot be used inside a key.
