@@ -132,7 +132,7 @@ func NewLinterBuilder() *LinterBuilder {
 }
 
 // Build loads all the "internal" linters.
-// The configuration is use for the linter settings.
+// The configuration is used for the linter settings.
 func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 	if cfg == nil {
 		return nil, nil

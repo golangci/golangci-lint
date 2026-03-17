@@ -33,7 +33,7 @@ The configuration file can be validated with the JSON Schema: [golangci.jsonsche
 
 {{< cards  cols=2 >}}
 {{< card link="/docs/linters" title="Linters Overview" icon="collection" >}}
-{{< card link="/docs/linters/configuration" title="Linters  Settings" icon="adjustments" >}}
+{{< card link="/docs/linters/configuration" title="Linters Settings" icon="adjustments" >}}
 {{< /cards >}}
 
 {{% golangci/configuration-file-snippet section="linters" %}}
@@ -42,7 +42,7 @@ The configuration file can be validated with the JSON Schema: [golangci.jsonsche
 
 {{< cards  cols=2 >}}
 {{< card link="/docs/formatters" title="Formatters Overview" icon="collection" >}}
-{{< card link="/docs/formatters/configuration" title="Formatters  Settings" icon="adjustments" >}}
+{{< card link="/docs/formatters/configuration" title="Formatters Settings" icon="adjustments" >}}
 {{< /cards >}}
 
 {{% golangci/configuration-file-snippet section="formatters" %}}

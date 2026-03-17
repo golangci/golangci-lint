@@ -46,8 +46,8 @@ func (l *PackageLoader) Load(ctx context.Context, linters []*linter.Config) (pkg
 ```
 
 First, we find a load mode as union of load modes for all enabled linters.
-We use [go/packages](https://pkg.go.dev/golang.org/x/tools/go/packages) for packages loading and use it's enum `packages.Need*` for load modes.
-Load mode sets which data does a linter needs for execution.
+We use [go/packages](https://pkg.go.dev/golang.org/x/tools/go/packages) for packages loading and use its enum `packages.Need*` for load modes.
+Load mode sets which data a linter needs for execution.
 
 A linter that works only with AST need minimum of information: only filenames and AST.
 
