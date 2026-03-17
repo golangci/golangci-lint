@@ -66,6 +66,7 @@ require (
 	github.com/golangci/misspell v0.8.0
 	github.com/golangci/plugin-module-register v0.1.2
 	github.com/golangci/revgrep v0.8.0
+	github.com/golangci/sqlclosecheck v0.0.0-20260317152156-1b5fadbb8565
 	github.com/golangci/swaggoswag v0.0.0-20250504205917-77f2aca3143e
 	github.com/golangci/unconvert v0.0.0-20250410112200-a129a6e6413e
 	github.com/gordonklaus/ineffassign v0.2.0
@@ -107,7 +108,6 @@ require (
 	github.com/raeperd/recvcheck v0.2.0
 	github.com/rogpeppe/go-internal v1.14.1
 	github.com/ryancurrah/gomodguard v1.4.1
-	github.com/ryanrolds/sqlclosecheck v0.5.1
 	github.com/sanposhiho/wastedassign/v2 v2.1.0
 	github.com/santhosh-tekuri/jsonschema/v6 v6.0.2
 	github.com/sashamelentyev/interfacebloat v1.1.0
@@ -226,7 +226,7 @@ require (
 	go.uber.org/multierr v1.10.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20260209203927-2842357ff358 // indirect
-	golang.org/x/text v0.34.0 // indirect
+	golang.org/x/text v0.35.0 // indirect
 	golang.org/x/tools/go/packages/packagestest v0.1.1-deprecated // indirect
 	google.golang.org/protobuf v1.36.8 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
