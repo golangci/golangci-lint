@@ -130,6 +130,9 @@ func extractInfo(lc *linter.Config) authorInfo {
 	case "goprintffuncname":
 		return authorInfo{Author: "jirfag", Host: hostGitHub}
 
+	case "sqlclosecheck":
+		return authorInfo{Author: "ryanrolds", Host: hostGitHub}
+
 	default:
 		if strings.HasPrefix(lc.OriginalURL, "https://pkg.go.dev/") {
 			return authorInfo{Author: "golang", Host: hostGitHub}

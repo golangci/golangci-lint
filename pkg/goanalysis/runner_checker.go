@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 //
-// Altered copy of https://github.com/golang/tools/blob/v0.28.0/go/analysis/internal/checker/checker.go
+// Altered copy of https://github.com/golang/tools/blob/v0.43.0/go/analysis/checker/checker.go
 
 package goanalysis
 
@@ -19,8 +19,7 @@ import (
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/packages"
 
-	"github.com/golangci/golangci-lint/v2/internal/x/tools/analysisflags"
-	"github.com/golangci/golangci-lint/v2/internal/x/tools/analysisinternal"
+	"github.com/golangci/golangci-lint/v2/internal/x/tools/driverutil"
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis/pkgerrors"
 )
 
@@ -134,9 +133,7 @@ func (act *action) analyze() {
 
 	module := &analysis.Module{} // possibly empty (non nil) in go/analysis drivers.
 	if mod := act.Package.Module; mod != nil {
-		module.Path = mod.Path
-		module.Version = mod.Version
-		module.GoVersion = mod.GoVersion
+		module = analysisModuleFromPackagesModule(mod)
 	}
 
 	// Run the analysis.
@@ -161,7 +158,7 @@ func (act *action) analyze() {
 		AllObjectFacts:    act.AllObjectFacts,
 		AllPackageFacts:   act.AllPackageFacts,
 	}
-	pass.ReadFile = analysisinternal.CheckedReadFile(pass, os.ReadFile)
+	pass.ReadFile = driverutil.CheckedReadFile(pass, os.ReadFile)
 	act.pass = pass
 
 	act.runner.passToPkgGuard.Lock()
@@ -199,7 +196,7 @@ func (act *action) analyze() {
 
 		// resolve diagnostic URLs
 		for i := range act.Diagnostics {
-			url, err := analysisflags.ResolveURL(act.Analyzer, act.Diagnostics[i])
+			url, err := driverutil.ResolveURL(act.Analyzer, act.Diagnostics[i])
 			if err != nil {
 				return nil, err
 			}
@@ -324,7 +321,7 @@ func exportedFrom(obj types.Object, pkg *types.Package) bool {
 	switch obj := obj.(type) {
 	case *types.Func:
 		return obj.Exported() && obj.Pkg() == pkg ||
-			obj.Type().(*types.Signature).Recv() != nil
+			obj.Signature().Recv() != nil
 	case *types.Var:
 		if obj.IsField() {
 			return true
@@ -387,8 +384,8 @@ func (act *action) exportObjectFact(obj types.Object, fact analysis.Fact) {
 // See documentation at AllObjectFacts field of [analysis.Pass].
 func (act *action) AllObjectFacts() []analysis.ObjectFact {
 	facts := make([]analysis.ObjectFact, 0, len(act.objectFacts))
-	for k := range act.objectFacts {
-		facts = append(facts, analysis.ObjectFact{Object: k.obj, Fact: act.objectFacts[k]})
+	for k, fact := range act.objectFacts {
+		facts = append(facts, analysis.ObjectFact{Object: k.obj, Fact: fact})
 	}
 	return facts
 }
@@ -444,4 +441,31 @@ func (act *action) AllPackageFacts() []analysis.PackageFact {
 		facts = append(facts, analysis.PackageFact{Package: k.pkg, Fact: fact})
 	}
 	return facts
+}
+
+// NOTE(ldez) no alteration.
+func analysisModuleFromPackagesModule(mod *packages.Module) *analysis.Module {
+	if mod == nil {
+		return nil
+	}
+
+	var modErr *analysis.ModuleError
+	if mod.Error != nil {
+		modErr = &analysis.ModuleError{
+			Err: mod.Error.Err,
+		}
+	}
+
+	return &analysis.Module{
+		Path:      mod.Path,
+		Version:   mod.Version,
+		Replace:   analysisModuleFromPackagesModule(mod.Replace),
+		Time:      mod.Time,
+		Main:      mod.Main,
+		Indirect:  mod.Indirect,
+		Dir:       mod.Dir,
+		GoMod:     mod.GoMod,
+		GoVersion: mod.GoVersion,
+		Error:     modErr,
+	}
 }

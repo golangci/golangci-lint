@@ -12,7 +12,7 @@ The same as the Go team (the 2 latest minor versions).
 
 Basically, golangci-lint supports Go versions lower or equal to the Go version used to compile it.
 
-New versions of Go are not automatically supported because, in addition of the Go version used to build it,
+New versions of Go are not automatically supported because, in addition to the Go version used to build it,
 some linters and/or internal pieces of golangci-lint could need to be adapted to support this new Go version.
 
 ## How to use golangci-lint in CI
@@ -91,14 +91,14 @@ Also, take a look at option `--new`,
 but consider that CI scripts that generate unstaged files will make `--new` only point out issues in those files and not in the last commit.
 In that regard `--new-from-merge-base=main` or `--new-from-rev=HEAD~1` are safer.
 
-By doing this you won't create new issues in your code and can choose fix existing issues (or not).
+By doing this you won't create new issues in your code and can choose to fix existing issues (or not).
 
 ## Why `--new-from-xxx` don't seem to be working in some cases?
 
 The options `--new-from-merge-base`, `--new-from-rev`, and `--new-from-patch` work by comparing `git diff` output and issues.
 
 If an issue is not reported as the same line as the changes then the issue will be skipped.
-This is the line of the issue is not inside the lines changed.
+This is because the line of the issue is not inside the lines changed.
 
 To fix that, you have to use the option `--whole-files`.
 
