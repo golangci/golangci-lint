@@ -92,10 +92,13 @@ type Plugin struct {
 	Path string `yaml:"path,omitempty"`
 }
 
-func LoadConfiguration() (*Configuration, error) {
-	configFilePath, err := findConfigurationFile()
-	if err != nil {
-		return nil, fmt.Errorf("file %s not found: %w", configFilePath, err)
+func LoadConfiguration(configFilePath string) (*Configuration, error) {
+	if configFilePath == "" {
+		var err error
+		configFilePath, err = findConfigurationFile()
+		if err != nil {
+			return nil, fmt.Errorf("file %s not found: %w", configFilePath, err)
+		}
 	}
 
 	file, err := os.Open(configFilePath)

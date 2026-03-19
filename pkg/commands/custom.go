@@ -15,9 +15,10 @@ import (
 const envKeepTempFiles = "CUSTOM_GCL_KEEP_TEMP_FILES"
 
 type customOptions struct {
-	version     string
-	name        string
-	destination string
+	configFilePath string
+	version        string
+	name           string
+	destination    string
 }
 
 type customCommand struct {
@@ -45,6 +46,7 @@ func newCustomCommand(logger logutils.Log) *customCommand {
 	flagSet := customCmd.PersistentFlags()
 	flagSet.SortFlags = false // sort them as they are defined here
 
+	flagSet.StringVarP(&c.opts.configFilePath, "config", "c", "", color.GreenString("Read custom binary config from file path `PATH`"))
 	flagSet.StringVar(&c.opts.version, "version", "", color.GreenString("The golangci-lint version used to build the custom binary"))
 	flagSet.StringVar(&c.opts.name, "name", "", color.GreenString("The name of the custom binary"))
 	flagSet.StringVar(&c.opts.destination, "destination", "", color.GreenString("The directory path used to store the custom binary"))
@@ -55,7 +57,7 @@ func newCustomCommand(logger logutils.Log) *customCommand {
 }
 
 func (c *customCommand) preRunE(_ *cobra.Command, _ []string) error {
-	cfg, err := internal.LoadConfiguration()
+	cfg, err := internal.LoadConfiguration(c.opts.configFilePath)
 	if err != nil {
 		return err
 	}
