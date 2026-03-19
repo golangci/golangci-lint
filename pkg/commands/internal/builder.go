@@ -14,6 +14,7 @@ import (
 	"time"
 	"unicode"
 
+	"golang.org/x/mod/modfile"
 	"golang.org/x/mod/sumdb/dirhash"
 
 	"github.com/golangci/golangci-lint/v2/pkg/logutils"
@@ -157,6 +158,49 @@ func (b Builder) addReplaceDirective(ctx context.Context, plugin *Plugin) error 
 		b.log.Warnf("%s", string(output))
 
 		return fmt.Errorf("%s: %w", strings.Join(cmd.Args, " "), err)
+	}
+
+	return b.propagatePluginReplaces(ctx, plugin.Path)
+}
+
+// propagatePluginReplaces reads the plugin's go.mod and adds any replace directives it
+// contains to the golangci-lint go.mod. This is necessary because replace directives are
+// only respected in the main module; a replace directive in a dependency's go.mod is
+// ignored by Go. Without propagation, local-path dependencies of a local plugin cannot
+// be resolved during `go mod tidy`.
+func (b Builder) propagatePluginReplaces(ctx context.Context, pluginPath string) error {
+	data, err := os.ReadFile(filepath.Join(pluginPath, "go.mod"))
+	if err != nil {
+		return fmt.Errorf("read plugin go.mod: %w", err)
+	}
+
+	f, err := modfile.Parse("go.mod", data, nil)
+	if err != nil {
+		return fmt.Errorf("parse plugin go.mod: %w", err)
+	}
+
+	for _, r := range f.Replace {
+		var newPath string
+		if r.New.Version == "" {
+			// local directory replace — resolve relative to the plugin directory
+			newPath = filepath.Join(pluginPath, filepath.FromSlash(r.New.Path))
+		} else {
+			newPath = r.New.Path + "@" + r.New.Version
+		}
+
+		replace := fmt.Sprintf("%s=%s", r.Old.Path, newPath)
+
+		cmd := exec.CommandContext(ctx, "go", "mod", "edit", "-replace", replace)
+		cmd.Dir = b.repo
+
+		b.log.Infof("propagating plugin replace: %s", replace)
+
+		output, err := cmd.CombinedOutput()
+		if err != nil {
+			b.log.Warnf("%s", string(output))
+
+			return fmt.Errorf("%s: %w", strings.Join(cmd.Args, " "), err)
+		}
 	}
 
 	return nil
