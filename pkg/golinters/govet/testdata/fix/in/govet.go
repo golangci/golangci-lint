@@ -23,3 +23,12 @@ func nonConstantFormat(s string) {
 	fmt.Fprintf(os.Stderr, "%s", s)
 	log.Printf("%s", s)
 }
+
+func _() {
+	ReadFile("")
+}
+
+//go:fix inline
+func ReadFile(filename string) ([]byte, error) {
+	return os.ReadFile(filename)
+}
