@@ -6,6 +6,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+const pluginTypeModule = "module"
+
 func TestLintersSettings_Validate(t *testing.T) {
 	testCases := []struct {
 		desc     string
@@ -16,7 +18,7 @@ func TestLintersSettings_Validate(t *testing.T) {
 			settings: &LintersSettings{
 				Custom: map[string]CustomLinterSettings{
 					"example": {
-						Type: "module",
+						Type: pluginTypeModule,
 					},
 				},
 			},
@@ -53,7 +55,7 @@ func TestLintersSettings_Validate_error(t *testing.T) {
 			settings: &LintersSettings{
 				Custom: map[string]CustomLinterSettings{
 					"example": {
-						Type: "module",
+						Type: pluginTypeModule,
 						Path: "example",
 					},
 				},
@@ -104,7 +106,7 @@ func TestCustomLinterSettings_Validate(t *testing.T) {
 		{
 			desc: "type module",
 			settings: &CustomLinterSettings{
-				Type: "module",
+				Type: pluginTypeModule,
 			},
 		},
 	}
@@ -133,7 +135,7 @@ func TestCustomLinterSettings_Validate_error(t *testing.T) {
 		{
 			desc: "module and path",
 			settings: &CustomLinterSettings{
-				Type: "module",
+				Type: pluginTypeModule,
 				Path: "example",
 			},
 			expected: "path not supported with module type",

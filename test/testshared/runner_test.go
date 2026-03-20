@@ -9,6 +9,8 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/exitcodes"
 )
 
+const cmdNameRun = "run"
+
 func TestRunnerBuilder_Runner(t *testing.T) {
 	testCases := []struct {
 		desc     string
@@ -20,7 +22,7 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 			builder: NewRunnerBuilder(t),
 			expected: &Runner{
 				env:     []string(nil),
-				command: "run",
+				command: cmdNameRun,
 				args: []string{
 					"--internal-cmd-test",
 					"--allow-parallel-runners",
@@ -37,10 +39,10 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 		},
 		{
 			desc:    "with run command",
-			builder: NewRunnerBuilder(t).WithCommand("run"),
+			builder: NewRunnerBuilder(t).WithCommand(cmdNameRun),
 			expected: &Runner{
 				env:     []string(nil),
-				command: "run",
+				command: cmdNameRun,
 				args: []string{
 					"--internal-cmd-test",
 					"--allow-parallel-runners",
@@ -52,7 +54,7 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 			builder: NewRunnerBuilder(t).WithNoConfig(),
 			expected: &Runner{
 				env:     []string(nil),
-				command: "run",
+				command: cmdNameRun,
 				args: []string{
 					"--internal-cmd-test",
 					"--allow-parallel-runners",
@@ -65,7 +67,7 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 			builder: NewRunnerBuilder(t).WithConfigFile("./testdata/example.yml"),
 			expected: &Runner{
 				env:     []string(nil),
-				command: "run",
+				command: cmdNameRun,
 				args: []string{
 					"--internal-cmd-test",
 					"--allow-parallel-runners",
@@ -79,7 +81,7 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 			builder: NewRunnerBuilder(t).WithDirectives("./testdata/all.go"),
 			expected: &Runner{
 				env:     []string(nil),
-				command: "run",
+				command: cmdNameRun,
 				args: []string{
 					"--internal-cmd-test",
 					"--allow-parallel-runners",
@@ -96,7 +98,7 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 			builder: NewRunnerBuilder(t).WithEnviron("FOO=BAR", "FII=BIR"),
 			expected: &Runner{
 				env:     []string{"FOO=BAR", "FII=BIR"},
-				command: "run",
+				command: cmdNameRun,
 				args: []string{
 					"--internal-cmd-test",
 					"--allow-parallel-runners",
@@ -108,7 +110,7 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 			builder: NewRunnerBuilder(t).WithNoParallelRunners(),
 			expected: &Runner{
 				env:     []string(nil),
-				command: "run",
+				command: cmdNameRun,
 				args: []string{
 					"--internal-cmd-test",
 				},
@@ -119,7 +121,7 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 			builder: NewRunnerBuilder(t).WithArgs("-Efoo", "--simple", "--hello=world"),
 			expected: &Runner{
 				env:     []string(nil),
-				command: "run",
+				command: cmdNameRun,
 				args: []string{
 					"--internal-cmd-test",
 					"--allow-parallel-runners",
@@ -134,7 +136,7 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 			builder: NewRunnerBuilder(t).WithTargetPath("./testdata/all.go"),
 			expected: &Runner{
 				env:     []string(nil),
-				command: "run",
+				command: cmdNameRun,
 				args: []string{
 					"--internal-cmd-test",
 					"--allow-parallel-runners",
@@ -152,7 +154,7 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 				}),
 			expected: &Runner{
 				env:     []string(nil),
-				command: "run",
+				command: cmdNameRun,
 				args: []string{
 					"--internal-cmd-test",
 					"--allow-parallel-runners",

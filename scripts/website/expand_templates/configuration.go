@@ -19,6 +19,7 @@ const (
 	keyLinters    = "linters"
 	keyFormatters = "formatters"
 	keySettings   = "settings"
+	keyVersion    = "version"
 )
 
 type SettingSnippets struct {
@@ -81,7 +82,7 @@ func (e *ExampleSnippetsExtractor) extractExampleSnippets(example []byte) (*Sett
 
 	for j, node := range root.Content {
 		switch node.Value {
-		case "run", "output", keyLinters, keyFormatters, "issues", "severity", "version":
+		case "run", "output", keyLinters, keyFormatters, "issues", "severity", keyVersion:
 		default:
 			continue
 		}
@@ -107,7 +108,7 @@ func (e *ExampleSnippetsExtractor) extractExampleSnippets(example []byte) (*Sett
 			},
 		}
 
-		if node.Value == "version" {
+		if node.Value == keyVersion {
 			n := &yaml.Node{
 				HeadComment: fmt.Sprintf("See the dedicated %q documentation section.", node.Value),
 				Kind:        node.Kind,
