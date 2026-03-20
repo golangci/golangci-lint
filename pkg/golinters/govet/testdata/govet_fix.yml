@@ -14,3 +14,4 @@ linters:
         - stringintconv
         - timeformat
         - unreachable
+        - inline
