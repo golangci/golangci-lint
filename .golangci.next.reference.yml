@@ -1726,7 +1726,7 @@ linters:
       # Enable analyzers by name.
       # (In addition to default:
       #   appends, asmdecl, assign, atomic, bools, buildtag, cgocall, composites, copylocks, defers, directive, errorsas,
-      #   framepointer, httpresponse, ifaceassert, loopclosure, lostcancel, nilfunc, printf, shift, sigchanyzer, slog,
+      #   framepointer, httpresponse, ifaceassert, inline, loopclosure, lostcancel, nilfunc, printf, shift, sigchanyzer, slog,
       #   stdmethods, stringintconv, structtag, testinggoroutine, tests, timeformat, unmarshal, unreachable, unsafeptr,
       #   unusedresult
       # ).
