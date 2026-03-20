@@ -111,7 +111,8 @@ var (
 		waitgroup.Analyzer,
 	}
 
-	// https://github.com/golang/go/blob/go1.25.2/src/cmd/vet/main.go#L57-L91
+	// https://github.com/golang/go/blob/go1.26.1/src/cmd/vet/main.go#L63-L99
+	// https://github.com/golang/go/blob/go1.26.1/src/cmd/fix/main.go#L47-L51
 	defaultAnalyzers = []*analysis.Analyzer{
 		appends.Analyzer,
 		asmdecl.Analyzer,
@@ -129,6 +130,7 @@ var (
 		hostport.Analyzer,
 		httpresponse.Analyzer,
 		ifaceassert.Analyzer,
+		inline.Analyzer,
 		loopclosure.Analyzer,
 		lostcancel.Analyzer,
 		nilfunc.Analyzer,
