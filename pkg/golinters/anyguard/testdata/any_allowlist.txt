@@ -1,6 +1,9 @@
-version: 1
+version: 2
 entries:
-  - path: pkg/golinters/anyguard/testdata/anyguard.go
-    symbols:
-      - AllowedPayload
+  - selector:
+      path: pkg/golinters/anyguard/testdata/anyguard.go
+      owner: AllowedPayload
+      category: "*ast.MapType.Value"
+      line: 9
+      column: 32
     description: approved boundary payload

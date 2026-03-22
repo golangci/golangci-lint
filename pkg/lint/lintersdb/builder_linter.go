@@ -146,6 +146,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 	return []*linter.Config{
 		linter.NewConfig(anyguard.New(&cfg.Linters.Settings.Anyguard)).
 			WithSince("v2.12.0").
+			WithLoadForGoAnalysis().
 			WithURL("https://github.com/tobythehutt/anyguard"),
 
 		linter.NewConfig(arangolint.New()).
