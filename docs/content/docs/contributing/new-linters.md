@@ -28,7 +28,7 @@ After that:
     - Add `WithSince("next_version")`, where `next_version` must be replaced by the next minor version. (ex: v1.2.0 if the current version is v1.1.0)
 4. Find out what options do you need to configure for the linter.
    For example, `nakedret` has only 1 option: [`max-func-lines`](https://github.com/golangci/golangci-lint/blob/HEAD/.golangci.reference.yml).
-   Choose default values to not being annoying for users of golangci-lint. Add configuration options to:
+   Choose default values to not be annoying for users of golangci-lint. Add configuration options to:
     - [.golangci.next.reference.yml](https://github.com/golangci/golangci-lint/blob/HEAD/.golangci.next.reference.yml): the example of a configuration file.
       You can also add them to [.golangci.yml](https://github.com/golangci/golangci-lint/blob/HEAD/.golangci.yml)
       if you think that this project needs not default values.

@@ -49,7 +49,7 @@ require (
 	github.com/curioswitch/go-reassign v0.3.0
 	github.com/daixiang0/gci v0.13.7
 	github.com/denis-tingaikin/go-header v0.5.0
-	github.com/fatih/color v1.18.0
+	github.com/fatih/color v1.19.0
 	github.com/firefart/nonamedreturns v1.0.6
 	github.com/fzipp/gocyclo v0.6.0
 	github.com/ghostiam/protogetter v0.3.20
@@ -107,7 +107,7 @@ require (
 	github.com/raeperd/recvcheck v0.2.0
 	github.com/rogpeppe/go-internal v1.14.1
 	github.com/ryancurrah/gomodguard v1.4.1
-	github.com/ryanrolds/sqlclosecheck v0.5.1
+	github.com/ryanrolds/sqlclosecheck v0.6.0
 	github.com/sanposhiho/wastedassign/v2 v2.1.0
 	github.com/santhosh-tekuri/jsonschema/v6 v6.0.2
 	github.com/sashamelentyev/interfacebloat v1.1.0
