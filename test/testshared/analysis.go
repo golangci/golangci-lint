@@ -20,6 +20,8 @@ import (
 
 const keyword = "want"
 
+const kindDiagnostic = "diagnostic"
+
 type jsonResult struct {
 	Issues []*result.Issue
 }
@@ -52,7 +54,7 @@ func Analyze(t *testing.T, sourcePath string, rawData []byte) {
 	require.NoError(t, err, string(rawData))
 
 	for _, issue := range reportData.Issues {
-		checkMessage(t, want, issue.Pos, "diagnostic", issue.FromLinter, issue.Text)
+		checkMessage(t, want, issue.Pos, kindDiagnostic, issue.FromLinter, issue.Text)
 	}
 
 	var surplus []string
@@ -143,7 +145,7 @@ func parseExpectations(text string) (lineDelta int, expects []expectation, err e
 			if err != nil {
 				return 0, nil, err
 			}
-			expects = append(expects, expectation{"diagnostic", "", rx})
+			expects = append(expects, expectation{kindDiagnostic, "", rx})
 
 		case scanner.Ident:
 			name := sc.TokenText()
@@ -157,7 +159,7 @@ func parseExpectations(text string) (lineDelta int, expects []expectation, err e
 			if err != nil {
 				return 0, nil, err
 			}
-			expects = append(expects, expectation{"diagnostic", name, rx})
+			expects = append(expects, expectation{kindDiagnostic, name, rx})
 
 		case scanner.EOF:
 			if scanErr != "" {
