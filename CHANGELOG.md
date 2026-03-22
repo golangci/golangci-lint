@@ -8,6 +8,15 @@ If you value it, consider supporting us, we appreciate it!
 
 <!-- START --->
 
+### v2.11.4
+
+_Released on 2026-03-22_
+
+1. Linters bug fixes
+   * `govet-modernize`: from 0.42.0 to 0.43.0
+   * `noctx`: from 0.5.0 to 0.5.1
+   * `sqlclosecheck`: from 0.5.1 to 0.6.0
+
 ### v2.11.3
 
 _Released on 2026-03-10_
