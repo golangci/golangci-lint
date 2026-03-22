@@ -1726,7 +1726,7 @@ linters:
       # Enable analyzers by name.
       # (In addition to default:
       #   appends, asmdecl, assign, atomic, bools, buildtag, cgocall, composites, copylocks, defers, directive, errorsas,
-      #   framepointer, httpresponse, ifaceassert, loopclosure, lostcancel, nilfunc, printf, shift, sigchanyzer, slog,
+      #   framepointer, httpresponse, ifaceassert, inline, loopclosure, lostcancel, nilfunc, printf, shift, sigchanyzer, slog,
       #   stdmethods, stringintconv, structtag, testinggoroutine, tests, timeformat, unmarshal, unreachable, unsafeptr,
       #   unusedresult
       # ).
@@ -1775,6 +1775,8 @@ linters:
         - httpresponse
         # Detect impossible interface-to-interface type assertions.
         - ifaceassert
+        # Find calls to functions and uses of constants marked with a "//go:fix inline" directive.
+        - inline
         # Check references to loop variables from within nested functions.
         - loopclosure
         # Check cancel func returned by context.WithCancel is called.
@@ -1856,6 +1858,7 @@ linters:
         - httpmux
         - httpresponse
         - ifaceassert
+        - inline
         - loopclosure
         - lostcancel
         - nilfunc
