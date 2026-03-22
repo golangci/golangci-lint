@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"maps"
+	"path/filepath"
 	"runtime"
 	"slices"
 	"strings"
@@ -170,6 +171,11 @@ func (c *Cache) computePkgHash(pkg *packages.Package) (hashResults, error) {
 		h, fErr := c.fileHash(f)
 		if fErr != nil {
 			return nil, fmt.Errorf("failed to calculate file %s hash: %w", f, fErr)
+		}
+
+		// This is the current module (the project to analyze).
+		if pkg.Module != nil && pkg.Module.Version == "" {
+			f = pkg.Module.Path + strings.TrimPrefix(filepath.ToSlash(f), filepath.ToSlash(pkg.Module.Dir))
 		}
 
 		fmt.Fprintf(key, "file %s %x\n", f, h)
