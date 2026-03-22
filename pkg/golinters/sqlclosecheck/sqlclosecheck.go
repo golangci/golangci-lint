@@ -1,7 +1,7 @@
 package sqlclosecheck
 
 import (
-	"github.com/golangci/sqlclosecheck/pkg/analyzer"
+	"github.com/ryanrolds/sqlclosecheck/pkg/analyzer"
 
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
 )
