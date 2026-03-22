@@ -416,7 +416,7 @@ linters:
       # Default: false
       check-type-assertions: true
 
-      # report about assignment of errors to blank identifier: `num, _ := strconv.Atoi(numStr)`.
+      # Report about assignment of errors to blank identifier: `num, _ := strconv.Atoi(numStr)`.
       # Such cases aren't reported by default.
       # Default: false
       check-blank: true
@@ -442,7 +442,7 @@ linters:
       # from json encoding functions that are safe to be ignored,
       # because they are not possible to happen.
       #
-      # if check-error-free-encoding is set to true and errcheck linter is enabled,
+      # If check-error-free-encoding is set to true and errcheck linter is enabled,
       # it is recommended to add the following exceptions to prevent from false positives:
       #
       #     linters:
@@ -652,7 +652,7 @@ linters:
       force-expect-to: true
 
       # Best effort validation of async intervals (timeout and polling).
-      # Ignored the `suppress-async-assertion` is true.
+      # Ignored if `suppress-async-assertion` is true.
       # Default: false
       validate-async-intervals: true
 
@@ -1396,7 +1396,7 @@ linters:
           COMPANY: MY COMPANY
         regexp:
           # Define here regexp type values.
-          # for example:
+          # For example:
           AUTHOR: .*@mycompany\.com
       # The template used for checking.
       # Put here copyright header template for source code files.
@@ -1962,7 +1962,7 @@ linters:
       # Do not allow non-required aliases.
       # Default: false
       no-extra-aliases: true
-      # List of aliases
+      # List of aliases.
       # Default: []
       alias:
         # Using `servingv1` alias for `knative.dev/serving/pkg/apis/serving/v1` package.
