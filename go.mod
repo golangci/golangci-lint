@@ -40,7 +40,7 @@ require (
 	github.com/bombsimon/wsl/v5 v5.6.0
 	github.com/breml/bidichk v0.3.3
 	github.com/breml/errchkjson v0.4.1
-	github.com/butuzov/ireturn v0.4.0
+	github.com/butuzov/ireturn v0.4.1
 	github.com/butuzov/mirror v1.3.0
 	github.com/catenacyber/perfsprint v0.10.1
 	github.com/charithe/durationcheck v0.0.11
