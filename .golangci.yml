@@ -230,6 +230,13 @@ linters:
         text: "SA1019: config.WSLv4Settings is deprecated: use WSLv5Settings instead."
         linters:
           - staticcheck
+      - path: pkg/golinters/gomodguard/gomodguard.go
+        text: "SA1019: config.GoModGuardSettings is deprecated: use GoModGuardv2Settings instead."
+        linters:
+          - staticcheck
+      - path: pkg/golinters/gomodguard/
+        linters:
+          - dupl
 
 formatters:
   enable:

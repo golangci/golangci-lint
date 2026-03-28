@@ -396,6 +396,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.25.0").
 			WithURL("https://github.com/ryancurrah/gomodguard"),
 
+		linter.NewConfig(gomodguard.NewV2(&cfg.Linters.Settings.Gomodguardv2)).
+			WithSince("v2.12.0").
+			DeprecatedWarning("new major version.", "v2.12.0").
+			WithURL("https://github.com/ryancurrah/gomodguard"),
+
 		linter.NewConfig(goprintffuncname.New()).
 			WithSince("v1.23.0").
 			WithURL("https://github.com/golangci/go-printf-func-name"),

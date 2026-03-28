@@ -24,6 +24,7 @@ require (
 	github.com/Antonboom/testifylint v1.6.4
 	github.com/BurntSushi/toml v1.6.0
 	github.com/Djarvur/go-err113 v0.1.1
+	github.com/Masterminds/semver/v3 v3.4.0
 	github.com/MirrexOne/unqueryvet v1.5.4
 	github.com/OpenPeeDeeP/depguard/v2 v2.2.1
 	github.com/alecthomas/chroma/v2 v2.23.1
@@ -107,6 +108,7 @@ require (
 	github.com/raeperd/recvcheck v0.2.0
 	github.com/rogpeppe/go-internal v1.14.1
 	github.com/ryancurrah/gomodguard v1.4.1
+	github.com/ryancurrah/gomodguard/v2 v2.0.0
 	github.com/ryanrolds/sqlclosecheck v0.6.0
 	github.com/sanposhiho/wastedassign/v2 v2.1.0
 	github.com/santhosh-tekuri/jsonschema/v6 v6.0.2
@@ -157,7 +159,6 @@ require (
 require (
 	codeberg.org/chavacava/garif v0.2.0 // indirect
 	dev.gaijin.team/go/golib v0.6.0 // indirect
-	github.com/Masterminds/semver/v3 v3.4.0 // indirect
 	github.com/alfatraining/structtag v1.0.0 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect

@@ -270,6 +270,7 @@ type LintersSettings struct {
 	Goheader                 GoHeaderSettings                 `mapstructure:"goheader"`
 	GoModDirectives          GoModDirectivesSettings          `mapstructure:"gomoddirectives"`
 	Gomodguard               GoModGuardSettings               `mapstructure:"gomodguard"`
+	Gomodguardv2             GoModGuardv2Settings             `mapstructure:"gomodguard_v2"`
 	Gosec                    GoSecSettings                    `mapstructure:"gosec"`
 	Gosmopolitan             GosmopolitanSettings             `mapstructure:"gosmopolitan"`
 	Unqueryvet               UnqueryvetSettings               `mapstructure:"unqueryvet"`
@@ -596,6 +597,25 @@ type GoModDirectivesSettings struct {
 	CheckModulePath           bool     `mapstructure:"check-module-path"`
 }
 
+type GoModGuardv2Settings struct {
+	Allowed []GoModGuardv2Allowed `mapstructure:"allowed"`
+	Blocked []GoModGuardv2Blocked `mapstructure:"blocked"`
+}
+
+type GoModGuardv2Allowed struct {
+	Name      string `mapstructure:"name"`
+	Version   string `mapstructure:"version"`
+	MatchType string `mapstructure:"match-type"`
+}
+
+type GoModGuardv2Blocked struct {
+	GoModGuardv2Allowed
+
+	Recommendations []string `yaml:"recommendations"`
+	Reason          string   `yaml:"reason"`
+}
+
+// Deprecated: use GoModGuardv2Settings instead.
 type GoModGuardSettings struct {
 	Allowed GoModGuardAllowed `mapstructure:"allowed"`
 	Blocked GoModGuardBlocked `mapstructure:"blocked"`
