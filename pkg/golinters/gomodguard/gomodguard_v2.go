@@ -22,6 +22,8 @@ func NewV2(settings *config.GoModGuardv2Settings) *goanalysis.Linter {
 
 	processorCfg := &gomodguard.Configuration{}
 	if settings != nil {
+		processorCfg.LocalReplaceDirectives = settings.LocalReplaceDirectives
+
 		for _, allowed := range settings.Allowed {
 			if processorCfg.Allowed == nil {
 				processorCfg.Allowed = make(map[string]gomodguard.AllowedRule)

@@ -598,8 +598,9 @@ type GoModDirectivesSettings struct {
 }
 
 type GoModGuardv2Settings struct {
-	Allowed []GoModGuardv2Allowed `mapstructure:"allowed"`
-	Blocked []GoModGuardv2Blocked `mapstructure:"blocked"`
+	Allowed                []GoModGuardv2Allowed `mapstructure:"allowed"`
+	Blocked                []GoModGuardv2Blocked `mapstructure:"blocked"`
+	LocalReplaceDirectives bool                  `mapstructure:"local-replace-directives"`
 }
 
 type GoModGuardv2Allowed struct {

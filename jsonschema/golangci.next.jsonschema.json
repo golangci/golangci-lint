@@ -2260,6 +2260,9 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "local-replace-directives": {
+              "type": "boolean"
+            },
             "allowed": {
               "type": "array",
               "items": {
@@ -2273,7 +2276,8 @@
                     "type": "string"
                   },
                   "match-type": {
-                    "type": "string"
+                    "enum": ["", "exact", "prefix", "regexp"],
+                    "default": "exact"
                   }
                 }
               }

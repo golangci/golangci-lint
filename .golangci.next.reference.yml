@@ -1498,16 +1498,19 @@ linters:
         local-replace-directives: false
 
     gomodguard_v2:
+      # Blocks 'replace' directives using local filesystem paths
+      # Default: false
+      local-replace-directives: true
       # List of allowed modules.
       allowed:
         - name: go.yaml.in/yaml/v4
         - name: github.com/confluentinc/confluent-kafka-go/v2
           version: "== 2.5.0"
         - name: github.com/kubernetes
+          # exact (default), prefix, regex
           match-type: prefix
         - name: "github.com/somecompany/.*"
           match-type: regex
-
       # List of blocked modules.
       blocked:
         - name: github.com/uudashr/go-module
