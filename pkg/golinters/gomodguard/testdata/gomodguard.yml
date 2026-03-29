@@ -4,9 +4,9 @@ linters:
   settings:
     gomodguard_v2:
       allowed:
-        - name: golang.org/x/mod
+        - module: golang.org/x/mod
       blocked:
-        - name: gopkg.in/yaml.v3
+        - module: gopkg.in/yaml.v3
           reason: "This is an example of a reason."
           recommendations:
             - github.com/kylelemons/go-gypsy

@@ -42,7 +42,7 @@ func NewV2(settings *config.GoModGuardv2Settings) *goanalysis.Linter {
 				}
 			}
 
-			processorCfg.Allowed[allowed.Name] = rule
+			processorCfg.Allowed[allowed.Module] = rule
 		}
 
 		for _, blocked := range settings.Blocked {
@@ -65,7 +65,7 @@ func NewV2(settings *config.GoModGuardv2Settings) *goanalysis.Linter {
 				}
 			}
 
-			processorCfg.Blocked[blocked.Name] = rule
+			processorCfg.Blocked[blocked.Module] = rule
 		}
 	}
 

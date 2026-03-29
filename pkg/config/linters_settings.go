@@ -604,7 +604,7 @@ type GoModGuardv2Settings struct {
 }
 
 type GoModGuardv2Allowed struct {
-	Name      string `mapstructure:"name"`
+	Module    string `mapstructure:"module"`
 	Version   string `mapstructure:"version"`
 	MatchType string `mapstructure:"match-type"`
 }

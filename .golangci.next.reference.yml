@@ -1503,25 +1503,25 @@ linters:
       local-replace-directives: true
       # List of allowed modules.
       allowed:
-        - name: go.yaml.in/yaml/v4
-        - name: github.com/confluentinc/confluent-kafka-go/v2
+        - module: go.yaml.in/yaml/v4
+        - module: github.com/confluentinc/confluent-kafka-go/v2
           version: "== 2.5.0"
-        - name: github.com/kubernetes
+        - module: github.com/kubernetes
           # exact (default), prefix, regex
           match-type: prefix
-        - name: "github.com/somecompany/.*"
+        - module: "github.com/somecompany/.*"
           match-type: regex
       # List of blocked modules.
       blocked:
-        - name: github.com/uudashr/go-module
+        - module: github.com/uudashr/go-module
           match-type: exact
           recommendations:
             - golang.org/x/mod
           reason: "`mod` is the official go.mod parser library."
-        - name: github.com/mitchellh/go-homedir
+        - module: github.com/mitchellh/go-homedir
           version: "<= 1.1.0"
           reason: "testing if blocked version constraint works."
-        - name: "github.com/badcompany/.*"
+        - module: "github.com/badcompany/.*"
           match-type: regex
           reason: "No badcompany packages are permitted."
 

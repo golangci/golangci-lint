@@ -2269,14 +2269,14 @@
                 "type": "object",
                 "additionalProperties": false,
                 "properties": {
-                  "name": {
+                  "module": {
                     "type": "string"
                   },
                   "version": {
                     "type": "string"
                   },
                   "match-type": {
-                    "enum": ["", "exact", "prefix", "regexp"],
+                    "enum": ["", "exact", "prefix", "regex"],
                     "default": "exact"
                   }
                 }
@@ -2288,7 +2288,7 @@
                 "type": "object",
                 "additionalProperties": false,
                 "properties": {
-                  "name": {
+                  "module": {
                     "type": "string"
                   },
                   "version": {
