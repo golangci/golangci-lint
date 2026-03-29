@@ -598,22 +598,22 @@ type GoModDirectivesSettings struct {
 }
 
 type GoModGuardv2Settings struct {
-	Allowed                []GoModGuardv2Allowed `mapstructure:"allowed"`
+	Allowed                []GoModGuardv2Base    `mapstructure:"allowed"`
 	Blocked                []GoModGuardv2Blocked `mapstructure:"blocked"`
 	LocalReplaceDirectives bool                  `mapstructure:"local-replace-directives"`
 }
 
-type GoModGuardv2Allowed struct {
+type GoModGuardv2Base struct {
 	Module    string `mapstructure:"module"`
 	Version   string `mapstructure:"version"`
 	MatchType string `mapstructure:"match-type"`
 }
 
 type GoModGuardv2Blocked struct {
-	GoModGuardv2Allowed
+	GoModGuardv2Base
 
-	Recommendations []string `yaml:"recommendations"`
-	Reason          string   `yaml:"reason"`
+	Recommendations []string `mapstructure:"recommendations"`
+	Reason          string   `mapstructure:"reason"`
 }
 
 // Deprecated: use GoModGuardv2Settings instead.

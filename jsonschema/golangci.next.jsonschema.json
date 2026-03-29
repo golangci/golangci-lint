@@ -2268,6 +2268,7 @@
               "items": {
                 "type": "object",
                 "additionalProperties": false,
+                "required": ["module"],
                 "properties": {
                   "module": {
                     "type": "string"
@@ -2287,6 +2288,7 @@
               "items": {
                 "type": "object",
                 "additionalProperties": false,
+                "required": ["module"],
                 "properties": {
                   "module": {
                     "type": "string"

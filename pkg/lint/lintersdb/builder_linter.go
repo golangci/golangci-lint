@@ -394,11 +394,12 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 
 		linter.NewConfig(gomodguard.New(&cfg.Linters.Settings.Gomodguard)).
 			WithSince("v1.25.0").
+			DeprecatedWarning("new major version.", "v2.12.0",
+				linter.Replacement("gomodguard_v2", gomodguard.Migration, &cfg.Linters.Settings.Gomodguard)).
 			WithURL("https://github.com/ryancurrah/gomodguard"),
 
 		linter.NewConfig(gomodguard.NewV2(&cfg.Linters.Settings.Gomodguardv2)).
 			WithSince("v2.12.0").
-			DeprecatedWarning("new major version.", "v2.12.0").
 			WithURL("https://github.com/ryancurrah/gomodguard"),
 
 		linter.NewConfig(goprintffuncname.New()).
