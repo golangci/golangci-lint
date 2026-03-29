@@ -518,6 +518,8 @@ github.com/rogpeppe/go-internal v1.14.1/go.mod h1:MaRKkUm5W0goXpeCfT7UZI6fk/L7L7
 github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
 github.com/ryancurrah/gomodguard v1.4.1 h1:eWC8eUMNZ/wM/PWuZBv7JxxqT5fiIKSIyTvjb7Elr+g=
 github.com/ryancurrah/gomodguard v1.4.1/go.mod h1:qnMJwV1hX9m+YJseXEBhd2s90+1Xn6x9dLz11ualI1I=
+github.com/ryancurrah/gomodguard/v2 v2.1.0 h1:iIIARHe7Fsp10LY5utfMmYA++hkVuKsMFGDzxnVcijU=
+github.com/ryancurrah/gomodguard/v2 v2.1.0/go.mod h1:ryDqr6as4otkNbUp/U0m7zAsxGpwcJ9NtL6mvy9Zzdw=
 github.com/ryanrolds/sqlclosecheck v0.6.0 h1:pEyL9okISdg1F1SEpJNlrEotkTGerv5BMk7U4AG0eVg=
 github.com/ryanrolds/sqlclosecheck v0.6.0/go.mod h1:xyX16hsDaCMXHrMJ3JMzGf5OpDfHTOTTQrT7HOFUmeU=
 github.com/sanposhiho/wastedassign/v2 v2.1.0 h1:crurBF7fJKIORrV85u9UUpePDYGWnwvv3+A96WvwXT0=

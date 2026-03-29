@@ -65,6 +65,7 @@ linters:
     - goheader
     - gomoddirectives
     - gomodguard
+    - gomodguard_v2
     - goprintffuncname
     - gosec
     - gosmopolitan
@@ -180,6 +181,7 @@ linters:
     - goheader
     - gomoddirectives
     - gomodguard
+    - gomodguard_v2
     - goprintffuncname
     - gosec
     - gosmopolitan
@@ -1494,6 +1496,34 @@ linters:
         # Set to true to raise lint issues for packages that are loaded from a local path via replace directive.
         # Default: false
         local-replace-directives: false
+
+    gomodguard_v2:
+      # Blocks 'replace' directives using local filesystem paths
+      # Default: false
+      local-replace-directives: true
+      # List of allowed modules.
+      allowed:
+        - module: go.yaml.in/yaml/v4
+        - module: github.com/confluentinc/confluent-kafka-go/v2
+          version: "== 2.5.0"
+        - module: github.com/kubernetes
+          # exact (default), prefix, regex
+          match-type: prefix
+        - module: "github.com/somecompany/.*"
+          match-type: regex
+      # List of blocked modules.
+      blocked:
+        - module: github.com/uudashr/go-module
+          match-type: exact
+          recommendations:
+            - golang.org/x/mod
+          reason: "`mod` is the official go.mod parser library."
+        - module: github.com/mitchellh/go-homedir
+          version: "<= 1.1.0"
+          reason: "testing if blocked version constraint works."
+        - module: "github.com/badcompany/.*"
+          match-type: regex
+          reason: "No badcompany packages are permitted."
 
     gosec:
       # To select a subset of rules to run.

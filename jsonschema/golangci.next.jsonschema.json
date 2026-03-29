@@ -868,6 +868,7 @@
             "goheader",
             "gomoddirectives",
             "gomodguard",
+            "gomodguard_v2",
             "goprintffuncname",
             "gosec",
             "gosimple",
@@ -2252,6 +2253,63 @@
               "description": "Check the validity of the module path.",
               "type": "boolean",
               "default": false
+            }
+          }
+        },
+        "gomodguardv2Settings": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "local-replace-directives": {
+              "type": "boolean"
+            },
+            "allowed": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["module"],
+                "properties": {
+                  "module": {
+                    "type": "string"
+                  },
+                  "version": {
+                    "type": "string"
+                  },
+                  "match-type": {
+                    "enum": ["", "exact", "prefix", "regex"],
+                    "default": "exact"
+                  }
+                }
+              }
+            },
+            "blocked": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["module"],
+                "properties": {
+                  "module": {
+                    "type": "string"
+                  },
+                  "version": {
+                    "type": "string"
+                  },
+                  "match-type": {
+                    "type": "string"
+                  },
+                  "reason": {
+                    "type": "string"
+                  },
+                  "recommendations": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
             }
           }
         },
@@ -4898,6 +4956,9 @@
             },
             "gomodguard": {
               "$ref": "#/definitions/settings/definitions/gomodguardSettings"
+            },
+            "gomodguard_v2": {
+              "$ref": "#/definitions/settings/definitions/gomodguardv2Settings"
             },
             "gosec": {
               "$ref": "#/definitions/settings/definitions/gosecSettings"
