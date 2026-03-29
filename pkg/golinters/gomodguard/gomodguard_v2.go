@@ -25,12 +25,11 @@ func NewV2(settings *config.GoModGuardv2Settings) *goanalysis.Linter {
 		processorCfg.LocalReplaceDirectives = settings.LocalReplaceDirectives
 
 		for _, allowed := range settings.Allowed {
-			if processorCfg.Allowed == nil {
-				processorCfg.Allowed = make(map[string]gomodguard.AllowedRule)
-			}
-
-			rule := gomodguard.AllowedRule{
+			rule := gomodguard.AllowedModule{
+				Module:    allowed.Module,
 				MatchType: gomodguard.MatchType(allowed.MatchType),
+				Version:   nil,
+				Matcher:   nil,
 			}
 
 			if allowed.Version != "" {
@@ -42,15 +41,12 @@ func NewV2(settings *config.GoModGuardv2Settings) *goanalysis.Linter {
 				}
 			}
 
-			processorCfg.Allowed[allowed.Module] = rule
+			processorCfg.Allowed = append(processorCfg.Allowed, rule)
 		}
 
 		for _, blocked := range settings.Blocked {
-			if processorCfg.Blocked == nil {
-				processorCfg.Blocked = make(map[string]gomodguard.BlockedRule)
-			}
-
-			rule := gomodguard.BlockedRule{
+			rule := gomodguard.BlockedModule{
+				Module:          blocked.Module,
 				MatchType:       gomodguard.MatchType(blocked.MatchType),
 				Recommendations: blocked.Recommendations,
 				Reason:          blocked.Reason,
@@ -65,7 +61,7 @@ func NewV2(settings *config.GoModGuardv2Settings) *goanalysis.Linter {
 				}
 			}
 
-			processorCfg.Blocked[blocked.Module] = rule
+			processorCfg.Blocked = append(processorCfg.Blocked, rule)
 		}
 	}
 
