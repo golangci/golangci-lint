@@ -39,6 +39,8 @@ func runAnalyzers(cfg runAnalyzersConfig, lintCtx *linter.Context) ([]*result.Is
 		pkgs = lintCtx.OriginalPackages
 	}
 
+	lintCtx.PkgCache.PrecomputePackageHashes(pkgs)
+
 	issues, pkgsFromCache := loadIssuesFromCache(pkgs, lintCtx, cfg.getAnalyzers())
 	var pkgsToAnalyze []*packages.Package
 	for _, pkg := range pkgs {

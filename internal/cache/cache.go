@@ -12,6 +12,7 @@ import (
 	"slices"
 	"strings"
 	"sync"
+	"sync/atomic"
 
 	"golang.org/x/tools/go/packages"
 
@@ -57,6 +58,90 @@ func (c *Cache) Close() {
 	if err != nil {
 		c.log.Errorf("cache close: %v", err)
 	}
+}
+
+// PrecomputePackageHashes walks the package dependency graph in topological
+// order (leaves first) and computes hashes for all packages concurrently.
+// This warms the pkgHashes cache so that subsequent Get/Put calls don't
+// need to recursively compute hashes on the critical path.
+func (c *Cache) PrecomputePackageHashes(pkgs []*packages.Package) {
+	// Collect all packages in the dependency graph.
+	all := map[*packages.Package]struct{}{}
+	var collect func(pkg *packages.Package)
+	collect = func(pkg *packages.Package) {
+		if _, seen := all[pkg]; seen {
+			return
+		}
+		all[pkg] = struct{}{}
+		for _, dep := range pkg.Imports {
+			collect(dep)
+		}
+	}
+	for _, pkg := range pkgs {
+		collect(pkg)
+	}
+
+	if len(all) == 0 {
+		return
+	}
+
+	// Build reverse dep edges and count pending deps per package.
+	type pkgState struct {
+		pending atomic.Int32
+	}
+	states := make(map[*packages.Package]*pkgState, len(all))
+	reverseDeps := make(map[*packages.Package][]*packages.Package, len(all))
+
+	for pkg := range all {
+		states[pkg] = &pkgState{}
+	}
+
+	for pkg := range all {
+		for _, dep := range pkg.Imports {
+			if dep.PkgPath == "unsafe" {
+				continue
+			}
+			if _, ok := all[dep]; ok {
+				states[pkg].pending.Add(1)
+				reverseDeps[dep] = append(reverseDeps[dep], pkg)
+			}
+		}
+	}
+
+	// Track overall completion.
+	var remaining sync.WaitGroup
+	remaining.Add(len(all))
+
+	ch := make(chan *packages.Package, len(all))
+
+	// Seed with leaf packages.
+	for pkg, st := range states {
+		if st.pending.Load() == 0 {
+			ch <- pkg
+		}
+	}
+
+	// Workers process packages whose deps are all resolved.
+	var workers sync.WaitGroup
+	for range runtime.GOMAXPROCS(-1) {
+		workers.Go(func() {
+			for pkg := range ch {
+				// Deps are already in pkgHashes, so this won't recurse deeply.
+				_, _ = c.packageHash(pkg, HashModeNeedAllDeps)
+				remaining.Done()
+
+				for _, rdep := range reverseDeps[pkg] {
+					if states[rdep].pending.Add(-1) == 0 {
+						ch <- rdep
+					}
+				}
+			}
+		})
+	}
+
+	remaining.Wait()
+	close(ch)
+	workers.Wait()
 }
 
 func (c *Cache) Put(pkg *packages.Package, mode HashMode, key string, data any) error {
@@ -167,18 +252,46 @@ func (c *Cache) computePkgHash(pkg *packages.Package) (hashResults, error) {
 
 	fmt.Fprintf(key, "pkgpath %s\n", pkg.PkgPath)
 
-	for _, f := range slices.Concat(pkg.CompiledGoFiles, pkg.IgnoredFiles) {
-		h, fErr := c.fileHash(f)
-		if fErr != nil {
-			return nil, fmt.Errorf("failed to calculate file %s hash: %w", f, fErr)
-		}
+	// Hash all files in the package concurrently.
+	files := slices.Concat(pkg.CompiledGoFiles, pkg.IgnoredFiles)
 
-		// This is the current module (the project to analyze).
+	type fileHashResult struct {
+		name string
+		hash [cache.HashSize]byte
+	}
+
+	results := make([]fileHashResult, len(files))
+
+	var wg sync.WaitGroup
+	var hashErr atomic.Pointer[error]
+
+	for i, f := range files {
+		// Pre-compute display name before spawning goroutine.
+		name := f
 		if pkg.Module != nil && pkg.Module.Version == "" {
-			f = pkg.Module.Path + strings.TrimPrefix(filepath.ToSlash(f), filepath.ToSlash(pkg.Module.Dir))
+			name = pkg.Module.Path + strings.TrimPrefix(filepath.ToSlash(f), filepath.ToSlash(pkg.Module.Dir))
 		}
+		results[i].name = name
 
-		fmt.Fprintf(key, "file %s %x\n", f, h)
+		wg.Go(func() {
+			h, fErr := c.fileHash(f)
+			if fErr != nil {
+				e := fmt.Errorf("failed to calculate file %s hash: %w", f, fErr)
+				hashErr.CompareAndSwap(nil, &e)
+				return
+			}
+			results[i].hash = h
+		})
+	}
+
+	wg.Wait()
+
+	if ep := hashErr.Load(); ep != nil {
+		return nil, *ep
+	}
+
+	for _, r := range results {
+		fmt.Fprintf(key, "file %s %x\n", r.name, r.hash)
 	}
 
 	curSum := key.Sum()
@@ -256,17 +369,7 @@ func (c *Cache) getBytes(actionID cache.ActionID) ([]byte, error) {
 }
 
 func (c *Cache) fileHash(f string) ([cache.HashSize]byte, error) {
-	c.ioSem <- struct{}{}
-
-	h, err := cache.FileHash(f)
-
-	<-c.ioSem
-
-	if err != nil {
-		return [cache.HashSize]byte{}, err
-	}
-
-	return h, nil
+	return cache.FileHash(f)
 }
 
 func (c *Cache) encode(data any) (*bytes.Buffer, error) {
