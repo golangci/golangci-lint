@@ -25,7 +25,6 @@ func main() {
 	info := createBuildInfo()
 
 	if err := commands.Execute(info); err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, "The command is terminated due to an error: %v\n", err)
 		os.Exit(exitcodes.Failure)
 	}
 }

@@ -1,11 +1,13 @@
 package commands
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"os"
 	"slices"
 
+	"charm.land/fang/v2"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
@@ -80,10 +82,11 @@ func newRootCommand(info BuildInfo) *rootCommand {
 func (c *rootCommand) Execute() error {
 	err := setupLogger(c.log)
 	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		return err
 	}
 
-	return c.cmd.Execute()
+	return fang.Execute(context.Background(), c.cmd, fang.WithoutVersion())
 }
 
 func setupRootPersistentFlags(fs *pflag.FlagSet, opts *rootOptions) {
