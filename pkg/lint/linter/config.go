@@ -185,15 +185,18 @@ func Replacement[T any](replacement string, mgr func(T) any, data T) func(*Depre
 			encoder := yaml.NewEncoder(buf)
 			encoder.SetIndent(2)
 
+			linters := map[string]any{
+				"enable": []string{d.Replacement},
+			}
+
+			replacementSettings := mgr(data)
+
+			if replacementSettings != nil {
+				linters["settings"] = map[string]any{d.Replacement: replacementSettings}
+			}
+
 			suggestion := map[string]any{
-				"linters": map[string]any{
-					"enable": []string{
-						d.Replacement,
-					},
-					"settings": map[string]any{
-						d.Replacement: mgr(data),
-					},
-				},
+				"linters": linters,
 			}
 
 			err := encoder.Encode(suggestion)
