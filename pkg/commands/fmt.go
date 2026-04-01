@@ -6,7 +6,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
@@ -68,9 +67,9 @@ func newFmtCommand(logger logutils.Log, info BuildInfo) *fmtCommand {
 
 	setupFormattersFlagSet(c.viper, fs)
 
-	fs.BoolVarP(&c.opts.diff, "diff", "d", false, color.GreenString("Display diffs instead of rewriting files"))
-	fs.BoolVar(&c.opts.diffColored, "diff-colored", false, color.GreenString("Display diffs instead of rewriting files (with colors)"))
-	fs.BoolVar(&c.opts.stdin, "stdin", false, color.GreenString("Use standard input for piping source files"))
+	fs.BoolVarP(&c.opts.diff, "diff", "d", false, "Display diffs instead of rewriting files")
+	fs.BoolVar(&c.opts.diffColored, "diff-colored", false, "Display diffs instead of rewriting files (with colors)")
+	fs.BoolVar(&c.opts.stdin, "stdin", false, "Use standard input for piping source files")
 
 	c.cmd = fmtCmd
 

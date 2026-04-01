@@ -7,7 +7,6 @@ import (
 	"os"
 	"runtime/debug"
 
-	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 )
 
@@ -51,9 +50,9 @@ func newVersionCommand(info BuildInfo) *versionCommand {
 	fs := versionCmd.Flags()
 	fs.SortFlags = false // sort them as they are defined here
 
-	fs.BoolVar(&c.opts.Debug, "debug", false, color.GreenString("Add build information"))
-	fs.BoolVar(&c.opts.JSON, "json", false, color.GreenString("Display as JSON"))
-	fs.BoolVar(&c.opts.Short, "short", false, color.GreenString("Display only the version number"))
+	fs.BoolVar(&c.opts.Debug, "debug", false, "Add build information")
+	fs.BoolVar(&c.opts.JSON, "json", false, "Display as JSON")
+	fs.BoolVar(&c.opts.Short, "short", false, "Display only the version number")
 
 	c.cmd = versionCmd
 

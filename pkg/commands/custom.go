@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 
 	"github.com/golangci/golangci-lint/v2/pkg/commands/internal"
@@ -45,9 +44,9 @@ func newCustomCommand(logger logutils.Log) *customCommand {
 	flagSet := customCmd.PersistentFlags()
 	flagSet.SortFlags = false // sort them as they are defined here
 
-	flagSet.StringVar(&c.opts.version, "version", "", color.GreenString("The golangci-lint version used to build the custom binary"))
-	flagSet.StringVar(&c.opts.name, "name", "", color.GreenString("The name of the custom binary"))
-	flagSet.StringVar(&c.opts.destination, "destination", "", color.GreenString("The directory path used to store the custom binary"))
+	flagSet.StringVar(&c.opts.version, "version", "", "The golangci-lint version used to build the custom binary")
+	flagSet.StringVar(&c.opts.name, "name", "", "The name of the custom binary")
+	flagSet.StringVar(&c.opts.destination, "destination", "", "The directory path used to store the custom binary")
 
 	c.cmd = customCmd
 

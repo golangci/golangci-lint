@@ -20,8 +20,6 @@ func Execute(info BuildInfo) error {
 }
 
 type rootOptions struct {
-	PrintVersion bool // Flag only.
-
 	Verbose bool   // Flag only.
 	Color   string // Flag only.
 }
@@ -29,6 +27,7 @@ type rootOptions struct {
 type rootCommand struct {
 	cmd  *cobra.Command
 	opts rootOptions
+	info BuildInfo
 
 	log logutils.Log
 }
@@ -42,17 +41,9 @@ func newRootCommand(info BuildInfo) *rootCommand {
 		Long:  `Smart, fast linters runner.`,
 		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
-			if c.opts.PrintVersion {
-				_ = printVersion(logutils.StdOut, info)
-				return nil
-			}
-
 			return cmd.Help()
 		},
 	}
-
-	fs := rootCmd.Flags()
-	fs.BoolVar(&c.opts.PrintVersion, "version", false, color.GreenString("Print version"))
 
 	setupRootPersistentFlags(rootCmd.PersistentFlags(), &c.opts)
 
@@ -73,6 +64,7 @@ func newRootCommand(info BuildInfo) *rootCommand {
 
 	rootCmd.SetHelpCommand(newHelpCommand(log).cmd)
 
+	c.info = info
 	c.log = log
 	c.cmd = rootCmd
 
@@ -86,13 +78,16 @@ func (c *rootCommand) Execute() error {
 		return err
 	}
 
-	return fang.Execute(context.Background(), c.cmd, fang.WithoutVersion())
+	return fang.Execute(context.Background(), c.cmd,
+		fang.WithVersion(c.info.Version),
+		fang.WithColorSchemeFunc(golangciColorScheme),
+	)
 }
 
 func setupRootPersistentFlags(fs *pflag.FlagSet, opts *rootOptions) {
-	fs.BoolP("help", "h", false, color.GreenString("Help for a command"))
-	fs.BoolVarP(&opts.Verbose, "verbose", "v", false, color.GreenString("Verbose output"))
-	fs.StringVar(&opts.Color, "color", "auto", color.GreenString("Use color when printing; can be 'always', 'auto', or 'never'"))
+	fs.BoolP("help", "h", false, "Help for a command")
+	fs.BoolVarP(&opts.Verbose, "verbose", "v", false, "Verbose output")
+	fs.StringVar(&opts.Color, "color", "auto", "Use color when printing; can be 'always', 'auto', or 'never'")
 }
 
 func setupLogger(logger logutils.Log) error {

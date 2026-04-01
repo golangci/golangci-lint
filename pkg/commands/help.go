@@ -5,7 +5,6 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 
 	"github.com/golangci/golangci-lint/v2/pkg/lint/lintersdb"
@@ -50,7 +49,7 @@ func newHelpCommand(logger logutils.Log) *helpCommand {
 	fsLinter := lintersCmd.Flags()
 	fsLinter.SortFlags = false // sort them as they are defined here
 
-	fsLinter.BoolVar(&c.opts.JSON, "json", false, color.GreenString("Display as JSON"))
+	fsLinter.BoolVar(&c.opts.JSON, "json", false, "Display as JSON")
 
 	helpCmd.AddCommand(lintersCmd)
 
@@ -66,7 +65,7 @@ func newHelpCommand(logger logutils.Log) *helpCommand {
 	fsFormatter := formattersCmd.Flags()
 	fsFormatter.SortFlags = false // sort them as they are defined here
 
-	fsFormatter.BoolVar(&c.opts.JSON, "json", false, color.GreenString("Display as JSON"))
+	fsFormatter.BoolVar(&c.opts.JSON, "json", false, "Display as JSON")
 
 	helpCmd.AddCommand(formattersCmd)
 

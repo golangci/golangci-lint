@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
-	"github.com/fatih/color"
 	"github.com/santhosh-tekuri/jsonschema/v6"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -69,11 +68,11 @@ func newMigrateCommand(log logutils.Log, info BuildInfo) *migrateCommand {
 	setupConfigFileFlagSet(fs, &c.opts.LoaderOptions)
 
 	fs.StringVar(&c.opts.format, "format", "",
-		color.GreenString("Output file format.\nBy default, the format of the input configuration file is used.\n"+
-			"It can be 'yml', 'yaml', 'toml', or 'json'."))
+		"Output file format.\nBy default, the format of the input configuration file is used.\n"+
+			"It can be 'yml', 'yaml', 'toml', or 'json'.")
 
 	fs.BoolVar(&c.opts.skipValidation, "skip-validation", false,
-		color.GreenString("Skip validation of the configuration file against the JSON Schema for v1."))
+		"Skip validation of the configuration file against the JSON Schema for v1.")
 
 	c.cmd = migrateCmd
 

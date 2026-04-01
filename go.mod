@@ -14,6 +14,7 @@ require (
 	4d63.com/gocheckcompilerdirectives v1.3.0
 	4d63.com/gochecknoglobals v0.2.2
 	charm.land/fang/v2 v2.0.1
+	charm.land/lipgloss/v2 v2.0.1
 	codeberg.org/polyfloyd/go-errorlint v1.9.0
 	dev.gaijin.team/go/exhaustruct/v4 v4.0.0
 	github.com/4meepo/tagalign v1.4.3
@@ -158,7 +159,6 @@ require (
 )
 
 require (
-	charm.land/lipgloss/v2 v2.0.1 // indirect
 	codeberg.org/chavacava/garif v0.2.0 // indirect
 	dev.gaijin.team/go/golib v0.6.0 // indirect
 	github.com/alfatraining/structtag v1.0.0 // indirect

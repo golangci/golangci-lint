@@ -19,7 +19,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/fatih/color"
 	"github.com/gofrs/flock"
 	"github.com/ldez/grignotin/goenv"
 	"github.com/spf13/cobra"
@@ -128,7 +127,7 @@ func newRunCommand(logger logutils.Log, info BuildInfo) *runCommand {
 	// Only for testing purpose.
 	// Don't add other flags here.
 	fs.BoolVar(&c.cfg.InternalCmdTest, "internal-cmd-test", false,
-		color.GreenString("Option is used only for testing golangci-lint command, don't use it"))
+		"Option is used only for testing golangci-lint command, don't use it")
 	_ = fs.MarkHidden("internal-cmd-test")
 
 	setupConfigFileFlagSet(fs, &c.opts.LoaderOptions)
@@ -579,18 +578,18 @@ func watchResources(ctx context.Context, done chan struct{}, logger logutils.Log
 }
 
 func setupConfigFileFlagSet(fs *pflag.FlagSet, cfg *config.LoaderOptions) {
-	fs.StringVarP(&cfg.Config, "config", "c", "", color.GreenString("Read config from file path `PATH`"))
-	fs.BoolVar(&cfg.NoConfig, "no-config", false, color.GreenString("Don't read config file"))
+	fs.StringVarP(&cfg.Config, "config", "c", "", "Read config from file path `PATH`")
+	fs.BoolVar(&cfg.NoConfig, "no-config", false, "Don't read config file")
 }
 
 func setupRunPersistentFlags(fs *pflag.FlagSet, opts *runOptions) {
 	fs.BoolVar(&opts.PrintResourcesUsage, "print-resources-usage", false,
-		color.GreenString("Print avg and max memory usage of golangci-lint and total time"))
+		"Print avg and max memory usage of golangci-lint and total time")
 	_ = fs.MarkDeprecated("print-resources-usage", "use --verbose instead")
 
-	fs.StringVar(&opts.CPUProfilePath, "cpu-profile-path", "", color.GreenString("Path to CPU profile output file"))
-	fs.StringVar(&opts.MemProfilePath, "mem-profile-path", "", color.GreenString("Path to memory profile output file"))
-	fs.StringVar(&opts.TracePath, "trace-path", "", color.GreenString("Path to trace output file"))
+	fs.StringVar(&opts.CPUProfilePath, "cpu-profile-path", "", "Path to CPU profile output file")
+	fs.StringVar(&opts.MemProfilePath, "mem-profile-path", "", "Path to memory profile output file")
+	fs.StringVar(&opts.TracePath, "trace-path", "", "Path to trace output file")
 }
 
 func printMemStats(ms *runtime.MemStats, logger logutils.Log) {

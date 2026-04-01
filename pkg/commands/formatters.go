@@ -62,7 +62,7 @@ func newFormattersCommand(logger logutils.Log) *formattersCommand {
 
 	setupFormattersFlagSet(c.viper, fs)
 
-	fs.BoolVar(&c.opts.JSON, "json", false, color.GreenString("Display as JSON"))
+	fs.BoolVar(&c.opts.JSON, "json", false, "Display as JSON")
 
 	c.cmd = formattersCmd
 
