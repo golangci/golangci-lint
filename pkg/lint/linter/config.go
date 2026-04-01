@@ -189,10 +189,10 @@ func Replacement[T any](replacement string, mgr func(T) any, data T) func(*Depre
 				"enable": []string{d.Replacement},
 			}
 
-			settings := mgr(data)
+			replacementSettings := mgr(data)
 
-			if settings != nil {
-				linters["settings"] = map[string]any{d.Replacement: settings}
+			if replacementSettings != nil {
+				linters["settings"] = map[string]any{d.Replacement: replacementSettings}
 			}
 
 			suggestion := map[string]any{
