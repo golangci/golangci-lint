@@ -2312,12 +2312,13 @@ linters:
       # Ignore missing calls to `t.Parallel()` and only report incorrect uses of it.
       # Default: false
       ignore-missing: true
-      # Ignore missing calls to `t.Parallel()` in subtests. Top-level tests are
-      # still required to have `t.Parallel`, but subtests are allowed to skip it.
+      # Ignore missing calls to `t.Parallel()` in subtests.
+      # Top-level tests are still required to have `t.Parallel`,
+      # but subtests are allowed to skip it.
       # Default: false
       ignore-missing-subtests: true
-      # Check that `defer` is not used with `t.Parallel` (use `t.Cleanup` instead 
-      # to ensure cleanup runs after parallel subtests complete).
+      # Check that `defer` is not used with `t.Parallel`.
+      # (use `t.Cleanup` instead to ensure cleanup runs after parallel subtests complete).
       # Default: false
       check-cleanup: true
 
