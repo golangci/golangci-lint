@@ -820,6 +820,7 @@ type ParallelTestSettings struct {
 	Go                    string `mapstructure:"-"`
 	IgnoreMissing         bool   `mapstructure:"ignore-missing"`
 	IgnoreMissingSubtests bool   `mapstructure:"ignore-missing-subtests"`
+	CheckCleanup          bool   `mapstructure:"check-cleanup"`
 }
 
 type PerfSprintSettings struct {

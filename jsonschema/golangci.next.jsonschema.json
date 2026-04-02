@@ -3048,6 +3048,11 @@
               "description": "Ignore missing calls to `t.Parallel()` in subtests. Top-level tests are still required to have `t.Parallel`, but subtests are allowed to skip it.",
               "type": "boolean",
               "default": false
+            },
+            "check-cleanup": {
+              "description": "Check that defer is not used with t.Parallel (use t.Cleanup instead).",
+              "type": "boolean",
+              "default": false
             }
           }
         },
