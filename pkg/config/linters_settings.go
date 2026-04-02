@@ -528,6 +528,10 @@ type GoConstSettings struct {
 	FindDuplicates       bool     `mapstructure:"find-duplicates"`
 	EvalConstExpressions bool     `mapstructure:"eval-const-expressions"`
 
+	// This option cannot be managed with `linters.exclusions.rules`.
+	// Because the linter counts occurrences across all files in the package.
+	IgnoreTests bool `mapstructure:"ignore-tests"`
+
 	// Deprecated: use IgnoreStringValues instead.
 	IgnoreStrings string `mapstructure:"ignore-strings"`
 }

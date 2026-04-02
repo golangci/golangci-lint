@@ -1715,6 +1715,11 @@
               "description": "Evaluates of constant expressions like Prefix + \"suffix\"",
               "type": "boolean",
               "default": false
+            },
+            "ignore-tests": {
+              "description": "Ignore strings from test files",
+              "type": "boolean",
+              "default": false
             }
           }
         },
