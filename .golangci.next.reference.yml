@@ -2316,6 +2316,10 @@ linters:
       # still required to have `t.Parallel`, but subtests are allowed to skip it.
       # Default: false
       ignore-missing-subtests: true
+      # Check that `defer` is not used with `t.Parallel` (use `t.Cleanup` instead 
+      # to ensure cleanup runs after parallel subtests complete).
+      # Default: false
+      check-cleanup: true
 
     perfsprint:
       # Enable/disable optimization of integer formatting.

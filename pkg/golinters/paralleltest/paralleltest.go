@@ -14,6 +14,7 @@ func New(settings *config.ParallelTestSettings) *goanalysis.Linter {
 		cfg = map[string]any{
 			"i":                     settings.IgnoreMissing,
 			"ignoremissingsubtests": settings.IgnoreMissingSubtests,
+			"checkcleanup":          settings.CheckCleanup,
 		}
 
 		if config.IsGoGreaterThanOrEqual(settings.Go, "1.22") {
