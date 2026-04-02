@@ -59,9 +59,7 @@ func runGoconst(pass *analysis.Pass, settings *config.GoConstSettings) ([]*goana
 		ExcludeTypes:         map[goconstAPI.Type]bool{},
 		FindDuplicates:       settings.FindDuplicates,
 		EvalConstExpressions: settings.EvalConstExpressions,
-
-		// Should be managed with `linters.exclusions.rules`.
-		IgnoreTests: false,
+		IgnoreTests:          settings.IgnoreTests,
 	}
 
 	if settings.IgnoreCalls {

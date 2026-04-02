@@ -719,6 +719,8 @@ linters:
       # Evaluates of constant expressions like Prefix + "suffix".
       # Default: false
       eval-const-expressions: true
+      # Ignore strings from test files.
+      ignore-tests: false
 
     gocritic:
       # Disable all checks.
