@@ -527,6 +527,7 @@ type GoConstSettings struct {
 	IgnoreCalls          bool     `mapstructure:"ignore-calls"`
 	FindDuplicates       bool     `mapstructure:"find-duplicates"`
 	EvalConstExpressions bool     `mapstructure:"eval-const-expressions"`
+	IgnoreFunctions      []string `mapstructure:"ignore-functions"`
 
 	// This option cannot be managed with `linters.exclusions.rules`.
 	// Because the linter counts occurrences across all files in the package.

@@ -237,6 +237,10 @@ linters:
       - path: pkg/golinters/gomodguard/
         linters:
           - dupl
+      # TODO(ldez): temporary fix, it will change in the future.
+      - path: internal/cache/cache.go
+        linters:
+          - goconst
 
 formatters:
   enable:

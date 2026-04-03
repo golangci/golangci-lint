@@ -720,7 +720,14 @@ linters:
       # Default: false
       eval-const-expressions: true
       # Ignore strings from test files.
-      ignore-tests: false
+      # Default: false
+      ignore-tests: true
+      # Ignore string literals in calls to these functions
+      # Default: empty list
+      ignore-functions:
+        - log.Info
+        - slog.Warn
+        - fmt.Errorf
 
     gocritic:
       # Disable all checks.
