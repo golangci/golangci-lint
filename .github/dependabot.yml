@@ -39,6 +39,7 @@ updates:
   - package-ecosystem: gomod
     directories:
       - pkg/golinters/arangolint/testdata/
+      - pkg/golinters/clickhouselint/testdata/
       - pkg/golinters/ginkgolinter/testdata/
       - pkg/golinters/loggercheck/testdata/
       - pkg/golinters/protogetter/testdata/
