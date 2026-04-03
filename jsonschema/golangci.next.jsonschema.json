@@ -1720,6 +1720,12 @@
               "description": "Ignore strings from test files",
               "type": "boolean",
               "default": false
+            },
+            "ignore-functions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
             }
           }
         },
