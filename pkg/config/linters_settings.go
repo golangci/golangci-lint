@@ -316,6 +316,7 @@ type LintersSettings struct {
 	Testpackage              TestpackageSettings              `mapstructure:"testpackage"`
 	Thelper                  ThelperSettings                  `mapstructure:"thelper"`
 	Unconvert                UnconvertSettings                `mapstructure:"unconvert"`
+	MultiSplit               MultiSplitSettings               `mapstructure:"multisplit"`
 	Unparam                  UnparamSettings                  `mapstructure:"unparam"`
 	Unused                   UnusedSettings                   `mapstructure:"unused"`
 	UseStdlibVars            UseStdlibVarsSettings            `mapstructure:"usestdlibvars"`
@@ -1031,6 +1032,17 @@ type ThelperOptions struct {
 	First *bool `mapstructure:"first"`
 	Name  *bool `mapstructure:"name"`
 	Begin *bool `mapstructure:"begin"`
+}
+
+type MultiSplitSettings struct {
+	Rules                  []string `mapstructure:"rules"`
+	VarDeclPkgToBlock      *bool    `mapstructure:"var-decl-pkg-to-block"`
+	VarDeclFuncToBlock     *bool    `mapstructure:"var-decl-func-to-block"`
+	VarDeclInitPkgToBlock  *bool    `mapstructure:"var-decl-init-pkg-to-block"`
+	VarDeclInitFuncToBlock *bool    `mapstructure:"var-decl-init-func-to-block"`
+	VarDeclInitFuncToShort *bool    `mapstructure:"var-decl-init-func-to-short"`
+	ConstDeclPkgToBlock    *bool    `mapstructure:"const-decl-pkg-to-block"`
+	ConstDeclFuncToBlock   *bool    `mapstructure:"const-decl-func-to-block"`
 }
 
 type UseStdlibVarsSettings struct {

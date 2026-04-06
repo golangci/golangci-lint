@@ -2836,6 +2836,76 @@
             }
           }
         },
+        "multisplit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "rules": {
+              "type": "array",
+              "description": "The set of multisplit rules to apply. If empty, the default rules will be used.",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "assign",
+                  "const-decl-func",
+                  "const-decl-pkg",
+                  "func-params",
+                  "func-return-values",
+                  "short-var-decl",
+                  "struct-fields",
+                  "var-decl-func",
+                  "var-decl-pkg",
+                  "var-decl-init-func",
+                  "var-decl-init-pkg"
+                ]
+              },
+              "default": [
+                "const-decl-pkg",
+                "func-params",
+                "func-return-values",
+                "struct-fields",
+                "var-decl-pkg",
+                "var-decl-init-pkg"
+              ],
+              "uniqueItems": true
+            },
+            "constDeclFuncToBlock": {
+              "type": "boolean",
+              "default": false,
+              "description": "If true, splits multi-identifier const declarations inside functions into a const block instead of separate const statements."
+            },
+            "constDeclPkgToBlock": {
+              "type": "boolean",
+              "default": true,
+              "description": "If true, splits multi-identifier const declarations at package scope into a const block instead of separate const statements."
+            },
+            "varDeclFuncToBlock": {
+              "type": "boolean",
+              "default": false,
+              "description": "If true, splits multi-identifier var declarations inside functions into a var block instead of separate var statements."
+            },
+            "varDeclPkgToBlock": {
+              "type": "boolean",
+              "default": true,
+              "description": "If true, splits multi-identifier var declarations at package scope into a var block instead of separate var statements."
+            },
+            "varDeclInitFuncToBlock": {
+              "type": "boolean",
+              "default": false,
+              "description": "If true, splits multi-identifier var declarations with initializers inside functions into a var block."
+            },
+            "varDeclInitFuncToShort": {
+              "type": "boolean",
+              "default": true,
+              "description": "If true, converts untyped multi-identifier var declarations in function scope into short variable declarations (:=) when the declarations are not in a var block."
+            },
+            "varDeclInitPkgToBlock": {
+              "type": "boolean",
+              "default": false,
+              "description": "If true, splits multi-identifier var declarations with initializers at package scope into a var block."
+            }
+          }
+        },
         "musttagSettings": {
           "type": "object",
           "additionalProperties": false,

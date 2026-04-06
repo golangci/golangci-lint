@@ -109,6 +109,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/thelper"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/tparallel"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/unconvert"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/multisplit"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/unparam"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/unqueryvet"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/unused"
@@ -671,6 +672,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/mdempsky/unconvert"),
+
+		linter.NewConfig(multisplit.New(&cfg.Linters.Settings.MultiSplit)).
+			WithSince("v2.12.0").
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/kenyoni-software/go-multisplit"),
 
 		linter.NewConfig(unparam.New(&cfg.Linters.Settings.Unparam)).
 			WithSince("v1.9.0").

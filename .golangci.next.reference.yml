@@ -87,6 +87,7 @@ linters:
     - misspell
     - mnd
     - modernize
+    - multisplit
     - musttag
     - nakedret
     - nestif
@@ -203,6 +204,7 @@ linters:
     - misspell
     - mnd
     - modernize
+    - multisplit
     - musttag
     - nakedret
     - nestif
@@ -2250,6 +2252,36 @@ linters:
         - unsafefuncs
         # Replace wg.Add(1)/go/wg.Done() with wg.Go.
         - waitgroup
+
+    multisplit:
+      # The set of rules to apply. If empty, the default rules will be applied.
+      # Default: const-decl-pkg, func-params, func-return-values, struct-fields, var-decl-init-pkg, var-decl-pkg
+      rules:
+        - assign
+        - var-decl-func
+        - var-decl-pkg
+
+      # Whether to rewrite const declarations with multiple identifiers inside functions into a const block.
+      # Default: false
+      constDeclFuncToBlock: true
+      # Whether to rewrite const declarations with multiple identifiers at package scope into a const block.
+      # Default: true
+      constDeclPkgToBlock: false
+      # Whether to rewrite var declarations with multiple identifiers inside functions into a const block.
+      # Default: false
+      varDeclFuncToBlock: true
+      # Whether to rewrite var declarations with multiple identifiers at package scope into a var block.
+      # Default: true
+      varDeclPkgToBlock: false
+      # Whether to rewrite var declarations with multiple identifiers and initializers inside functions into a var block.
+      # Default: false
+      varDeclInitFuncToBlock: true
+      # Whether to rewrite untyped var declarations with multiple identifiers inside functions into short declarations.
+      # Default: true
+      varDeclInitFuncToShort: false
+      # Whether to rewrite var declarations with multiple identifiers and initializers at package scope into a var block.
+      # Default: false
+      varDeclInitPkgToBlock: false
 
     musttag:
       # A set of custom functions to check in addition to the builtin ones.
