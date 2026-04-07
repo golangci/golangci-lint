@@ -298,6 +298,7 @@ type LintersSettings struct {
 	NoLintLint               NoLintLintSettings               `mapstructure:"nolintlint"`
 	NoNamedReturns           NoNamedReturnsSettings           `mapstructure:"nonamedreturns"`
 	ParallelTest             ParallelTestSettings             `mapstructure:"paralleltest"`
+	PathConcat               PathConcatSettings               `mapstructure:"pathconcat"`
 	PerfSprint               PerfSprintSettings               `mapstructure:"perfsprint"`
 	Prealloc                 PreallocSettings                 `mapstructure:"prealloc"`
 	Predeclared              PredeclaredSettings              `mapstructure:"predeclared"`
@@ -826,6 +827,11 @@ type ParallelTestSettings struct {
 	IgnoreMissing         bool   `mapstructure:"ignore-missing"`
 	IgnoreMissingSubtests bool   `mapstructure:"ignore-missing-subtests"`
 	CheckCleanup          bool   `mapstructure:"check-cleanup"`
+}
+
+type PathConcatSettings struct {
+	IgnoreStrings     []string `mapstructure:"ignore-strings"`
+	CheckSchemeConcat bool     `mapstructure:"check-scheme-concat"`
 }
 
 type PerfSprintSettings struct {

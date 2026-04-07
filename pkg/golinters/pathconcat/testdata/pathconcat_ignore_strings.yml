@@ -1,0 +1,8 @@
+version: "2"
+
+linters:
+  settings:
+    pathconcat:
+      ignore-strings:
+        - "/attr/"
+        - "/value/"

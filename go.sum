@@ -346,6 +346,8 @@ github.com/hexops/gotextdiff v1.0.3/go.mod h1:pSWU5MAI3yDq+fZBTazCSJysOMbxWL1BSo
 github.com/ianlancetaylor/demangle v0.0.0-20181102032728-5e5cf60278f6/go.mod h1:aSSvb/t6k1mPoxDqO4vJh6VOCGPwU4O0C2/Eqndh1Sc=
 github.com/inconshreveable/mousetrap v1.1.0 h1:wN+x4NVGpMsO7ErUn/mUI3vEoE6Jt13X2s0bqwp9tc8=
 github.com/inconshreveable/mousetrap v1.1.0/go.mod h1:vpF70FUmC8bwa3OWnCshd2FqLfsEA9PFc4w1p2J65bw=
+github.com/jakedoublev/pathconcat v0.3.0 h1:LvpQAl7VaC74ZyLwn4W54gCZb0FfCdSbrRM4axOnYJM=
+github.com/jakedoublev/pathconcat v0.3.0/go.mod h1:nCiAfBSLaLjQVf9nkGJL6bSRjmz3ow37CezaIvtq6Ho=
 github.com/jgautheron/goconst v1.10.0 h1:Ptt+OoE4NaEWKhLrWrrN3IpZdGLiqaf7WLnEX/iv4Jw=
 github.com/jgautheron/goconst v1.10.0/go.mod h1:0p+wv1lFOiUr0IlNNT1nrm6+8DB8u2sU6KHGzFRXHDc=
 github.com/jingyugao/rowserrcheck v1.1.1 h1:zibz55j/MJtLsjP1OF4bSdgXxwL1b+Vn7Tjzq7gFzUs=
