@@ -1036,13 +1036,13 @@ type ThelperOptions struct {
 
 type MultiSplitSettings struct {
 	Rules                  []string `mapstructure:"rules"`
-	VarDeclPkgToBlock      *bool    `mapstructure:"var-decl-pkg-to-block"`
+	ConstDeclFuncToBlock   *bool    `mapstructure:"const-decl-func-to-block"`
+	ConstDeclPkgToBlock    *bool    `mapstructure:"const-decl-pkg-to-block"`
 	VarDeclFuncToBlock     *bool    `mapstructure:"var-decl-func-to-block"`
-	VarDeclInitPkgToBlock  *bool    `mapstructure:"var-decl-init-pkg-to-block"`
+	VarDeclPkgToBlock      *bool    `mapstructure:"var-decl-pkg-to-block"`
 	VarDeclInitFuncToBlock *bool    `mapstructure:"var-decl-init-func-to-block"`
 	VarDeclInitFuncToShort *bool    `mapstructure:"var-decl-init-func-to-short"`
-	ConstDeclPkgToBlock    *bool    `mapstructure:"const-decl-pkg-to-block"`
-	ConstDeclFuncToBlock   *bool    `mapstructure:"const-decl-func-to-block"`
+	VarDeclInitPkgToBlock  *bool    `mapstructure:"var-decl-init-pkg-to-block"`
 }
 
 type UseStdlibVarsSettings struct {

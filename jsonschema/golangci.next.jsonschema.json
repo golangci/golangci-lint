@@ -2869,37 +2869,37 @@
               ],
               "uniqueItems": true
             },
-            "constDeclFuncToBlock": {
+            "const-decl-func-to-block": {
               "type": "boolean",
               "default": false,
               "description": "If true, splits multi-identifier const declarations inside functions into a const block instead of separate const statements."
             },
-            "constDeclPkgToBlock": {
+            "const-decl-pkg-to-block": {
               "type": "boolean",
               "default": true,
               "description": "If true, splits multi-identifier const declarations at package scope into a const block instead of separate const statements."
             },
-            "varDeclFuncToBlock": {
+            "var-decl-func-to-block": {
               "type": "boolean",
               "default": false,
               "description": "If true, splits multi-identifier var declarations inside functions into a var block instead of separate var statements."
             },
-            "varDeclPkgToBlock": {
+            "var-decl-pkg-to-block": {
               "type": "boolean",
               "default": true,
               "description": "If true, splits multi-identifier var declarations at package scope into a var block instead of separate var statements."
             },
-            "varDeclInitFuncToBlock": {
+            "var-decl-init-func-to-block": {
               "type": "boolean",
               "default": false,
               "description": "If true, splits multi-identifier var declarations with initializers inside functions into a var block."
             },
-            "varDeclInitFuncToShort": {
+            "var-decl-init-func-to-short": {
               "type": "boolean",
               "default": true,
               "description": "If true, converts untyped multi-identifier var declarations in function scope into short variable declarations (:=) when the declarations are not in a var block."
             },
-            "varDeclInitPkgToBlock": {
+            "var-decl-init-pkg-to-block": {
               "type": "boolean",
               "default": false,
               "description": "If true, splits multi-identifier var declarations with initializers at package scope into a var block."
