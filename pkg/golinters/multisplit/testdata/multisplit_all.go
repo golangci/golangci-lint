@@ -1,4 +1,5 @@
 //golangcitest:args -Emultisplit
+//golangcitest:config_path testdata/multisplit.yml
 package multisplit
 
 import (
@@ -25,12 +26,12 @@ func assign() {
 		v5 StructT
 	)
 
-	v1, v2, v3, v5 = 1, value(), struct{}{}, StructT{}
+	v1, v2, v3, v5 = 1, value(), struct{}{}, StructT{} // want `assignment with multiple targets \(v1, v2, v3, v5\) should be split into individual assignments`
 
-	v3, v4 = struct{}{}, struct{}{}
+	v3, v4 = struct{}{}, struct{}{} // want `assignment with multiple targets \(v3, v4\) should be split into individual assignments`
 
-	v1, v2 = 1, 2 // comment
-	v1, _ = 1, 2
+	v1, v2 = 1, 2 // want `assignment with multiple targets \(v1, v2\) should be split into individual assignments`
+	v1, _ = 1, 2 // want `assignment with multiple targets \(v1, _\) should be split into individual assignments`
 
 	_ = v1
 	_ = v2
@@ -52,15 +53,15 @@ const (
 )
 
 func var_func_init() {
-	var vpkgi1, vpkgi2 = 1, 2
+	var vpkgi1, vpkgi2 = 1, 2 // want `variable declaration with multiple identifiers and initializers \(vpkgi1, vpkgi2\) should be split into individual declarations`
 
-	var vpkgi3, vpkgi4 = 3, 4 // comment
+	var vpkgi3, vpkgi4 = 3, 4 // want `variable declaration with multiple identifiers and initializers \(vpkgi3, vpkgi4\) should be split into individual declarations`
 
-	var vpkgi5, vpkgi6 = struct{}{}, struct{}{}
+	var vpkgi5, vpkgi6 = struct{}{}, struct{}{} // want `variable declaration with multiple identifiers and initializers \(vpkgi5, vpkgi6\) should be split into individual declarations`
 
-	var vpkgi7, vpkgi8 = StructT{}, StructT{}
+	var vpkgi7, vpkgi8 = StructT{}, StructT{} // want `variable declaration with multiple identifiers and initializers \(vpkgi7, vpkgi8\) should be split into individual declarations`
 
-	var vpkgi9, vpkgi10 = 1, value()
+	var vpkgi9, vpkgi10 = 1, value() // want `variable declaration with multiple identifiers and initializers \(vpkgi9, vpkgi10\) should be split into individual declarations`
 
 	var vpkgi11, vpkgi12 = value2()
 

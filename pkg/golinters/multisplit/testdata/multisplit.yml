@@ -1,0 +1,25 @@
+version: "2"
+
+linters:
+  settings:
+    multisplit:
+      rules:
+        - assign
+        - const-decl-func
+        - const-decl-pkg
+        - func-params
+        - func-return-values
+        - short-var-decl
+        - struct-fields
+        - var-decl-func
+        - var-decl-pkg
+        - var-decl-init-func
+        - var-decl-init-pkg
+
+      const-decl-func-to-block: true
+      const-decl-pkg-to-block: false
+      var-decl-func-to-block: true
+      var-decl-pkg-to-block: false
+      var-decl-init-func-to-block: true
+      var-decl-init-func-to-short: false
+      var-decl-init-pkg-to-block: false
