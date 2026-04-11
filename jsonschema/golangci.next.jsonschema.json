@@ -829,6 +829,7 @@
             "bidichk",
             "bodyclose",
             "canonicalheader",
+            "clickhouselint",
             "containedctx",
             "contextcheck",
             "copyloopvar",
