@@ -1485,6 +1485,11 @@
               "description": "Checks if the constructors and/or structure methods are sorted alphabetically.",
               "type": "boolean",
               "default": false
+            },
+            "function": {
+              "description": "Checks that exported functions are placed before unexported functions.",
+              "type": "boolean",
+              "default": false
             }
           }
         },

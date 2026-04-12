@@ -601,6 +601,9 @@ linters:
       # Checks if the constructors and/or structure methods are sorted alphabetically.
       # Default: false
       alphabetical: true
+      # Checks that exported functions are placed before unexported functions.
+      # Default: false
+      function: true
 
     funlen:
       # Checks the number of lines in a function.
