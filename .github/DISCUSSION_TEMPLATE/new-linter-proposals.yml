@@ -1,0 +1,126 @@
+title: Add XXX linter
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Inside golangci-lint we differentiate two types of analyzers:
+        - the linters (find problems with nearly zero false positives)
+        - the detectors (detect potential problems, and so a majority of false positives)
+
+        The detectors are not allowed because of the number of false positives
+  - type: input
+    id: repo-url
+    attributes:
+      label: Repository URL
+      description: Add a link to the repository of the analyzer.
+    validations:
+      required: true
+  - type: checkboxes
+    id: analyzer-requirements
+    attributes:
+      label: Analyzer Requirements
+      options:
+        - label: The analyzer must be more than one month old.
+          required: true
+        - label: The usage of AI must be explicitly expressed inside the readme.
+          required: true
+        - label: It must use [`go/analysis`](https://golangci-lint.run/docs/contributing/new-linters/).
+          required: true
+        - label: It must not be a duplicate or too close of an existing analyzer.
+          required: true
+        - label: It must use Go version <= 1.25.0
+          required: true
+        - label: The dependencies must be minimal.
+          required: true
+        - label: It must be available as a plugin.
+          required: true
+  - type: dropdown
+    id: analyzer-goal
+    attributes:
+      label: Analyzer Goal
+      description: 'What is the goal of the analyzer?'
+      options:
+        - No goal
+        - Finds bugs
+        - Style
+    validations:
+      required: true
+  - type: textarea
+    id: analyzer-description
+    attributes:
+      label: Analyzer Description
+      description: A short one or two lines maximum.
+      placeholder: Add the description here.
+    validations:
+      required: true
+  - type: checkboxes
+    id: license
+    attributes:
+      label: Analyzer License
+      options:
+        - label: AGPL is not allowed.
+          required: true
+        - label: The file must start with `LICENSE` (capitalized)
+          required: true
+        - label: "The file must contain the required information by the license, ex: author, year, etc."
+          required: true
+  - type: checkboxes
+    id: analyzer-info
+    attributes:
+      label: Analyzer Details
+      options:
+        - label: It must have tests.
+          required: true
+        - label: It must not contain `init()`.
+          required: true
+        - label: It must not contain `panic()`.
+          required: true
+        - label: It must not contain `log.Fatal()`.
+          required: true
+        - label: It must not contain `os.Exit()`.
+          required: true
+        - label: It must not modify the AST.
+          required: true
+        - label: The configuration must not rely on external files.
+          required: true
+  - type: checkboxes
+    id: repo-info
+    attributes:
+      label: Repository Details
+      options:
+        - label: 'It must have a valid semver tag, ex: `v1.0.0`, `v0.1.0` (`0.0.x` are not valid).'
+          required: true
+        - label: A tag should never be deleted or recreated.
+          required: false
+        - label: It should have a readme.
+          required: true
+        - label: The repository must have a CI.
+          required: true
+        - label: The CI must run on PR.
+          required: true
+        - label: The CI must run on the default branch.
+          required: true
+  - type: checkboxes
+    id: repo-recommendations
+    attributes:
+      label: Repository Recommendations
+      options:
+        - label: It should have linting.
+          required: false
+        - label: It should have a `.gitignore` (IDE files, binaries, OS files, etc. should not be committed)
+          required: false
+        - label: Use `main` as the default branch name.
+          required: false
+  - type: checkboxes
+    id: pr
+    attributes:
+      label: Pull Request
+      description: You should not open a PR to add the analyzer before a maintainer approves your suggestion.
+      options:
+        - label: Yes, I will wait for the approval of a maintainer before creating a PR.
+          required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        **This checklist does not imply that we will accept the linter.**
