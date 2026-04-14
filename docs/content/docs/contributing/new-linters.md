@@ -26,12 +26,12 @@ After that:
    list of all supported linters in [`pkg/lint/lintersdb/builder_linter.go`](https://github.com/golangci/golangci-lint/blob/HEAD/pkg/lint/lintersdb/builder_linter.go)
    to the method `LinterBuilder.Build`.
     - Add `WithSince("next_version")`, where `next_version` must be replaced by the next minor version. (ex: v1.2.0 if the current version is v1.1.0)
-4. Find out what options do you need to configure for the linter.
-   For example, `nakedret` has only 1 option: [`max-func-lines`](https://github.com/golangci/golangci-lint/blob/HEAD/.golangci.reference.yml).
+4. Find out what options you need to configure for the linter.
+   For example, `nakedret` has only one option: [`max-func-lines`](https://github.com/golangci/golangci-lint/blob/HEAD/.golangci.reference.yml).
    Choose default values to not be annoying for users of golangci-lint. Add configuration options to:
     - [.golangci.next.reference.yml](https://github.com/golangci/golangci-lint/blob/HEAD/.golangci.next.reference.yml): the example of a configuration file.
       You can also add them to [.golangci.yml](https://github.com/golangci/golangci-lint/blob/HEAD/.golangci.yml)
-      if you think that this project needs not default values.
+      if you think that this project needs no default values.
     - [config struct](https://github.com/golangci/golangci-lint/blob/HEAD/pkg/config/config.go):
       don't forget about `mapstructure` tags for proper configuration files parsing.
 5. Take a look at the example of [pull requests with new linter support](https://github.com/golangci/golangci-lint/pulls?q=is%3Apr+is%3Amerged+label%3A%22linter%3A+new%22).
@@ -45,7 +45,7 @@ After that:
 Some people and organizations may choose to have custom-made linters run as a part of `golangci-lint`.  
 Typically, these linters can't be open-sourced or too specific.
 
-Such linters can be added through 2 plugin systems:
+Such linters can be added through two plugin systems:
 
 {{< cards cols=2 >}}
   {{< card link="/docs/plugins/module-plugins" title="Module Plugin System" icon="puzzle" tag="Recommended" >}}

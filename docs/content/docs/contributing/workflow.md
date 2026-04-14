@@ -5,7 +5,7 @@ aliases:
   - /contributing/workflow/
 ---
 
-By participating in this project, you agree to abide our [code of conduct](https://github.com/golangci/golangci-lint?tab=coc-ov-file).
+By participating in this project, you agree to abide by our [code of conduct](https://github.com/golangci/golangci-lint?tab=coc-ov-file).
 
 ## Set up your machine
 
@@ -39,7 +39,15 @@ Which runs all the linters and tests.
 
 Add your new or updated parameters to [.golangci.next.reference.yml](https://github.com/golangci/golangci-lint/blob/HEAD/.golangci.next.reference.yml) so they will be shown in the docs
 
+## Create a discussion
+
+You must create a discussion **before** opening a pull request.
+
+There is a dedicated category for new linters: [New Linter Proposals](https://github.com/golangci/golangci-lint/discussions/categories/new-linter-proposals).
+
 ## Submit a pull request
+
+Once the maintainers have approved your linter proposal in the discussion.
 
 Push your branch to your golangci-lint fork and open a pull request against the
 `main` branch.
