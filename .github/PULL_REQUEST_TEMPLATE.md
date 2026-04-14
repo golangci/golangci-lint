@@ -5,7 +5,7 @@ WARNING: If you don't follow the rules, the pull request will be closed.
 -->
 
 <!--
-Please don't use an AI to generate the PR description.
+Please keep the description brief.
 -->
 
 <!--

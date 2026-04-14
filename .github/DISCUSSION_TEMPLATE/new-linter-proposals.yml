@@ -3,11 +3,11 @@ body:
   - type: markdown
     attributes:
       value: |
-        Inside golangci-lint we differentiate two types of analyzers:
+        Inside `golangci-lint`, we differentiate two types of analyzers:
         - the linters (find problems with nearly zero false positives)
-        - the detectors (detect potential problems, and so a majority of false positives)
+        - the detectors (detect potential problems and thus produce a majority of false positives)
 
-        The detectors are not allowed because of the number of false positives
+        The detectors are not allowed because of the number of false positives.
   - type: input
     id: repo-url
     attributes:
@@ -26,9 +26,9 @@ body:
           required: true
         - label: It must use [`go/analysis`](https://golangci-lint.run/docs/contributing/new-linters/).
           required: true
-        - label: It must not be a duplicate or too close of an existing analyzer.
+        - label: It must not be a duplicate or too close to an existing analyzer.
           required: true
-        - label: It must use Go version <= 1.25.0
+        - label: It must have a Go version inside the `go.mod` <= 1.25.0.
           required: true
         - label: The dependencies must be minimal.
           required: true
@@ -38,18 +38,19 @@ body:
     id: analyzer-goal
     attributes:
       label: Analyzer Goal
-      description: 'What is the goal of the analyzer?'
+      description: What is the goal of the analyzer?
       options:
         - No goal
         - Finds bugs
         - Style
+        - Other
     validations:
       required: true
   - type: textarea
     id: analyzer-description
     attributes:
       label: Analyzer Description
-      description: A short one or two lines maximum.
+      description: A short description, no more than one or two lines.
       placeholder: Add the description here.
     validations:
       required: true
@@ -60,9 +61,9 @@ body:
       options:
         - label: AGPL is not allowed.
           required: true
-        - label: The file must start with `LICENSE` (capitalized)
+        - label: The file must start with `LICENSE` (capitalized).
           required: true
-        - label: "The file must contain the required information by the license, ex: author, year, etc."
+        - label: 'The file must contain the required information by the license, e.g.: author, year, etc.'
           required: true
   - type: checkboxes
     id: analyzer-info
@@ -88,11 +89,11 @@ body:
     attributes:
       label: Repository Details
       options:
-        - label: 'It must have a valid semver tag, ex: `v1.0.0`, `v0.1.0` (`0.0.x` are not valid).'
+        - label: 'It must have a [semver](https://semver.org/) tag, e.g.: `v1.0.0`, `v0.1.0` (`0.0.x` are not valid).'
           required: true
-        - label: A tag should never be deleted or recreated.
+        - label: A tag must never be deleted or recreated.
           required: false
-        - label: It should have a readme.
+        - label: It must have a readme.
           required: true
         - label: The repository must have a CI.
           required: true
@@ -107,7 +108,7 @@ body:
       options:
         - label: It should have linting.
           required: false
-        - label: It should have a `.gitignore` (IDE files, binaries, OS files, etc. should not be committed)
+        - label: It should have a `.gitignore` (IDE files, binaries, OS files, etc. should not be committed).
           required: false
         - label: Use `main` as the default branch name.
           required: false
