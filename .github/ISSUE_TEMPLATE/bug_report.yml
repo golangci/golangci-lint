@@ -138,7 +138,7 @@ body:
     attributes:
       label: Validation
       options:
-        - label: Yes, I've included all information above (version, config, etc.).
+        - label: Yes, I've included all the information above (example, version, config, etc.).
           required: true
 
   - type: checkboxes

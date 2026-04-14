@@ -25,6 +25,8 @@ you are the original author of the linter, AND there are important changes requi
 If you want to add a new linter, you MUST open a discussion in the category "New Linter Proposals" and
 wait for a maintainer to approve it BEFORE opening a pull request.
 
+https://github.com/golangci/golangci-lint/discussions/new?category=new-linter-proposals
+
 If you don't follow the previous rule, the pull request will be closed.
 
 -->

@@ -3,11 +3,12 @@ body:
   - type: markdown
     attributes:
       value: |
-        Inside `golangci-lint`, we differentiate two types of analyzers:
-        - the linters (find problems with nearly zero false positives)
-        - the detectors (detect potential problems and thus produce a majority of false positives)
-
-        The detectors are not allowed because of the number of false positives.
+        > [!IMPORTANT]
+        > Inside `golangci-lint`, we differentiate two types of analyzers:
+        > - the linters (find problems with nearly zero false positives)
+        > - the detectors (detect potential problems and thus produce a majority of false positives)
+        >
+        > The detectors are not allowed because of the number of false positives.
   - type: input
     id: repo-url
     attributes:
@@ -54,16 +55,32 @@ body:
       placeholder: Add the description here.
     validations:
       required: true
-  - type: checkboxes
+  - type: dropdown
     id: license
+    validations:
+      required: true
     attributes:
       label: Analyzer License
+      description: A license is required. AGPL is not allowed.
+      multiple: true
       options:
-        - label: AGPL is not allowed.
-          required: true
+        - MIT
+        - Apache-2.0
+        - BSD-3-Clause
+        - ISC
+        - MPL-2.0
+        - EPL-2.0
+        - GPL-2.0-only
+        - GPL-3.0-only
+        - Other
+  - type: checkboxes
+    id: license-check
+    attributes:
+      label: Analyzer License Checks
+      options:
         - label: The file must start with `LICENSE` (capitalized).
           required: true
-        - label: 'The file must contain the required information by the license, e.g.: author, year, etc.'
+        - label: 'The file(s) must contain the required information by the license, e.g.: author, year, etc.'
           required: true
   - type: checkboxes
     id: analyzer-info
@@ -92,7 +109,7 @@ body:
         - label: 'It must have a [semver](https://semver.org/) tag, e.g.: `v1.0.0`, `v0.1.0` (`0.0.x` are not valid).'
           required: true
         - label: A tag must never be deleted or recreated.
-          required: false
+          required: true
         - label: It must have a readme.
           required: true
         - label: The repository must have a CI.
