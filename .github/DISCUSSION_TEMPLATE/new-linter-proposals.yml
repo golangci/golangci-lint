@@ -108,7 +108,7 @@ body:
       options:
         - label: 'It must have a [semver](https://semver.org/) tag, e.g.: `v1.0.0`, `v0.1.0` (`0.0.x` are not valid).'
           required: true
-        - label: A tag must never be deleted or recreated.
+        - label: I understand that tags must never be deleted or recreated once published.
           required: true
         - label: It must have a readme.
           required: true
