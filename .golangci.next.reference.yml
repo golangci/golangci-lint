@@ -278,6 +278,12 @@ linters:
       first-strong-isolate: false
       pop-directional-isolate: false
 
+    bodyclose:
+      # Check that the response body is consumed.
+      # This has false positives.
+      # Default: false
+      check-consumption: true
+
     copyloopvar:
       # Check all assigning the loop variable to another variable.
       # Default: false

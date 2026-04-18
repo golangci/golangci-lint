@@ -161,7 +161,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.43.0").
 			WithURL("https://github.com/breml/bidichk"),
 
-		linter.NewConfig(bodyclose.New()).
+		linter.NewConfig(bodyclose.New(&cfg.Linters.Settings.BodyClose)).
 			WithSince("v1.18.0").
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/timakin/bodyclose"),
