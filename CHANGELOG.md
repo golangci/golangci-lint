@@ -8,6 +8,35 @@ If you value it, consider supporting us, we appreciate it!
 
 <!-- START --->
 
+### v2.12.0
+
+_Released on 2026-05-01_
+
+1. New linters
+   * Add `clickhouselint` linter https://github.com/ClickHouse/clickhouse-go-linter
+2. Linters new features or changes
+   * `dupl`: from f665c8d69b32 to c99c5cf5c202 (extended detection)
+   * `funcorder`: from 0.5.0 to 0.6.0 (new option: `function`)
+   * `goconst`: add an option to ignore strings from tests
+   * `goconst`: from 1.8.2 to 1.10.0 (extended detection)
+   * `gomodguard_v2`: from 1.4.1 to 2.1.0 (major version with new configuration)
+   * `gosec`: from 619ce2117e08 to 2.26.1 (new checks: `G124`, `G708`, `G709`, `G710`)
+   * `govet`: add `inline` analyzer
+   * `makezero`: from 2.1.0 to 2.2.1 (support slice type aliases)
+   * `paralleltest`: expose `checkcleanup` option
+   * `sloglint`: from 0.11.1 to 0.12.0 (new options: `allowed-keys`, `custom-funcs`)
+   * `wsl_v5`: from 5.6.0 to 5.8.0 (new option: `cuddle-max-statements`; new checks: `after-decl`, `after-defer`, `after-expr`, `after-go`, `cuddle-group`)
+3. Linters bug fixes
+   * `forbidigo`: from 2.3.0 to 2.3.1
+   * `godot`: from 1.5.4 to 1.5.6
+   * `govet-modernize`: from 0.43.0 to 0.44.0
+   * `ireturn`: from 0.4.0 to 0.4.1
+   * `rowserrcheck`: from 1.1.1 to c5f79b8
+4. Misc.
+   * Decrease cache entropy
+   * Embed the JSON schema in the binary
+   * Filter env vars when cloning the repository with the `custom` command
+
 ### v2.11.4
 
 _Released on 2026-03-22_

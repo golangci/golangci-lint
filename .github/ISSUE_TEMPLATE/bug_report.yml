@@ -22,10 +22,10 @@ body:
     id: install
     attributes:
       label: How did you install golangci-lint?
+      multiple: true
       options:
-        - I don't know
-        - Official GitHub Action
         - Official binary
+        - Official GitHub Action
         - Brew
         - MacPorts
         - Chocolatey
@@ -38,7 +38,7 @@ body:
         - Nix
         - Deb
         - RPM
-        - Other Linux package manager
+        - Other Linux package managers
         - Via editor/IDE
         - asdf/mise-en-place
         - Other
@@ -53,19 +53,12 @@ body:
     validations:
       required: true
 
-  - type: textarea
+  - type: input
     id: version
     attributes:
       label: Version of golangci-lint
-      value: |-
-        <details>
-
-        ```console
-        $ golangci-lint --version
-        # Paste output here
-        ```
-
-        </details>
+      description: "Copy and paste the output of `golangci-lint --version`."
+      placeholder: golangci-lint has version 2.x.x built with go1.x.x from xxxx on xxxx-xx-xx
     validations:
       required: true
 
@@ -88,11 +81,11 @@ body:
     id: go-env
     attributes:
       label: Go environment
+      description: "Copy and paste the output of `go version && go env`."
       value: |-
         <details>
 
         ```console
-        $ go version && go env
         # paste output here
         ```
 
@@ -104,12 +97,11 @@ body:
     id: verbose-output
     attributes:
       label: Verbose output of running
+      description: "Run `golangci-lint cache clean` and `golangci-lint run -v` to get verbose output."
       value: |-
         <details>
 
         ```console
-        $ golangci-lint cache clean
-        $ golangci-lint run -v
         # paste output here
         ```
 
@@ -121,7 +113,7 @@ body:
     id: code-example
     attributes:
       label: A minimal reproducible example or link to a public repository
-      description: if your problem is related to a private repository, a minimal reproducible example is required.
+      description: If your problem is related to a private repository, a minimal reproducible example is required.
       value: |-
         <details>
 
@@ -145,5 +137,6 @@ body:
     id: supporter
     attributes:
       label: Supporter
+      description: If you find golangci-lint valuable, consider [sponsoring the project](https://donate.golangci.org) to help sustain its development. 💛
       options:
         - label: I am a [sponsor/backer](https://donate.golangci.org) of this project.
