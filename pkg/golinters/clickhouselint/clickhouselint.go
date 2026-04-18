@@ -12,7 +12,7 @@ func New() *goanalysis.Linter {
 	return goanalysis.NewLinter(
 		"clickhouselint",
 		"Detects common mistakes with the ClickHouse native Go driver API.",
-		[]*analysis.Analyzer{chrowserr.Analyzer, chbatchclose.Analyzer},
+		[]*analysis.Analyzer{chrowserr.NewAnalyzer(), chbatchclose.NewAnalyzer()},
 		nil,
 	).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
