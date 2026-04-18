@@ -68,9 +68,23 @@ func newConfigCommand(log logutils.Log, info BuildInfo) *configCommand {
 		RunE:              c.executePath,
 	}
 
+	updateCommand := &cobra.Command{
+		Use:               "update",
+		Short:             "Update configuration with commented-out options and linters.",
+		Long: "Read the current configuration file (if it exists) and add all unspecified options " +
+			"and linters as comments with descriptions. Options or linters that already exist " +
+			"(either as values or as comments) are not duplicated.",
+		Args:              cobra.NoArgs,
+		ValidArgsFunction: cobra.NoFileCompletions,
+		RunE:              c.executeUpdate,
+		SilenceUsage:      true,
+		SilenceErrors:     true,
+	}
+
 	configCmd.AddCommand(
 		pathCommand,
 		verifyCommand,
+		updateCommand,
 	)
 
 	flagSet := configCmd.PersistentFlags()
