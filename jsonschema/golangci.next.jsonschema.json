@@ -1056,6 +1056,17 @@
             }
           }
         },
+        "bodycloseSettings": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "check-consumption": {
+              "description": "Check that the response body is consumed.",
+              "type": "boolean",
+              "default": false
+            }
+          }
+        },
         "cyclopSettings": {
           "type": "object",
           "additionalProperties": false,
@@ -4893,6 +4904,9 @@
             },
             "bidichk": {
               "$ref": "#/definitions/settings/definitions/bidichkSettings"
+            },
+            "bodyclose": {
+              "$ref": "#/definitions/settings/definitions/bodycloseSettings"
             },
             "cyclop": {
               "$ref": "#/definitions/settings/definitions/cyclopSettings"

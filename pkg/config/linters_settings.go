@@ -241,6 +241,7 @@ type LintersSettings struct {
 
 	Asasalint                AsasalintSettings                `mapstructure:"asasalint"`
 	BiDiChk                  BiDiChkSettings                  `mapstructure:"bidichk"`
+	BodyClose                BodyCloseSettings                `mapstructure:"bodyclose"`
 	CopyLoopVar              CopyLoopVarSettings              `mapstructure:"copyloopvar"`
 	Cyclop                   CyclopSettings                   `mapstructure:"cyclop"`
 	Decorder                 DecorderSettings                 `mapstructure:"decorder"`
@@ -358,6 +359,10 @@ type BiDiChkSettings struct {
 	RightToLeftIsolate       bool `mapstructure:"right-to-left-isolate"`
 	FirstStrongIsolate       bool `mapstructure:"first-strong-isolate"`
 	PopDirectionalIsolate    bool `mapstructure:"pop-directional-isolate"`
+}
+
+type BodyCloseSettings struct {
+	CheckConsumption bool `mapstructure:"check-consumption"`
 }
 
 type CopyLoopVarSettings struct {
