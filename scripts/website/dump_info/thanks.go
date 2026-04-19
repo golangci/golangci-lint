@@ -121,6 +121,9 @@ func extractInfo(lc *linter.Config) authorInfo {
 	case "misspell":
 		return authorInfo{Author: "client9", Host: hostGitHub}
 
+	case "rowserrcheck":
+		return authorInfo{Author: "jingyugao", Host: hostGitHub}
+
 	case "fatcontext":
 		return authorInfo{Author: "Crocmagnon", Host: hostGitHub}
 

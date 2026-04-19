@@ -1,7 +1,7 @@
 package rowserrcheck
 
 import (
-	"github.com/jingyugao/rowserrcheck/passes/rowserr"
+	"github.com/golangci/rowserrcheck/passes/rowserr"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
