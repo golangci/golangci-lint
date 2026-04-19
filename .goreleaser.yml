@@ -41,6 +41,10 @@ builds:
       - goos: windows
         goarch: arm
 
+sboms:
+  - id: archive
+    artifacts: archive
+
 archives:
   - formats: [ 'tar.gz' ]
     wrap_in_directory: true
