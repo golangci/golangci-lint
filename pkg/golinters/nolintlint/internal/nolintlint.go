@@ -2,6 +2,8 @@
 package internal
 
 import (
+	"bytes"
+	"go/ast"
 	"go/token"
 	"regexp"
 	"strings"
@@ -34,6 +36,49 @@ var fullDirectivePattern = regexp.MustCompile(`^//\s*nolint(?::(\s*[\w-]+\s*(?:,
 type Linter struct {
 	needs           Needs // indicates which linter checks to perform
 	excludeByLinter map[string]bool
+}
+
+func expandStandaloneDirectiveRange(
+	pass *analysis.Pass,
+	comment *ast.Comment,
+	pos, end token.Position,
+) (int, int) {
+	rawPos := pass.Fset.PositionFor(comment.Pos(), false)
+	rawEnd := pass.Fset.PositionFor(comment.End(), false)
+
+	if pass.ReadFile == nil || rawPos.Line == 0 {
+		return pos.Offset, end.Offset
+	}
+
+	file := pass.Fset.File(comment.Pos())
+	if file == nil {
+		return pos.Offset, end.Offset
+	}
+
+	content, err := pass.ReadFile(file.Name())
+	if err != nil {
+		return pos.Offset, end.Offset
+	}
+
+	lineStart := file.Offset(file.LineStart(rawPos.Line))
+	lineEnd := file.Size()
+	if rawPos.Line < file.LineCount() {
+		lineEnd = file.Offset(file.LineStart(rawPos.Line + 1))
+	}
+
+	if rawPos.Offset > len(content) || rawEnd.Offset > len(content) || lineStart > len(content) || lineEnd > len(content) {
+		return pos.Offset, end.Offset
+	}
+
+	if len(bytes.TrimSpace(content[lineStart:rawPos.Offset])) != 0 {
+		return pos.Offset, end.Offset
+	}
+
+	if len(bytes.TrimSpace(content[rawEnd.Offset:lineEnd])) != 0 {
+		return pos.Offset, end.Offset
+	}
+
+	return lineStart, lineEnd
 }
 
 // NewLinter creates a linter that enforces that the provided directives fulfill the provided requirements
@@ -162,10 +207,12 @@ func (l Linter) Run(pass *analysis.Pass) ([]*goanalysis.Issue, error) {
 
 				// when detecting unused directives, we send all the directives through and filter them out in the nolint processor
 				if (l.needs & NeedsUnused) != 0 {
+					startOffset, endOffset := expandStandaloneDirectiveRange(pass, comment, pos, end)
+
 					removeNolintCompletely := []analysis.SuggestedFix{{
 						TextEdits: []analysis.TextEdit{{
-							Pos:     token.Pos(pos.Offset),
-							End:     token.Pos(end.Offset),
+							Pos:     token.Pos(startOffset),
+							End:     token.Pos(endOffset),
 							NewText: nil,
 						}},
 					}}

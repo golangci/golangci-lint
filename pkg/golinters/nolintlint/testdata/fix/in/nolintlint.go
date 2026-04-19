@@ -13,3 +13,8 @@ func nolintlint() {
 
 	fmt.Println() //nolint:alice,lll // we don't drop individual linters from lists
 }
+
+// MyTest is a great struct.
+//
+//nolint:lll // nolint should be dropped
+type MyTest struct{}
