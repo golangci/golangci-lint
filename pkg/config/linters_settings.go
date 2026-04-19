@@ -141,17 +141,20 @@ var defaultLintersSettings = LintersSettings{
 	Predeclared: PredeclaredSettings{
 		Qualified: false,
 	},
-	SlogLint: SlogLintSettings{
-		NoMixedArgs:    true,
-		KVOnly:         false,
-		AttrOnly:       false,
+	Sloglint: SloglintSettings{
 		NoGlobal:       "",
 		Context:        "",
 		StaticMsg:      false,
-		NoRawKeys:      false,
-		KeyNamingCase:  "",
-		ForbiddenKeys:  nil,
+		MsgStyle:       "",
+		NoMixedArgs:    true,
+		KVOnly:         false,
+		AttrOnly:       false,
 		ArgsOnSepLines: false,
+		NoRawKeys:      false,
+		AllowedKeys:    []string{},
+		ForbiddenKeys:  []string{},
+		KeyNamingCase:  "",
+		CustomFuncs:    []SloglintCustomFunc{},
 	},
 	TagAlign: TagAlignSettings{
 		Align:  true,
@@ -308,7 +311,7 @@ type LintersSettings struct {
 	Recvcheck                RecvcheckSettings                `mapstructure:"recvcheck"`
 	Revive                   ReviveSettings                   `mapstructure:"revive"`
 	RowsErrCheck             RowsErrCheckSettings             `mapstructure:"rowserrcheck"`
-	SlogLint                 SlogLintSettings                 `mapstructure:"sloglint"`
+	Sloglint                 SloglintSettings                 `mapstructure:"sloglint"`
 	Spancheck                SpancheckSettings                `mapstructure:"spancheck"`
 	Staticcheck              StaticCheckSettings              `mapstructure:"staticcheck"`
 	TagAlign                 TagAlignSettings                 `mapstructure:"tagalign"`
@@ -914,18 +917,26 @@ type RowsErrCheckSettings struct {
 	Packages []string `mapstructure:"packages"`
 }
 
-type SlogLintSettings struct {
-	NoMixedArgs    bool     `mapstructure:"no-mixed-args"`
-	KVOnly         bool     `mapstructure:"kv-only"`
-	AttrOnly       bool     `mapstructure:"attr-only"`
-	NoGlobal       string   `mapstructure:"no-global"`
-	Context        string   `mapstructure:"context"`
-	StaticMsg      bool     `mapstructure:"static-msg"`
-	MsgStyle       string   `mapstructure:"msg-style"`
-	NoRawKeys      bool     `mapstructure:"no-raw-keys"`
-	KeyNamingCase  string   `mapstructure:"key-naming-case"`
-	ForbiddenKeys  []string `mapstructure:"forbidden-keys"`
-	ArgsOnSepLines bool     `mapstructure:"args-on-sep-lines"`
+type SloglintSettings struct {
+	NoGlobal       string               `mapstructure:"no-global"`
+	Context        string               `mapstructure:"context"`
+	StaticMsg      bool                 `mapstructure:"static-msg"`
+	MsgStyle       string               `mapstructure:"msg-style"`
+	NoMixedArgs    bool                 `mapstructure:"no-mixed-args"`
+	KVOnly         bool                 `mapstructure:"kv-only"`
+	AttrOnly       bool                 `mapstructure:"attr-only"`
+	ArgsOnSepLines bool                 `mapstructure:"args-on-sep-lines"`
+	NoRawKeys      bool                 `mapstructure:"no-raw-keys"`
+	AllowedKeys    []string             `mapstructure:"allowed-keys"`
+	ForbiddenKeys  []string             `mapstructure:"forbidden-keys"`
+	KeyNamingCase  string               `mapstructure:"key-naming-case"`
+	CustomFuncs    []SloglintCustomFunc `mapstructure:"custom-funcs"`
+}
+
+type SloglintCustomFunc struct {
+	Name    string `mapstructure:"name"`
+	MsgPos  int    `mapstructure:"msg-pos"`
+	ArgsPos int    `mapstructure:"args-pos"`
 }
 
 type SpancheckSettings struct {
