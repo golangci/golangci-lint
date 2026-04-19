@@ -607,7 +607,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/golangci/rowserrcheck"),
 
-		linter.NewConfig(sloglint.New(&cfg.Linters.Settings.SlogLint)).
+		linter.NewConfig(sloglint.New(&cfg.Linters.Settings.Sloglint)).
 			WithSince("v1.55.0").
 			WithLoadForGoAnalysis().
 			WithAutoFix().
