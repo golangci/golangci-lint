@@ -3360,24 +3360,6 @@
             }
           }
         },
-        "sloglintCustomFunc": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "name": {
-              "description": "The full name of the function, including the package. If the function is a method, the receiver type must be wrapped in parentheses.",
-              "type": "string"
-            },
-            "msg-pos": {
-              "description": "The position of the \"msg string\" argument in the function signature, starting from 0. If there is no message in the function, a negative value must be passed.",
-              "type": "integer"
-            },
-            "args-pos": {
-              "description": "The position of the \"args ...any\" argument in the function signature, starting from 0. If there are no arguments in the function, a negative value must be passed.",
-              "type": "integer"
-            }
-          }
-        },
         "sloglintSettings": {
           "type": "object",
           "additionalProperties": false,
@@ -3451,6 +3433,24 @@
               "items": {
                 "$ref": "#/definitions/settings/definitions/sloglintCustomFunc"
               }
+            }
+          }
+        },
+        "sloglintCustomFunc": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "description": "The full name of the function, including the package. If the function is a method, the receiver type must be wrapped in parentheses.",
+              "type": "string"
+            },
+            "msg-pos": {
+              "description": "The position of the \"msg string\" argument in the function signature, starting from 0. If there is no message in the function, a negative value must be passed.",
+              "type": "integer"
+            },
+            "args-pos": {
+              "description": "The position of the \"args ...any\" argument in the function signature, starting from 0. If there are no arguments in the function, a negative value must be passed.",
+              "type": "integer"
             }
           }
         },

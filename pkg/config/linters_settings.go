@@ -917,12 +917,6 @@ type RowsErrCheckSettings struct {
 	Packages []string `mapstructure:"packages"`
 }
 
-type SloglintCustomFunc struct {
-	Name    string `mapstructure:"name"`
-	MsgPos  int    `mapstructure:"msg-pos"`
-	ArgsPos int    `mapstructure:"args-pos"`
-}
-
 type SloglintSettings struct {
 	NoGlobal       string               `mapstructure:"no-global"`
 	Context        string               `mapstructure:"context"`
@@ -937,6 +931,12 @@ type SloglintSettings struct {
 	ForbiddenKeys  []string             `mapstructure:"forbidden-keys"`
 	KeyNamingCase  string               `mapstructure:"key-naming-case"`
 	CustomFuncs    []SloglintCustomFunc `mapstructure:"custom-funcs"`
+}
+
+type SloglintCustomFunc struct {
+	Name    string `mapstructure:"name"`
+	MsgPos  int    `mapstructure:"msg-pos"`
+	ArgsPos int    `mapstructure:"args-pos"`
 }
 
 type SpancheckSettings struct {
