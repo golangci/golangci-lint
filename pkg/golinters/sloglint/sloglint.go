@@ -11,14 +11,6 @@ func New(settings *config.SloglintSettings) *goanalysis.Linter {
 	var opts *sloglint.Options
 
 	if settings != nil {
-		customFuncs := make([]sloglint.Func, len(settings.CustomFuncs))
-		for i, fn := range settings.CustomFuncs {
-			customFuncs[i] = sloglint.Func{
-				FullName:     fn.Name,
-				MessagePos:   fn.MsgPos,
-				ArgumentsPos: fn.ArgsPos,
-			}
-		}
 		opts = &sloglint.Options{
 			NoGlobalLogger:           settings.NoGlobal,
 			ContextOnly:              settings.Context,
@@ -32,7 +24,14 @@ func New(settings *config.SloglintSettings) *goanalysis.Linter {
 			AllowedKeys:              settings.AllowedKeys,
 			ForbiddenKeys:            settings.ForbiddenKeys,
 			KeyNamingCase:            settings.KeyNamingCase,
-			CustomFuncs:              customFuncs,
+		}
+
+		for _, fn := range settings.CustomFuncs {
+			opts.CustomFuncs = append(opts.CustomFuncs, sloglint.Func{
+				FullName:     fn.Name,
+				MessagePos:   fn.MsgPos,
+				ArgumentsPos: fn.ArgsPos,
+			})
 		}
 	}
 
