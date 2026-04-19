@@ -65,6 +65,9 @@ jobs:
       - name: Install snapcraft
         run: sudo snap install snapcraft --classic
 
+      - name: Setup Syft
+        uses: anchore/sbom-action/download-syft@v0.24.0
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@ce360397dd3f832beb865e1373c09c0e9f86d70a # v4.0.0
 
