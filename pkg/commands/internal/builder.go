@@ -29,6 +29,42 @@ type Builder struct {
 	repo string
 }
 
+// cleanGitEnv returns a copy of the current environment with GIT_* variables
+// removed that could interfere with subprocess git/go operations.
+//
+// When golangci-lint is invoked from a git hook (e.g. pre-commit), git sets
+// environment variables like GIT_DIR, GIT_INDEX_FILE, and GIT_WORK_TREE.
+// If these leak into subprocesses, operations like `git clone` will write to
+// the wrong index file — corrupting the original repository's git state.
+//
+// This mirrors the approach used by pre-commit (no_git_env) and is similar to
+// how git itself cleans the environment for hooks.
+func cleanGitEnv() []string {
+	keep := map[string]bool{
+		"GIT_EXEC_PATH":            true,
+		"GIT_SSH":                  true,
+		"GIT_SSH_COMMAND":          true,
+		"GIT_SSL_CAINFO":          true,
+		"GIT_SSL_NO_VERIFY":       true,
+		"GIT_CONFIG_COUNT":        true,
+		"GIT_HTTP_PROXY_AUTHMETHOD": true,
+		"GIT_ALLOW_PROTOCOL":      true,
+		"GIT_ASKPASS":             true,
+		"GIT_TERMINAL_PROMPT":     true,
+	}
+
+	var env []string
+	for _, e := range os.Environ() {
+		key, _, _ := strings.Cut(e, "=")
+		if strings.HasPrefix(key, "GIT_") && !keep[key] {
+			continue
+		}
+		env = append(env, e)
+	}
+
+	return env
+}
+
 // NewBuilder creates a new Builder.
 func NewBuilder(logger logutils.Log, cfg *Configuration, root string) *Builder {
 	return &Builder{
@@ -96,6 +132,7 @@ func (b Builder) clone(ctx context.Context) error {
 		"https://github.com/golangci/golangci-lint.git",
 	)
 	cmd.Dir = b.root
+	cmd.Env = cleanGitEnv()
 
 	output, err := cmd.CombinedOutput()
 	if err != nil {
@@ -131,6 +168,7 @@ func (b Builder) goGet(ctx context.Context, plugin *Plugin) error {
 	//nolint:gosec // the variables are user related.
 	cmd := exec.CommandContext(ctx, "go", "get", plugin.Module+"@"+plugin.Version)
 	cmd.Dir = b.repo
+	cmd.Env = cleanGitEnv()
 
 	b.log.Infof("run: %s", strings.Join(cmd.Args, " "))
 
@@ -149,6 +187,7 @@ func (b Builder) addReplaceDirective(ctx context.Context, plugin *Plugin) error 
 
 	cmd := exec.CommandContext(ctx, "go", "mod", "edit", "-replace", replace)
 	cmd.Dir = b.repo
+	cmd.Env = cleanGitEnv()
 
 	b.log.Infof("run: %s", strings.Join(cmd.Args, " "))
 
@@ -165,6 +204,7 @@ func (b Builder) addReplaceDirective(ctx context.Context, plugin *Plugin) error 
 func (b Builder) goModTidy(ctx context.Context) error {
 	cmd := exec.CommandContext(ctx, "go", "mod", "tidy")
 	cmd.Dir = b.repo
+	cmd.Env = cleanGitEnv()
 
 	output, err := cmd.CombinedOutput()
 	if err != nil {
@@ -192,6 +232,7 @@ func (b Builder) goBuild(ctx context.Context, binaryName string) error {
 		"./cmd/golangci-lint",
 	)
 	cmd.Dir = b.repo
+	cmd.Env = cleanGitEnv()
 
 	output, err := cmd.CombinedOutput()
 	if err != nil {
