@@ -306,8 +306,6 @@ func filterGitEnviron(envs []string) []string {
 			"GIT_ALLOW_PROTOCOL",
 			"GIT_ASKPASS":
 			filtered = append(filtered, env)
-		default:
-			continue
 		}
 	}
 

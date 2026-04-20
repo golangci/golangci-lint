@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"slices"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -84,8 +83,6 @@ func Test_filterGitEnviron(t *testing.T) {
 
 	envs := filterGitEnviron(environ)
 
-	slices.Sort(envs)
-
 	expected := []string{
 		"GIT_ALLOW_PROTOCOL=https:git:ssh",
 		"GIT_ASKPASS=/usr/bin/ssh-askpass",
@@ -96,8 +93,8 @@ func Test_filterGitEnviron(t *testing.T) {
 		"GIT_CONFIG_VALUE_1=bot@example.com",
 		"GIT_EXEC_PATH=/usr/lib/git-core",
 		"GIT_HTTP_PROXY_AUTHMETHOD=basic",
-		"GIT_SSH=/usr/bin/ssh",
 		"GIT_SSH_COMMAND=ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no",
+		"GIT_SSH=/usr/bin/ssh",
 		"GIT_SSL_CAINFO=/etc/ssl/certs/ca-certificates.crt",
 		"GIT_SSL_NO_VERIFY=true",
 	}
