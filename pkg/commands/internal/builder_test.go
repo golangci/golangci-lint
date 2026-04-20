@@ -56,7 +56,7 @@ func Test_sanitizeVersion(t *testing.T) {
 	}
 }
 
-func Test_filterEnviron(t *testing.T) {
+func Test_filterGitEnviron(t *testing.T) {
 	environ := []string{
 		"GIT_ALLOW_PROTOCOL=https:git:ssh",
 		"GIT_ASKPASS=/usr/bin/ssh-askpass",
