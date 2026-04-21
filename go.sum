@@ -524,6 +524,8 @@ github.com/ryancurrah/gomodguard/v2 v2.1.0 h1:iIIARHe7Fsp10LY5utfMmYA++hkVuKsMFG
 github.com/ryancurrah/gomodguard/v2 v2.1.0/go.mod h1:ryDqr6as4otkNbUp/U0m7zAsxGpwcJ9NtL6mvy9Zzdw=
 github.com/ryanrolds/sqlclosecheck v0.6.0 h1:pEyL9okISdg1F1SEpJNlrEotkTGerv5BMk7U4AG0eVg=
 github.com/ryanrolds/sqlclosecheck v0.6.0/go.mod h1:xyX16hsDaCMXHrMJ3JMzGf5OpDfHTOTTQrT7HOFUmeU=
+github.com/sanbricio/goconcurrencylint v0.2.0 h1:x5AzRZ2vfjLAXhuFg01ztQ7tlJ6/n14y3tJAAq9/0BA=
+github.com/sanbricio/goconcurrencylint v0.2.0/go.mod h1:0qxHsLzhx3ETnw1nyoi1OCAdTMigzvkO3ZyWh3pY/9g=
 github.com/sanposhiho/wastedassign/v2 v2.1.0 h1:crurBF7fJKIORrV85u9UUpePDYGWnwvv3+A96WvwXT0=
 github.com/sanposhiho/wastedassign/v2 v2.1.0/go.mod h1:+oSmSC+9bQ+VUAxA66nBb0Z7N8CK7mscKTDYC6aIek4=
 github.com/santhosh-tekuri/jsonschema/v6 v6.0.2 h1:KRzFb2m7YtdldCEkzs6KqmJw4nqEVZGK7IN2kJkjTuQ=
