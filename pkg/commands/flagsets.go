@@ -66,6 +66,10 @@ func setupOutputFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 		color.GreenString("Path mode to use (empty, or 'abs')"))
 	internal.AddFlagAndBind(v, fs, fs.Bool, "show-stats", "output.show-stats", true, color.GreenString("Show statistics per linter"))
 
+	const clearConfigOutputsDesc = "Clear all output formats from the configuration file. " +
+		"If no output formats are specified on the command line, the default text format will be used."
+	fs.Bool("clear-config-outputs", false, color.GreenString(clearConfigOutputsDesc)) // Flags only, no config file binding
+
 	setupOutputFormatsFlagSet(v, fs)
 }
 
