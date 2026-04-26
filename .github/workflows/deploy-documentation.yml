@@ -39,8 +39,9 @@ jobs:
         run: make docs_build
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4.0.0
+        uses: crazy-max/ghaction-github-pages@1d6ee9b181a81033a16bd707a1401afa978daab4 # v5.0.0
         with:
-          publish_dir: docs/public
-          force_orphan: true
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          target_branch: gh-pages
+          build_dir: docs/public
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
