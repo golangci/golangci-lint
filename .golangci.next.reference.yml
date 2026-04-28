@@ -4414,6 +4414,13 @@ linters:
       # Default: 0
       case-max-lines: 2
 
+      # Max number of cuddled statements allowed above block statements, go, defer and send.
+      # Every cuddled statement must have at least one variable used in the block.
+      # Respects allow-first-in-block and allow-whole-block.
+      # With 0 no cuddling is allowed at all; every cuddle-checked trigger requires a blank line above it
+      # Default: 1
+      cuddle-max-statements: 2
+
       # Default checks to use.
       # Can be `all`, `none`, `default` or empty.
       # https://github.com/bombsimon/wsl/tree/main?tab=readme-ov-file#checks-and-configuration
@@ -4425,10 +4432,12 @@ linters:
       # https://github.com/bombsimon/wsl/tree/main?tab=readme-ov-file#checks-and-configuration
       # Default: []
       enable:
+        - append
         - assign
         - branch
         - decl
         - defer
+        - err
         - expr
         - for
         - go
@@ -4441,23 +4450,28 @@ linters:
         - send
         - switch
         - type-switch
-        - append
-        - assign-exclusive
-        - assign-expr
-        - err
         - leading-whitespace
         - trailing-whitespace
         - after-block
+        - after-decl
+        - after-defer
+        - after-expr
+        - after-go
+        - assign-exclusive
+        - assign-expr
+        - cuddle-group
 
       # Disable checks.
       # Will be subtractive to any preset.
       # https://github.com/bombsimon/wsl/tree/main?tab=readme-ov-file#checks-and-configuration
       # Default: []
       disable:
+        - append
         - assign
         - branch
         - decl
         - defer
+        - err
         - expr
         - for
         - go
@@ -4470,13 +4484,16 @@ linters:
         - send
         - switch
         - type-switch
-        - append
-        - assign-exclusive
-        - assign-expr
-        - err
         - leading-whitespace
         - trailing-whitespace
         - after-block
+        - after-decl
+        - after-defer
+        - after-expr
+        - after-go
+        - assign-exclusive
+        - assign-expr
+        - cuddle-group
 
     # The custom section can be used to define linter plugins to be loaded at runtime.
     # See README documentation for more info.
