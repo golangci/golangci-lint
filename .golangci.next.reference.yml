@@ -1609,6 +1609,7 @@ linters:
         - G707 # SMTP command/header injection via taint analysis
         - G708 # Server-side template injection via taint analysis
         - G709 # Unsafe deserialization of untrusted data via taint analysis
+        - G710 # Open redirect via taint analysis
 
       # To specify a set of rules to explicitly exclude.
       # Available rules: https://github.com/securego/gosec#available-rules
@@ -1673,6 +1674,7 @@ linters:
         - G707 # SMTP command/header injection via taint analysis
         - G708 # Server-side template injection via taint analysis
         - G709 # Unsafe deserialization of untrusted data via taint analysis
+        - G710 # Open redirect via taint analysis
 
       # Filter out the issues with a lower severity than the given value.
       # Valid options are: low, medium, high.
