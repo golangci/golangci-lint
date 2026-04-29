@@ -1,30 +1,22 @@
 package commands
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"net/http"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
-	"time"
 
-	hcversion "github.com/hashicorp/go-version"
 	"github.com/pelletier/go-toml/v2"
 	"github.com/santhosh-tekuri/jsonschema/v6"
 	"github.com/spf13/cobra"
-	"github.com/spf13/pflag"
 	"go.yaml.in/yaml/v3"
 
+	jsonsch "github.com/golangci/golangci-lint/v2/jsonschema"
 	"github.com/golangci/golangci-lint/v2/pkg/exitcodes"
 )
-
-type verifyOptions struct {
-	schemaURL string // For debugging purpose only (Flag only).
-}
 
 func (c *configCommand) executeVerify(cmd *cobra.Command, _ []string) error {
 	usedConfigFile := c.getUsedConfig()
@@ -33,14 +25,9 @@ func (c *configCommand) executeVerify(cmd *cobra.Command, _ []string) error {
 		os.Exit(exitcodes.NoConfigFileDetected)
 	}
 
-	schemaURL, err := createSchemaURL(cmd.Flags(), c.buildInfo)
-	if err != nil {
-		return fmt.Errorf("get JSON schema: %w", err)
-	}
+	c.log.Infof("Verifying the configuration file %q with the JSON Schema", usedConfigFile)
 
-	c.log.Infof("Verifying the configuration file %q with the JSON Schema from %s", usedConfigFile, schemaURL)
-
-	err = validateConfiguration(schemaURL, usedConfigFile)
+	err := validateConfiguration(jsonsch.NextSchema, usedConfigFile)
 	if err != nil {
 		var v *jsonschema.ValidationError
 		if !errors.As(err, &v) {
@@ -55,85 +42,12 @@ func (c *configCommand) executeVerify(cmd *cobra.Command, _ []string) error {
 	return nil
 }
 
-func createSchemaURL(flags *pflag.FlagSet, buildInfo BuildInfo) (string, error) {
-	schemaURL, err := flags.GetString("schema")
-	if err != nil {
-		return "", fmt.Errorf("get schema flag: %w", err)
-	}
-
-	if schemaURL != "" {
-		return schemaURL, nil
-	}
-
-	switch {
-	case buildInfo.Version != "" && buildInfo.Version != "(devel)":
-		version, err := hcversion.NewVersion(buildInfo.Version)
-		if err != nil {
-			return "", fmt.Errorf("parse version: %w", err)
-		}
-
-		if version.Core().Equal(hcversion.Must(hcversion.NewVersion("v0.0.0"))) {
-			commit, err := extractCommitHash(buildInfo)
-			if err != nil {
-				return "", err
-			}
-
-			return fmt.Sprintf("https://raw.githubusercontent.com/golangci/golangci-lint/%s/jsonschema/golangci.next.jsonschema.json",
-				commit), nil
-		}
-
-		return fmt.Sprintf("https://golangci-lint.run/jsonschema/golangci.v%d.%d.jsonschema.json",
-			version.Segments()[0], version.Segments()[1]), nil
-
-	case buildInfo.Commit != "" && buildInfo.Commit != "?":
-		commit, err := extractCommitHash(buildInfo)
-		if err != nil {
-			return "", err
-		}
-
-		return fmt.Sprintf("https://raw.githubusercontent.com/golangci/golangci-lint/%s/jsonschema/golangci.next.jsonschema.json",
-			commit), nil
-
-	default:
-		return "", errors.New("version not found")
-	}
-}
-
-func extractCommitHash(buildInfo BuildInfo) (string, error) {
-	if buildInfo.Commit == "" || buildInfo.Commit == "?" {
-		return "", errors.New("empty commit information")
-	}
-
-	if buildInfo.Commit == "unknown" {
-		return "", errors.New("unknown commit information")
-	}
-
-	commit := buildInfo.Commit
-
-	if after, ok := strings.CutPrefix(commit, "("); ok {
-		c, _, ok := strings.Cut(after, ",")
-		if !ok {
-			return "", errors.New("commit information not found")
-		}
-
-		commit = c
-	}
-
-	if commit == "unknown" {
-		return "", errors.New("unknown commit information")
-	}
-
-	return commit, nil
-}
-
 func validateConfiguration(schemaPath, targetFile string) error {
 	compiler := jsonschema.NewCompiler()
-	compiler.UseLoader(jsonschema.SchemeURLLoader{
-		"file":  jsonschema.FileLoader{},
-		"https": newJSONSchemaHTTPLoader(),
-	})
+	compiler.UseLoader(jsonsch.NewEmbedLoader())
 	compiler.DefaultDraft(jsonschema.Draft7)
 
+	// The name is not us
 	schema, err := compiler.Compile(schemaPath)
 	if err != nil {
 		return fmt.Errorf("compile schema: %w", err)
@@ -208,34 +122,4 @@ func decodeTomlFile(filename string) (any, error) {
 	}
 
 	return m, nil
-}
-
-type jsonschemaHTTPLoader struct {
-	*http.Client
-}
-
-func newJSONSchemaHTTPLoader() *jsonschemaHTTPLoader {
-	return &jsonschemaHTTPLoader{Client: &http.Client{
-		Timeout: 2 * time.Second,
-	}}
-}
-
-func (l jsonschemaHTTPLoader) Load(url string) (any, error) {
-	req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, url, http.NoBody)
-	if err != nil {
-		return nil, err
-	}
-
-	resp, err := l.Do(req)
-	if err != nil {
-		return nil, err
-	}
-
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("%s returned status code %d", url, resp.StatusCode)
-	}
-
-	return jsonschema.UnmarshalJSON(resp.Body)
 }

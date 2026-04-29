@@ -13,6 +13,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
+	jsonsch "github.com/golangci/golangci-lint/v2/jsonschema"
 	"github.com/golangci/golangci-lint/v2/pkg/commands/internal/migrate"
 	"github.com/golangci/golangci-lint/v2/pkg/commands/internal/migrate/fakeloader"
 	"github.com/golangci/golangci-lint/v2/pkg/commands/internal/migrate/parser"
@@ -153,7 +154,7 @@ func (c *migrateCommand) preRunE(cmd *cobra.Command, _ []string) error {
 
 	c.log.Infof("Validating v1 configuration file: %s", usedConfigFile)
 
-	err := validateConfiguration("https://golangci-lint.run/jsonschema/golangci.v1.jsonschema.json", usedConfigFile)
+	err := validateConfiguration(jsonsch.V1Schema, usedConfigFile)
 	if err != nil {
 		var v *jsonschema.ValidationError
 		if !errors.As(err, &v) {
