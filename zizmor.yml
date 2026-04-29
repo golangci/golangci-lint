@@ -1,0 +1,6 @@
+rules:
+  secrets-outside-env:
+    disable: true
+  dependabot-cooldown:
+    ignore:
+      - dependabot.yml:3:5

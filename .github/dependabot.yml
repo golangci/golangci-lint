@@ -16,6 +16,8 @@ updates:
     directory: "/"
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 7
     groups:
       github-actions:
         patterns:
@@ -24,6 +26,8 @@ updates:
     directory: "/build"
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 7
     groups:
       docker:
         patterns:
@@ -32,6 +36,8 @@ updates:
     directory: "/scripts/gen_github_action_config"
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 7
     groups:
       scripts:
         patterns:
@@ -53,3 +59,5 @@ updates:
       interval: monthly
       day: "wednesday"
       time: "11:00" # 11am UTC
+    cooldown:
+      default-days: 7
