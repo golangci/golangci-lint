@@ -229,13 +229,14 @@ var defaultLintersSettings = LintersSettings{
 		ForceExclusiveShortDeclarations:  false,
 	},
 	WSLv5: WSLv5Settings{
-		AllowFirstInBlock: true,
-		AllowWholeBlock:   false,
-		BranchMaxLines:    2,
-		CaseMaxLines:      0,
-		Default:           "default",
-		Enable:            nil,
-		Disable:           nil,
+		AllowFirstInBlock:   true,
+		AllowWholeBlock:     false,
+		BranchMaxLines:      2,
+		CaseMaxLines:        0,
+		CuddleMaxStatements: 1,
+		Default:             "default",
+		Enable:              nil,
+		Disable:             nil,
 	},
 }
 
@@ -1174,13 +1175,14 @@ type WSLv4Settings struct {
 }
 
 type WSLv5Settings struct {
-	AllowFirstInBlock bool     `mapstructure:"allow-first-in-block"`
-	AllowWholeBlock   bool     `mapstructure:"allow-whole-block"`
-	BranchMaxLines    int      `mapstructure:"branch-max-lines"`
-	CaseMaxLines      int      `mapstructure:"case-max-lines"`
-	Default           string   `mapstructure:"default"`
-	Enable            []string `mapstructure:"enable"`
-	Disable           []string `mapstructure:"disable"`
+	AllowFirstInBlock   bool     `mapstructure:"allow-first-in-block"`
+	AllowWholeBlock     bool     `mapstructure:"allow-whole-block"`
+	BranchMaxLines      int      `mapstructure:"branch-max-lines"`
+	CaseMaxLines        int      `mapstructure:"case-max-lines"`
+	CuddleMaxStatements int      `mapstructure:"cuddle-max-statements"`
+	Default             string   `mapstructure:"default"`
+	Enable              []string `mapstructure:"enable"`
+	Disable             []string `mapstructure:"disable"`
 }
 
 // CustomLinterSettings encapsulates the meta-data of a private linter.

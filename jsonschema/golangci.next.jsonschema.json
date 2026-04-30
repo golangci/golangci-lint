@@ -762,29 +762,34 @@
     },
     "wsl-checks": {
       "enum": [
+        "after-block",
+        "after-decl",
+        "after-defer",
+        "after-expr",
+        "after-go",
+        "append",
+        "assign-exclusive",
+        "assign-expr",
         "assign",
         "branch",
+        "cuddle-group",
         "decl",
         "defer",
+        "err",
         "expr",
         "for",
         "go",
         "if",
         "inc-dec",
         "label",
+        "leading-whitespace",
         "range",
         "return",
         "select",
         "send",
         "switch",
-        "type-switch",
-        "append",
-        "assign-exclusive",
-        "assign-expr",
-        "err",
-        "leading-whitespace",
         "trailing-whitespace",
-        "after-block"
+        "type-switch"
       ]
     },
     "relative-path-modes": {
@@ -4639,6 +4644,10 @@
             "case-max-lines": {
               "type": "integer",
               "default": 0
+            },
+            "cuddle-max-statements": {
+              "type": "integer",
+              "default": 1
             },
             "default": {
               "enum": ["all", "none", "default", ""],
