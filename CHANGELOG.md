@@ -8,6 +8,15 @@ If you value it, consider supporting us, we appreciate it!
 
 <!-- START --->
 
+### v2.12.1
+
+_Released on 2026-05-01_
+
+1. Linters bug fixes
+   * `gomodguard_v2`: fix panic with migration suggestion
+2. Misc.
+   * fix `install.sh` script (if you are still using an URL based on the branch `master`, please update to use `https://golangci-lint.run/install.sh`)
+
 ### v2.12.0
 
 _Released on 2026-05-01_
