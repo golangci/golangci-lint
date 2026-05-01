@@ -236,11 +236,42 @@ func foo() {
 				SuggestedFixes: []analysis.SuggestedFix{{
 					TextEdits: []analysis.TextEdit{{
 						Pos: 13,
-						End: 32,
+						End: 33,
 					}},
 				}},
 				ExpectNoLint:         true,
 				ExpectedNoLintLinter: "somelinter",
+			}},
+		},
+		{
+			desc:  "needs unused nolint in docstring removes full line to preserve doc association",
+			needs: NeedsUnused,
+			contents: `
+			package bar
+
+			// MyTest is a great struct.
+			//
+			//nolint:lll
+			type MyTest struct{}
+			`,
+			// offset 0: "package bar\n" (12 bytes)
+			// offset 12: "\n"
+			// offset 13: "// MyTest is a great struct.\n" (29 bytes, offset 13-41)
+			// offset 42: "//\n" (3 bytes, offset 42-44)
+			// offset 45: "//nolint:lll\n" (13 bytes, offset 45-57)
+			// offset 58: "type MyTest struct{}\n"
+			expected: []*result.Issue{{
+				FromLinter: "nolintlint",
+				Text:       "directive `//nolint:lll` is unused for linter \"lll\"",
+				Pos:        token.Position{Filename: "testing.go", Offset: 45, Line: 5, Column: 1},
+				SuggestedFixes: []analysis.SuggestedFix{{
+					TextEdits: []analysis.TextEdit{{
+						Pos: 45,
+						End: 58,
+					}},
+				}},
+				ExpectNoLint:         true,
+				ExpectedNoLintLinter: "lll",
 			}},
 		},
 		{
@@ -284,6 +315,9 @@ func foo() {
 			pass := &analysis.Pass{
 				Fset:  fset,
 				Files: []*ast.File{expr},
+				ReadFile: func(string) ([]byte, error) {
+					return []byte(test.contents), nil
+				},
 			}
 
 			analysisIssues, err := linter.Run(pass)

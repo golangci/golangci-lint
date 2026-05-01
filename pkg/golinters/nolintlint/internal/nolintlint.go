@@ -57,6 +57,8 @@ var (
 //nolint:funlen,gocyclo // the function is going to be refactored in the future
 func (l Linter) Run(pass *analysis.Pass) ([]*goanalysis.Issue, error) {
 	var issues []*goanalysis.Issue
+	var fileContent []byte
+	tokenFile := pass.Fset.File(file.Pos())
 
 	for _, file := range pass.Files {
 		for _, c := range file.Comments {
@@ -162,10 +164,20 @@ func (l Linter) Run(pass *analysis.Pass) ([]*goanalysis.Issue, error) {
 
 				// when detecting unused directives, we send all the directives through and filter them out in the nolint processor
 				if (l.needs & NeedsUnused) != 0 {
+					removeStart := pos.Offset
+					removeEnd := end.Offset
+
+					// When the nolint directive is on its own line (not inline with code), remove the entire line including the newline 
+					// to avoid leaving a blank line that would separate a doc comment from its target declaration.
+					if isCommentOnlyLine(pass, tokenFile, &fileContent, pos, end) {
+						removeStart = pos.Offset - (pos.Column - 1) // start of line
+						removeEnd = nextLineOffset(tokenFile, pos.Line, end.Offset)
+					}
+
 					removeNolintCompletely := []analysis.SuggestedFix{{
 						TextEdits: []analysis.TextEdit{{
-							Pos:     token.Pos(pos.Offset),
-							End:     token.Pos(end.Offset),
+							Pos:     token.Pos(removeStart),
+							End:     token.Pos(removeEnd),
 							NewText: nil,
 						}},
 					}}
@@ -229,4 +241,51 @@ func (l Linter) Run(pass *analysis.Pass) ([]*goanalysis.Issue, error) {
 	}
 
 	return issues, nil
+}
+
+// isCommentOnlyLine reports whether the comment at pos occupies its line alone 
+// (only optional whitespace before it, nothing after it except a newline or EOF).
+func isCommentOnlyLine(
+	pass *analysis.Pass,
+	tokenFile *token.File,
+	fileContent *[]byte,
+	pos, end token.Position,
+) bool {
+	// Lazy-load the file content once per file.
+	if len(*fileContent) == 0 {
+		filename := tokenFile.Name()
+		content, err := pass.ReadFile(filename)
+		if err != nil || len(content) == 0 {
+			return false
+		}
+		*fileContent = content
+	}
+
+	content := *fileContent
+
+	// Check that everything before the comment on the same line is whitespace.
+	lineStart := pos.Offset - (pos.Column - 1) // Column is 1-based
+	for i := lineStart; i < pos.Offset; i++ {
+		if content[i] != ' ' && content[i] != '\t' {
+			return false
+		}
+	}
+
+	// Check that nothing follows the comment on the same line (except a newline or EOF).
+	afterComment := end.Offset
+	if afterComment < len(content) && content[afterComment] != '\n' && content[afterComment] != '\r' {
+		return false
+	}
+
+	return true
+}
+
+// nextLineOffset returns the byte offset of the start of the line after lineNum.
+// If lineNum is the last line, it returns endOffset (the end of the comment).
+func nextLineOffset(tokenFile *token.File, lineNum int, endOffset int) int {
+	if lineNum < tokenFile.LineCount() {
+		return tokenFile.Offset(tokenFile.LineStart(lineNum + 1))
+	}
+
+	return endOffset
 }
