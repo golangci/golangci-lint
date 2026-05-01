@@ -104,7 +104,7 @@ type goModGuardv2Base struct {
 
 // Only used the set YAML struct tags.
 type goModGuardv2Blocked struct {
-	goModGuardv2Base
+	goModGuardv2Base `yaml:",inline"`
 
 	Recommendations []string `yaml:"recommendations,omitempty"`
 	Reason          string   `yaml:"reason,omitempty"`
