@@ -18,7 +18,7 @@ jobs:
       # - 1.18beta1 -> 1.18.0-beta.1
       # - 1.18rc1 -> 1.18.0-rc.1
       GO_VERSION: '1.26'
-      HUGO_VERSION: 0.157.0
+      HUGO_VERSION: 0.161.1
       CGO_ENABLED: 0
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2

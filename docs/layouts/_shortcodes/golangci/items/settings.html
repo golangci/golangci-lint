@@ -10,9 +10,9 @@ Creates a section for each setting of a linter/formatter.
 {{- $fileInfo := .Get "info" -}}
 {{- $fileSettings := .Get "settings" -}}
 
-{{- $gcilVersion := index $.Site.Data.version.version -}}
-{{- $info := index $.Site.Data $fileInfo -}}
-{{- $settings := index $.Site.Data $fileSettings -}}
+{{- $gcilVersion := index hugo.Data.version.version -}}
+{{- $info := index hugo.Data $fileInfo -}}
+{{- $settings := index hugo.Data $fileSettings -}}
 
 {{- range sort $info "name" -}}
 {{- if .internal -}}

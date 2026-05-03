@@ -9,7 +9,7 @@ Creates a code block with the contents of a configuration file section.
 
 {{- $sectionName := .Get "section" -}}
 
-{{- $file := index $.Site.Data.configuration_file -}}
+{{- $file := index hugo.Data.configuration_file -}}
 
 ```yaml
 {{ index $file $sectionName | safeHTML }}

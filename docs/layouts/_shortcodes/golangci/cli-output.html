@@ -12,7 +12,7 @@ Creates a code block with the output of the CLI.
 {{- $cmdName := .Get "cmd" -}}
 {{- $section := .Get "section" -}}
 
-{{- $cliData := index $.Site.Data.cli_help -}}
+{{- $cliData := index hugo.Data.cli_help -}}
 
 ```console
 {{ if $section -}}
