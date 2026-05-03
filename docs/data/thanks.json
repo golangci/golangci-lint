@@ -169,6 +169,14 @@
     "avatar": "https://github.com/ckaznocha.png"
   },
   {
+    "name": "ClickHouse",
+    "linters": [
+      "clickhouselint"
+    ],
+    "profile": "https://github.com/sponsors/ClickHouse",
+    "avatar": "https://github.com/ClickHouse.png"
+  },
+  {
     "name": "client9",
     "linters": [
       "misspell"
@@ -520,7 +528,8 @@
   {
     "name": "ryancurrah",
     "linters": [
-      "gomodguard"
+      "gomodguard",
+      "gomodguard_v2"
     ],
     "profile": "https://github.com/sponsors/ryancurrah",
     "avatar": "https://github.com/ryancurrah.png"
