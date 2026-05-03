@@ -26,6 +26,7 @@ linters:
     - bidichk
     - bodyclose
     - canonicalheader
+    - clickhouselint
     - containedctx
     - contextcheck
     - copyloopvar
@@ -65,6 +66,7 @@ linters:
     - goheader
     - gomoddirectives
     - gomodguard
+    - gomodguard_v2
     - goprintffuncname
     - gosec
     - gosmopolitan
@@ -141,6 +143,7 @@ linters:
     - bidichk
     - bodyclose
     - canonicalheader
+    - clickhouselint
     - containedctx
     - contextcheck
     - copyloopvar
@@ -180,6 +183,7 @@ linters:
     - goheader
     - gomoddirectives
     - gomodguard
+    - gomodguard_v2
     - goprintffuncname
     - gosec
     - gosmopolitan
@@ -275,6 +279,12 @@ linters:
       right-to-left-isolate: false
       first-strong-isolate: false
       pop-directional-isolate: false
+
+    bodyclose:
+      # Check that the response body is consumed.
+      # This has false positives.
+      # Default: false
+      check-consumption: true
 
     copyloopvar:
       # Check all assigning the loop variable to another variable.
@@ -599,6 +609,9 @@ linters:
       # Checks if the constructors and/or structure methods are sorted alphabetically.
       # Default: false
       alphabetical: true
+      # Checks that exported functions are placed before unexported functions.
+      # Default: false
+      function: true
 
     funlen:
       # Checks the number of lines in a function.
@@ -717,6 +730,15 @@ linters:
       # Evaluates of constant expressions like Prefix + "suffix".
       # Default: false
       eval-const-expressions: true
+      # Ignore strings from test files.
+      # Default: false
+      ignore-tests: true
+      # Ignore string literals in calls to these functions
+      # Default: empty list
+      ignore-functions:
+        - log.Info
+        - slog.Warn
+        - fmt.Errorf
 
     gocritic:
       # Disable all checks.
@@ -1495,6 +1517,34 @@ linters:
         # Default: false
         local-replace-directives: false
 
+    gomodguard_v2:
+      # Blocks 'replace' directives using local filesystem paths
+      # Default: false
+      local-replace-directives: true
+      # List of allowed modules.
+      allowed:
+        - module: go.yaml.in/yaml/v4
+        - module: github.com/confluentinc/confluent-kafka-go/v2
+          version: "== 2.5.0"
+        - module: github.com/kubernetes
+          # exact (default), prefix, regex
+          match-type: prefix
+        - module: "github.com/somecompany/.*"
+          match-type: regex
+      # List of blocked modules.
+      blocked:
+        - module: github.com/uudashr/go-module
+          match-type: exact
+          recommendations:
+            - golang.org/x/mod
+          reason: "`mod` is the official go.mod parser library."
+        - module: github.com/mitchellh/go-homedir
+          version: "<= 1.1.0"
+          reason: "testing if blocked version constraint works."
+        - module: "github.com/badcompany/.*"
+          match-type: regex
+          reason: "No badcompany packages are permitted."
+
     gosec:
       # To select a subset of rules to run.
       # Available rules: https://github.com/securego/gosec#available-rules
@@ -1522,6 +1572,7 @@ linters:
         - G121 # Unsafe CrossOriginProtection bypass patterns
         - G122 # Filesystem TOCTOU race risk in filepath.Walk/WalkDir callbacks
         - G123 # TLS resumption may bypass VerifyPeerCertificate when VerifyConnection is unset
+        - G124 # Insecure HTTP cookie configuration missing Secure, HttpOnly, or SameSite attributes
         - G201 # SQL query construction using format string
         - G202 # SQL query construction using string concatenation
         - G203 # Use of unescaped data in HTML templates
@@ -1556,6 +1607,9 @@ linters:
         - G705 # XSS via taint analysis
         - G706 # Log injection via taint analysis
         - G707 # SMTP command/header injection via taint analysis
+        - G708 # Server-side template injection via taint analysis
+        - G709 # Unsafe deserialization of untrusted data via taint analysis
+        - G710 # Open redirect via taint analysis
 
       # To specify a set of rules to explicitly exclude.
       # Available rules: https://github.com/securego/gosec#available-rules
@@ -1572,9 +1626,18 @@ linters:
         - G110 # Detect io.Copy instead of io.CopyN when decompression
         - G111 # Detect http.Dir('/') as a potential risk
         - G112 # Detect ReadHeaderTimeout not configured as a potential risk
+        - G113 # HTTP request smuggling via conflicting headers or bare LF in body parsing
         - G114 # Use of net/http serve function that has no support for setting timeouts
         - G115 # Type conversion which leads to integer overflow
         - G116 # Detect Trojan Source attacks using bidirectional Unicode characters
+        - G117 # Potential exposure of secrets via JSON/YAML/XML/TOML marshaling
+        - G118 # Context propagation failure leading to goroutine/resource leaks
+        - G119 # Unsafe redirect policy may propagate sensitive headers
+        - G120 # Unbounded form parsing in HTTP handlers can cause memory exhaustion
+        - G121 # Unsafe CrossOriginProtection bypass patterns
+        - G122 # Filesystem TOCTOU race risk in filepath.Walk/WalkDir callbacks
+        - G123 # TLS resumption may bypass VerifyPeerCertificate when VerifyConnection is unset
+        - G124 # Insecure HTTP cookie configuration missing Secure, HttpOnly, or SameSite attributes
         - G201 # SQL query construction using format string
         - G202 # SQL query construction using string concatenation
         - G203 # Use of unescaped data in HTML templates
@@ -1592,6 +1655,7 @@ linters:
         - G404 # Insecure random number source (rand)
         - G405 # Detect the usage of DES or RC4
         - G406 # Detect the usage of deprecated MD4 or RIPEMD160
+        - G408 # Stateful misuse of ssh.PublicKeyCallback leading to auth bypass
         - G501 # Import blocklist: crypto/md5
         - G502 # Import blocklist: crypto/des
         - G503 # Import blocklist: crypto/rc4
@@ -1601,6 +1665,16 @@ linters:
         - G507 # Import blocklist: golang.org/x/crypto/ripemd160
         - G601 # Implicit memory aliasing in RangeStmt
         - G602 # Possible slice bounds out of range
+        - G701 # SQL injection via taint analysis
+        - G702 # Command injection via taint analysis
+        - G703 # Path traversal via taint analysis
+        - G704 # SSRF via taint analysis
+        - G705 # XSS via taint analysis
+        - G706 # Log injection via taint analysis
+        - G707 # SMTP command/header injection via taint analysis
+        - G708 # Server-side template injection via taint analysis
+        - G709 # Unsafe deserialization of untrusted data via taint analysis
+        - G710 # Open redirect via taint analysis
 
       # Filter out the issues with a lower severity than the given value.
       # Valid options are: low, medium, high.
@@ -1726,7 +1800,7 @@ linters:
       # Enable analyzers by name.
       # (In addition to default:
       #   appends, asmdecl, assign, atomic, bools, buildtag, cgocall, composites, copylocks, defers, directive, errorsas,
-      #   framepointer, httpresponse, ifaceassert, loopclosure, lostcancel, nilfunc, printf, shift, sigchanyzer, slog,
+      #   framepointer, httpresponse, ifaceassert, inline, loopclosure, lostcancel, nilfunc, printf, shift, sigchanyzer, slog,
       #   stdmethods, stringintconv, structtag, testinggoroutine, tests, timeformat, unmarshal, unreachable, unsafeptr,
       #   unusedresult
       # ).
@@ -1775,6 +1849,8 @@ linters:
         - httpresponse
         # Detect impossible interface-to-interface type assertions.
         - ifaceassert
+        # Find calls to functions and uses of constants marked with a "//go:fix inline" directive.
+        - inline
         # Check references to loop variables from within nested functions.
         - loopclosure
         # Check cancel func returned by context.WithCancel is called.
@@ -1856,6 +1932,7 @@ linters:
         - httpmux
         - httpresponse
         - ifaceassert
+        - inline
         - loopclosure
         - lostcancel
         - nilfunc
@@ -2257,10 +2334,15 @@ linters:
       # Ignore missing calls to `t.Parallel()` and only report incorrect uses of it.
       # Default: false
       ignore-missing: true
-      # Ignore missing calls to `t.Parallel()` in subtests. Top-level tests are
-      # still required to have `t.Parallel`, but subtests are allowed to skip it.
+      # Ignore missing calls to `t.Parallel()` in subtests.
+      # Top-level tests are still required to have `t.Parallel`,
+      # but subtests are allowed to skip it.
       # Default: false
       ignore-missing-subtests: true
+      # Check that `defer` is not used with `t.Parallel`.
+      # (use `t.Cleanup` instead to ensure cleanup runs after parallel subtests complete).
+      # Default: false
+      check-cleanup: true
 
     perfsprint:
       # Enable/disable optimization of integer formatting.
@@ -3068,65 +3150,76 @@ linters:
         - github.com/jmoiron/sqlx
 
     sloglint:
-      # Enforce not mixing key-value pairs and attributes.
-      # https://github.com/go-simpler/sloglint?tab=readme-ov-file#no-mixed-arguments
-      # Default: true
-      no-mixed-args: false
-      # Enforce using key-value pairs only (overrides no-mixed-args, incompatible with attr-only).
-      # https://github.com/go-simpler/sloglint?tab=readme-ov-file#key-value-pairs-only
-      # Default: false
-      kv-only: true
-      # Enforce using attributes only (overrides no-mixed-args, incompatible with kv-only).
-      # https://github.com/go-simpler/sloglint?tab=readme-ov-file#attributes-only
-      # Default: false
-      attr-only: true
-      # Enforce not using global loggers.
-      # Values:
-      # - "": disabled
-      # - "all": report all global loggers
-      # - "default": report only the default slog logger
-      # https://github.com/go-simpler/sloglint?tab=readme-ov-file#no-global
+      # Report the use of global loggers.
+      # https://github.com/go-simpler/sloglint#no-global-logger
+      # Values: "all", "default"
       # Default: ""
       no-global: "all"
-      # Enforce using methods that accept a context.
-      # Values:
-      # - "": disabled
-      # - "all": report all contextless calls
-      # - "scope": report only if a context exists in the scope of the outermost function
-      # https://github.com/go-simpler/sloglint?tab=readme-ov-file#context-only
+      # Report the use of functions without a context.Context.
+      # https://github.com/go-simpler/sloglint#context-only
+      # Values: "all", "scope"
       # Default: ""
       context: "all"
-      # Enforce using static values for log messages.
-      # https://github.com/go-simpler/sloglint?tab=readme-ov-file#static-messages
+      # Report dynamic log messages, such as those that are built with fmt.Sprintf.
+      # https://github.com/go-simpler/sloglint#static-message
       # Default: false
       static-msg: true
-      # Enforce message style.
-      # Values: lowercased, capitalized
-      # https://github.com/go-simpler/sloglint?tab=readme-ov-file#message-style
+      # Report log messages that do not match a particular style.
+      # https://github.com/go-simpler/sloglint#message-style
+      # Values: "lowercased", "capitalized"
       # Default: ""
-      msg-style: capitalized
-      # Enforce using constants instead of raw keys.
-      # https://github.com/go-simpler/sloglint?tab=readme-ov-file#no-raw-keys
+      msg-style: "lowercased"
+      # Report the use of both key-value pairs and attributes within a single function call.
+      # https://github.com/go-simpler/sloglint#no-mixed-arguments
+      # Default: true
+      no-mixed-args: false
+      # Report any use of attributes as function call arguments.
+      # https://github.com/go-simpler/sloglint#key-value-pairs-only
+      # Default: false
+      kv-only: true
+      # Report any use of key-value pairs as function call arguments.
+      # https://github.com/go-simpler/sloglint#attributes-only
+      # Default: false
+      attr-only: true
+      # Report two or more arguments on the same line.
+      # https://github.com/go-simpler/sloglint#arguments-on-separate-lines
+      # Default: false
+      args-on-sep-lines: true
+      # Report the use of string literals as log keys.
+      # https://github.com/go-simpler/sloglint#constant-keys
       # Default: false
       no-raw-keys: true
-      # Enforce key naming convention.
-      # Values: snake, kebab, camel, pascal
-      # https://github.com/go-simpler/sloglint?tab=readme-ov-file#key-naming-convention
-      # Default: ""
-      key-naming-case: snake
-      # Enforce not using specific keys.
-      # https://github.com/go-simpler/sloglint?tab=readme-ov-file#forbidden-keys
+      # Report the use of log keys that are not explicitly allowed.
+      # https://github.com/go-simpler/sloglint#allowed-keys
+      # Default: []
+      allowed-keys:
+        - user_id
+      # Report the use of forbidden log keys.
+      # https://github.com/go-simpler/sloglint#forbidden-keys
       # Default: []
       forbidden-keys:
         - time
         - level
         - msg
         - source
-        - foo
-      # Enforce putting arguments on separate lines.
-      # https://github.com/go-simpler/sloglint?tab=readme-ov-file#arguments-on-separate-lines
-      # Default: false
-      args-on-sep-lines: true
+      # Report log keys that do not match a particular naming case.
+      # https://github.com/go-simpler/sloglint#key-naming-case
+      # Values: "snake", "kebab", "camel", "pascal"
+      # Default: ""
+      key-naming-case: "snake"
+      # Analyze custom functions in addition to the standard log/slog functions.
+      # https://github.com/go-simpler/sloglint#custom-function-analysis
+      # Default: []
+      custom-funcs:
+          # The full name of the function, including the package, e.g. "log/slog.Info".
+          # If the function is a method, the receiver type must be wrapped in parentheses, e.g. "(*log/slog.Logger).Info".
+        - name: "(*golang.org/x/exp/slog.Logger).InfoContext"
+          # The position of the "msg string" argument in the function signature, starting from 0.
+          # If there is no message in the function, a negative value must be passed.
+          msg-pos: 1
+          # The position of the "args ...any" argument in the function signature, starting from 0.
+          # If there are no arguments in the function, a negative value must be passed.
+          args-pos: 2
 
     spancheck:
       # Checks to enable.
@@ -4321,6 +4414,13 @@ linters:
       # Default: 0
       case-max-lines: 2
 
+      # Max number of cuddled statements allowed above block statements, go, defer and send.
+      # Every cuddled statement must have at least one variable used in the block.
+      # Respects allow-first-in-block and allow-whole-block.
+      # With 0 no cuddling is allowed at all; every cuddle-checked trigger requires a blank line above it
+      # Default: 1
+      cuddle-max-statements: 2
+
       # Default checks to use.
       # Can be `all`, `none`, `default` or empty.
       # https://github.com/bombsimon/wsl/tree/main?tab=readme-ov-file#checks-and-configuration
@@ -4332,10 +4432,12 @@ linters:
       # https://github.com/bombsimon/wsl/tree/main?tab=readme-ov-file#checks-and-configuration
       # Default: []
       enable:
+        - append
         - assign
         - branch
         - decl
         - defer
+        - err
         - expr
         - for
         - go
@@ -4348,23 +4450,28 @@ linters:
         - send
         - switch
         - type-switch
-        - append
-        - assign-exclusive
-        - assign-expr
-        - err
         - leading-whitespace
         - trailing-whitespace
         - after-block
+        - after-decl
+        - after-defer
+        - after-expr
+        - after-go
+        - assign-exclusive
+        - assign-expr
+        - cuddle-group
 
       # Disable checks.
       # Will be subtractive to any preset.
       # https://github.com/bombsimon/wsl/tree/main?tab=readme-ov-file#checks-and-configuration
       # Default: []
       disable:
+        - append
         - assign
         - branch
         - decl
         - defer
+        - err
         - expr
         - for
         - go
@@ -4377,13 +4484,16 @@ linters:
         - send
         - switch
         - type-switch
-        - append
-        - assign-exclusive
-        - assign-expr
-        - err
         - leading-whitespace
         - trailing-whitespace
         - after-block
+        - after-decl
+        - after-defer
+        - after-expr
+        - after-go
+        - assign-exclusive
+        - assign-expr
+        - cuddle-group
 
     # The custom section can be used to define linter plugins to be loaded at runtime.
     # See README documentation for more info.
