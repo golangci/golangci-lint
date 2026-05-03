@@ -201,6 +201,9 @@
     "v2.11": {
       "Error": "golangci-lint version 'v2.11' isn't supported: only v1 versions are supported"
     },
+    "v2.12": {
+      "Error": "golangci-lint version 'v2.12' isn't supported: only v1 versions are supported"
+    },
     "v2.2": {
       "Error": "golangci-lint version 'v2.2' isn't supported: only v1 versions are supported"
     },
