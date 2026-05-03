@@ -58,14 +58,14 @@ The `migrate` command automatically migrates `linters.presets` in individual lin
 
 This property has been replaced with `linters.default: none`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 linters:
   disable-all: true
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   default: none
@@ -77,14 +77,14 @@ linters:
 
 This property has been replaced with `linters.default: all`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 linters:
   enable-all: true
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   default: all
@@ -96,8 +96,8 @@ linters:
 
 The linters `gci`, `gofmt`, `gofumpt`, and `goimports` have been moved to the `formatters` section.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 linters:
   enable:
@@ -107,7 +107,7 @@ linters:
     - goimports
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 formatters:
   enable:
@@ -123,8 +123,8 @@ formatters:
 
 The linters `stylecheck`, `gosimple`, and `staticcheck` has been merged inside the `staticcheck`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 linters:
   enable:
@@ -133,7 +133,7 @@ linters:
     - stylecheck
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   enable:
@@ -161,8 +161,8 @@ This property has been removed.
 
 The `migrate` command automatically migrates `linters.presets` in individual linters to `linters.enable`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 Presets:
 
 | name | linters |
@@ -182,7 +182,7 @@ Presets:
 | unused | `ineffassign`, `unparam`, `unused` |
 
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 # Removed
 ```
@@ -228,8 +228,8 @@ The alternative linters has been removed.
 | `vet`       | `govet`       |
 | `vetshadow` | `govet`       |
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 linters:
   enable:
@@ -242,7 +242,7 @@ linters:
     - vetshadow
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   enable:
@@ -262,8 +262,8 @@ The `linters-settings` section has been split into `linters.settings` and `forma
 
 Settings for `gci`, `gofmt`, `gofumpt`, and `goimports` are moved to the `formatters.settings` section.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 linters-settings:
   govet:
@@ -272,7 +272,7 @@ linters-settings:
     simplify: false
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   settings:
@@ -293,15 +293,15 @@ This option has been removed.
 
 To ignore test files, use `linters.exclusions.rules`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 linters-settings:
   asasalint:
     ignore-test: true
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   exclusions:
@@ -317,15 +317,15 @@ linters:
 
 This option has been deprecated since v1.58.0 and has been replaced with `linters.settings.copyloopvar.check-alias`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 linters-settings:
   copyloopvar:
     ignore-alias: false
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   settings:
@@ -341,15 +341,15 @@ This option has been removed.
 
 To ignore test files, use `linters.exclusions.rules`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 linters-settings:
   cyclop:
     skip-test: true
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   exclusions:
@@ -367,15 +367,15 @@ This option has been deprecated since v1.42.0 and has been removed.
 
 To exclude functions, use `linters.settings.errcheck.exclude-functions` instead.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 linters-settings:
   errcheck:
     exclude: ./errcheck_excludes.txt
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   settings:
@@ -394,15 +394,15 @@ This option has been deprecated since v1.13.0 and has been removed.
 
 To exclude functions, use `linters.settings.errcheck.exclude-functions` instead.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 linters-settings:
   errcheck:
     ignore: 'io:.*'
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   settings:
@@ -421,15 +421,15 @@ This option has been removed.
 
 To analyze generated files, use `linters.exclusions.generated`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 linters-settings:
   exhaustive:
     check-generated: true
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   exclusions:
@@ -442,8 +442,8 @@ linters:
 
 This field has been replaced with `linters-settings.forbidigo.forbid[].pattern`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 linters-settings:
   forbidigo:
@@ -452,7 +452,7 @@ linters-settings:
         msg: Do not commit print statements.
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   settings:
@@ -468,8 +468,8 @@ linters:
 
 The `pattern` has become mandatory for the `forbid` field.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 linters-settings:
   forbidigo:
@@ -478,7 +478,7 @@ linters-settings:
       - '^spew\.(ConfigState\.)?Dump$'
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   settings:
@@ -496,15 +496,15 @@ This option has been deprecated since v1.44.0 and has been removed.
 
 Use `linters.settings.gci.sections` instead.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 linters-settings:
   gci:
     local-prefixes: 'github.com/example/pkg'
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   settings:
@@ -523,8 +523,8 @@ This option has been removed.
 
 To analyze generated files, use `linters.exclusions.generated`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 linters:
   settings:
@@ -532,7 +532,7 @@ linters:
       skip-generated: false
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   exclusions:
@@ -547,15 +547,15 @@ This option has been removed.
 
 To ignore test files, use `linters.exclusions.rules`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 linters-settings:
   goconst:
     ignore-tests: true
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   exclusions:
@@ -571,8 +571,8 @@ linters:
 
 The special variable `${configDir}` has been replaced with `${base-path}`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 linters-settings:
   gocritic:
@@ -581,7 +581,7 @@ linters-settings:
         rules: '${configDir}/ruleguard/rules-*.go'
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   settings:
@@ -599,15 +599,15 @@ This option has been deprecated since v1.57.0 and has been removed.
 
 Use `linters.settings.govet.enable: shadow` instead.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 linters-settings:
   govet:
     check-shadowing: true
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   settings:
@@ -622,8 +622,8 @@ linters:
 
 This option has been replaced with `linters.settings.misspell.ignore-rules`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 linters-settings:
   misspell:
@@ -631,7 +631,7 @@ linters-settings:
       - foo
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   settings:
@@ -646,15 +646,15 @@ linters:
 
 This string option has been replaced with the slice option with the same name.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 linters-settings:
   predeclared:
     ignore: "new,int"
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   settings:
@@ -670,15 +670,15 @@ linters:
 
 This option has been replaced with `linters.settings.predeclared.qualified-name`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 linters-settings:
   predeclared:
     q: true
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   settings:
@@ -694,15 +694,15 @@ This option has been removed.
 
 Use `linters.exclusions.generated` instead.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 linters-settings:
   revive:
     ignore-generated-header: true
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   exclusions:
@@ -715,15 +715,15 @@ linters:
 
 This option has been deprecated since v1.58.0 and has been replaced with `linters.settings.sloglint.context`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 linters-settings:
   sloglint:
     context-only: true
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   settings:
@@ -739,15 +739,15 @@ This option has been deprecated since v1.47.0 and has been removed.
 
 Use `run.go` instead.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 linters-settings:
   staticcheck:
     go: '1.22'
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 run:
   go: '1.22'
@@ -759,15 +759,15 @@ run:
 
 This option has been deprecated since v1.60.0 and has been removed.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 linters-settings:
   unused:
     exported-is-used: true
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 # Removed
 ```
@@ -778,15 +778,15 @@ linters-settings:
 
 This option has been deprecated since v1.51.0 and has been removed.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 linters-settings:
   usestdlibvars:
     os-dev-null: true
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 # Removed
 ```
@@ -797,15 +797,15 @@ linters-settings:
 
 This option has been deprecated since v1.51.0 and has been removed.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 linters-settings:
   usestdlibvars:
     syslog-priority: true
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 # Removed
 ```
@@ -816,8 +816,8 @@ linters-settings:
 
 This option has been renamed to `linters.settings.wrapcheck.ignore-interface-regexps`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 linters-settings:
   wrapcheck:
@@ -825,7 +825,7 @@ linters-settings:
       - '^(?i)c(?-i)ach(ing|e)'
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   settings:
@@ -840,8 +840,8 @@ linters:
 
 This option has been renamed to `linters.settings.wrapcheck.ignore-package-globs`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 linters-settings:
   wrapcheck:
@@ -849,7 +849,7 @@ linters-settings:
       - 'encoding/*'
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   settings:
@@ -864,8 +864,8 @@ linters:
 
 This option has been renamed to `linters.settings.wrapcheck.ignore-sig-regexps`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
   linters-settings:
     wrapcheck:
@@ -873,7 +873,7 @@ This option has been renamed to `linters.settings.wrapcheck.ignore-sig-regexps`.
         - '\.New.*Error\('
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   settings:
@@ -888,8 +888,8 @@ linters:
 
 This option has been renamed to `linters.settings.wrapcheck.ignore-sigs`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 linters-settings:
   wrapcheck:
@@ -897,7 +897,7 @@ linters-settings:
       - '.Errorf('
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   settings:
@@ -918,8 +918,8 @@ This property has been removed.
 
 To ignore case, use `(?i)` at the beginning of a regex syntax.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 issues:
   exclude-case-sensitive: false
@@ -927,7 +927,7 @@ issues:
     - 'abcdef'
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   exclusions:
@@ -944,14 +944,14 @@ This property has been removed.
 
 Use `linters.exclusions.paths` and `formatters.exclusions.paths` to exclude directories.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 issues:
   exclude-dirs-use-default: true
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 
 ```yaml
 linters:
@@ -968,8 +968,8 @@ linters:
 
 This property has been replaced with `linters.exclusions.paths` and `formatters.exclusions.paths`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 issues:
   exclude-dirs:
@@ -977,7 +977,7 @@ issues:
     - autogenerated_by_my_lib
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   exclusions:
@@ -992,8 +992,8 @@ linters:
 
 This property has been replaced with `linters.exclusions.paths` and `formatters.exclusions.paths`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 issues:
   exclude-files:
@@ -1001,7 +1001,7 @@ issues:
     - lib/bad.go
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   exclusions:
@@ -1016,14 +1016,14 @@ linters:
 
 This property has been deprecated since v1.59.0 and has been replaced with `linters.exclusions.generated: strict`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 linters:
   exclude-generated-strict: true
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   exclusions:
@@ -1036,14 +1036,14 @@ linters:
 
 This property has been replaced with `linters.exclusions.generated`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 linters:
   exclude-generated: lax
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   exclusions:
@@ -1056,8 +1056,8 @@ linters:
 
 This property has been replaced with `linters.exclusions.rules`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 issues:
   exclude-rules:
@@ -1082,7 +1082,7 @@ issues:
       source: "foo"
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   exclusions:
@@ -1115,14 +1115,14 @@ linters:
 
 This property has been replaced with `linters.exclusions.presets`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 issues:
   exclude-use-default: true
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   exclusions:
@@ -1139,15 +1139,15 @@ linters:
 
 This property has been replaced with `linters.exclusions.rules`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 issues:
   exclude:
     - abcdef
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   exclusions:
@@ -1162,8 +1162,8 @@ linters:
 
 This property has been replaced with `linters.exclusions.presets`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 issues:
   include:
@@ -1171,7 +1171,7 @@ issues:
     - EXC0015
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   exclusions:
@@ -1189,14 +1189,14 @@ linters:
 
 This property has been deprecated since v1.57.0 and has been replaced with `output.formats`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 output:
   format: 'checkstyle:report.xml,json:stdout,colored-line-number'
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 output:
   formats:
@@ -1215,8 +1215,8 @@ output:
 
 The property `output.formats[].format` has been replaced with `output.formats[].<format_name>`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 output:
   formats:
@@ -1226,7 +1226,7 @@ output:
       path: report.xml
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 output:
   formats:
@@ -1242,15 +1242,15 @@ output:
 
 This format has been replaced by the format `text`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 output:
   formats:
     - format: line-number
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 output:
   formats:
@@ -1264,15 +1264,15 @@ output:
 
 This format has been replaced by the format `text` with the option `colors` (`true` by default).
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 output:
   formats:
     - format: colored-line-number
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 output:
   formats:
@@ -1287,15 +1287,15 @@ output:
 
 This format has been replaced by the format `tab` with the option `colors` (`true` by default).
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 output:
   formats:
     - format: colored-tab
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 output:
   formats:
@@ -1312,8 +1312,8 @@ This property has been removed.
 
 To not print the lines with issues, use the `text` format with the option `print-issued-lines: false`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 output:
   formats:
@@ -1322,7 +1322,7 @@ output:
   print-issued-lines: false
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 output:
   formats:
@@ -1339,8 +1339,8 @@ This property has been removed.
 
 To not print the linter name, use the `text` format with the option `print-linter-name: false`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 output:
   formats:
@@ -1349,7 +1349,7 @@ output:
   print-linter-name: false
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 output:
   formats:
@@ -1378,14 +1378,14 @@ The output results are always sorted.
 
 This property has been deprecated since v1.63.0 and has been replaced by `issues.uniq-by-line`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 output:
   uniq-by-line: true
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 issues:
   uniq-by-line: true
@@ -1407,14 +1407,14 @@ This property value set to match Linux container CPU quota by default and fallba
 
 This property has a new default value of `cfg` instead of `wd`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 run:
 # When not specified, relative-path-mode is set to 'wd' by default
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 run:
   relative-path-mode: 'cfg'
@@ -1426,14 +1426,14 @@ run:
 
 This property has been deprecated since v1.57.0 and has been replaced by `output.show-stats`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 run:
   show-stats: true
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 output:
   show-stats: true
@@ -1445,14 +1445,14 @@ output:
 
 This property has been deprecated since v1.57.0 and has been replaced by `issues.exclude-dirs-use-default`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 run:
   skip-dirs-use-default: false
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 issues:
   exclude-dirs-use-default: false
@@ -1466,8 +1466,8 @@ This property has been deprecated since v1.57.0 and has been removed.
 
 Use `linters.exclusions.paths` and `formatters.exclusions.paths` to exclude directories.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 run:
   skip-dirs:
@@ -1475,7 +1475,7 @@ run:
     - autogenerated_by_my_lib
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   exclusions:
@@ -1492,8 +1492,8 @@ This property has been deprecated since v1.57.0 and has been removed.
 
 Use `linters.exclusions.paths` and `formatters.exclusions.paths` to exclude files.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 run:
   skip-files:
@@ -1501,7 +1501,7 @@ run:
     - lib/bad.go
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 linters:
   exclusions:
@@ -1522,14 +1522,14 @@ This property value is disabled by default (`0`).
 
 This property has been replaced with `severity.default`.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 severity:
   default-severity: error
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 severity:
   default: error
@@ -1543,8 +1543,8 @@ severity:
 
 To ignore case, use `(?i)` at the beginning of a regex syntax.
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```yaml
 severity:
   case-sensitive: true
@@ -1555,7 +1555,7 @@ severity:
       text: 'Example.*'
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```yaml
 severity:
   rules:
@@ -1579,8 +1579,8 @@ version: "2"
 
 #### Visual Studio Code
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 ```JSONata
 "go.lintTool": "golangci-lint",
 "go.lintFlags": [
@@ -1588,7 +1588,7 @@ version: "2"
 ]
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 ```JSONata
 "go.lintTool": "golangci-lint",
 "go.lintFlags": [
@@ -1701,14 +1701,14 @@ The following flags have been removed:
 
 Run only the `govet` linter, output results to stdout in JSON format, and sort results:
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 
 ```bash
 golangci-lint run --disable-all --enable=govet --out-format=json --sort-order=linter --sort-results
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 
 ```bash
 golangci-lint run --default=none --enable=govet --output.json.path=stdout
@@ -1718,14 +1718,14 @@ golangci-lint run --default=none --enable=govet --output.json.path=stdout
 
 Do not print issued lines, output results to stdout without colors in text format, and to `gl-code-quality-report.json` file in Code Climate's format:
 
-{{< tabs items="v1,v2" >}}
-{{< tab >}}
+{{< tabs >}}
+{{< tab name="v1" >}}
 
 ```bash
 golangci-lint run --print-issued-lines=false --out-format code-climate:gl-code-quality-report.json,line-number
 ```
 {{< /tab >}}
-{{< tab >}}
+{{< tab name="v2" >}}
 
 ```bash
 golangci-lint run --output.text.path=stdout --output.text.colors=false --output.text.print-issued-lines=false --output.code-climate.path=gl-code-quality-report.json
