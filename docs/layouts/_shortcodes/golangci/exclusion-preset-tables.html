@@ -4,7 +4,7 @@ Creates a table of exclusion presets.
 @example {{% golangci/exclusion-preset-tables %}}
 */ -}}
 
-{{- $presets := index $.Site.Data.exclusion_presets -}}
+{{- $presets := index hugo.Data.exclusion_presets -}}
 
 {{ range $key, $values := $presets }}
 ### Preset {{ print "`" $key "`" }}

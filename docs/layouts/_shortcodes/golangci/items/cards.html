@@ -14,7 +14,7 @@ Creates a card for each item (linter/formatter) in a data file.
 {{- $path := .Get "path" -}}
 {{- $group := .Get "group" | default "" -}}
 
-{{- $info := index $.Site.Data $file -}}
+{{- $info := index hugo.Data $file -}}
 
 {{- /* Determine if we should exclude items from the group */ -}}
 {{- $notInGroup := hasPrefix $group "!" -}}
@@ -40,7 +40,7 @@ Creates a card for each item (linter/formatter) in a data file.
     {{- end -}}
 {{- end -}}
 
-{{- $gcilVersion := index $.Site.Data.version.version -}}
+{{- $gcilVersion := index hugo.Data.version.version -}}
 
 {{- /* Create cards */ -}}
 {{- range $items -}}
