@@ -624,7 +624,7 @@ type GoModGuardv2Base struct {
 }
 
 type GoModGuardv2Blocked struct {
-	GoModGuardv2Base
+	GoModGuardv2Base `mapstructure:",squash"`
 
 	Recommendations []string `mapstructure:"recommendations"`
 	Reason          string   `mapstructure:"reason"`
