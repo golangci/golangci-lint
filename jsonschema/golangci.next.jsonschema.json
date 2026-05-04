@@ -2240,6 +2240,20 @@
             "module-path": {
               "description": " Module path which contains the source code being formatted.",
               "type": "string"
+            },
+            "extra": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "group-params": {
+                  "type": "boolean",
+                  "default": false
+                },
+                "clothe-returns": {
+                  "type": "boolean",
+                  "default": false
+                }
+              }
             }
           }
         },

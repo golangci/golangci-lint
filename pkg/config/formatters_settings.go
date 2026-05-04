@@ -42,10 +42,18 @@ type GoFmtRewriteRule struct {
 }
 
 type GoFumptSettings struct {
-	ModulePath string `mapstructure:"module-path"`
-	ExtraRules bool   `mapstructure:"extra-rules"`
+	ModulePath string       `mapstructure:"module-path"`
+	Extra      GoFumptExtra `mapstructure:"extra"`
+
+	// Deprecated: use Extra instead.
+	ExtraRules bool `mapstructure:"extra-rules"`
 
 	LangVersion string `mapstructure:"-"`
+}
+
+type GoFumptExtra struct {
+	GroupParams   bool `mapstructure:"group-params"`
+	ClotheReturns bool `mapstructure:"clothe-returns"`
 }
 
 type GoImportsSettings struct {
