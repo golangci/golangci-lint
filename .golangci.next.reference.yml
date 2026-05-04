@@ -4652,6 +4652,16 @@ formatters:
       # Default: ""
       module-path: github.com/org/project
 
+      # Extra formatting rules.
+      extra:
+        # Groups function parameters with repeated types.
+        # Default: false
+        group-params: true
+        # Clothes naked returns in functions with named results.
+        # Default: false
+        clothe-returns: true
+
+      # Deprecated: use `extra` instead.
       # Choose whether to use the extra rules.
       # Default: false
       extra-rules: true
