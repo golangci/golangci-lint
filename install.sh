@@ -387,7 +387,17 @@ hash_sha256_verify() {
     return 1
   fi
   BASENAME=${TARGET##*/}
-  want=$(grep "${BASENAME}$" "${checksums}" 2>/dev/null | tr '\t' ' ' | cut -d ' ' -f 1)
+  want=""
+  # Parse checksum files by fields to avoid substring/regex matches.
+  while read -r sum file _; do
+    [ -z "$sum" ] && continue
+    file=${file#\*}
+    file=$(echo "$file" | tr -d '\r')
+    if [ "$file" = "$BASENAME" ]; then
+      want="$sum"
+      break
+    fi
+  done < "$checksums"
   if [ -z "$want" ]; then
     log_err "hash_sha256_verify unable to find checksum for '${TARGET}' in '${checksums}'"
     return 1
