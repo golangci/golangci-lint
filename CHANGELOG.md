@@ -8,6 +8,15 @@ If you value it, consider supporting us, we appreciate it!
 
 <!-- START --->
 
+### v2.12.2
+
+_Released on 2026-05-06_
+
+1. Linters bug fixes
+   * `gomodguard_v2`: fix blocked configuration
+   * `gomodguard_v2`: from 2.1.0 to 2.1.3
+   * `iface`: from 1.4.1 to 1.4.2
+
 ### v2.12.1
 
 _Released on 2026-05-01_
