@@ -78,7 +78,7 @@ require (
 	github.com/gostaticanalysis/forcetypeassert v0.2.0
 	github.com/gostaticanalysis/nilerr v0.1.2
 	github.com/hashicorp/go-version v1.9.0
-	github.com/jgautheron/goconst v1.10.0
+	github.com/jgautheron/goconst v1.10.1
 	github.com/jjti/go-spancheck v0.6.5
 	github.com/julz/importas v0.2.0
 	github.com/karamaru-alpha/copyloopvar v1.2.2
