@@ -9,6 +9,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/bidichk"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/bodyclose"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/canonicalheader"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/clickhouselint"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/containedctx"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/contextcheck"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/copyloopvar"
@@ -162,7 +163,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.43.0").
 			WithURL("https://github.com/breml/bidichk"),
 
-		linter.NewConfig(bodyclose.New()).
+		linter.NewConfig(bodyclose.New(&cfg.Linters.Settings.BodyClose)).
 			WithSince("v1.18.0").
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/timakin/bodyclose"),
@@ -172,6 +173,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithAutoFix().
 			WithURL("https://github.com/lasiar/canonicalheader"),
+
+		linter.NewConfig(clickhouselint.New()).
+			WithSince("v2.12.0").
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/ClickHouse/clickhouse-go-linter"),
 
 		linter.NewConfig(containedctx.New()).
 			WithSince("v1.44.0").
@@ -605,9 +611,9 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 		linter.NewConfig(rowserrcheck.New(&cfg.Linters.Settings.RowsErrCheck)).
 			WithSince("v1.23.0").
 			WithLoadForGoAnalysis().
-			WithURL("https://github.com/jingyugao/rowserrcheck"),
+			WithURL("https://github.com/golangci/rowserrcheck"),
 
-		linter.NewConfig(sloglint.New(&cfg.Linters.Settings.SlogLint)).
+		linter.NewConfig(sloglint.New(&cfg.Linters.Settings.Sloglint)).
 			WithSince("v1.55.0").
 			WithLoadForGoAnalysis().
 			WithAutoFix().

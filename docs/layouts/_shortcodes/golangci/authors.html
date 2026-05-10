@@ -4,7 +4,7 @@ Creates a card for each author of a linter/formatter.
 @example {{< golangci/authors >}}
 */ -}}
 
-{{- $thanks := index $.Site.Data.thanks -}}
+{{- $thanks := index hugo.Data.thanks -}}
 {{- range $thanks }}
 
 {{ $v := slice }}

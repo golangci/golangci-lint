@@ -6,7 +6,7 @@ import (
 	"log"
 
 	"golang.org/x/mod/modfile"
-	"gopkg.in/yaml.v3" // want "import of package `gopkg.in/yaml.v3` is blocked because the module is not in the allowed modules list."
+	"gopkg.in/yaml.v3" // want "import of package `gopkg.in/yaml.v3` is blocked because the module is in the blocked modules list. `github.com/kylelemons/go-gypsy` is a recommended module. This is an example of a reason."
 )
 
 // Something just some struct

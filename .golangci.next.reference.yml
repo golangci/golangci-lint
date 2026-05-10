@@ -26,6 +26,7 @@ linters:
     - bidichk
     - bodyclose
     - canonicalheader
+    - clickhouselint
     - containedctx
     - contextcheck
     - copyloopvar
@@ -143,6 +144,7 @@ linters:
     - bidichk
     - bodyclose
     - canonicalheader
+    - clickhouselint
     - containedctx
     - contextcheck
     - copyloopvar
@@ -279,6 +281,12 @@ linters:
       right-to-left-isolate: false
       first-strong-isolate: false
       pop-directional-isolate: false
+
+    bodyclose:
+      # Check that the response body is consumed.
+      # This has false positives.
+      # Default: false
+      check-consumption: true
 
     copyloopvar:
       # Check all assigning the loop variable to another variable.
@@ -1603,6 +1611,7 @@ linters:
         - G707 # SMTP command/header injection via taint analysis
         - G708 # Server-side template injection via taint analysis
         - G709 # Unsafe deserialization of untrusted data via taint analysis
+        - G710 # Open redirect via taint analysis
 
       # To specify a set of rules to explicitly exclude.
       # Available rules: https://github.com/securego/gosec#available-rules
@@ -1667,6 +1676,7 @@ linters:
         - G707 # SMTP command/header injection via taint analysis
         - G708 # Server-side template injection via taint analysis
         - G709 # Unsafe deserialization of untrusted data via taint analysis
+        - G710 # Open redirect via taint analysis
 
       # Filter out the issues with a lower severity than the given value.
       # Valid options are: low, medium, high.
@@ -3142,65 +3152,76 @@ linters:
         - github.com/jmoiron/sqlx
 
     sloglint:
-      # Enforce not mixing key-value pairs and attributes.
-      # https://github.com/go-simpler/sloglint?tab=readme-ov-file#no-mixed-arguments
-      # Default: true
-      no-mixed-args: false
-      # Enforce using key-value pairs only (overrides no-mixed-args, incompatible with attr-only).
-      # https://github.com/go-simpler/sloglint?tab=readme-ov-file#key-value-pairs-only
-      # Default: false
-      kv-only: true
-      # Enforce using attributes only (overrides no-mixed-args, incompatible with kv-only).
-      # https://github.com/go-simpler/sloglint?tab=readme-ov-file#attributes-only
-      # Default: false
-      attr-only: true
-      # Enforce not using global loggers.
-      # Values:
-      # - "": disabled
-      # - "all": report all global loggers
-      # - "default": report only the default slog logger
-      # https://github.com/go-simpler/sloglint?tab=readme-ov-file#no-global
+      # Report the use of global loggers.
+      # https://github.com/go-simpler/sloglint#no-global-logger
+      # Values: "all", "default"
       # Default: ""
       no-global: "all"
-      # Enforce using methods that accept a context.
-      # Values:
-      # - "": disabled
-      # - "all": report all contextless calls
-      # - "scope": report only if a context exists in the scope of the outermost function
-      # https://github.com/go-simpler/sloglint?tab=readme-ov-file#context-only
+      # Report the use of functions without a context.Context.
+      # https://github.com/go-simpler/sloglint#context-only
+      # Values: "all", "scope"
       # Default: ""
       context: "all"
-      # Enforce using static values for log messages.
-      # https://github.com/go-simpler/sloglint?tab=readme-ov-file#static-messages
+      # Report dynamic log messages, such as those that are built with fmt.Sprintf.
+      # https://github.com/go-simpler/sloglint#static-message
       # Default: false
       static-msg: true
-      # Enforce message style.
-      # Values: lowercased, capitalized
-      # https://github.com/go-simpler/sloglint?tab=readme-ov-file#message-style
+      # Report log messages that do not match a particular style.
+      # https://github.com/go-simpler/sloglint#message-style
+      # Values: "lowercased", "capitalized"
       # Default: ""
-      msg-style: capitalized
-      # Enforce using constants instead of raw keys.
-      # https://github.com/go-simpler/sloglint?tab=readme-ov-file#no-raw-keys
+      msg-style: "lowercased"
+      # Report the use of both key-value pairs and attributes within a single function call.
+      # https://github.com/go-simpler/sloglint#no-mixed-arguments
+      # Default: true
+      no-mixed-args: false
+      # Report any use of attributes as function call arguments.
+      # https://github.com/go-simpler/sloglint#key-value-pairs-only
+      # Default: false
+      kv-only: true
+      # Report any use of key-value pairs as function call arguments.
+      # https://github.com/go-simpler/sloglint#attributes-only
+      # Default: false
+      attr-only: true
+      # Report two or more arguments on the same line.
+      # https://github.com/go-simpler/sloglint#arguments-on-separate-lines
+      # Default: false
+      args-on-sep-lines: true
+      # Report the use of string literals as log keys.
+      # https://github.com/go-simpler/sloglint#constant-keys
       # Default: false
       no-raw-keys: true
-      # Enforce key naming convention.
-      # Values: snake, kebab, camel, pascal
-      # https://github.com/go-simpler/sloglint?tab=readme-ov-file#key-naming-convention
-      # Default: ""
-      key-naming-case: snake
-      # Enforce not using specific keys.
-      # https://github.com/go-simpler/sloglint?tab=readme-ov-file#forbidden-keys
+      # Report the use of log keys that are not explicitly allowed.
+      # https://github.com/go-simpler/sloglint#allowed-keys
+      # Default: []
+      allowed-keys:
+        - user_id
+      # Report the use of forbidden log keys.
+      # https://github.com/go-simpler/sloglint#forbidden-keys
       # Default: []
       forbidden-keys:
         - time
         - level
         - msg
         - source
-        - foo
-      # Enforce putting arguments on separate lines.
-      # https://github.com/go-simpler/sloglint?tab=readme-ov-file#arguments-on-separate-lines
-      # Default: false
-      args-on-sep-lines: true
+      # Report log keys that do not match a particular naming case.
+      # https://github.com/go-simpler/sloglint#key-naming-case
+      # Values: "snake", "kebab", "camel", "pascal"
+      # Default: ""
+      key-naming-case: "snake"
+      # Analyze custom functions in addition to the standard log/slog functions.
+      # https://github.com/go-simpler/sloglint#custom-function-analysis
+      # Default: []
+      custom-funcs:
+          # The full name of the function, including the package, e.g. "log/slog.Info".
+          # If the function is a method, the receiver type must be wrapped in parentheses, e.g. "(*log/slog.Logger).Info".
+        - name: "(*golang.org/x/exp/slog.Logger).InfoContext"
+          # The position of the "msg string" argument in the function signature, starting from 0.
+          # If there is no message in the function, a negative value must be passed.
+          msg-pos: 1
+          # The position of the "args ...any" argument in the function signature, starting from 0.
+          # If there are no arguments in the function, a negative value must be passed.
+          args-pos: 2
 
     spancheck:
       # Checks to enable.
@@ -4395,6 +4416,13 @@ linters:
       # Default: 0
       case-max-lines: 2
 
+      # Max number of cuddled statements allowed above block statements, go, defer and send.
+      # Every cuddled statement must have at least one variable used in the block.
+      # Respects allow-first-in-block and allow-whole-block.
+      # With 0 no cuddling is allowed at all; every cuddle-checked trigger requires a blank line above it
+      # Default: 1
+      cuddle-max-statements: 2
+
       # Default checks to use.
       # Can be `all`, `none`, `default` or empty.
       # https://github.com/bombsimon/wsl/tree/main?tab=readme-ov-file#checks-and-configuration
@@ -4406,10 +4434,12 @@ linters:
       # https://github.com/bombsimon/wsl/tree/main?tab=readme-ov-file#checks-and-configuration
       # Default: []
       enable:
+        - append
         - assign
         - branch
         - decl
         - defer
+        - err
         - expr
         - for
         - go
@@ -4422,23 +4452,28 @@ linters:
         - send
         - switch
         - type-switch
-        - append
-        - assign-exclusive
-        - assign-expr
-        - err
         - leading-whitespace
         - trailing-whitespace
         - after-block
+        - after-decl
+        - after-defer
+        - after-expr
+        - after-go
+        - assign-exclusive
+        - assign-expr
+        - cuddle-group
 
       # Disable checks.
       # Will be subtractive to any preset.
       # https://github.com/bombsimon/wsl/tree/main?tab=readme-ov-file#checks-and-configuration
       # Default: []
       disable:
+        - append
         - assign
         - branch
         - decl
         - defer
+        - err
         - expr
         - for
         - go
@@ -4451,13 +4486,16 @@ linters:
         - send
         - switch
         - type-switch
-        - append
-        - assign-exclusive
-        - assign-expr
-        - err
         - leading-whitespace
         - trailing-whitespace
         - after-block
+        - after-decl
+        - after-defer
+        - after-expr
+        - after-go
+        - assign-exclusive
+        - assign-expr
+        - cuddle-group
 
     # The custom section can be used to define linter plugins to be loaded at runtime.
     # See README documentation for more info.

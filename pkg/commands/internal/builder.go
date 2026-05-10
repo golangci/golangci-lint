@@ -96,6 +96,7 @@ func (b Builder) clone(ctx context.Context) error {
 		"https://github.com/golangci/golangci-lint.git",
 	)
 	cmd.Dir = b.root
+	cmd.Env = filterGitEnviron(os.Environ())
 
 	output, err := cmd.CombinedOutput()
 	if err != nil {
@@ -279,4 +280,34 @@ func sanitizeVersion(v string) string {
 	}
 
 	return strings.Join(strings.FieldsFunc(v, fn), "")
+}
+
+// Inspired by https://github.com/pre-commit/pre-commit/blob/f5678bf4ac35cffc0ff7174ad85f7fdc2a5c977e/pre_commit/git.py#L27
+func filterGitEnviron(envs []string) []string {
+	var filtered []string
+
+	for _, env := range envs {
+		if !strings.HasPrefix(env, "GIT_") {
+			filtered = append(filtered, env)
+			continue
+		}
+
+		if strings.HasPrefix(env, "GIT_CONFIG_KEY_") || strings.HasPrefix(env, "GIT_CONFIG_VALUE_") {
+			filtered = append(filtered, env)
+			continue
+		}
+
+		key, _, _ := strings.Cut(env, "=")
+
+		switch key {
+		case "GIT_EXEC_PATH", "GIT_SSH", "GIT_SSH_COMMAND", "GIT_SSL_CAINFO",
+			"GIT_SSL_NO_VERIFY", "GIT_CONFIG_COUNT",
+			"GIT_HTTP_PROXY_AUTHMETHOD",
+			"GIT_ALLOW_PROTOCOL",
+			"GIT_ASKPASS":
+			filtered = append(filtered, env)
+		}
+	}
+
+	return filtered
 }

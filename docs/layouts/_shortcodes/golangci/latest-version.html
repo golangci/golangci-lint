@@ -5,7 +5,7 @@ Based on the data file `data/version.json`.
 @example {{< golangci/latest-version >}}
 */ -}}
 
-{{- $v := index $.Site.Data.version.version -}}
+{{- $v := index hugo.Data.version.version -}}
 {{- if $v -}}
   {{- $v -}}
 {{- else if .Page.GitInfo -}}

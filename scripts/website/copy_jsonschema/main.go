@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 
 	hcversion "github.com/hashicorp/go-version"
 
@@ -30,6 +31,22 @@ func copySchemas() error {
 	err = os.CopyFS(dstDir, os.DirFS("jsonschema"))
 	if err != nil {
 		return fmt.Errorf("copy FS: %w", err)
+	}
+
+	matches, err := filepath.Glob(filepath.Join(dstDir, "*"))
+	if err != nil {
+		return fmt.Errorf("glob: %w", err)
+	}
+
+	for _, match := range matches {
+		if strings.HasSuffix(match, ".json") {
+			continue
+		}
+
+		err = os.RemoveAll(match)
+		if err != nil {
+			log.Printf("removing %q: %v", match, err)
+		}
 	}
 
 	err = copyLatestSchema(dstDir)

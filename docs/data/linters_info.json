@@ -55,6 +55,15 @@
     "since": "v1.58.0"
   },
   {
+    "name": "clickhouselint",
+    "desc": "Detects common mistakes with the ClickHouse native Go driver API.",
+    "loadMode": 8767,
+    "originalURL": "https://github.com/ClickHouse/clickhouse-go-linter",
+    "internal": false,
+    "isSlow": true,
+    "since": "v2.12.0"
+  },
+  {
     "name": "containedctx",
     "desc": "containedctx is a linter that detects struct contained context.Context field",
     "loadMode": 8767,
@@ -433,7 +442,21 @@
     "originalURL": "https://github.com/ryancurrah/gomodguard",
     "internal": false,
     "isSlow": false,
-    "since": "v1.25.0"
+    "since": "v1.25.0",
+    "deprecation": {
+      "since": "v2.12.0",
+      "message": "new major version.",
+      "replacement": "gomodguard_v2"
+    }
+  },
+  {
+    "name": "gomodguard_v2",
+    "desc": "Allow and blocklist linter for direct Go module dependencies. This is different from depguard where there are different block types for example version constraints and module recommendations.",
+    "loadMode": 8199,
+    "originalURL": "https://github.com/ryancurrah/gomodguard",
+    "internal": false,
+    "isSlow": false,
+    "since": "v2.12.0"
   },
   {
     "name": "goprintffuncname",
@@ -807,14 +830,14 @@
     "name": "rowserrcheck",
     "desc": "checks whether Rows.Err of rows is checked successfully",
     "loadMode": 8767,
-    "originalURL": "https://github.com/jingyugao/rowserrcheck",
+    "originalURL": "https://github.com/golangci/rowserrcheck",
     "internal": false,
     "isSlow": true,
     "since": "v1.23.0"
   },
   {
     "name": "sloglint",
-    "desc": "ensure consistent code style when using log/slog",
+    "desc": "Ensures consistent code style when using log/slog.",
     "loadMode": 8767,
     "originalURL": "https://github.com/go-simpler/sloglint",
     "internal": false,

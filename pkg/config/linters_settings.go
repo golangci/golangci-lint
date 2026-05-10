@@ -141,17 +141,20 @@ var defaultLintersSettings = LintersSettings{
 	Predeclared: PredeclaredSettings{
 		Qualified: false,
 	},
-	SlogLint: SlogLintSettings{
-		NoMixedArgs:    true,
-		KVOnly:         false,
-		AttrOnly:       false,
+	Sloglint: SloglintSettings{
 		NoGlobal:       "",
 		Context:        "",
 		StaticMsg:      false,
-		NoRawKeys:      false,
-		KeyNamingCase:  "",
-		ForbiddenKeys:  nil,
+		MsgStyle:       "",
+		NoMixedArgs:    true,
+		KVOnly:         false,
+		AttrOnly:       false,
 		ArgsOnSepLines: false,
+		NoRawKeys:      false,
+		AllowedKeys:    []string{},
+		ForbiddenKeys:  []string{},
+		KeyNamingCase:  "",
+		CustomFuncs:    []SloglintCustomFunc{},
 	},
 	TagAlign: TagAlignSettings{
 		Align:  true,
@@ -226,13 +229,14 @@ var defaultLintersSettings = LintersSettings{
 		ForceExclusiveShortDeclarations:  false,
 	},
 	WSLv5: WSLv5Settings{
-		AllowFirstInBlock: true,
-		AllowWholeBlock:   false,
-		BranchMaxLines:    2,
-		CaseMaxLines:      0,
-		Default:           "default",
-		Enable:            nil,
-		Disable:           nil,
+		AllowFirstInBlock:   true,
+		AllowWholeBlock:     false,
+		BranchMaxLines:      2,
+		CaseMaxLines:        0,
+		CuddleMaxStatements: 1,
+		Default:             "default",
+		Enable:              nil,
+		Disable:             nil,
 	},
 }
 
@@ -241,6 +245,7 @@ type LintersSettings struct {
 
 	Asasalint                AsasalintSettings                `mapstructure:"asasalint"`
 	BiDiChk                  BiDiChkSettings                  `mapstructure:"bidichk"`
+	BodyClose                BodyCloseSettings                `mapstructure:"bodyclose"`
 	CopyLoopVar              CopyLoopVarSettings              `mapstructure:"copyloopvar"`
 	Cyclop                   CyclopSettings                   `mapstructure:"cyclop"`
 	Decorder                 DecorderSettings                 `mapstructure:"decorder"`
@@ -307,7 +312,7 @@ type LintersSettings struct {
 	Recvcheck                RecvcheckSettings                `mapstructure:"recvcheck"`
 	Revive                   ReviveSettings                   `mapstructure:"revive"`
 	RowsErrCheck             RowsErrCheckSettings             `mapstructure:"rowserrcheck"`
-	SlogLint                 SlogLintSettings                 `mapstructure:"sloglint"`
+	Sloglint                 SloglintSettings                 `mapstructure:"sloglint"`
 	Spancheck                SpancheckSettings                `mapstructure:"spancheck"`
 	Staticcheck              StaticCheckSettings              `mapstructure:"staticcheck"`
 	TagAlign                 TagAlignSettings                 `mapstructure:"tagalign"`
@@ -358,6 +363,10 @@ type BiDiChkSettings struct {
 	RightToLeftIsolate       bool `mapstructure:"right-to-left-isolate"`
 	FirstStrongIsolate       bool `mapstructure:"first-strong-isolate"`
 	PopDirectionalIsolate    bool `mapstructure:"pop-directional-isolate"`
+}
+
+type BodyCloseSettings struct {
+	CheckConsumption bool `mapstructure:"check-consumption"`
 }
 
 type CopyLoopVarSettings struct {
@@ -615,7 +624,7 @@ type GoModGuardv2Base struct {
 }
 
 type GoModGuardv2Blocked struct {
-	GoModGuardv2Base
+	GoModGuardv2Base `mapstructure:",squash"`
 
 	Recommendations []string `mapstructure:"recommendations"`
 	Reason          string   `mapstructure:"reason"`
@@ -909,18 +918,26 @@ type RowsErrCheckSettings struct {
 	Packages []string `mapstructure:"packages"`
 }
 
-type SlogLintSettings struct {
-	NoMixedArgs    bool     `mapstructure:"no-mixed-args"`
-	KVOnly         bool     `mapstructure:"kv-only"`
-	AttrOnly       bool     `mapstructure:"attr-only"`
-	NoGlobal       string   `mapstructure:"no-global"`
-	Context        string   `mapstructure:"context"`
-	StaticMsg      bool     `mapstructure:"static-msg"`
-	MsgStyle       string   `mapstructure:"msg-style"`
-	NoRawKeys      bool     `mapstructure:"no-raw-keys"`
-	KeyNamingCase  string   `mapstructure:"key-naming-case"`
-	ForbiddenKeys  []string `mapstructure:"forbidden-keys"`
-	ArgsOnSepLines bool     `mapstructure:"args-on-sep-lines"`
+type SloglintSettings struct {
+	NoGlobal       string               `mapstructure:"no-global"`
+	Context        string               `mapstructure:"context"`
+	StaticMsg      bool                 `mapstructure:"static-msg"`
+	MsgStyle       string               `mapstructure:"msg-style"`
+	NoMixedArgs    bool                 `mapstructure:"no-mixed-args"`
+	KVOnly         bool                 `mapstructure:"kv-only"`
+	AttrOnly       bool                 `mapstructure:"attr-only"`
+	ArgsOnSepLines bool                 `mapstructure:"args-on-sep-lines"`
+	NoRawKeys      bool                 `mapstructure:"no-raw-keys"`
+	AllowedKeys    []string             `mapstructure:"allowed-keys"`
+	ForbiddenKeys  []string             `mapstructure:"forbidden-keys"`
+	KeyNamingCase  string               `mapstructure:"key-naming-case"`
+	CustomFuncs    []SloglintCustomFunc `mapstructure:"custom-funcs"`
+}
+
+type SloglintCustomFunc struct {
+	Name    string `mapstructure:"name"`
+	MsgPos  int    `mapstructure:"msg-pos"`
+	ArgsPos int    `mapstructure:"args-pos"`
 }
 
 type SpancheckSettings struct {
@@ -1158,13 +1175,14 @@ type WSLv4Settings struct {
 }
 
 type WSLv5Settings struct {
-	AllowFirstInBlock bool     `mapstructure:"allow-first-in-block"`
-	AllowWholeBlock   bool     `mapstructure:"allow-whole-block"`
-	BranchMaxLines    int      `mapstructure:"branch-max-lines"`
-	CaseMaxLines      int      `mapstructure:"case-max-lines"`
-	Default           string   `mapstructure:"default"`
-	Enable            []string `mapstructure:"enable"`
-	Disable           []string `mapstructure:"disable"`
+	AllowFirstInBlock   bool     `mapstructure:"allow-first-in-block"`
+	AllowWholeBlock     bool     `mapstructure:"allow-whole-block"`
+	BranchMaxLines      int      `mapstructure:"branch-max-lines"`
+	CaseMaxLines        int      `mapstructure:"case-max-lines"`
+	CuddleMaxStatements int      `mapstructure:"cuddle-max-statements"`
+	Default             string   `mapstructure:"default"`
+	Enable              []string `mapstructure:"enable"`
+	Disable             []string `mapstructure:"disable"`
 }
 
 // CustomLinterSettings encapsulates the meta-data of a private linter.

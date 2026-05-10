@@ -41,6 +41,10 @@ builds:
       - goos: windows
         goarch: arm
 
+sboms:
+  - id: archive
+    artifacts: archive
+
 archives:
   - formats: [ 'tar.gz' ]
     wrap_in_directory: true
@@ -92,29 +96,6 @@ release:
 source:
   enabled: true
   name_template: '{{ .ProjectName }}-{{ .Version }}-source'
-
-brews:
-  - description: Fast linters runner for Go.
-    homepage: https://golangci.com
-    skip_upload: false
-    repository:
-      owner: golangci
-      name: homebrew-tap
-    commit_author:
-      name: golangci-releaser
-      email: 65486276+golangci-releaser@users.noreply.github.com
-    directory: Formula
-    install: |
-      bin.install "golangci-lint"
-      output = Utils.popen_read("#{bin}/golangci-lint completion bash")
-      (bash_completion/"golangci-lint").write output
-      output = Utils.popen_read("#{bin}/golangci-lint completion zsh")
-      (zsh_completion/"_golangci-lint").write output
-      output = Utils.popen_read("#{bin}/golangci-lint completion fish")
-      (fish_completion/"golangci-lint.fish").write output
-      prefix.install_metafiles
-    test: |
-      system "#{bin}/golangci-lint --version"
 
 ## chocolatey is disabled because mono has been removed from GitHub Actions runners due to security and maintenance concerns.
 ## The release is done manually and locally, with goreleaser after the release of the other elements.

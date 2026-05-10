@@ -17,8 +17,8 @@ body:
     id: install
     attributes:
       label: How did you install golangci-lint?
+      multiple: true
       options:
-        - I don't know
         - Official GitHub Action
         - Official binary
         - Brew
@@ -33,7 +33,7 @@ body:
         - Nix
         - Deb
         - RPM
-        - Other Linux package manager
+        - Other Linux package managers
         - Via editor/IDE
         - asdf/mise-en-place
         - Other
@@ -76,5 +76,6 @@ body:
     id: supporter
     attributes:
       label: Supporter
+      description: If you find golangci-lint valuable, consider [sponsoring the project](https://donate.golangci.org) to help sustain its development. 💛
       options:
         - label: I am a [sponsor/backer](https://donate.golangci.org) of this project.
