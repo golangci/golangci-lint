@@ -2225,8 +2225,12 @@ linters:
       disable:
         # Replace interface{} with any.
         - any
-        # Replace []byte(fmt.Sprintf) with fmt.Appendf.
-        - fmtappendf
+        # Replace basic types in sync/atomic calls with atomic types.
+        - atomictypes
+        # Simplify references to embedded fields in composite literals.
+        - embedlit
+        # Replace errors.As with errors.AsType[T].
+        - errorsastype
         # Remove redundant re-declaration of loop variables.
         - forvar
         # Replace explicit loops over maps with calls to maps package.
@@ -2243,6 +2247,8 @@ linters:
         - rangeint
         # Replace reflect.TypeOf(x) with TypeFor[T]().
         - reflecttypefor
+        # Replace backward loops over slices with slices.Backward.
+        - slicesbackward
         # Replace loops with slices.Contains or slices.ContainsFunc.
         - slicescontains
         # Replace sort.Slice with slices.Sort for basic types.
@@ -2262,7 +2268,7 @@ linters:
         # Replace unsafe pointer arithmetic with function calls.
         - unsafefuncs
         # Replace wg.Add(1)/go/wg.Done() with wg.Go.
-        - waitgroup
+        - waitgroupgo
 
     musttag:
       # A set of custom functions to check in addition to the builtin ones.
