@@ -17,7 +17,8 @@ func badDoubleUnlockCase() {
 
 func badConditionalMissingUnlockCase() {
 	var mu sync.Mutex
-	if true {
+	cond := true
+	if cond {
 		mu.Lock() // want "mutex 'mu' is locked but not unlocked in if"
 	}
 }
