@@ -14,7 +14,7 @@ ignore (
 )
 
 require (
-	4d63.com/gocheckcompilerdirectives v1.3.0
+	4d63.com/gocheckcompilerdirectives v1.4.0
 	4d63.com/gochecknoglobals v0.2.2
 	charm.land/lipgloss/v2 v2.0.3
 	codeberg.org/polyfloyd/go-errorlint v1.9.0
