@@ -1,0 +1,334 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Golangci-lint – Welcome</title><link>https://golangci-lint.run/docs/welcome/</link><description>Recent content in Welcome on Golangci-lint</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://golangci-lint.run/docs/welcome/index.xml" rel="self" type="application/rss+xml"/><item><title>Install</title><link>https://golangci-lint.run/docs/welcome/install/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://golangci-lint.run/docs/welcome/install/</guid><description>
+&lt;p&gt;Where do you want to install golangci-lint?&lt;/p&gt;
+&lt;div class="hextra-cards hx:mt-4 hx:gap-4 hx:grid not-prose" style="--hextra-cards-grid-cols: 3;"&gt;
+&lt;a
+class="hextra-card hx:group hx:flex hx:flex-col hx:justify-start hx:overflow-hidden hx:rounded-lg hx:border hx:border-gray-200 hx:text-current hx:no-underline hx:dark:shadow-none hx:hover:shadow-gray-100 hx:dark:hover:shadow-none hx:shadow-gray-100 hx:active:shadow-sm hx:active:shadow-gray-200 hx:transition-all hx:duration-200 hx:hover:border-gray-300 hx:bg-transparent hx:shadow-xs hx:dark:border-neutral-800 hx:hover:bg-slate-50 hx:hover:shadow-md hx:dark:hover:border-neutral-700 hx:dark:hover:bg-neutral-900"href="https://golangci-lint.run/docs/welcome/install/local"
+&gt;&lt;div class="hx:mt-auto"&gt;
+&lt;span class="hextra-card-icon hx:flex hx:font-semibold hx:items-start hx:gap-2 hx:p-4 hx:text-gray-700 hx:hover:text-gray-900 hx:dark:text-neutral-200 hx:dark:hover:text-neutral-50"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/&gt;&lt;/svg&gt;On my machine&lt;/span&gt;&lt;/div&gt;&lt;/a&gt;
+&lt;a
+class="hextra-card hx:group hx:flex hx:flex-col hx:justify-start hx:overflow-hidden hx:rounded-lg hx:border hx:border-gray-200 hx:text-current hx:no-underline hx:dark:shadow-none hx:hover:shadow-gray-100 hx:dark:hover:shadow-none hx:shadow-gray-100 hx:active:shadow-sm hx:active:shadow-gray-200 hx:transition-all hx:duration-200 hx:hover:border-gray-300 hx:bg-transparent hx:shadow-xs hx:dark:border-neutral-800 hx:hover:bg-slate-50 hx:hover:shadow-md hx:dark:hover:border-neutral-700 hx:dark:hover:bg-neutral-900"href="https://golangci-lint.run/docs/welcome/install/ci"
+&gt;&lt;div class="hx:mt-auto"&gt;
+&lt;span class="hextra-card-icon hx:flex hx:font-semibold hx:items-start hx:gap-2 hx:p-4 hx:text-gray-700 hx:hover:text-gray-900 hx:dark:text-neutral-200 hx:dark:hover:text-neutral-50"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/&gt;&lt;/svg&gt;On CI/CD systems&lt;/span&gt;&lt;/div&gt;&lt;/a&gt;
+&lt;/div&gt;</description></item><item><title>Quick Start</title><link>https://golangci-lint.run/docs/welcome/quick-start/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://golangci-lint.run/docs/welcome/quick-start/</guid><description>
+&lt;h2&gt;Linting&lt;span class="hx:absolute hx:-mt-20" id="linting"&gt;&lt;/span&gt;
+&lt;a href="#linting" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;To run golangci-lint:&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;golangci-lint run&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;It&amp;rsquo;s an equivalent of:&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;golangci-lint run ./...&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;You can choose which directories or files to analyze:&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;golangci-lint run dir1 dir2/...
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;golangci-lint run file1.go&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Directories are NOT analyzed recursively.
+To analyze them recursively append &lt;code&gt;/...&lt;/code&gt; to their path.
+It&amp;rsquo;s not possible to mix files and packages/directories, and files must come from the same package.&lt;/p&gt;
+&lt;p&gt;Golangci-lint can be used with zero configuration. By default, the following linters are enabled:&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-console" data-lang="console"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gp"&gt;$&lt;/span&gt; golangci-lint &lt;span class="nb"&gt;help&lt;/span&gt; linters
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;Enabled by default linters:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;errcheck: Errcheck is a program for checking for unchecked errors in Go code. These unchecked errors can be critical bugs in some cases.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;govet: Vet examines Go source code and reports suspicious constructs. It is roughly the same as &amp;#39;go vet&amp;#39; and uses its passes. [auto-fix]
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;ineffassign: Detects when assignments to existing variables are not used. [fast]
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;staticcheck: It&amp;#39;s the set of rules from staticcheck. [auto-fix]
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="go"&gt;unused: Checks Go code for unused constants, variables, functions and types.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Pass &lt;code&gt;-E/--enable&lt;/code&gt; to enable linter and &lt;code&gt;-D/--disable&lt;/code&gt; to disable:&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;golangci-lint run --default&lt;span class="o"&gt;=&lt;/span&gt;none -E errcheck&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;More information about available linters can be found in the &lt;a href="https://golangci-lint.run/docs/linters/"&gt;linters page&lt;/a&gt;.&lt;/p&gt;
+&lt;h2&gt;Formatting&lt;span class="hx:absolute hx:-mt-20" id="formatting"&gt;&lt;/span&gt;
+&lt;a href="#formatting" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;To format your code:&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;golangci-lint fmt&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;You can choose which directories or files to analyze:&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;golangci-lint fmt dir1 dir2/...
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;golangci-lint fmt file1.go&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;More information about available formatters can be found in the &lt;a href="https://golangci-lint.run/docs/formatters/"&gt;formatters page&lt;/a&gt;.&lt;/p&gt;</description></item><item><title>Integrations</title><link>https://golangci-lint.run/docs/welcome/integrations/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://golangci-lint.run/docs/welcome/integrations/</guid><description>
+&lt;h2&gt;Editor Integration&lt;span class="hx:absolute hx:-mt-20" id="editor-integration"&gt;&lt;/span&gt;
+&lt;a href="#editor-integration" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;h3&gt;GoLand&lt;span class="hx:absolute hx:-mt-20" id="goland"&gt;&lt;/span&gt;
+&lt;a href="#goland" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Starting from version 2025.1, GoLand has built-in support of golangci-lint.
+For IntelliJ IDEA with the Go plugin, please install the &lt;a href="https://plugins.jetbrains.com/plugin/12496-go-linter"target="_blank" rel="noopener"&gt;plugin&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Both v1 and v2 versions are supported.&lt;/p&gt;
+&lt;h3&gt;Visual Studio Code&lt;span class="hx:absolute hx:-mt-20" id="visual-studio-code"&gt;&lt;/span&gt;
+&lt;a href="#visual-studio-code" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Install the &lt;a href="https://marketplace.visualstudio.com/items?itemName=golang.Go"target="_blank" rel="noopener"&gt;extension&lt;/a&gt;.&lt;/p&gt;
+&lt;details class="hx:last-of-type:mb-0 hx:rounded-lg hx:bg-neutral-50 hx:dark:bg-neutral-800 hx:p-2 hx:mt-4 hx:group" &gt;
+&lt;summary class="hx:flex hx:items-center hx:cursor-pointer hx:select-none hx:list-none hx:p-1 hx:rounded-sm hx:transition-colors hx:hover:bg-gray-100 hx:dark:hover:bg-neutral-800 hx:before:mr-1 hx:before:inline-block hx:before:transition-transform hx:before:content-[''] hx:dark:before:invert hx:rtl:before:rotate-180 hx:group-open:before:rotate-90"&gt;
+&lt;span class="hx:text-lg"&gt;Recommended settings for those who installed golangci-lint manually&lt;/span&gt;
+&lt;/summary&gt;
+&lt;div class="hx:p-2 hx:overflow-hidden"&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-JSONata" data-lang="JSONata"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;&amp;#34;go.lintTool&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;golangci-lint&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;&amp;#34;go.lintFlags&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="s2"&gt;&amp;#34;--path-mode=abs&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="s2"&gt;&amp;#34;--fast-only&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;],&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;&amp;#34;go.formatTool&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;custom&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;&amp;#34;go.alternateTools&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;customFormatter&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;golangci-lint&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;},&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;&amp;#34;go.formatFlags&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="s2"&gt;&amp;#34;fmt&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="s2"&gt;&amp;#34;--stdin&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Using it in an editor without &lt;code&gt;--fast-only&lt;/code&gt; can freeze your editor.
+Golangci-lint automatically discovers the &lt;code&gt;.golangci.yml&lt;/code&gt; config for the edited file, so you don&amp;rsquo;t need to configure it in VS Code settings.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;details class="hx:last-of-type:mb-0 hx:rounded-lg hx:bg-neutral-50 hx:dark:bg-neutral-800 hx:p-2 hx:mt-4 hx:group" &gt;
+&lt;summary class="hx:flex hx:items-center hx:cursor-pointer hx:select-none hx:list-none hx:p-1 hx:rounded-sm hx:transition-colors hx:hover:bg-gray-100 hx:dark:hover:bg-neutral-800 hx:before:mr-1 hx:before:inline-block hx:before:transition-transform hx:before:content-[''] hx:dark:before:invert hx:rtl:before:rotate-180 hx:group-open:before:rotate-90"&gt;
+&lt;span class="hx:text-lg"&gt;Recommended settings for those who installed golangci-lint via extension&lt;/span&gt;
+&lt;/summary&gt;
+&lt;div class="hx:p-2 hx:overflow-hidden"&gt;
+&lt;p&gt;Install &lt;code&gt;golangci-lint-v2&lt;/code&gt; via the &lt;code&gt;Go: Install/Update Tools&lt;/code&gt; command after setting these configs.
+This will enable golangci-lint v1 to co-exist with v2.
+And use the following settings:&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-JSONata" data-lang="JSONata"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;&amp;#34;go.lintTool&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;golangci-lint-v2&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;&amp;#34;go.lintFlags&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="s2"&gt;&amp;#34;--path-mode=abs&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="s2"&gt;&amp;#34;--fast-only&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;],&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;&amp;#34;go.formatTool&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;custom&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;&amp;#34;go.alternateTools&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;customFormatter&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;golangci-lint-v2&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;},&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;&amp;#34;go.formatFlags&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="s2"&gt;&amp;#34;fmt&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="s2"&gt;&amp;#34;--stdin&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Using it in an editor without &lt;code&gt;--fast-only&lt;/code&gt; can freeze your editor.
+Golangci-lint automatically discovers the &lt;code&gt;.golangci.yml&lt;/code&gt; config for the edited file, so you don&amp;rsquo;t need to configure it in VS Code settings.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;h3&gt;GNU Emacs&lt;span class="hx:absolute hx:-mt-20" id="gnu-emacs"&gt;&lt;/span&gt;
+&lt;a href="#gnu-emacs" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;There are available plugins:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/syl20bnr/spacemacs/blob/develop/layers/&amp;#43;lang/go/README.org#linting"target="_blank" rel="noopener"&gt;Spacemacs&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/weijiangan/flycheck-golangci-lint"target="_blank" rel="noopener"&gt;Flycheck checker&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Vim&lt;span class="hx:absolute hx:-mt-20" id="vim"&gt;&lt;/span&gt;
+&lt;a href="#vim" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;The following plugins support golangci-lint:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/fatih/vim-go"target="_blank" rel="noopener"&gt;vim-go&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/w0rp/ale"target="_blank" rel="noopener"&gt;ALE&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;LSP Server&lt;span class="hx:absolute hx:-mt-20" id="lsp-server"&gt;&lt;/span&gt;
+&lt;a href="#lsp-server" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;&lt;a href="https://github.com/nametake/golangci-lint-langserver"target="_blank" rel="noopener"&gt;golangci-lint-langserver&lt;/a&gt; (NeoVim, Vim, Emacs, &amp;hellip;)&lt;/p&gt;
+&lt;h3&gt;Sublime Text&lt;span class="hx:absolute hx:-mt-20" id="sublime-text"&gt;&lt;/span&gt;
+&lt;a href="#sublime-text" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;There is a &lt;a href="https://github.com/SublimeLinter/SublimeLinter-golangcilint"target="_blank" rel="noopener"&gt;plugin&lt;/a&gt; for SublimeLinter.&lt;/p&gt;
+&lt;h2&gt;Shell Completion&lt;span class="hx:absolute hx:-mt-20" id="shell-completion"&gt;&lt;/span&gt;
+&lt;a href="#shell-completion" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Golangci-lint can generate Bash, fish, PowerShell, and Zsh completion files.&lt;/p&gt;
+&lt;p&gt;See the instructions on &lt;code&gt;golangci-lint completion &amp;lt;YOUR_SHELL&amp;gt; --help&lt;/code&gt; (replace &lt;code&gt;&amp;lt;YOUR_SHELL&amp;gt;&lt;/code&gt; with your favorite one).&lt;/p&gt;
+&lt;details class="hx:last-of-type:mb-0 hx:rounded-lg hx:bg-neutral-50 hx:dark:bg-neutral-800 hx:p-2 hx:mt-4 hx:group" &gt;
+&lt;summary class="hx:flex hx:items-center hx:cursor-pointer hx:select-none hx:list-none hx:p-1 hx:rounded-sm hx:transition-colors hx:hover:bg-gray-100 hx:dark:hover:bg-neutral-800 hx:before:mr-1 hx:before:inline-block hx:before:transition-transform hx:before:content-[''] hx:dark:before:invert hx:rtl:before:rotate-180 hx:group-open:before:rotate-90"&gt;
+&lt;span class="hx:text-lg"&gt;Bash &amp;amp; macOS&lt;/span&gt;
+&lt;/summary&gt;
+&lt;div class="hx:p-2 hx:overflow-hidden"&gt;
+&lt;p&gt;There are two versions of &lt;code&gt;bash-completion&lt;/code&gt;, v1 and v2. V1 is for Bash 3.2 (which is the default on macOS), and v2 is for Bash 4.1+.&lt;/p&gt;
+&lt;p&gt;The golangci-lint completion script doesn’t work correctly with bash-completion v1 and Bash 3.2. It requires bash-completion v2 and Bash 4.1+.&lt;/p&gt;
+&lt;p&gt;Thus, to be able to correctly use golangci-lint completion on macOS, you have to install and use Bash 4.1+ (&lt;a href="https://itnext.io/upgrading-bash-on-macos-7138bd1066ba"target="_blank" rel="noopener"&gt;instructions&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;The following instructions assume that you use Bash 4.1+ (that is, any Bash version of 4.1 or newer).&lt;/p&gt;
+&lt;p&gt;Install &lt;code&gt;bash-completion v2&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;brew install bash-completion@2
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;export BASH_COMPLETION_COMPAT_DIR=&amp;#34;/usr/local/etc/bash_completion.d&amp;#34;&amp;#39;&lt;/span&gt; &amp;gt;&amp;gt;~/.bashrc
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;[[ -r &amp;#34;/usr/local/etc/profile.d/bash_completion.sh&amp;#34; ]] &amp;amp;&amp;amp; . &amp;#34;/usr/local/etc/profile.d/bash_completion.sh&amp;#34;&amp;#39;&lt;/span&gt; &amp;gt;&amp;gt;~/.bashrc
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;exec&lt;/span&gt; bash &lt;span class="c1"&gt;# reload and replace (if it was updated) shell&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;type&lt;/span&gt; _init_completion &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;completion is OK&amp;#34;&lt;/span&gt; &lt;span class="c1"&gt;# verify that bash-completion v2 is correctly installed&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Add golangci-lint bash completion:&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;source &amp;lt;(golangci-lint completion bash)&amp;#39;&lt;/span&gt; &amp;gt;&amp;gt;~/.bashrc
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;source&lt;/span&gt; ~/.bashrc&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;h2&gt;CI Integration&lt;span class="hx:absolute hx:-mt-20" id="ci-integration"&gt;&lt;/span&gt;
+&lt;a href="#ci-integration" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Check out our &lt;a href="https://golangci-lint.run/docs/welcome/install/#ci-installation"&gt;documentation for CI integrations&lt;/a&gt;.&lt;/p&gt;</description></item><item><title>FAQ</title><link>https://golangci-lint.run/docs/welcome/faq/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://golangci-lint.run/docs/welcome/faq/</guid><description>
+&lt;h2&gt;Which Go versions are supported?&lt;span class="hx:absolute hx:-mt-20" id="which-go-versions-are-supported"&gt;&lt;/span&gt;
+&lt;a href="#which-go-versions-are-supported" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;The same as the Go team (the 2 latest minor versions).&lt;/p&gt;
+&lt;p&gt;Basically, golangci-lint supports Go versions lower or equal to the Go version used to compile it.&lt;/p&gt;
+&lt;p&gt;New versions of Go are not automatically supported because, in addition to the Go version used to build it,
+some linters and/or internal pieces of golangci-lint could need to be adapted to support this new Go version.&lt;/p&gt;
+&lt;h2&gt;How to use golangci-lint in CI&lt;span class="hx:absolute hx:-mt-20" id="how-to-use-golangci-lint-in-ci"&gt;&lt;/span&gt;
+&lt;a href="#how-to-use-golangci-lint-in-ci" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Run golangci-lint in CI and check the exit code. If it&amp;rsquo;s non-zero - fail the build.&lt;/p&gt;
+&lt;p&gt;See &lt;a href="https://golangci-lint.run/docs/welcome/install/ci/"&gt;how to properly install golangci-lint in CI&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;golangci-lint doesn&amp;rsquo;t work&lt;span class="hx:absolute hx:-mt-20" id="golangci-lint-doesnt-work"&gt;&lt;/span&gt;
+&lt;a href="#golangci-lint-doesnt-work" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;Please ensure you are using the latest binary release.&lt;/li&gt;
+&lt;li&gt;Run it with &lt;code&gt;-v&lt;/code&gt; option and check the output.&lt;/li&gt;
+&lt;li&gt;If it doesn&amp;rsquo;t help, create a &lt;a href="https://github.com/golangci/golangci-lint/issues/new/choose"target="_blank" rel="noopener"&gt;GitHub issue&lt;/a&gt; with the output from the error and #2 above.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;Why do you have &lt;code&gt;typecheck&lt;/code&gt; errors?&lt;span class="hx:absolute hx:-mt-20" id="why-do-you-have-typecheck-errors"&gt;&lt;/span&gt;
+&lt;a href="#why-do-you-have-typecheck-errors" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;&lt;code&gt;typecheck&lt;/code&gt; is like a front-end for the Go compiler errors.
+Compilation errors are identified/labeled as reports of &lt;code&gt;typecheck&lt;/code&gt; but they are not produced by a linter called &lt;code&gt;typecheck&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;typecheck&lt;/code&gt; is not a linter, it doesn&amp;rsquo;t perform any analysis,
+it&amp;rsquo;s just a way to identify, parse, and display compiling errors (produced by the &lt;code&gt;types.Checker&lt;/code&gt;) and some linter errors.&lt;/p&gt;
+&lt;p&gt;It cannot be disabled because of that.&lt;/p&gt;
+&lt;p&gt;Of course, this is just as good as the compiler itself, and a lot of compilation issues will not properly show where in the code your error lies.&lt;/p&gt;
+&lt;p&gt;As a consequence, the code to analyze should compile.
+It means that if you try to run an analysis on a single file or a group of files or a package or a group of packages,
+with dependencies on other files or packages of your project, as it doesn&amp;rsquo;t compile (because of the missing pieces of code),
+it also cannot be analyzed.&lt;/p&gt;
+&lt;p&gt;If there are &lt;code&gt;typecheck&lt;/code&gt; errors, golangci-lint will not be able to produce other reports because that kind of error doesn&amp;rsquo;t allow it to perform any analysis.&lt;/p&gt;
+&lt;p&gt;How to troubleshoot:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Ensure the version of golangci-lint is built with a compatible version of Go (&lt;code&gt;golangci-lint version&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;Ensure dependencies are up to date with &lt;code&gt;go mod tidy&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Ensure building works with &lt;code&gt;go run ./...&lt;/code&gt;/&lt;code&gt;go build ./...&lt;/code&gt; - whole package.&lt;/li&gt;
+&lt;li&gt;Ensure you are not running an analysis on code that depends on files/packages outside the scope of the analyzed elements.&lt;/li&gt;
+&lt;li&gt;If using CGO, ensure all required system libraries are installed.&lt;/li&gt;
+&lt;li&gt;If you are using private repositories/dependencies, ensure the &lt;a href="https://go.dev/ref/mod#module-proxy"target="_blank" rel="noopener"&gt;Go proxy&lt;/a&gt; (&lt;code&gt;GOPROXY&lt;/code&gt;) and &lt;a href="https://go.dev/ref/mod#checksum-database"target="_blank" rel="noopener"&gt;checksum database&lt;/a&gt; (&lt;code&gt;GOSUMDB&lt;/code&gt;) are right and/or your git configuration.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;Why is it not possible to skip/ignore &lt;code&gt;typecheck&lt;/code&gt; errors?&lt;span class="hx:absolute hx:-mt-20" id="why-is-it-not-possible-to-skipignore-typecheck-errors"&gt;&lt;/span&gt;
+&lt;a href="#why-is-it-not-possible-to-skipignore-typecheck-errors" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;For mainly the same reasons that you cannot compile when you have a compiler error.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;typecheck&lt;/code&gt; errors are reported in the same style as linter reports/issues,
+but are completely different because they are related to problems that block the analysis (&lt;code&gt;typecheck&lt;/code&gt; is not a linter).&lt;/p&gt;
+&lt;p&gt;When there are &lt;code&gt;typecheck&lt;/code&gt; errors,
+most linters are not able to perform the analysis,
+and they simply do not produce any reports,
+so it&amp;rsquo;s not possible to skip/ignore &lt;code&gt;typecheck&lt;/code&gt; errors.&lt;/p&gt;
+&lt;h2&gt;Why running with &lt;code&gt;--fast-only&lt;/code&gt; can be slow on the first run?&lt;span class="hx:absolute hx:-mt-20" id="why-running-with---fast-only-can-be-slow-on-the-first-run"&gt;&lt;/span&gt;
+&lt;a href="#why-running-with---fast-only-can-be-slow-on-the-first-run" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Because the first run caches type information.
+All subsequent runs will be faster.
+Usually this option is used during development on a local machine and compilation was already performed.&lt;/p&gt;
+&lt;h2&gt;How do you add a custom linter?&lt;span class="hx:absolute hx:-mt-20" id="how-do-you-add-a-custom-linter"&gt;&lt;/span&gt;
+&lt;a href="#how-do-you-add-a-custom-linter" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;You can integrate it yourself, see this &lt;a href="https://golangci-lint.run/docs/contributing/new-linters/"&gt;manual&lt;/a&gt;.
+Or you can create a &lt;a href="https://github.com/golangci/golangci-lint/issues/new?assignees=&amp;amp;labels=enhancement&amp;amp;projects=&amp;amp;template=feature_request.yml"target="_blank" rel="noopener"&gt;GitHub Issue&lt;/a&gt; and we will integrate when time permits.&lt;/p&gt;
+&lt;h2&gt;How to integrate golangci-lint into a large project with thousands of issues&lt;span class="hx:absolute hx:-mt-20" id="how-to-integrate-golangci-lint-into-a-large-project-with-thousands-of-issues"&gt;&lt;/span&gt;
+&lt;a href="#how-to-integrate-golangci-lint-into-a-large-project-with-thousands-of-issues" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;We are sure that every project can easily integrate golangci-lint, even the large one.&lt;/p&gt;
+&lt;p&gt;The idea is to not fix all existing issues.
+Fix only newly added issue: issues in new code.&lt;/p&gt;
+&lt;p&gt;To do this, set up the CI to run golangci-lint with options &lt;code&gt;--new-from-merge-base=main&lt;/code&gt; or &lt;code&gt;--new-from-rev=HEAD~1&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Also, take a look at option &lt;code&gt;--new&lt;/code&gt;,
+but consider that CI scripts that generate unstaged files will make &lt;code&gt;--new&lt;/code&gt; only point out issues in those files and not in the last commit.
+In that regard &lt;code&gt;--new-from-merge-base=main&lt;/code&gt; or &lt;code&gt;--new-from-rev=HEAD~1&lt;/code&gt; are safer.&lt;/p&gt;
+&lt;p&gt;By doing this you won&amp;rsquo;t create new issues in your code and can choose to fix existing issues (or not).&lt;/p&gt;
+&lt;h2&gt;Why &lt;code&gt;--new-from-xxx&lt;/code&gt; don&amp;rsquo;t seem to be working in some cases?&lt;span class="hx:absolute hx:-mt-20" id="why---new-from-xxx-dont-seem-to-be-working-in-some-cases"&gt;&lt;/span&gt;
+&lt;a href="#why---new-from-xxx-dont-seem-to-be-working-in-some-cases" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;The options &lt;code&gt;--new-from-merge-base&lt;/code&gt;, &lt;code&gt;--new-from-rev&lt;/code&gt;, and &lt;code&gt;--new-from-patch&lt;/code&gt; work by comparing &lt;code&gt;git diff&lt;/code&gt; output and issues.&lt;/p&gt;
+&lt;p&gt;If an issue is not reported as the same line as the changes then the issue will be skipped.
+This is because the line of the issue is not inside the lines changed.&lt;/p&gt;
+&lt;p&gt;To fix that, you have to use the option &lt;code&gt;--whole-files&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;The side effect is the issues inside the file that contain changes but not directly related to the changes themselves will be reported.&lt;/p&gt;</description></item></channel></rss>
