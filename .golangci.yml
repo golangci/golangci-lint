@@ -234,6 +234,10 @@ linters:
         text: "SA1019: config.GoModGuardSettings is deprecated: use GoModGuardv2Settings instead."
         linters:
           - staticcheck
+      - path: pkg/goformatters/gofumpt/gofumpt.go
+        text: "SA1019: settings.ExtraRules is deprecated: use Extra instead."
+        linters:
+          - staticcheck
       - path: pkg/golinters/gomodguard/
         linters:
           - dupl
