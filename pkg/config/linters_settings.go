@@ -414,9 +414,10 @@ type DuplSettings struct {
 }
 
 type DupWordSettings struct {
-	Keywords     []string `mapstructure:"keywords"`
-	Ignore       []string `mapstructure:"ignore"`
-	CommentsOnly bool     `mapstructure:"comments-only"`
+	Keywords       []string `mapstructure:"keywords"`
+	Ignore         []string `mapstructure:"ignore"`
+	CommentsOnly   bool     `mapstructure:"comments-only"`
+	SkipRawStrings bool     `mapstructure:"skip-raw-strings"`
 }
 
 type EmbeddedStructFieldCheckSettings struct {

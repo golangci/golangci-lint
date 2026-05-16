@@ -989,6 +989,11 @@
               "description": "Checks only comments, skip strings.",
               "type": "boolean",
               "default": false
+            },
+            "skip-raw-strings": {
+              "description": "Skip raw string literals (backtick-delimited) from duplicate word checking.",
+              "type": "boolean",
+              "default": false
             }
           }
         },
