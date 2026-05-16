@@ -63,6 +63,7 @@ var defaultLintersSettings = LintersSettings{
 		MinOccurrencesCount: 3,
 		NumberMin:           3,
 		NumberMax:           3,
+		ExcludeTypes:        []string{"Call"},
 		IgnoreCalls:         true,
 	},
 	Gocritic: GoCriticSettings{
@@ -533,7 +534,7 @@ type GoConstSettings struct {
 	ParseNumbers         bool     `mapstructure:"numbers"`
 	NumberMin            int      `mapstructure:"min"`
 	NumberMax            int      `mapstructure:"max"`
-	IgnoreCalls          bool     `mapstructure:"ignore-calls"`
+	ExcludeTypes         []string `mapstructure:"exclude-types"`
 	FindDuplicates       bool     `mapstructure:"find-duplicates"`
 	EvalConstExpressions bool     `mapstructure:"eval-const-expressions"`
 	IgnoreFunctions      []string `mapstructure:"ignore-functions"`
@@ -541,6 +542,11 @@ type GoConstSettings struct {
 	// This option cannot be managed with `linters.exclusions.rules`.
 	// Because the linter counts occurrences across all files in the package.
 	IgnoreTests bool `mapstructure:"ignore-tests"`
+
+	// NOTE(ldez): `ignore-calls` was here to have the same options as goconst as CLI.
+	//
+	// Deprecated: use ExcludeTypes instead.
+	IgnoreCalls bool `mapstructure:"ignore-calls"`
 
 	// Deprecated: use IgnoreStringValues instead.
 	IgnoreStrings string `mapstructure:"ignore-strings"`

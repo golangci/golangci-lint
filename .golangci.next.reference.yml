@@ -720,6 +720,28 @@ linters:
       # Ignore when constant is not used as function argument.
       # Default: true
       ignore-calls: false
+      # Ignore constants from specific types.
+      # Default: [Call]
+      exclude-types:
+        # Represents a string in an assignment context.
+        # (e.g., x := "foo")
+        - Assignment
+        # Represents a string in a binary expression.
+        # (e.g., x == "foo")
+        - Binary
+        # Represents a string in a case clause.
+        # (e.g., case "foo":)
+        - Case
+        # Represents a string in a return statement.
+        # (e.g., return "foo")
+        - Return
+        # Represents a string passed as an argument to a function call.
+        # (e.g., f("foo"))
+        - Call
+        # Represents a string inside a composite literal.
+        # (e.g., []string{"foo"}, map[string]string{"k": "v" }, MyStruct{Field: "foo" })
+        - CompositeLit
+
       # Exclude strings matching the given regular expression.
       # Default: ""
       ignore-string-values:

@@ -2,6 +2,7 @@ package goconst
 
 import (
 	"fmt"
+	"strings"
 	"sync"
 
 	goconstAPI "github.com/jgautheron/goconst"
@@ -48,7 +49,7 @@ func New(settings *config.GoConstSettings) *goanalysis.Linter {
 }
 
 func runGoconst(pass *analysis.Pass, settings *config.GoConstSettings) ([]*goanalysis.Issue, error) {
-	cfg := goconstAPI.Config{
+	cfg := &goconstAPI.Config{
 		IgnoreStrings:        settings.IgnoreStringValues,
 		IgnoreTests:          settings.IgnoreTests,
 		MatchWithConstants:   settings.MatchWithConstants,
@@ -63,11 +64,24 @@ func runGoconst(pass *analysis.Pass, settings *config.GoConstSettings) ([]*goana
 		IgnoreFunctions:      settings.IgnoreFunctions,
 	}
 
-	if settings.IgnoreCalls {
-		cfg.ExcludeTypes[goconstAPI.Call] = true
+	// There is no deprecation log for `IgnoreCalls` because the default is true.
+	// As the default of `ExcludeTypes` contains `call`,
+	// setting `IgnoreCalls` to false is the only way for a user to explicitly use the value `call`.
+	// TODO(ldez): `IgnoreCalls` must be removed if the next major version.
+	if !settings.IgnoreCalls && len(settings.ExcludeTypes) == 1 && strings.EqualFold(settings.ExcludeTypes[0], "call") {
+		settings.ExcludeTypes = nil
 	}
 
-	lintIssues, err := goconstAPI.Run(pass.Files, pass.Fset, pass.TypesInfo, &cfg)
+	for _, k := range settings.ExcludeTypes {
+		typ, err := toType(k)
+		if err != nil {
+			return nil, err
+		}
+
+		cfg.ExcludeTypes[typ] = true
+	}
+
+	lintIssues, err := goconstAPI.Run(pass.Files, pass.Fset, pass.TypesInfo, cfg)
 	if err != nil {
 		return nil, err
 	}
@@ -109,4 +123,29 @@ func runGoconst(pass *analysis.Pass, settings *config.GoConstSettings) ([]*goana
 	}
 
 	return res, nil
+}
+
+func toType(v string) (goconstAPI.Type, error) {
+	switch strings.ToLower(v) {
+	case "assignment":
+		return goconstAPI.Assignment, nil
+
+	case "binary":
+		return goconstAPI.Binary, nil
+
+	case "case":
+		return goconstAPI.Case, nil
+
+	case "return":
+		return goconstAPI.Return, nil
+
+	case "call":
+		return goconstAPI.Call, nil
+
+	case "compositelit":
+		return goconstAPI.CompositeLit, nil
+
+	default:
+		return 0, fmt.Errorf("unknown type %s", v)
+	}
 }
