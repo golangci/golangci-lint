@@ -20,7 +20,7 @@ require (
 	codeberg.org/polyfloyd/go-errorlint v1.9.0
 	dev.gaijin.team/go/exhaustruct/v4 v4.0.0
 	github.com/4meepo/tagalign v1.4.3
-	github.com/Abirdcfly/dupword v0.1.7
+	github.com/Abirdcfly/dupword v0.1.8
 	github.com/AdminBenni/iota-mixing v1.0.0
 	github.com/AlwxSin/noinlineerr v1.0.5
 	github.com/Antonboom/errname v1.1.1
