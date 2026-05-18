@@ -257,6 +257,13 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 
 		linter.NewConfig(exhaustruct.New(&cfg.Linters.Settings.Exhaustruct)).
 			WithSince("v1.46.0").
+			DeprecatedWarning("new major version.", "v2.13.0",
+				linter.Replacement("exhaustruct_v5", nil, &cfg.Linters.Settings.Exhaustruct)).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/GaijinEntertainment/go-exhaustruct"),
+
+		linter.NewConfig(exhaustruct.NewV5(&cfg.Linters.Settings.Exhaustructv5)).
+			WithSince("v2.13.0").
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/GaijinEntertainment/go-exhaustruct"),
 
