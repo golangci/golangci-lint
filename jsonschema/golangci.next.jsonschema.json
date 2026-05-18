@@ -739,7 +739,9 @@
     "modernize-analyzers": {
       "enum": [
         "any",
-        "fmtappendf",
+        "atomictypes",
+        "embedlit",
+        "errorsastype",
         "forvar",
         "mapsloop",
         "minmax",
@@ -748,6 +750,7 @@
         "plusbuild",
         "rangeint",
         "reflecttypefor",
+        "slicesbackward",
         "slicescontains",
         "slicessort",
         "stditerators",
@@ -757,7 +760,7 @@
         "stringsbuilder",
         "testingcontext",
         "unsafefuncs",
-        "waitgroup"
+        "waitgroupgo"
       ]
     },
     "wsl-checks": {

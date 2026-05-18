@@ -5,6 +5,7 @@ import (
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/internal"
 
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/modernize"
@@ -16,6 +17,15 @@ func New(settings *config.ModernizeSettings) *goanalysis.Linter {
 	if settings == nil {
 		analyzers = modernize.Suite
 	} else {
+		for _, name := range settings.Disable {
+			switch name {
+			case "fmtappendf":
+				internal.LinterLogger.Warnf("%s has been removed from the modernize suite", name)
+			case "waitgroup":
+				internal.LinterLogger.Warnf("%s has been renamed to 'waitgroupgo'", name)
+			}
+		}
+
 		for _, analyzer := range modernize.Suite {
 			if slices.Contains(settings.Disable, analyzer.Name) {
 				continue
