@@ -1,5 +1,5 @@
 //golangcitest:args -Eexhaustruct
-//golangcitest:config_path testdata/exhaustruct_custom.yml
+//golangcitest:config_path testdata/exhaustruct_v4_custom.yml
 package testdata
 
 import "time"

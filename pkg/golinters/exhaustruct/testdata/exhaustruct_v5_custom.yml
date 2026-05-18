@@ -1,0 +1,9 @@
+version: "2"
+
+linters:
+  settings:
+    exhaustruct_v5:
+      enforce-patterns:
+      - .*\.ExhaustructCustom
+      ignore-patterns:
+      - .*\.ExhaustructCustom[\d]{1,2}
