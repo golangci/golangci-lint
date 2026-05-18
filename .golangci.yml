@@ -75,6 +75,7 @@ linters:
     goconst:
       min-len: 2
       min-occurrences: 3
+      ignore-tests: true
     gocritic:
       enabled-tags:
         - diagnostic
@@ -237,10 +238,10 @@ linters:
       - path: pkg/golinters/gomodguard/
         linters:
           - dupl
-      # TODO(ldez): temporary fix, it will change in the future.
-      - path: internal/cache/cache.go
+      - path: pkg/golinters/goconst/goconst.go
+        text: "SA1019: settings.IgnoreCalls is deprecated: use ExcludeTypes instead."
         linters:
-          - goconst
+          - staticcheck
 
 formatters:
   enable:

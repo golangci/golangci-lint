@@ -1707,6 +1707,19 @@
               "type": "integer",
               "default": 3
             },
+            "exclude-types": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "Assignment",
+                  "Binary",
+                  "Case",
+                  "Return",
+                  "Call",
+                  "CompositeLit"
+                ]
+              }
+            },
             "ignore-calls": {
               "description": "Ignore when constant is not used as function argument",
               "type": "boolean",

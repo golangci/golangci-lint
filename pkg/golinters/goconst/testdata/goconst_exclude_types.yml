@@ -1,0 +1,8 @@
+version: "2"
+
+linters:
+  settings:
+    goconst:
+      exclude-types:
+        - Call
+        - CompositeLit
