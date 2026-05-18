@@ -8,6 +8,45 @@ If you value it, consider supporting us, we appreciate it!
 
 <!-- START --->
 
+### v2.13.0
+
+_Released on 2026-08-19_
+
+1. Enhancements
+   * 🎉 go1.27 support
+2. Bug fixes
+   * fix: cache package facts
+3. Linters new features or changes
+   * `dupword`: from 0.1.7 to 0.1.8 (new option `skip-raw-strings`)
+   * `errcheck`: from 1.10.0 to 1.20.0
+   * `exhaustruct_v5`: from 4.0.0 to 5.0.2 (new configuration)
+   * `exhaustruct`: deprecated and replaced by `exhaustruct_v5`
+   * `fatcontext`: from 0.9.0 to 0.10.0 (new options: `check-loops`, `check-function-literals`)
+   * `goconst`: add option `exclude-
+   * `goconst`: from 1.10.0 to 1.11.0 (new option: `ignore-map-keys`)
+   * `gofumpt`: from 0.9.2 to 0.11.0 (new options: `extra.group-params`, `extra.clothe-returns`, `extra.balance-calls`)
+   * `gomoddirectives`: from 0.8.0 to 0.9.0 (new option: `replace-allow-all`)
+   * `gosec`: from 2.26.1 to 2.27.1
+   * `govet-modernize`: from 0.44.0 to 0.49.0 (`fmtappendf` is removed. New analyzers `atomictypes`, `embedlit`, `errorsastype`, `importcomment`, `reflecttypeassert`, `slicesclip`, and `slicesbackward`. `waitgroup` is renamed `waitgroupgo`)
+   * `iface`: from 1.4.3 to 1.5.0 (new analyzer: `unusedmethod`)
+   * `noinlineerr`: from 1.0.5 to 1.0.6
+   * `nonamedreturns`: from 1.0.6 to 1.0.8 (new option: `allow-unused-named-returns`)
+   * `recvcheck`: from 0.2.0 to 0.3.0 (new default exclusions) types`
+   * `unparam`: from 2dd26e23affb to 2dd26e23affb
+4. Linters bug fixes
+   * `clickhouse-go-linter`: from 1.2.0 to 1.2.1
+   * `errname`: from 1.1.1 to 1.1.2
+   * `exhaustruct`: from 5.0.2 to 5.0.3
+   * `funcorder`: add missing `Function` field
+   * `ginkgolinter`: from 0.23.0 to 0.23.1
+   * `gocheckcompilerdirectives`: from 1.3.0 to 1.4.0
+   * `gocritic`: from 0.14.3 to 0.14.4
+   * `gomoddirectives`: add missing `IgnoreForbidden` field
+   * `iface`: from 1.4.2 to 1.4.3
+   * `mirror`: from 1.3.0 to 1.3.3
+   * `nilnil`: from 1.1.1 to 1.1.2
+   * `protogetter`: from 0.3.20 to 0.3.21
+
 ### v2.12.2
 
 _Released on 2026-05-06_
@@ -38,7 +77,7 @@ _Released on 2026-05-01_
    * `goconst`: add an option to ignore strings from tests
    * `goconst`: from 1.8.2 to 1.10.0 (extended detection)
    * `gomodguard_v2`: from 1.4.1 to 2.1.0 (major version with new configuration)
-   * `gosec`: from 619ce2117e08 to 2.26.1 (new checks: `G124`, `G708`, `G709`, `G710`)
+   * `gosec`: from 619ce2117e08 to 2.28.0 (new checks: `G124`, `G708`, `G709`, `G710`)
    * `govet`: add `inline` analyzer
    * `makezero`: from 2.1.0 to 2.2.1 (support slice type aliases)
    * `paralleltest`: expose `checkcleanup` option

@@ -6,11 +6,9 @@ module github.com/golangci/golangci-lint/v2
 go 1.26.0
 
 ignore (
-	./.github
 	./assets
 	./build
 	./docs
-	./jsonschema
 )
 
 require (
