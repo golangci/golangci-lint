@@ -716,7 +716,8 @@
         "identical",
         "unused",
         "opaque",
-        "unexported"
+        "unexported",
+        "unusedmethod"
       ]
     },
     "tagliatelle-cases": {
