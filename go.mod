@@ -23,7 +23,7 @@ require (
 	github.com/Abirdcfly/dupword v0.1.8
 	github.com/AdminBenni/iota-mixing v1.0.0
 	github.com/AlwxSin/noinlineerr v1.0.5
-	github.com/Antonboom/errname v1.1.1
+	github.com/Antonboom/errname v1.1.2
 	github.com/Antonboom/nilnil v1.1.1
 	github.com/Antonboom/testifylint v1.6.4
 	github.com/BurntSushi/toml v1.6.0
