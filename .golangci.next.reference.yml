@@ -2043,7 +2043,7 @@ linters:
       var-require-grouping: true
 
     iface:
-      # List of analyzers.
+      # List of analyzers to enable.
       # Default: ["identical"]
       enable:
         - identical # Identifies interfaces in the same package that have identical method sets.
@@ -2053,6 +2053,11 @@ linters:
         - unusedmethod # Detects interface methods that are never used anywhere in the same package where they are defined.
       settings:
         unused:
+          # List of packages path to exclude from the check.
+          # Default: []
+          exclude:
+            - github.com/example/log
+        unusedmethod:
           # List of packages path to exclude from the check.
           # Default: []
           exclude:

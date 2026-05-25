@@ -2633,6 +2633,18 @@
                       }
                     }
                   }
+                },
+                "unusedmethod": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "exclude": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
                 }
               }
             }
