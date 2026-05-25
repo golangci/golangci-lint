@@ -2043,7 +2043,9 @@ linters:
       var-require-grouping: true
 
     iface:
-      # List of analyzers.
+      # List of analyzers to enable.
+      # By default, only the identical analyzer is enabled.
+      # It is recommended to enable all analyzers to get the best of interface pollution detection.
       # Default: ["identical"]
       enable:
         - identical # Identifies interfaces in the same package that have identical method sets.
