@@ -2057,6 +2057,11 @@ linters:
           # Default: []
           exclude:
             - github.com/example/log
+        unusedmethod:
+          # List of packages path to exclude from the check.
+          # Default: []
+          exclude:
+            - github.com/example/log
 
     importas:
       # Do not allow unaliased imports of aliased packages.
