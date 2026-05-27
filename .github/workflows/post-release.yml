@@ -31,6 +31,7 @@ jobs:
       - uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c # v6.4.0
         with:
           go-version: ${{ env.GO_VERSION }}
+          cache: false
 
       - name: Update GitHub Action config
         run: make assets/github-action-config.json
@@ -58,6 +59,7 @@ jobs:
       - uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c # v6.4.0
         with:
           go-version: ${{ env.GO_VERSION }}
+          cache: false
 
       - name: Update reference files
         run: cp .golangci.next.reference.yml .golangci.reference.yml
