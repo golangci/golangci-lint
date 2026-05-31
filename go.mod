@@ -99,7 +99,7 @@ require (
 	github.com/maratori/testableexamples v1.0.1
 	github.com/maratori/testpackage v1.1.2
 	github.com/matoous/godox v1.1.0
-	github.com/mattn/go-colorable v0.1.14
+	github.com/mattn/go-colorable v0.1.15
 	github.com/mgechev/revive v1.15.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/moricho/tparallel v0.3.2
