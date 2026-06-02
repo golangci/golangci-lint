@@ -332,14 +332,30 @@ http_download_wget() {
 }
 http_download() {
   log_debug "http_download $2"
-  if is_command curl; then
-    http_download_curl "$@"
-    return
-  elif is_command wget; then
-    http_download_wget "$@"
-    return
-  fi
-  log_crit "http_download unable to find wget or curl"
+  local retries=${HTTP_RETRY_COUNT:-3}
+  local attempt=1
+  local wait_time=1
+  while [ "$attempt" -le "$retries" ]; do
+    if is_command curl; then
+      if http_download_curl "$@"; then
+        return 0
+      fi
+    elif is_command wget; then
+      if http_download_wget "$@"; then
+        return 0
+      fi
+    else
+      log_crit "http_download unable to find wget or curl"
+      return 1
+    fi
+    if [ "$attempt" -lt "$retries" ]; then
+      log_info "http_download attempt $attempt failed, retrying in ${wait_time}s..."
+      sleep "$wait_time"
+      wait_time=$((wait_time * 2))
+    fi
+    attempt=$((attempt + 1))
+  done
+  log_err "http_download failed after $retries attempts"
   return 1
 }
 http_copy() {
