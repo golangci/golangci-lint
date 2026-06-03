@@ -21,52 +21,52 @@ func toOutput(old *versionone.Config) versiontwo.Output {
 			formats.Text.PrintLinterName = old.Output.PrintLinterName
 			formats.Text.PrintIssuedLine = old.Output.PrintIssuedLine
 			formats.Text.Colors = nil // color is true by default (flags).
-			formats.Text.Path = ptr.Pointer(defaultFormatPath(ptr.Deref(format.Path)))
+			formats.Text.Path = new(defaultFormatPath(ptr.Deref(format.Path)))
 
 		case "line-number":
 			formats.Text.PrintLinterName = old.Output.PrintLinterName
 			formats.Text.PrintIssuedLine = old.Output.PrintIssuedLine
-			formats.Text.Colors = ptr.Pointer(false)
-			formats.Text.Path = ptr.Pointer(defaultFormatPath(ptr.Deref(format.Path)))
+			formats.Text.Colors = new(false)
+			formats.Text.Path = new(defaultFormatPath(ptr.Deref(format.Path)))
 
 		case "json":
-			formats.JSON.Path = ptr.Pointer(defaultFormatPath(ptr.Deref(format.Path)))
+			formats.JSON.Path = new(defaultFormatPath(ptr.Deref(format.Path)))
 
 		case "colored-tab":
 			formats.Tab.PrintLinterName = old.Output.PrintLinterName
 			formats.Tab.Colors = nil // Colors is true by default (flags).
-			formats.Tab.Path = ptr.Pointer(defaultFormatPath(ptr.Deref(format.Path)))
+			formats.Tab.Path = new(defaultFormatPath(ptr.Deref(format.Path)))
 
 		case "tab":
 			formats.Tab.PrintLinterName = old.Output.PrintLinterName
-			formats.Tab.Colors = ptr.Pointer(false)
-			formats.Tab.Path = ptr.Pointer(defaultFormatPath(ptr.Deref(format.Path)))
+			formats.Tab.Colors = new(false)
+			formats.Tab.Path = new(defaultFormatPath(ptr.Deref(format.Path)))
 
 		case "html":
-			formats.HTML.Path = ptr.Pointer(defaultFormatPath(ptr.Deref(format.Path)))
+			formats.HTML.Path = new(defaultFormatPath(ptr.Deref(format.Path)))
 
 		case "checkstyle":
-			formats.Checkstyle.Path = ptr.Pointer(defaultFormatPath(ptr.Deref(format.Path)))
+			formats.Checkstyle.Path = new(defaultFormatPath(ptr.Deref(format.Path)))
 
 		case "code-climate":
-			formats.CodeClimate.Path = ptr.Pointer(defaultFormatPath(ptr.Deref(format.Path)))
+			formats.CodeClimate.Path = new(defaultFormatPath(ptr.Deref(format.Path)))
 
 		case "junit-xml":
 			formats.JUnitXML.Extended = nil // Extended is false by default.
-			formats.JUnitXML.Path = ptr.Pointer(defaultFormatPath(ptr.Deref(format.Path)))
+			formats.JUnitXML.Path = new(defaultFormatPath(ptr.Deref(format.Path)))
 
 		case "junit-xml-extended":
-			formats.JUnitXML.Extended = ptr.Pointer(true)
-			formats.JUnitXML.Path = ptr.Pointer(defaultFormatPath(ptr.Deref(format.Path)))
+			formats.JUnitXML.Extended = new(true)
+			formats.JUnitXML.Path = new(defaultFormatPath(ptr.Deref(format.Path)))
 
 		case "github-actions":
 			// Ignored
 
 		case "teamcity":
-			formats.TeamCity.Path = ptr.Pointer(defaultFormatPath(ptr.Deref(format.Path)))
+			formats.TeamCity.Path = new(defaultFormatPath(ptr.Deref(format.Path)))
 
 		case "sarif":
-			formats.Sarif.Path = ptr.Pointer(defaultFormatPath(ptr.Deref(format.Path)))
+			formats.Sarif.Path = new(defaultFormatPath(ptr.Deref(format.Path)))
 		}
 	}
 

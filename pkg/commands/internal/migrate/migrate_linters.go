@@ -22,9 +22,9 @@ func toLinters(old *versionone.Config) versiontwo.Linters {
 func getDefaultName(old versionone.Linters) *string {
 	switch {
 	case ptr.Deref(old.DisableAll):
-		return ptr.Pointer("none")
+		return new("none")
 	case ptr.Deref(old.EnableAll):
-		return ptr.Pointer("all")
+		return new("all")
 	default:
 		return nil // standard is the default
 	}

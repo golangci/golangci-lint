@@ -268,7 +268,7 @@ func toForbidigoSettings(old versionone.ForbidigoSettings) versiontwo.ForbidigoS
 			}
 
 			settings.Forbid = append(settings.Forbid, versiontwo.ForbidigoPattern{
-				Pattern: ptr.Pointer(string(buffer)),
+				Pattern: new(string(buffer)),
 			})
 
 			continue
