@@ -59,6 +59,33 @@ var Btests = []Btest{
 	{"aabbaa", "aacaba", []string{"aaaa", "aaba"}},
 }
 
+type stringSeqs struct{ a, b string }
+
+func (s stringSeqs) lengths() (int, int) { return len(s.a), len(s.b) }
+func (s stringSeqs) commonPrefixLen(ai, aj, bi, bj int) int {
+	return commonPrefixLenString(s.a[ai:aj], s.b[bi:bj])
+}
+func (s stringSeqs) commonSuffixLen(ai, aj, bi, bj int) int {
+	return commonSuffixLenString(s.a[ai:aj], s.b[bi:bj])
+}
+
+func commonPrefixLenString(a, b string) int {
+	n := min(len(a), len(b))
+	i := 0
+	for i < n && a[i] == b[i] {
+		i++
+	}
+	return i
+}
+func commonSuffixLenString(a, b string) int {
+	n := min(len(a), len(b))
+	i := 0
+	for i < n && a[len(a)-1-i] == b[len(b)-1-i] {
+		i++
+	}
+	return i
+}
+
 func init() {
 	log.SetFlags(log.Lshortfile)
 }

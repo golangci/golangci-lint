@@ -133,18 +133,13 @@ func TestRandOld(t *testing.T) {
 // to ensure at least minimal parity of the three representations.
 func TestDiffAPI(t *testing.T) {
 	for _, test := range []struct {
-		a, b                              string
-		wantStrings, wantBytes, wantRunes string
+		a, b                 string
+		wantBytes, wantRunes string
 	}{
-		{"abcXdef", "abcxdef", "[{3 4 3 4}]", "[{3 4 3 4}]", "[{3 4 3 4}]"}, // ASCII
-		{"abcωdef", "abcΩdef", "[{3 5 3 5}]", "[{3 5 3 5}]", "[{3 4 3 4}]"}, // non-ASCII
+		{"abcXdef", "abcxdef", "[{3 4 3 4}]", "[{3 4 3 4}]"}, // ASCII
+		{"abcωdef", "abcΩdef", "[{3 5 3 5}]", "[{3 4 3 4}]"}, // non-ASCII
 	} {
 
-		gotStrings := fmt.Sprint(DiffStrings(test.a, test.b))
-		if gotStrings != test.wantStrings {
-			t.Errorf("DiffStrings(%q, %q) = %v, want %v",
-				test.a, test.b, gotStrings, test.wantStrings)
-		}
 		gotBytes := fmt.Sprint(DiffBytes([]byte(test.a), []byte(test.b)))
 		if gotBytes != test.wantBytes {
 			t.Errorf("DiffBytes(%q, %q) = %v, want %v",
@@ -160,7 +155,7 @@ func TestDiffAPI(t *testing.T) {
 
 func BenchmarkTwoOld(b *testing.B) {
 	tests := genBench(rng(b), "abc", 96)
-	for i := 0; i < b.N; i++ {
+	for b.Loop() {
 		for _, tt := range tests {
 			_, two := compute(stringSeqs{tt.before, tt.after}, twosided, 100)
 			if !two.valid() {
@@ -172,7 +167,7 @@ func BenchmarkTwoOld(b *testing.B) {
 
 func BenchmarkForwOld(b *testing.B) {
 	tests := genBench(rng(b), "abc", 96)
-	for i := 0; i < b.N; i++ {
+	for b.Loop() {
 		for _, tt := range tests {
 			_, two := compute(stringSeqs{tt.before, tt.after}, forward, 100)
 			if !two.valid() {
@@ -236,7 +231,7 @@ func BenchmarkLargeFileSmallDiff(b *testing.B) {
 	src := string(data)
 	dst := src[:n*49/100] + src[n*51/100:] // remove 2% from the middle
 	b.Run("string", func(b *testing.B) {
-		for i := 0; i < b.N; i++ {
+		for b.Loop() {
 			compute(stringSeqs{src, dst}, twosided, len(src)+len(dst))
 		}
 	})
@@ -244,7 +239,7 @@ func BenchmarkLargeFileSmallDiff(b *testing.B) {
 	srcBytes := []byte(src)
 	dstBytes := []byte(dst)
 	b.Run("bytes", func(b *testing.B) {
-		for i := 0; i < b.N; i++ {
+		for b.Loop() {
 			compute(bytesSeqs{srcBytes, dstBytes}, twosided, len(srcBytes)+len(dstBytes))
 		}
 	})
@@ -252,8 +247,15 @@ func BenchmarkLargeFileSmallDiff(b *testing.B) {
 	srcRunes := []rune(src)
 	dstRunes := []rune(dst)
 	b.Run("runes", func(b *testing.B) {
-		for i := 0; i < b.N; i++ {
+		for b.Loop() {
 			compute(runesSeqs{srcRunes, dstRunes}, twosided, len(srcRunes)+len(dstRunes))
+		}
+	})
+	srcLines := strings.Split(src, "\n")
+	dstLines := strings.Split(dst, "\n")
+	b.Run("lines", func(b *testing.B) {
+		for b.Loop() {
+			compute(linesSeqs{srcLines, dstLines}, twosided, len(srcLines)+len(dstLines))
 		}
 	})
 }
