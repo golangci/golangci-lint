@@ -3,7 +3,7 @@
 Extracted from `go/src/cmd/go/internal/cache/`.
 
 The main modifications are:
-- The errors management
+- The error management
   - Some methods return error.
   - Some errors are returned instead of being ignored.
 - The name of the env vars:
@@ -12,6 +12,8 @@ The main modifications are:
 
 ## History
 
+- https://github.com/golangci/golangci-lint/pull/xxx
+  - sync go1.26.4
 - https://github.com/golangci/golangci-lint/pull/5576
   - sync go1.24.1
 - https://github.com/golangci/golangci-lint/pull/5100
@@ -30,7 +32,7 @@ The main modifications are:
 
 ## Previous History
 
-Based on the initial PR/commit the based in a mix between go1.12 and go1.13:
+Based on the initial PR/commit this was based in a mix between go1.12 and go1.13:
 - cache.go (go1.13)
 - cache_test.go (go1.12?)
 - default.go (go1.12?)
