@@ -155,8 +155,7 @@ func (l *BaseLoader) getConfigSearchPaths() []string {
 
 func (l *BaseLoader) parseConfig() error {
 	if err := l.viper.ReadInConfig(); err != nil {
-		var configFileNotFoundError viper.ConfigFileNotFoundError
-		if errors.As(err, &configFileNotFoundError) {
+		if _, ok := errors.AsType[viper.ConfigFileNotFoundError](err); ok {
 			// Load configuration from flags only.
 			err = l.viper.Unmarshal(l.cfg, customDecoderHook())
 			if err != nil {
