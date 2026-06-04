@@ -398,8 +398,8 @@ github.com/lasiar/canonicalheader v1.1.2 h1:vZ5uqwvDbyJCnMhmFYimgMZnJMjwljN5VGY0
 github.com/lasiar/canonicalheader v1.1.2/go.mod h1:qJCeLFS0G/QlLQ506T+Fk/fWMa2VmBUiEI2cuMK4djI=
 github.com/ldez/exptostd v0.4.5 h1:kv2ZGUVI6VwRfp/+bcQ6Nbx0ghFWcGIKInkG/oFn1aQ=
 github.com/ldez/exptostd v0.4.5/go.mod h1:QRjHRMXJrCTIm9WxVNH6VW7oN7KrGSht69bIRwvdFsM=
-github.com/ldez/gomoddirectives v0.8.0 h1:JqIuTtgvFC2RdH1s357vrE23WJF2cpDCPFgA/TWDGpk=
-github.com/ldez/gomoddirectives v0.8.0/go.mod h1:jutzamvZR4XYJLr0d5Honycp4Gy6GEg2mS9+2YX3F1Q=
+github.com/ldez/gomoddirectives v0.9.0 h1:2YV/EX7nVlWL4jySusYTzBKHuE3D2fgcRsQuMa3yIoo=
+github.com/ldez/gomoddirectives v0.9.0/go.mod h1:DdZzfm9MdXCjn2/UGYXCFfo+tzrp2Ib4iD2Q0kIJkwE=
 github.com/ldez/grignotin v0.10.1 h1:keYi9rYsgbvqAZGI1liek5c+jv9UUjbvdj3Tbn5fn4o=
 github.com/ldez/grignotin v0.10.1/go.mod h1:UlDbXFCARrXbWGNGP3S5vsysNXAPhnSuBufpTEbwOas=
 github.com/ldez/structtags v0.6.1 h1:bUooFLbXx41tW8SvkfwfFkkjPYvFFs59AAMgVg6DUBk=

@@ -24,6 +24,7 @@ func New(settings *config.GoModDirectivesSettings) *goanalysis.Linter {
 	if settings != nil {
 		opts.ReplaceAllowLocal = settings.ReplaceLocal
 		opts.ReplaceAllowList = settings.ReplaceAllowList
+		opts.ReplaceAllowAll = settings.ReplaceAllowAll
 		opts.RetractAllowNoExplanation = settings.RetractAllowNoExplanation
 		opts.ExcludeForbidden = settings.ExcludeForbidden
 		opts.ToolchainForbidden = settings.ToolchainForbidden

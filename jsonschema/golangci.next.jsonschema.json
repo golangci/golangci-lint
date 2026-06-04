@@ -2266,6 +2266,11 @@
                 "type": "string"
               }
             },
+            "replace-allow-all": {
+              "description": "Allow all `replace` directives.",
+              "type": "boolean",
+              "default": false
+            },
             "retract-allow-no-explanation": {
               "description": "Allow to not explain why the version has been retracted in the `retract` directives.",
               "type": "boolean",
