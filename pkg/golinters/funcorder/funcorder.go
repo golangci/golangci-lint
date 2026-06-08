@@ -15,6 +15,7 @@ func New(settings *config.FuncOrderSettings) *goanalysis.Linter {
 			analyzer.ConstructorCheckName:  settings.Constructor,
 			analyzer.StructMethodCheckName: settings.StructMethod,
 			analyzer.AlphabeticalCheckName: settings.Alphabetical,
+			analyzer.FunctionCheckName:     settings.Function,
 		}
 	}
 
