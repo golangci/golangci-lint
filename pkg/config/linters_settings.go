@@ -610,6 +610,7 @@ type GoModDirectivesSettings struct {
 	ReplaceLocal              bool     `mapstructure:"replace-local"`
 	ReplaceAllowAll           bool     `mapstructure:"replace-allow-all"`
 	ExcludeForbidden          bool     `mapstructure:"exclude-forbidden"`
+	IgnoreForbidden           bool     `mapstructure:"ignore-forbidden"`
 	RetractAllowNoExplanation bool     `mapstructure:"retract-allow-no-explanation"`
 	ToolchainForbidden        bool     `mapstructure:"toolchain-forbidden"`
 	ToolchainPattern          string   `mapstructure:"toolchain-pattern"`
