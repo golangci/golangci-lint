@@ -493,6 +493,7 @@ type FuncOrderSettings struct {
 	Constructor  bool `mapstructure:"constructor,omitempty"`
 	StructMethod bool `mapstructure:"struct-method,omitempty"`
 	Alphabetical bool `mapstructure:"alphabetical,omitempty"`
+	Function     bool `mapstructure:"function,omitempty"`
 }
 
 type FunlenSettings struct {
