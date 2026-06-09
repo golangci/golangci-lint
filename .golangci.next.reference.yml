@@ -57,6 +57,7 @@ linters:
     - gochecknoinits
     - gochecksumtype
     - gocognit
+    - goconcurrencylint
     - goconst
     - gocritic
     - gocyclo
@@ -174,6 +175,7 @@ linters:
     - gochecknoinits
     - gochecksumtype
     - gocognit
+    - goconcurrencylint
     - goconst
     - gocritic
     - gocyclo

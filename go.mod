@@ -114,6 +114,7 @@ require (
 	github.com/ryancurrah/gomodguard v1.4.1
 	github.com/ryancurrah/gomodguard/v2 v2.1.3
 	github.com/ryanrolds/sqlclosecheck v0.6.0
+	github.com/sanbricio/goconcurrencylint v0.3.0
 	github.com/sanposhiho/wastedassign/v2 v2.1.0
 	github.com/santhosh-tekuri/jsonschema/v6 v6.0.2
 	github.com/sashamelentyev/interfacebloat v1.1.0
