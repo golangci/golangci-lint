@@ -2,7 +2,6 @@ package unused
 
 import (
 	"fmt"
-	"sync"
 
 	"golang.org/x/tools/go/analysis"
 	"honnef.co/go/tools/analysis/facts/directives"
@@ -12,30 +11,20 @@ import (
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
-	"github.com/golangci/golangci-lint/v2/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/v2/pkg/result"
 )
 
 const linterName = "unused"
 
 func New(settings *config.UnusedSettings) *goanalysis.Linter {
-	var mu sync.Mutex
-	var resIssues []*goanalysis.Issue
+	b := goanalysis.NewThreadSafeLinterBuilder()
 
 	analyzer := &analysis.Analyzer{
 		Name:     linterName,
 		Doc:      unused.Analyzer.Analyzer.Doc,
 		Requires: unused.Analyzer.Analyzer.Requires,
 		Run: func(pass *analysis.Pass) (any, error) {
-			issues := runUnused(pass, settings)
-			if len(issues) == 0 {
-				return nil, nil
-			}
-
-			mu.Lock()
-			resIssues = append(resIssues, issues...)
-			mu.Unlock()
-
+			b.Add(runUnused(pass, settings)...)
 			return nil, nil
 		},
 	}
@@ -45,9 +34,7 @@ func New(settings *config.UnusedSettings) *goanalysis.Linter {
 		"Checks Go code for unused constants, variables, functions and types",
 		[]*analysis.Analyzer{analyzer},
 		nil,
-	).WithIssuesReporter(func(_ *linter.Context) []*goanalysis.Issue {
-		return resIssues
-	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
+	).WithIssuesReporter(b.Reporter()).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
 
 func runUnused(pass *analysis.Pass, cfg *config.UnusedSettings) []*goanalysis.Issue {
