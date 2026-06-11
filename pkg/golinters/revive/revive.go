@@ -9,7 +9,6 @@ import (
 	"reflect"
 	"slices"
 	"strings"
-	"sync"
 
 	"github.com/BurntSushi/toml"
 	hcversion "github.com/hashicorp/go-version"
@@ -34,8 +33,7 @@ var (
 )
 
 func New(settings *config.ReviveSettings) *goanalysis.Linter {
-	var mu sync.Mutex
-	var resIssues []*goanalysis.Issue
+	b := goanalysis.NewThreadSafeLinterBuilder()
 
 	analyzer := &analysis.Analyzer{
 		Name: linterName,
@@ -58,20 +56,11 @@ func New(settings *config.ReviveSettings) *goanalysis.Linter {
 					return nil, err
 				}
 
-				if len(issues) == 0 {
-					return nil, nil
-				}
-
-				mu.Lock()
-				resIssues = append(resIssues, issues...)
-				mu.Unlock()
-
+				b.Add(issues...)
 				return nil, nil
 			}
 		}).
-		WithIssuesReporter(func(*linter.Context) []*goanalysis.Issue {
-			return resIssues
-		}).
+		WithIssuesReporter(b.Reporter()).
 		WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
