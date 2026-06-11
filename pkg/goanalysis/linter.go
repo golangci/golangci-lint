@@ -66,15 +66,12 @@ func (b *ThreadSafeLinterBuilder) Add(issues ...*Issue) {
 	b.mu.Unlock()
 }
 
-func (b *ThreadSafeLinterBuilder) Issues() []*Issue {
-	b.mu.Lock()
-	defer b.mu.Unlock()
-	return b.issues
-}
-
+// Reporter returns a WithIssuesReporter-compatible function.
+// It must only be called after all analyzer Run callbacks have completed,
+// which is guaranteed by runner.run() waiting on actsWg before calling buildAllIssues.
 func (b *ThreadSafeLinterBuilder) Reporter() func(*linter.Context) []*Issue {
 	return func(*linter.Context) []*Issue {
-		return b.Issues()
+		return b.issues
 	}
 }
 
