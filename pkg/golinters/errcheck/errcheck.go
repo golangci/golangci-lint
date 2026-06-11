@@ -4,7 +4,6 @@ import (
 	"cmp"
 	"fmt"
 	"regexp"
-	"sync"
 
 	"github.com/kisielk/errcheck/errcheck"
 	"golang.org/x/tools/go/analysis"
@@ -20,8 +19,7 @@ import (
 const linterName = "errcheck"
 
 func New(settings *config.ErrcheckSettings) *goanalysis.Linter {
-	var mu sync.Mutex
-	var resIssues []*goanalysis.Issue
+	b := goanalysis.NewThreadSafeLinterBuilder()
 
 	analyzer := &analysis.Analyzer{
 		Name: linterName,
@@ -37,22 +35,11 @@ func New(settings *config.ErrcheckSettings) *goanalysis.Linter {
 			checker.Tags = lintCtx.Cfg.Run.BuildTags
 
 			analyzer.Run = func(pass *analysis.Pass) (any, error) {
-				issues := runErrCheck(pass, checker, settings.Verbose)
-
-				if len(issues) == 0 {
-					return nil, nil
-				}
-
-				mu.Lock()
-				resIssues = append(resIssues, issues...)
-				mu.Unlock()
-
+				b.Add(runErrCheck(pass, checker, settings.Verbose)...)
 				return nil, nil
 			}
 		}).
-		WithIssuesReporter(func(*linter.Context) []*goanalysis.Issue {
-			return resIssues
-		}).
+		WithIssuesReporter(b.Reporter()).
 		WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
 
