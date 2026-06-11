@@ -7,7 +7,6 @@ import (
 	"log"
 	"strconv"
 	"strings"
-	"sync"
 
 	"github.com/securego/gosec/v2"
 	"github.com/securego/gosec/v2/analyzers"
@@ -25,8 +24,7 @@ import (
 const linterName = "gosec"
 
 func New(settings *config.GoSecSettings) *goanalysis.Linter {
-	var mu sync.Mutex
-	var resIssues []*goanalysis.Issue
+	b := goanalysis.NewThreadSafeLinterBuilder()
 
 	conf := gosec.NewConfig()
 
@@ -64,18 +62,11 @@ func New(settings *config.GoSecSettings) *goanalysis.Linter {
 				gosecAnalyzer.LoadRules(ruleDefinitions.RulesInfo())
 				gosecAnalyzer.LoadAnalyzers(analyzerDefinitions.AnalyzersInfo())
 
-				issues := runGoSec(lintCtx, pass, settings, gosecAnalyzer)
-
-				mu.Lock()
-				resIssues = append(resIssues, issues...)
-				mu.Unlock()
-
+				b.Add(runGoSec(lintCtx, pass, settings, gosecAnalyzer)...)
 				return nil, nil
 			}
 		}).
-		WithIssuesReporter(func(*linter.Context) []*goanalysis.Issue {
-			return resIssues
-		}).
+		WithIssuesReporter(b.Reporter()).
 		WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
 
