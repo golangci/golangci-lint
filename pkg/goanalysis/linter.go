@@ -6,6 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"strings"
+	"sync"
 
 	"golang.org/x/tools/go/analysis"
 
@@ -44,6 +45,35 @@ type Linter struct {
 	contextSetter           func(*linter.Context)
 	loadMode                LoadMode
 	needUseOriginalPackages bool
+}
+
+type ThreadSafeLinterBuilder struct {
+	mu     sync.Mutex
+	issues []*Issue
+}
+
+func NewThreadSafeLinterBuilder() *ThreadSafeLinterBuilder {
+	return &ThreadSafeLinterBuilder{}
+}
+
+func (b *ThreadSafeLinterBuilder) Add(issues ...*Issue) {
+	if len(issues) == 0 {
+		return
+	}
+
+	b.mu.Lock()
+	b.issues = append(b.issues, issues...)
+	b.mu.Unlock()
+}
+
+func (b *ThreadSafeLinterBuilder) Issues() []*Issue {
+	return b.issues
+}
+
+func (b *ThreadSafeLinterBuilder) Reporter() func(*linter.Context) []*Issue {
+	return func(*linter.Context) []*Issue {
+		return b.issues
+	}
 }
 
 func NewLinter(name, desc string, analyzers []*analysis.Analyzer, cfg map[string]map[string]any) *Linter {
