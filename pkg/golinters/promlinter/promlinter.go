@@ -2,22 +2,19 @@ package promlinter
 
 import (
 	"fmt"
-	"sync"
 
 	"github.com/yeya24/promlinter"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
-	"github.com/golangci/golangci-lint/v2/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/v2/pkg/result"
 )
 
 const linterName = "promlinter"
 
 func New(settings *config.PromlinterSettings) *goanalysis.Linter {
-	var mu sync.Mutex
-	var resIssues []*goanalysis.Issue
+	b := goanalysis.NewThreadSafeLinterBuilder()
 
 	var promSettings promlinter.Setting
 	if settings != nil {
@@ -32,22 +29,11 @@ func New(settings *config.PromlinterSettings) *goanalysis.Linter {
 			Name: linterName,
 			Doc:  "Check Prometheus metrics naming via promlint",
 			Run: func(pass *analysis.Pass) (any, error) {
-				issues := runPromLinter(pass, promSettings)
-
-				if len(issues) == 0 {
-					return nil, nil
-				}
-
-				mu.Lock()
-				resIssues = append(resIssues, issues...)
-				mu.Unlock()
-
+				b.Add(runPromLinter(pass, promSettings)...)
 				return nil, nil
 			},
 		}).
-		WithIssuesReporter(func(*linter.Context) []*goanalysis.Issue {
-			return resIssues
-		}).
+		WithIssuesReporter(b.Reporter()).
 		WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
