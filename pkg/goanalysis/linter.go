@@ -67,12 +67,14 @@ func (b *ThreadSafeLinterBuilder) Add(issues ...*Issue) {
 }
 
 func (b *ThreadSafeLinterBuilder) Issues() []*Issue {
+	b.mu.Lock()
+	defer b.mu.Unlock()
 	return b.issues
 }
 
 func (b *ThreadSafeLinterBuilder) Reporter() func(*linter.Context) []*Issue {
 	return func(*linter.Context) []*Issue {
-		return b.issues
+		return b.Issues()
 	}
 }
 
