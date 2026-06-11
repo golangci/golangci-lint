@@ -2,7 +2,6 @@ package gochecksumtype
 
 import (
 	"strings"
-	"sync"
 
 	gochecksumtype "github.com/alecthomas/go-check-sumtype"
 	"golang.org/x/tools/go/analysis"
@@ -10,15 +9,13 @@ import (
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
-	"github.com/golangci/golangci-lint/v2/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/v2/pkg/result"
 )
 
 const linterName = "gochecksumtype"
 
 func New(settings *config.GoChecksumTypeSettings) *goanalysis.Linter {
-	var mu sync.Mutex
-	var resIssues []*goanalysis.Issue
+	b := goanalysis.NewThreadSafeLinterBuilder()
 
 	return goanalysis.
 		NewLinterFromAnalyzer(&analysis.Analyzer{
@@ -30,20 +27,11 @@ func New(settings *config.GoChecksumTypeSettings) *goanalysis.Linter {
 					return nil, err
 				}
 
-				if len(issues) == 0 {
-					return nil, nil
-				}
-
-				mu.Lock()
-				resIssues = append(resIssues, issues...)
-				mu.Unlock()
-
+				b.Add(issues...)
 				return nil, nil
 			},
 		}).
-		WithIssuesReporter(func(_ *linter.Context) []*goanalysis.Issue {
-			return resIssues
-		}).
+		WithIssuesReporter(b.Reporter()).
 		WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
 
