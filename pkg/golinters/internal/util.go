@@ -11,7 +11,7 @@ import (
 
 func FormatCode(code string) string {
 	if strings.Contains(code, "`") {
-		return code // TODO: properly escape or remove
+		return fmt.Sprintf("%q", code)
 	}
 
 	return fmt.Sprintf("`%s`", code)
