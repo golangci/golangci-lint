@@ -1,8 +1,6 @@
 package gomodguard
 
 import (
-	"sync"
-
 	"github.com/Masterminds/semver/v3"
 	"github.com/ryancurrah/gomodguard/v2"
 	"golang.org/x/tools/go/analysis"
@@ -17,8 +15,7 @@ import (
 const linterNameV2 = "gomodguard_v2"
 
 func NewV2(settings *config.GoModGuardv2Settings) *goanalysis.Linter {
-	var issues []*goanalysis.Issue
-	var mu sync.Mutex
+	b := goanalysis.NewThreadSafeLinterBuilder()
 
 	processorCfg := &gomodguard.Configuration{}
 	if settings != nil {
@@ -85,11 +82,8 @@ func NewV2(settings *config.GoModGuardv2Settings) *goanalysis.Linter {
 			analyzer.Run = func(pass *analysis.Pass) (any, error) {
 				gomodguardIssues := processor.ProcessFiles(internal.GetGoFileNames(pass))
 
-				mu.Lock()
-				defer mu.Unlock()
-
 				for _, gomodguardIssue := range gomodguardIssues {
-					issues = append(issues, goanalysis.NewIssue(&result.Issue{
+					b.Add(goanalysis.NewIssue(&result.Issue{
 						FromLinter: linterNameV2,
 						Pos:        gomodguardIssue.Position,
 						Text:       gomodguardIssue.Reason,
@@ -99,8 +93,6 @@ func NewV2(settings *config.GoModGuardv2Settings) *goanalysis.Linter {
 				return nil, nil
 			}
 		}).
-		WithIssuesReporter(func(*linter.Context) []*goanalysis.Issue {
-			return issues
-		}).
+		WithIssuesReporter(b.Reporter()).
 		WithLoadMode(goanalysis.LoadModeSyntax)
 }
