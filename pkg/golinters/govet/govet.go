@@ -30,7 +30,6 @@ import (
 	"golang.org/x/tools/go/analysis/passes/ifaceassert"
 	"golang.org/x/tools/go/analysis/passes/inline"
 	_ "golang.org/x/tools/go/analysis/passes/inspect" // unused internal analyzer
-	"golang.org/x/tools/go/analysis/passes/loopclosure"
 	"golang.org/x/tools/go/analysis/passes/lostcancel"
 	"golang.org/x/tools/go/analysis/passes/nilfunc"
 	"golang.org/x/tools/go/analysis/passes/nilness"
@@ -85,7 +84,6 @@ var (
 		httpresponse.Analyzer,
 		ifaceassert.Analyzer,
 		inline.Analyzer,
-		loopclosure.Analyzer,
 		lostcancel.Analyzer,
 		nilfunc.Analyzer,
 		nilness.Analyzer,
@@ -131,7 +129,6 @@ var (
 		httpresponse.Analyzer,
 		ifaceassert.Analyzer,
 		inline.Analyzer,
-		loopclosure.Analyzer,
 		lostcancel.Analyzer,
 		nilfunc.Analyzer,
 		printf.Analyzer,
@@ -194,11 +191,6 @@ func analyzersFromConfig(settings *config.GovetSettings) []*analysis.Analyzer {
 }
 
 func isAnalyzerEnabled(name string, cfg *config.GovetSettings, defaultAnalyzers []*analysis.Analyzer) bool {
-	// TODO(ldez) remove loopclosure when go1.24
-	if name == loopclosure.Analyzer.Name && config.IsGoGreaterThanOrEqual(cfg.Go, "1.22") {
-		return false
-	}
-
 	switch {
 	case cfg.EnableAll:
 		return !slices.Contains(cfg.Disable, name)
