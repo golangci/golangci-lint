@@ -260,6 +260,7 @@ type LintersSettings struct {
 	ErrorLint                ErrorLintSettings                `mapstructure:"errorlint"`
 	Exhaustive               ExhaustiveSettings               `mapstructure:"exhaustive"`
 	Exhaustruct              ExhaustructSettings              `mapstructure:"exhaustruct"`
+	Exhaustructv5            ExhaustructV5Settings            `mapstructure:"exhaustruct_v5"`
 	Fatcontext               FatcontextSettings               `mapstructure:"fatcontext"`
 	Forbidigo                ForbidigoSettings                `mapstructure:"forbidigo"`
 	FuncOrder                FuncOrderSettings                `mapstructure:"funcorder"`
@@ -464,6 +465,7 @@ type ExhaustiveSettings struct {
 	DefaultCaseRequired        bool     `mapstructure:"default-case-required"`
 }
 
+// Deprecated: use ExhaustructV5Settings instead.
 type ExhaustructSettings struct {
 	Include                []string `mapstructure:"include"`
 	Exclude                []string `mapstructure:"exclude"`
@@ -471,6 +473,17 @@ type ExhaustructSettings struct {
 	AllowEmptyRx           []string `mapstructure:"allow-empty-rx"`
 	AllowEmptyReturns      bool     `mapstructure:"allow-empty-returns"`
 	AllowEmptyDeclarations bool     `mapstructure:"allow-empty-declarations"`
+}
+
+type ExhaustructV5Settings struct {
+	EnforcePatterns        []string `mapstructure:"enforce-patterns"`
+	IgnorePatterns         []string `mapstructure:"ignore-patterns"`
+	OptionalPatterns       []string `mapstructure:"optional-patterns"`
+	AllowEmpty             bool     `mapstructure:"allow-empty"`
+	AllowEmptyPatterns     []string `mapstructure:"allow-empty-patterns"`
+	AllowEmptyReturns      bool     `mapstructure:"allow-empty-returns"`
+	AllowEmptyDeclarations bool     `mapstructure:"allow-empty-declarations"`
+	ExplicitMode           bool     `mapstructure:"explicit-mode"`
 }
 
 type FatcontextSettings struct {

@@ -19,6 +19,8 @@ require (
 	charm.land/lipgloss/v2 v2.0.3
 	codeberg.org/polyfloyd/go-errorlint v1.9.0
 	dev.gaijin.team/go/exhaustruct/v4 v4.0.0
+	dev.gaijin.team/go/exhaustruct/v5 v5.0.2-0.20260613013200-d454ba081585
+	dev.gaijin.team/go/golib v0.8.1
 	github.com/4meepo/tagalign v1.4.3
 	github.com/Abirdcfly/dupword v0.1.8
 	github.com/AdminBenni/iota-mixing v1.0.0
@@ -162,7 +164,6 @@ require (
 
 require (
 	codeberg.org/chavacava/garif v0.2.0 // indirect
-	dev.gaijin.team/go/golib v0.6.0 // indirect
 	github.com/alfatraining/structtag v1.0.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/ccojocar/zxcvbn-go v1.0.4 // indirect

@@ -235,6 +235,10 @@ linters:
         text: "SA1019: config.GoModGuardSettings is deprecated: use GoModGuardv2Settings instead."
         linters:
           - staticcheck
+      - path: pkg/golinters/exhaustruct/exhaustruct.go
+        text: "SA1019: config.ExhaustructSettings is deprecated: use ExhaustructV5Settings instead."
+        linters:
+          - staticcheck
       - path: pkg/golinters/gomodguard/
         linters:
           - dupl
