@@ -96,7 +96,7 @@ func _() {
 	if after, ok := strings.CutPrefix(s, pre); ok { // want "TrimPrefix can be simplified to CutPrefix"
 		println(after)
 	}
-	if after, ok := strings.CutPrefix(s, pre); ok { // want "TrimPrefix can be simplified to CutPrefix"
+	if _, ok := strings.CutPrefix(s, pre); ok { // want "TrimPrefix can be simplified to CutPrefix"
 		println(strings.TrimPrefix(s, pre)) // noop here
 	}
 	if after, ok := strings.CutPrefix(s, ""); ok { // want "TrimPrefix can be simplified to CutPrefix"
