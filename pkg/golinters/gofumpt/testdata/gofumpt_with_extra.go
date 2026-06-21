@@ -3,6 +3,10 @@ package testdata
 
 import "fmt"
 
-func GofmtNotExtra(bar string, baz string) { // want "File is not properly formatted"
+func GroupedType(bar string, baz string) { // want "File is not properly formatted"
 	fmt.Print("foo")
+}
+
+func RakedReturns() (err error) {
+	return
 }
