@@ -857,6 +857,7 @@
             "errorlint",
             "exhaustive",
             "exhaustruct",
+            "exhaustruct_v5",
             "exptostd",
             "fatcontext",
             "forbidigo",
@@ -1440,6 +1441,60 @@
             },
             "allow-empty-declarations": {
               "description": "Allows empty structures in variable declarations.",
+              "type": "boolean",
+              "default": false
+            }
+          }
+        },
+        "exhaustructv5Settings": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enforce-patterns": {
+              "description": "List of regular expressions to match type names that should be checked.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "ignore-patterns":{
+              "description": "List of regular expressions to match type names that should be skipped from checking.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "optional-patterns": {
+              "description": "List of regular expressions to match type names where all fields are treated as optional.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "allow-empty":{
+              "description": "Allows empty structures, effectively excluding them from the check.",
+              "type": "boolean",
+              "default": false
+            },
+            "allow-empty-patterns": {
+              "description": "List of regular expressions to match type names that should be allowed to be empty.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "allow-empty-returns": {
+              "description": "Allows empty structures in return statements.",
+              "type": "boolean",
+              "default": false
+            },
+            "allow-empty-declarations": {
+              "description": "Allows empty structures in variable declarations.",
+              "type": "boolean",
+              "default": false
+            },
+            "explicit-mode":{
+              "description": "When true, only types marked with //exhaustruct:enforce directive or matching enforce-rx patterns are checked.",
               "type": "boolean",
               "default": false
             }
@@ -5022,6 +5077,9 @@
             },
             "exhaustruct": {
               "$ref": "#/definitions/settings/definitions/exhaustructSettings"
+            },
+            "exhaustruct_v5": {
+              "$ref": "#/definitions/settings/definitions/exhaustructv5Settings"
             },
             "fatcontext": {
               "$ref": "#/definitions/settings/definitions/fatcontextSettings"
