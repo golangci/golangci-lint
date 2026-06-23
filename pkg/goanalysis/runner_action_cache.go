@@ -3,6 +3,7 @@ package goanalysis
 import (
 	"errors"
 	"fmt"
+	"go/types"
 	"io"
 
 	"golang.org/x/tools/go/analysis"
@@ -12,8 +13,13 @@ import (
 )
 
 type Fact struct {
-	Path string // non-empty only for object facts
-	Fact analysis.Fact
+	// PkgPath is the import path of the package owning the fact's object (object facts)
+	// or the package the fact is about (package facts).
+	// It is empty when the fact belongs to the package being cached,
+	// which keeps backward compatibility with the previous cache format.
+	PkgPath string
+	Path    string // non-empty only for object facts
+	Fact    analysis.Fact
 }
 
 func (act *action) loadCachedFacts() bool {
@@ -32,33 +38,50 @@ func (act *action) loadCachedFacts() bool {
 
 		return act.loadPersistedFacts()
 	}()
+
 	act.loadCachedFactsDone = true
 	act.loadCachedFactsOk = res
+
 	return res
 }
 
 func (act *action) persistFactsToCache() error {
 	analyzer := act.Analyzer
+
 	if len(analyzer.FactTypes) == 0 {
 		return nil
 	}
 
 	// Merge new facts into the package and persist them.
+	//
+	// We must persist not only the facts about this package's own objects,
+	// but also the facts about objects from other packages that are reachable through this package's export data (see exportedFrom).
+	// When a package is later restored from the cache instead of being analyzed from source,
+	// it re-exports these inherited facts to its own dependents.
+	// Dropping them here makes linters using facts silently miss issues for downstream packages analyzed from source.
+	// e.g. it makes nolintlint report the related `nolint` directives as unused.
+
 	var facts []Fact
+
 	for key, fact := range act.packageFacts {
+		pkgPath := ""
 		if key.pkg != act.Package.Types {
-			// The fact is from inherited facts from another package
-			continue
+			pkgPath = key.pkg.Path()
 		}
+
 		facts = append(facts, Fact{
-			Path: "",
-			Fact: fact,
+			PkgPath: pkgPath,
+			Path:    "",
+			Fact:    fact,
 		})
 	}
+
 	for key, fact := range act.objectFacts {
 		obj := key.obj
-		if obj.Pkg() != act.Package.Types {
-			// The fact is from inherited facts from another package
+
+		// Keep facts about objects reachable downstream through the export data,
+		// mirroring the filter used by inheritFacts.
+		if !exportedFrom(obj, act.Package.Types) {
 			continue
 		}
 
@@ -68,9 +91,15 @@ func (act *action) persistFactsToCache() error {
 			continue
 		}
 
+		pkgPath := ""
+		if obj.Pkg() != nil && obj.Pkg() != act.Package.Types {
+			pkgPath = obj.Pkg().Path()
+		}
+
 		facts = append(facts, Fact{
-			Path: string(path),
-			Fact: fact,
+			PkgPath: pkgPath,
+			Path:    string(path),
+			Fact:    fact,
 		})
 	}
 
@@ -89,18 +118,42 @@ func (act *action) loadPersistedFacts() bool {
 		}
 
 		factsCacheDebugf("No cached facts for package %q and analyzer %s", act.Package.Name, act.Analyzer.Name)
+
 		return false
 	}
 
 	factsCacheDebugf("Loaded %d cached facts for package %q and analyzer %s", len(facts), act.Package.Name, act.Analyzer.Name)
 
+	var importsByPath map[string]*types.Package
+
+	// Lazily built lookup of the package owning each fact (by import path),
+	// resolved through this package's transitive imports.
+	resolvePkg := func(pkgPath string) *types.Package {
+		if pkgPath == "" {
+			return act.Package.Types
+		}
+
+		if importsByPath == nil {
+			importsByPath = collectImports(act.Package.Types)
+		}
+
+		return importsByPath[pkgPath]
+	}
+
 	for _, f := range facts {
+		pkg := resolvePkg(f.PkgPath)
+		if pkg == nil {
+			// The owning package is not reachable from this package anymore.
+			continue
+		}
+
 		if f.Path == "" { // this is a package fact
-			key := packageFactKey{pkg: act.Package.Types, typ: act.factType(f.Fact)}
+			key := packageFactKey{pkg: pkg, typ: act.factType(f.Fact)}
 			act.packageFacts[key] = f.Fact
 			continue
 		}
-		obj, err := objectpath.Object(act.Package.Types, objectpath.Path(f.Path))
+
+		obj, err := objectpath.Object(pkg, objectpath.Path(f.Path))
 		if err != nil {
 			// Be lenient about these errors.
 			// For example, when analyzing io/ioutil from source,
@@ -114,11 +167,36 @@ func (act *action) loadPersistedFacts() bool {
 			// then (part of) the unexported type will become part of the type information and our path will resolve again.
 			continue
 		}
+
 		factKey := objectFactKey{obj, act.factType(f.Fact)}
+
 		act.objectFacts[factKey] = f.Fact
 	}
 
 	return true
+}
+
+// collectImports returns a map of every package transitively imported by pkg (including pkg itself), keyed by import path.
+// It is used to resolve facts about objects that belong to a dependency reachable through the export data.
+func collectImports(pkg *types.Package) map[string]*types.Package {
+	result := map[string]*types.Package{pkg.Path(): pkg}
+
+	var visit func(p *types.Package)
+
+	visit = func(p *types.Package) {
+		for _, imp := range p.Imports() {
+			if _, ok := result[imp.Path()]; ok {
+				continue
+			}
+
+			result[imp.Path()] = imp
+			visit(imp)
+		}
+	}
+
+	visit(pkg)
+
+	return result
 }
 
 func factCacheKey(a *analysis.Analyzer) string {
