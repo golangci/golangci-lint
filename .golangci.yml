@@ -224,26 +224,26 @@ linters:
 
       # Deprecated linters
       - path: pkg/lint/lintersdb/builder_linter.go
-        text: "SA1019: wsl.NewV4 is deprecated: use NewV5 instead."
+        text: "SA1019: (.*)wsl.NewV4 is deprecated: use NewV5 instead."
         linters:
           - staticcheck
       - path: pkg/golinters/wsl/wsl.go
-        text: "SA1019: config.WSLv4Settings is deprecated: use WSLv5Settings instead."
+        text: "SA1019: (.*)config.WSLv4Settings is deprecated: use WSLv5Settings instead."
         linters:
           - staticcheck
       - path: pkg/golinters/gomodguard/gomodguard.go
-        text: "SA1019: config.GoModGuardSettings is deprecated: use GoModGuardv2Settings instead."
+        text: "SA1019: (.*)config.GoModGuardSettings is deprecated: use GoModGuardv2Settings instead."
         linters:
           - staticcheck
       - path: pkg/golinters/exhaustruct/exhaustruct.go
-        text: "SA1019: config.ExhaustructSettings is deprecated: use ExhaustructV5Settings instead."
+        text: "SA1019: (.*)config.ExhaustructSettings is deprecated: use ExhaustructV5Settings instead."
         linters:
           - staticcheck
       - path: pkg/golinters/gomodguard/
         linters:
           - dupl
       - path: pkg/golinters/goconst/goconst.go
-        text: "SA1019: settings.IgnoreCalls is deprecated: use ExcludeTypes instead."
+        text: "SA1019: (.*).IgnoreCalls is deprecated: use ExcludeTypes instead."
         linters:
           - staticcheck
 
