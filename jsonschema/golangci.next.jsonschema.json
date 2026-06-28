@@ -1508,6 +1508,16 @@
               "description": "Check for potential fat contexts in struct pointers.",
               "type": "boolean",
               "default": false
+            },
+            "check-loops": {
+              "description": "Disable detection of fat contexts in function literals.",
+              "type": "boolean",
+              "default": true
+            },
+            "check-function-literals": {
+              "description": "Disable detection of fat contexts in function literals.",
+              "type": "boolean",
+              "default": true
             }
           }
         },
