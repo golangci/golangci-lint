@@ -41,6 +41,11 @@ var defaultLintersSettings = LintersSettings{
 		ExplicitExhaustiveMap:      false,
 		ExplicitExhaustiveSwitch:   false,
 	},
+	Fatcontext: FatcontextSettings{
+		CheckStructPointers:   false,
+		CheckLoops:            true,
+		CheckFunctionLiterals: true,
+	},
 	Forbidigo: ForbidigoSettings{
 		ExcludeGodocExamples: true,
 	},
@@ -487,7 +492,9 @@ type ExhaustructV5Settings struct {
 }
 
 type FatcontextSettings struct {
-	CheckStructPointers bool `mapstructure:"check-struct-pointers"`
+	CheckStructPointers   bool `mapstructure:"check-struct-pointers"`
+	CheckLoops            bool `mapstructure:"check-loops"`
+	CheckFunctionLiterals bool `mapstructure:"check-function-literals"`
 }
 
 type ForbidigoSettings struct {

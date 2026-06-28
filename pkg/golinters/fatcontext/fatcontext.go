@@ -12,7 +12,9 @@ func New(settings *config.FatcontextSettings) *goanalysis.Linter {
 
 	if settings != nil {
 		cfg = map[string]any{
-			analyzer.FlagCheckStructPointers: settings.CheckStructPointers,
+			analyzer.FlagCheckStructPointers:   settings.CheckStructPointers,
+			analyzer.FlagCheckLoops:            settings.CheckLoops,
+			analyzer.FlagCheckFunctionLiterals: settings.CheckFunctionLiterals,
 		}
 	}
 

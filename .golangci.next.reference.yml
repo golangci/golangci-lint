@@ -624,6 +624,12 @@ linters:
       # May generate false positives.
       # Default: false
       check-struct-pointers: true
+      # Disable detection of fat contexts in loops.
+      # Default: true
+      check-loops: false
+      # Disable detection of fat contexts in function literals.
+      # Default: true
+      check-function-literals: false
 
     forbidigo:
       # Forbid the following identifiers (list of regexp).
