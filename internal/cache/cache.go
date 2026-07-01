@@ -296,7 +296,7 @@ func SetSalt(b *bytes.Buffer) {
 	cache.SetSalt(b.Bytes())
 }
 
-func DefaultDir() string {
-	cacheDir, _ := cache.DefaultDir()
-	return cacheDir
+func DefaultDir() (string, error) {
+	cacheDir, _, err := cache.DefaultDir()
+	return cacheDir, err
 }

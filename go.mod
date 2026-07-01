@@ -3,7 +3,7 @@ module github.com/golangci/golangci-lint/v2
 // The minimum Go version must always be latest-1.
 // This version should never be changed outside of the PR to add the support of newer Go version.
 // Only golangci-lint maintainers are allowed to change it.
-go 1.25.0
+go 1.26.0
 
 ignore (
 	./.github
@@ -156,7 +156,7 @@ require (
 	golang.org/x/sync v0.21.0
 	golang.org/x/sys v0.46.0
 	golang.org/x/tools v0.47.0
-	honnef.co/go/tools v0.7.0
+	honnef.co/go/tools v0.8.0-rc.1
 	mvdan.cc/gofumpt v0.9.2
 	mvdan.cc/unparam v0.0.0-20251027182757-5beb8c8f8f15
 )

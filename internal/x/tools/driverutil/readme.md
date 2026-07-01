@@ -7,6 +7,8 @@ Previously, it was `analysisinternal` and `analysisflags` packages.
 
 ## History
 
+- https://github.com/golangci/golangci-lint/pull/xxx
+  - sync with https://github.com/golang/tools/blob/v0.45.0/internal/analysis/driverutil/readfile.go (no change)
 - https://github.com/golangci/golangci-lint/pull/6434
   - sync with https://github.com/golang/tools/blob/v0.43.0/internal/analysis/driverutil/readfile.go
 
