@@ -33,7 +33,7 @@
     "name": "golines",
     "desc": "Checks if code is formatted, and fixes long lines",
     "loadMode": 8199,
-    "originalURL": "https://github.com/segmentio/golines",
+    "originalURL": "https://github.com/golangci/golines",
     "internal": false,
     "canAutoFix": true,
     "isSlow": false,
