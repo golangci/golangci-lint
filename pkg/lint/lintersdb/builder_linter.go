@@ -380,7 +380,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 		linter.NewConfig(golines.New(&cfg.Linters.Settings.GoLines)).
 			WithSince("v2.0.0").
 			WithAutoFix().
-			WithURL("https://github.com/segmentio/golines"),
+			WithURL("https://github.com/golangci/golines"),
 
 		linter.NewConfig(goheader.New(&cfg.Linters.Settings.Goheader, placeholderReplacer)).
 			WithSince("v1.28.0").
