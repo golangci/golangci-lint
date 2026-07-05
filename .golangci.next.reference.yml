@@ -2428,6 +2428,9 @@ linters:
       # Report named error if it is assigned inside defer.
       # Default: false
       report-error-in-defer: true
+      # Allow named returns in the signature but report them if referenced in the body or used by a naked return.
+      # Default: false
+      allow-unused-named-returns: true
 
     paralleltest:
       # Ignore missing calls to `t.Parallel()` and only report incorrect uses of it.

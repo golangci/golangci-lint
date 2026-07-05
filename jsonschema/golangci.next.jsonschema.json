@@ -3170,6 +3170,11 @@
               "description": "Report named error if it is assigned inside defer.",
               "type": "boolean",
               "default": false
+            },
+            "allow-unused-named-returns": {
+              "description": "Allow named returns in the signature but report them if referenced in the body or used by a naked return.",
+              "type": "boolean",
+              "default": false
             }
           }
         },

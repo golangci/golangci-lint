@@ -857,7 +857,8 @@ type NoLintLintSettings struct {
 }
 
 type NoNamedReturnsSettings struct {
-	ReportErrorInDefer bool `mapstructure:"report-error-in-defer"`
+	ReportErrorInDefer      bool `mapstructure:"report-error-in-defer"`
+	AllowUnusedNamedReturns bool `mapstructure:"allow-unused-named-returns"`
 }
 
 type ParallelTestSettings struct {

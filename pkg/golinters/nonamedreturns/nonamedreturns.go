@@ -12,7 +12,8 @@ func New(settings *config.NoNamedReturnsSettings) *goanalysis.Linter {
 
 	if settings != nil {
 		cfg = map[string]any{
-			analyzer.FlagReportErrorInDefer: settings.ReportErrorInDefer,
+			analyzer.FlagReportErrorInDefer:      settings.ReportErrorInDefer,
+			analyzer.FlagAllowUnusedNamedReturns: settings.AllowUnusedNamedReturns,
 		}
 	}
 
