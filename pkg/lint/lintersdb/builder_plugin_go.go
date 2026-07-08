@@ -92,7 +92,9 @@ func (b *PluginGoBuilder) getAnalyzerPlugin(cfg *config.Config, path string, set
 		path = filepath.Join(basePath, path)
 	}
 
+	//nolint:staticcheck,nolintlint // Ignore because the implementation on Windows returns nil
 	plug, err := plugin.Open(path)
+	//nolint:staticcheck,nolintlint // Ignore because the implementation on Windows returns nil
 	if err != nil {
 		return nil, err
 	}
@@ -106,7 +108,9 @@ func (b *PluginGoBuilder) getAnalyzerPlugin(cfg *config.Config, path string, set
 }
 
 func (b *PluginGoBuilder) lookupPlugin(plug *plugin.Plugin, settings any) ([]*analysis.Analyzer, error) {
+	//nolint:staticcheck,nolintlint // Ignore because the implementation on Windows returns nil
 	symbol, err := plug.Lookup("New")
+	//nolint:staticcheck,nolintlint // Ignore because the implementation on Windows returns nil
 	if err != nil {
 		analyzers, errP := b.lookupAnalyzerPlugin(plug)
 		if errP != nil {
@@ -126,7 +130,9 @@ func (b *PluginGoBuilder) lookupPlugin(plug *plugin.Plugin, settings any) ([]*an
 }
 
 func (b *PluginGoBuilder) lookupAnalyzerPlugin(plug *plugin.Plugin) ([]*analysis.Analyzer, error) {
+	//nolint:staticcheck,nolintlint // Ignore because the implementation on Windows returns nil
 	symbol, err := plug.Lookup("AnalyzerPlugin")
+	//nolint:staticcheck,nolintlint // Ignore because the implementation on Windows returns nil
 	if err != nil {
 		return nil, err
 	}

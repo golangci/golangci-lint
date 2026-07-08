@@ -5,7 +5,6 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/golangci/golangci-lint/v2/pkg/commands/internal/migrate/ptr"
 	"github.com/golangci/golangci-lint/v2/pkg/commands/internal/migrate/versionone"
 )
 
@@ -18,9 +17,9 @@ func Test_disableAllFilter(t *testing.T) {
 		{
 			desc: "no presets, fast",
 			old: versionone.Linters{
-				DisableAll: ptr.Pointer(true),
+				DisableAll: new(true),
 				Enable:     nil,
-				Fast:       ptr.Pointer(false),
+				Fast:       new(false),
 				Presets:    nil,
 			},
 			expected: nil,
@@ -28,9 +27,9 @@ func Test_disableAllFilter(t *testing.T) {
 		{
 			desc: "no presets, fast",
 			old: versionone.Linters{
-				DisableAll: ptr.Pointer(true),
+				DisableAll: new(true),
 				Enable:     nil,
-				Fast:       ptr.Pointer(true),
+				Fast:       new(true),
 				Presets:    nil,
 			},
 			expected: nil,
@@ -38,9 +37,9 @@ func Test_disableAllFilter(t *testing.T) {
 		{
 			desc: "no presets, enable",
 			old: versionone.Linters{
-				DisableAll: ptr.Pointer(true),
+				DisableAll: new(true),
 				Enable:     []string{"lll", "misspell", "govet"},
-				Fast:       ptr.Pointer(false),
+				Fast:       new(false),
 				Presets:    nil,
 			},
 			expected: []string{"govet", "lll", "misspell"},
@@ -48,9 +47,9 @@ func Test_disableAllFilter(t *testing.T) {
 		{
 			desc: "fast, no presets, enable",
 			old: versionone.Linters{
-				DisableAll: ptr.Pointer(true),
+				DisableAll: new(true),
 				Enable:     []string{"lll", "misspell", "govet"},
-				Fast:       ptr.Pointer(true),
+				Fast:       new(true),
 				Presets:    nil,
 			},
 			expected: []string{"govet", "lll", "misspell"},
@@ -58,9 +57,9 @@ func Test_disableAllFilter(t *testing.T) {
 		{
 			desc: "presets, enable",
 			old: versionone.Linters{
-				DisableAll: ptr.Pointer(true),
+				DisableAll: new(true),
 				Enable:     []string{"lll", "misspell", "govet"},
-				Fast:       ptr.Pointer(false),
+				Fast:       new(false),
 				Presets:    []string{"comment", "error", "format"},
 			},
 			expected: []string{
@@ -83,9 +82,9 @@ func Test_disableAllFilter(t *testing.T) {
 		{
 			desc: "presets, enable, fast",
 			old: versionone.Linters{
-				DisableAll: ptr.Pointer(true),
+				DisableAll: new(true),
 				Enable:     []string{"lll", "misspell", "govet"},
-				Fast:       ptr.Pointer(true),
+				Fast:       new(true),
 				Presets:    []string{"comment", "error", "format"},
 			},
 			expected: []string{
@@ -123,9 +122,9 @@ func Test_enableAllFilter(t *testing.T) {
 		{
 			desc: "no options",
 			old: versionone.Linters{
-				EnableAll: ptr.Pointer(true),
+				EnableAll: new(true),
 				Disable:   nil,
-				Fast:      ptr.Pointer(false),
+				Fast:      new(false),
 				Presets:   nil,
 			},
 			expected: nil,
@@ -133,9 +132,9 @@ func Test_enableAllFilter(t *testing.T) {
 		{
 			desc: "presets (ignored)",
 			old: versionone.Linters{
-				EnableAll: ptr.Pointer(true),
+				EnableAll: new(true),
 				Disable:   nil,
-				Fast:      ptr.Pointer(false),
+				Fast:      new(false),
 				Presets:   []string{"comment", "error", "format"},
 			},
 			expected: nil,
@@ -143,9 +142,9 @@ func Test_enableAllFilter(t *testing.T) {
 		{
 			desc: "fast",
 			old: versionone.Linters{
-				EnableAll: ptr.Pointer(true),
+				EnableAll: new(true),
 				Disable:   nil,
-				Fast:      ptr.Pointer(true),
+				Fast:      new(true),
 				Presets:   nil,
 			},
 			expected: []string{"asasalint", "bodyclose", "canonicalheader", "containedctx", "contextcheck", "durationcheck", "err113", "errcheck", "errchkjson", "errname", "errorlint", "exhaustive", "exhaustruct", "exptostd", "fatcontext", "forbidigo", "forcetypeassert", "ginkgolinter", "gochecknoglobals", "gochecksumtype", "gocritic", "gosec", "gosimple", "gosmopolitan", "govet", "iface", "importas", "intrange", "ireturn", "loggercheck", "makezero", "mirror", "musttag", "nilerr", "nilnesserr", "nilnil", "noctx", "nonamedreturns", "paralleltest", "perfsprint", "protogetter", "reassign", "recvcheck", "revive", "rowserrcheck", "sloglint", "spancheck", "sqlclosecheck", "staticcheck", "stylecheck", "tagliatelle", "testifylint", "thelper", "tparallel", "unconvert", "unparam", "unused", "usetesting", "varnamelen", "wastedassign", "wrapcheck", "zerologlint"},
@@ -153,9 +152,9 @@ func Test_enableAllFilter(t *testing.T) {
 		{
 			desc: "disable",
 			old: versionone.Linters{
-				EnableAll: ptr.Pointer(true),
+				EnableAll: new(true),
 				Disable:   []string{"lll", "misspell", "govet"},
-				Fast:      ptr.Pointer(false),
+				Fast:      new(false),
 				Presets:   nil,
 			},
 			expected: []string{"govet", "lll", "misspell"},
@@ -163,9 +162,9 @@ func Test_enableAllFilter(t *testing.T) {
 		{
 			desc: "disable, fast",
 			old: versionone.Linters{
-				EnableAll: ptr.Pointer(true),
+				EnableAll: new(true),
 				Disable:   []string{"lll", "misspell", "govet"},
-				Fast:      ptr.Pointer(true),
+				Fast:      new(true),
 				Presets:   nil,
 			},
 			expected: []string{"asasalint", "bodyclose", "canonicalheader", "containedctx", "contextcheck", "durationcheck", "err113", "errcheck", "errchkjson", "errname", "errorlint", "exhaustive", "exhaustruct", "exptostd", "fatcontext", "forbidigo", "forcetypeassert", "ginkgolinter", "gochecknoglobals", "gochecksumtype", "gocritic", "gosec", "gosimple", "gosmopolitan", "govet", "iface", "importas", "intrange", "ireturn", "lll", "loggercheck", "makezero", "mirror", "misspell", "musttag", "nilerr", "nilnesserr", "nilnil", "noctx", "nonamedreturns", "paralleltest", "perfsprint", "protogetter", "reassign", "recvcheck", "revive", "rowserrcheck", "sloglint", "spancheck", "sqlclosecheck", "staticcheck", "stylecheck", "tagliatelle", "testifylint", "thelper", "tparallel", "unconvert", "unparam", "unused", "usetesting", "varnamelen", "wastedassign", "wrapcheck", "zerologlint"},
@@ -173,10 +172,10 @@ func Test_enableAllFilter(t *testing.T) {
 		{
 			desc: "disable, enable, fast",
 			old: versionone.Linters{
-				EnableAll: ptr.Pointer(true),
+				EnableAll: new(true),
 				Enable:    []string{"canonicalheader", "errname"},
 				Disable:   []string{"lll", "misspell", "govet"},
-				Fast:      ptr.Pointer(true),
+				Fast:      new(true),
 				Presets:   nil,
 			},
 			expected: []string{"asasalint", "bodyclose", "containedctx", "contextcheck", "durationcheck", "err113", "errcheck", "errchkjson", "errorlint", "exhaustive", "exhaustruct", "exptostd", "fatcontext", "forbidigo", "forcetypeassert", "ginkgolinter", "gochecknoglobals", "gochecksumtype", "gocritic", "gosec", "gosimple", "gosmopolitan", "govet", "iface", "importas", "intrange", "ireturn", "lll", "loggercheck", "makezero", "mirror", "misspell", "musttag", "nilerr", "nilnesserr", "nilnil", "noctx", "nonamedreturns", "paralleltest", "perfsprint", "protogetter", "reassign", "recvcheck", "revive", "rowserrcheck", "sloglint", "spancheck", "sqlclosecheck", "staticcheck", "stylecheck", "tagliatelle", "testifylint", "thelper", "tparallel", "unconvert", "unparam", "unused", "usetesting", "varnamelen", "wastedassign", "wrapcheck", "zerologlint"},
@@ -205,7 +204,7 @@ func Test_defaultLintersDisableFilter(t *testing.T) {
 			old: versionone.Linters{
 				Enable:  nil,
 				Disable: nil,
-				Fast:    ptr.Pointer(false),
+				Fast:    new(false),
 				Presets: nil,
 			},
 			expected: nil,
@@ -215,7 +214,7 @@ func Test_defaultLintersDisableFilter(t *testing.T) {
 			old: versionone.Linters{
 				Enable:  nil,
 				Disable: nil,
-				Fast:    ptr.Pointer(false),
+				Fast:    new(false),
 				Presets: []string{"comment", "error", "format"},
 			},
 			expected: nil,
@@ -225,7 +224,7 @@ func Test_defaultLintersDisableFilter(t *testing.T) {
 			old: versionone.Linters{
 				Enable:  nil,
 				Disable: nil,
-				Fast:    ptr.Pointer(true),
+				Fast:    new(true),
 				Presets: nil,
 			},
 			expected: []string{"errcheck", "gosimple", "govet", "staticcheck", "unused"},
@@ -235,7 +234,7 @@ func Test_defaultLintersDisableFilter(t *testing.T) {
 			old: versionone.Linters{
 				Enable:  []string{"lll", "misspell", "govet"},
 				Disable: nil,
-				Fast:    ptr.Pointer(false),
+				Fast:    new(false),
 				Presets: nil,
 			},
 			expected: nil,
@@ -245,7 +244,7 @@ func Test_defaultLintersDisableFilter(t *testing.T) {
 			old: versionone.Linters{
 				Enable:  nil,
 				Disable: []string{"lll", "misspell", "govet"},
-				Fast:    ptr.Pointer(false),
+				Fast:    new(false),
 				Presets: nil,
 			},
 			expected: []string{"govet", "lll", "misspell"},
@@ -255,7 +254,7 @@ func Test_defaultLintersDisableFilter(t *testing.T) {
 			old: versionone.Linters{
 				Enable:  nil,
 				Disable: []string{"lll", "misspell", "govet"},
-				Fast:    ptr.Pointer(true),
+				Fast:    new(true),
 				Presets: nil,
 			},
 			expected: []string{"errcheck", "gosimple", "govet", "lll", "misspell", "staticcheck", "unused"},
@@ -265,7 +264,7 @@ func Test_defaultLintersDisableFilter(t *testing.T) {
 			old: versionone.Linters{
 				Enable:  []string{"grouper", "importas", "errcheck"},
 				Disable: []string{"lll", "misspell", "govet"},
-				Fast:    ptr.Pointer(false),
+				Fast:    new(false),
 				Presets: nil,
 			},
 			expected: []string{"govet", "lll", "misspell"},
@@ -275,7 +274,7 @@ func Test_defaultLintersDisableFilter(t *testing.T) {
 			old: versionone.Linters{
 				Enable:  []string{"grouper", "importas", "errcheck"},
 				Disable: nil,
-				Fast:    ptr.Pointer(false),
+				Fast:    new(false),
 				Presets: nil,
 			},
 			expected: nil,
@@ -305,7 +304,7 @@ func Test_defaultLintersEnableFilter(t *testing.T) {
 			old: versionone.Linters{
 				Enable:  nil,
 				Disable: nil,
-				Fast:    ptr.Pointer(false),
+				Fast:    new(false),
 				Presets: nil,
 			},
 			expected: nil,
@@ -315,7 +314,7 @@ func Test_defaultLintersEnableFilter(t *testing.T) {
 			old: versionone.Linters{
 				Enable:  []string{"grouper", "importas", "errcheck"},
 				Disable: nil,
-				Fast:    ptr.Pointer(false),
+				Fast:    new(false),
 				Presets: nil,
 			},
 			expected: []string{"grouper", "importas"},
@@ -325,7 +324,7 @@ func Test_defaultLintersEnableFilter(t *testing.T) {
 			old: versionone.Linters{
 				Enable:  []string{"grouper", "importas", "errcheck"},
 				Disable: []string{"lll", "misspell", "govet"},
-				Fast:    ptr.Pointer(false),
+				Fast:    new(false),
 				Presets: nil,
 			},
 			expected: []string{"grouper", "importas"},
@@ -335,7 +334,7 @@ func Test_defaultLintersEnableFilter(t *testing.T) {
 			old: versionone.Linters{
 				Enable:  nil,
 				Disable: []string{"lll", "misspell", "govet"},
-				Fast:    ptr.Pointer(false),
+				Fast:    new(false),
 				Presets: nil,
 			},
 			expected: nil,
@@ -345,7 +344,7 @@ func Test_defaultLintersEnableFilter(t *testing.T) {
 			old: versionone.Linters{
 				Enable:  nil,
 				Disable: nil,
-				Fast:    ptr.Pointer(false),
+				Fast:    new(false),
 				Presets: []string{"comment", "error", "format"},
 			},
 			expected: []string{"dupword", "err113", "errorlint", "gci", "godot", "godox", "gofmt", "gofumpt", "goimports", "misspell", "wrapcheck"},
@@ -355,7 +354,7 @@ func Test_defaultLintersEnableFilter(t *testing.T) {
 			old: versionone.Linters{
 				Enable:  nil,
 				Disable: nil,
-				Fast:    ptr.Pointer(true),
+				Fast:    new(true),
 				Presets: []string{"comment", "error", "format"},
 			},
 			expected: []string{"dupword", "gci", "godot", "godox", "gofmt", "gofumpt", "goimports", "misspell"},

@@ -41,7 +41,7 @@ func newCacheCommand() *cacheCommand {
 			Short:             "Show cache status",
 			Args:              cobra.NoArgs,
 			ValidArgsFunction: cobra.NoFileCompletions,
-			Run:               c.executeStatus,
+			RunE:              c.executeStatus,
 		},
 	)
 
@@ -51,7 +51,10 @@ func newCacheCommand() *cacheCommand {
 }
 
 func (*cacheCommand) executeClean(_ *cobra.Command, _ []string) error {
-	cacheDir := cache.DefaultDir()
+	cacheDir, err := cache.DefaultDir()
+	if err != nil {
+		return err
+	}
 
 	if err := os.RemoveAll(cacheDir); err != nil {
 		return fmt.Errorf("failed to remove dir %s: %w", cacheDir, err)
@@ -60,8 +63,11 @@ func (*cacheCommand) executeClean(_ *cobra.Command, _ []string) error {
 	return nil
 }
 
-func (*cacheCommand) executeStatus(_ *cobra.Command, _ []string) {
-	cacheDir := cache.DefaultDir()
+func (*cacheCommand) executeStatus(_ *cobra.Command, _ []string) error {
+	cacheDir, err := cache.DefaultDir()
+	if err != nil {
+		return err
+	}
 
 	_, _ = fmt.Fprintf(logutils.StdOut, "Dir: %s\n", cacheDir)
 
@@ -69,6 +75,8 @@ func (*cacheCommand) executeStatus(_ *cobra.Command, _ []string) {
 	if err == nil {
 		_, _ = fmt.Fprintf(logutils.StdOut, "Size: %s\n", fsutils.PrettifyBytesCount(cacheSizeBytes))
 	}
+
+	return nil
 }
 
 func dirSizeBytes(path string) (int64, error) {
