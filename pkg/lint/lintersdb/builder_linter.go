@@ -398,6 +398,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 
 		linter.NewConfig(modernize.New(&cfg.Linters.Settings.Modernize)).
 			WithSince("v2.6.0").
+			WithAutoFix().
 			WithLoadForGoAnalysis().
 			WithURL("https://pkg.go.dev/golang.org/x/tools/go/analysis/passes/modernize"),
 

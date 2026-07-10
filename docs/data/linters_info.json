@@ -423,6 +423,7 @@
     "loadMode": 8767,
     "originalURL": "https://pkg.go.dev/golang.org/x/tools/go/analysis/passes/modernize",
     "internal": false,
+    "canAutoFix": true,
     "isSlow": true,
     "since": "v2.6.0"
   },
