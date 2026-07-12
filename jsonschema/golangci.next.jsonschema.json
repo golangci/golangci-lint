@@ -744,6 +744,7 @@
         "embedlit",
         "errorsastype",
         "forvar",
+        "importcomment",
         "mapsloop",
         "minmax",
         "newexpr",
