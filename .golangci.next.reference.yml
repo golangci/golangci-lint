@@ -2326,6 +2326,8 @@ linters:
         - errorsastype
         # Remove redundant re-declaration of loop variables.
         - forvar
+        # Remove obsolete comments specifying canonical import path.
+        - importcomment
         # Replace explicit loops over maps with calls to maps package.
         - mapsloop
         # Replace if/else statements with calls to min or max.
