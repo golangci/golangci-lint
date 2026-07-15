@@ -847,6 +847,7 @@ type MndSettings struct {
 
 type ModernizeSettings struct {
 	Disable []string `mapstructure:"disable"`
+	Enable  []string `mapstructure:"enable"`
 }
 
 type NoLintLintSettings struct {

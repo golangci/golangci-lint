@@ -3101,6 +3101,13 @@
               "items": {
                 "$ref": "#/definitions/modernize-analyzers"
               }
+            },
+            "enable": {
+              "description": "List of analyzers to enable. When set, only the listed analyzers run ('disable' still takes precedence).",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/modernize-analyzers"
+              }
             }
           }
         },

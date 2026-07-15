@@ -17,7 +17,7 @@ func New(settings *config.ModernizeSettings) *goanalysis.Linter {
 	if settings == nil {
 		analyzers = modernize.Suite
 	} else {
-		for _, name := range settings.Disable {
+		for _, name := range slices.Concat(settings.Disable, settings.Enable) {
 			switch name {
 			case "fmtappendf":
 				internal.LinterLogger.Warnf("%s has been removed from the modernize suite", name)
@@ -28,6 +28,9 @@ func New(settings *config.ModernizeSettings) *goanalysis.Linter {
 
 		for _, analyzer := range modernize.Suite {
 			if slices.Contains(settings.Disable, analyzer.Name) {
+				continue
+			}
+			if len(settings.Enable) != 0 && !slices.Contains(settings.Enable, analyzer.Name) {
 				continue
 			}
 
