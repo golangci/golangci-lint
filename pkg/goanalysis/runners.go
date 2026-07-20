@@ -1,6 +1,7 @@
 package goanalysis
 
 import (
+	"errors"
 	"fmt"
 	"go/token"
 	"slices"
@@ -9,6 +10,7 @@ import (
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/packages"
 
+	"github.com/golangci/golangci-lint/v2/internal/cache"
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis/pkgerrors"
 	"github.com/golangci/golangci-lint/v2/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/v2/pkg/logutils"
@@ -39,7 +41,8 @@ func runAnalyzers(cfg runAnalyzersConfig, lintCtx *linter.Context) ([]*result.Is
 		pkgs = lintCtx.OriginalPackages
 	}
 
-	issues, pkgsFromCache := loadIssuesFromCache(pkgs, lintCtx, cfg.getAnalyzers())
+	cacheHashMode := issuesCacheHashMode(cfg.getLoadMode())
+	issues, pkgsFromCache := loadIssuesFromCache(pkgs, lintCtx, cfg.getAnalyzers(), cacheHashMode)
 	var pkgsToAnalyze []*packages.Package
 	for _, pkg := range pkgs {
 		if !pkgsFromCache[pkg] {
@@ -50,10 +53,15 @@ func runAnalyzers(cfg runAnalyzersConfig, lintCtx *linter.Context) ([]*result.Is
 	diags, errs, passToPkg := runner.run(cfg.getAnalyzers(), pkgsToAnalyze)
 
 	defer func() {
-		if len(errs) == 0 {
-			// If we try to save to cache even if we have compilation errors
-			// we won't see them on repeated runs.
-			saveIssuesToCache(pkgs, pkgsFromCache, issues, lintCtx, cfg.getAnalyzers())
+		pkgsToSave, ok := packagesToSaveIssuesFor(pkgs, errs)
+		if ok {
+			// Cache packages that were analyzed successfully. Keep ill-typed packages out
+			// of the cache so their typechecking errors stay visible on repeated runs.
+			if len(pkgsToSave) != len(pkgs) {
+				lintCtx.Log.Infof("Skipping goanalysis issue cache save for %d ill-typed packages", len(pkgs)-len(pkgsToSave))
+			}
+
+			saveIssuesToCache(pkgsToSave, pkgsFromCache, issues, lintCtx, cfg.getAnalyzers(), cacheHashMode)
 		}
 	}()
 
@@ -81,6 +89,38 @@ func runAnalyzers(cfg runAnalyzersConfig, lintCtx *linter.Context) ([]*result.Is
 	issues = append(issues, buildAllIssues()...)
 
 	return issues, nil
+}
+
+func issuesCacheHashMode(loadMode LoadMode) cache.HashMode {
+	if loadMode <= LoadModeSyntax {
+		return cache.HashModeNeedOnlySelf
+	}
+
+	return cache.HashModeNeedAllDeps
+}
+
+func packagesToSaveIssuesFor(pkgs []*packages.Package, errs []error) ([]*packages.Package, bool) {
+	if len(errs) == 0 {
+		return pkgs, true
+	}
+
+	for _, err := range errs {
+		var ill *pkgerrors.IllTypedError
+		if !errors.As(err, &ill) {
+			return nil, false
+		}
+	}
+
+	pkgsToSave := make([]*packages.Package, 0, len(pkgs))
+	for _, pkg := range pkgs {
+		if pkg.IllTyped {
+			continue
+		}
+
+		pkgsToSave = append(pkgsToSave, pkg)
+	}
+
+	return pkgsToSave, true
 }
 
 func buildIssues(diags []*Diagnostic, linterNameBuilder func(diag *Diagnostic) string) []*result.Issue {

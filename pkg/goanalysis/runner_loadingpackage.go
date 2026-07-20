@@ -36,6 +36,7 @@ type loadingPackage struct {
 	log         logutils.Log
 	actions     []*action // all actions with this package
 	loadGuard   *load.Guard
+	loadStats   *loadingStats
 	dependents  int32 // number of depending on it packages
 	analyzeOnce sync.Once
 	decUseMutex sync.Mutex
@@ -117,6 +118,8 @@ func (lp *loadingPackage) analyze(ctx context.Context, cancel context.CancelFunc
 }
 
 func (lp *loadingPackage) loadFromSource(loadMode LoadMode) error {
+	lp.loadStats.sourceLoads.Add(1)
+
 	pkg := lp.pkg
 
 	// Many packages have few files, much fewer than there
@@ -222,6 +225,8 @@ func (lp *loadingPackage) loadFromSource(loadMode LoadMode) error {
 }
 
 func (lp *loadingPackage) loadFromExportData() error {
+	lp.loadStats.exportLoads.Add(1)
+
 	pkg := lp.pkg
 
 	// Call NewPackage directly with explicit name.
@@ -292,11 +297,16 @@ func (lp *loadingPackage) loadWithFacts(loadMode LoadMode) error {
 	}
 
 	if pkg.TypesInfo != nil {
+		lp.loadStats.alreadyLoadedPackages.Add(1)
+
 		// Already loaded package, e.g. because another not go/analysis linter required types for deps.
 		// Try load cached facts for it.
 
 		for _, act := range lp.actions {
-			if !act.loadCachedFacts() {
+			if act.loadCachedFacts() {
+				lp.loadStats.factCacheHits.Add(1)
+			} else {
+				lp.loadStats.factCacheMisses.Add(1)
 				// Cached facts loading failed: analyze later the action from source.
 				act.needAnalyzeSource = true
 				factsCacheDebugf("Loading of facts for already loaded %s failed, analyze it from source later", act)
@@ -321,6 +331,8 @@ func (lp *loadingPackage) loadImportedPackageWithFacts(loadMode LoadMode) error 
 	// Load package from export data
 	if loadMode >= LoadModeTypesInfo {
 		if err := lp.loadFromExportData(); err != nil {
+			lp.loadStats.exportLoadFallbacks.Add(1)
+
 			// We asked Go to give us up-to-date export data, yet
 			// we can't load it. There must be something wrong.
 			//
@@ -350,8 +362,11 @@ func (lp *loadingPackage) loadImportedPackageWithFacts(loadMode LoadMode) error 
 	needLoadFromSource := false
 	for _, act := range lp.actions {
 		if act.loadCachedFacts() {
+			lp.loadStats.factCacheHits.Add(1)
 			continue
 		}
+
+		lp.loadStats.factCacheMisses.Add(1)
 
 		// Cached facts loading failed: analyze later the action from source.
 		factsCacheDebugf("Loading of facts for %s failed, analyze it from source later", act)

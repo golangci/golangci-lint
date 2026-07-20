@@ -55,6 +55,7 @@ type runner struct {
 	passToPkg      map[*analysis.Pass]*packages.Package
 	passToPkgGuard sync.Mutex
 	sw             *timeutils.Stopwatch
+	loadStats      *loadingStats
 }
 
 func newRunner(prefix string, logger logutils.Log, pkgCache *cache.Cache, loadGuard *load.Guard,
@@ -68,6 +69,7 @@ func newRunner(prefix string, logger logutils.Log, pkgCache *cache.Cache, loadGu
 		loadMode:  loadMode,
 		passToPkg: map[*analysis.Pass]*packages.Package{},
 		sw:        sw,
+		loadStats: &loadingStats{},
 	}
 }
 
@@ -83,6 +85,7 @@ func (r *runner) run(analyzers []*analysis.Analyzer, initialPackages []*packages
 	debugf("Analyzing %d packages on load mode %s", len(initialPackages), r.loadMode)
 
 	roots := r.analyze(initialPackages, analyzers)
+	r.loadStats.log(r.log)
 
 	diags, errs := extractDiagnostics(roots)
 
@@ -248,6 +251,7 @@ func (r *runner) analyze(pkgs []*packages.Package, analyzers []*analysis.Analyze
 			log:        r.log,
 			actions:    actionPerPkg[pkg],
 			loadGuard:  r.loadGuard,
+			loadStats:  r.loadStats,
 			dependents: 1, // self dependent
 		}
 	}

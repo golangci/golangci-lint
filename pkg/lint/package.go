@@ -87,6 +87,7 @@ func (l *PackageLoader) loadPackages(ctx context.Context, loadMode packages.Load
 	if err != nil {
 		return nil, fmt.Errorf("failed to load with go/packages: %w", err)
 	}
+	l.logLoadedPackagesStats(pkgs)
 
 	if loadMode&packages.NeedSyntax == 0 {
 		// Needed e.g. for go/analysis loading.
@@ -104,6 +105,38 @@ func (l *PackageLoader) loadPackages(ctx context.Context, loadMode packages.Load
 	}
 
 	return l.filterTestMainPackages(pkgs), nil
+}
+
+func (l *PackageLoader) logLoadedPackagesStats(initialPkgs []*packages.Package) {
+	type stats struct {
+		total           int
+		withErrors      int
+		illTyped        int
+		withExportFile  int
+		compiledGoFiles int
+		goFiles         int
+	}
+
+	var s stats
+	packages.Visit(initialPkgs, nil, func(pkg *packages.Package) {
+		s.total++
+		if len(pkg.Errors) != 0 {
+			s.withErrors++
+		}
+		if pkg.IllTyped {
+			s.illTyped++
+		}
+		if pkg.ExportFile != "" {
+			s.withExportFile++
+		}
+
+		s.compiledGoFiles += len(pkg.CompiledGoFiles)
+		s.goFiles += len(pkg.GoFiles)
+	})
+
+	l.log.Infof("Go packages loaded: initial=%d, total=%d, with_errors=%d, ill_typed=%d, "+
+		"with_export_file=%d, go_files=%d, compiled_go_files=%d",
+		len(initialPkgs), s.total, s.withErrors, s.illTyped, s.withExportFile, s.goFiles, s.compiledGoFiles)
 }
 
 func (*PackageLoader) parseLoadedPackagesErrors(pkgs []*packages.Package) error {
