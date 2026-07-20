@@ -7,7 +7,6 @@ import (
 	"go/token"
 	"os"
 	"reflect"
-	"slices"
 	"strings"
 	"sync"
 
@@ -133,7 +132,7 @@ func (w *wrapper) toIssue(pass *analysis.Pass, failure *lint.Failure) *goanalysi
 	}
 
 	issue := &result.Issue{
-		Severity: string(severity(w.conf, failure)),
+		Severity: string(failure.SeverityFor(w.conf)),
 		Text:     fmt.Sprintf("%s: %s", failure.RuleName, failure.Failure),
 		Pos: token.Position{
 			Filename: failure.Position.Start.Filename,
@@ -171,10 +170,11 @@ func (w *wrapper) toIssue(pass *analysis.Pass, failure *lint.Failure) *goanalysi
 // This function mimics the GetConfig function of revive.
 // This allows to get default values and right types.
 // https://github.com/golangci/golangci-lint/issues/1745
+// TODO: update the following links:
 // https://github.com/mgechev/revive/blob/v1.13.0/config/config.go#L249
 // https://github.com/mgechev/revive/blob/v1.13.0/config/config.go#L198-L204
 func getConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
-	conf := defaultConfig()
+	conf := reviveConfig.Default()
 
 	// Since the Go version is dynamic, this value must be neutralized in order to compare with a "zero value" of the configuration structure.
 	zero := &config.ReviveSettings{Go: cfg.Go}
@@ -273,175 +273,14 @@ func safeTomlSlice(r []any) []any {
 	return typed
 }
 
-// This element is not exported by revive, so we need copy the code.
-// Extracted from https://github.com/mgechev/revive/blob/v1.15.0/config/config.go#L16
-var defaultRules = []lint.Rule{
-	&rule.VarDeclarationsRule{},
-	&rule.PackageCommentsRule{},
-	&rule.DotImportsRule{},
-	&rule.BlankImportsRule{},
-	&rule.ExportedRule{},
-	&rule.VarNamingRule{},
-	&rule.IndentErrorFlowRule{},
-	&rule.RangeRule{},
-	&rule.ErrorfRule{},
-	&rule.ErrorNamingRule{},
-	&rule.ErrorStringsRule{},
-	&rule.ReceiverNamingRule{},
-	&rule.IncrementDecrementRule{},
-	&rule.ErrorReturnRule{},
-	&rule.UnexportedReturnRule{},
-	&rule.TimeNamingRule{},
-	&rule.ContextKeysType{},
-	&rule.ContextAsArgumentRule{},
-	&rule.EmptyBlockRule{},
-	&rule.SuperfluousElseRule{},
-	&rule.UnusedParamRule{},
-	&rule.UnreachableCodeRule{},
-	&rule.RedefinesBuiltinIDRule{},
-}
-
-var allRules = append([]lint.Rule{
-	&rule.AddConstantRule{},
-	&rule.ArgumentsLimitRule{},
-	&rule.AtomicRule{},
-	&rule.BannedCharsRule{},
-	&rule.BareReturnRule{},
-	&rule.BoolLiteralRule{},
-	&rule.CallToGCRule{},
-	&rule.CognitiveComplexityRule{},
-	&rule.CommentsDensityRule{},
-	&rule.CommentSpacingsRule{},
-	&rule.ConfusingNamingRule{},
-	&rule.ConfusingResultsRule{},
-	&rule.ConstantLogicalExprRule{},
-	&rule.CyclomaticRule{},
-	&rule.DataRaceRule{},
-	&rule.DeepExitRule{},
-	&rule.DeferRule{},
-	&rule.DuplicatedImportsRule{},
-	&rule.EarlyReturnRule{},
-	&rule.EmptyLinesRule{},
-	&rule.EnforceMapStyleRule{},
-	&rule.EnforceRepeatedArgTypeStyleRule{},
-	&rule.EnforceSliceStyleRule{},
-	&rule.EnforceSwitchStyleRule{},
-	&rule.EpochNamingRule{},
-	&rule.FileHeaderRule{},
-	&rule.FileLengthLimitRule{},
-	&rule.FilenameFormatRule{},
-	&rule.FlagParamRule{},
-	&rule.ForbiddenCallInWgGoRule{},
-	&rule.FunctionLength{},
-	&rule.FunctionResultsLimitRule{},
-	&rule.GetReturnRule{},
-	&rule.IdenticalBranchesRule{},
-	&rule.IdenticalIfElseIfBranchesRule{},
-	&rule.IdenticalIfElseIfConditionsRule{},
-	&rule.IdenticalSwitchBranchesRule{},
-	&rule.IdenticalSwitchConditionsRule{},
-	&rule.IfReturnRule{},
-	&rule.ImportAliasNamingRule{},
-	&rule.ImportsBlocklistRule{},
-	&rule.ImportShadowingRule{},
-	&rule.InefficientMapLookupRule{},
-	&rule.LineLengthLimitRule{},
-	&rule.MaxControlNestingRule{},
-	&rule.MaxPublicStructsRule{},
-	&rule.ModifiesParamRule{},
-	&rule.ModifiesValRecRule{},
-	&rule.NestedStructs{},
-	&rule.OptimizeOperandsOrderRule{},
-	&rule.PackageDirectoryMismatchRule{},
-	&rule.PackageNamingRule{},
-	&rule.RangeValAddress{},
-	&rule.RangeValInClosureRule{},
-	&rule.RedundantBuildTagRule{},
-	&rule.RedundantImportAlias{},
-	&rule.RedundantTestMainExitRule{},
-	&rule.StringFormatRule{},
-	&rule.StringOfIntRule{},
-	&rule.StructTagRule{},
-	&rule.TimeDateRule{},
-	&rule.TimeEqualRule{},
-	&rule.UncheckedTypeAssertionRule{},
-	&rule.UnconditionalRecursionRule{},
-	&rule.UnexportedNamingRule{},
-	&rule.UnhandledErrorRule{},
-	&rule.UnnecessaryFormatRule{},
-	&rule.UnnecessaryIfRule{},
-	&rule.UnnecessaryStmtRule{},
-	&rule.UnsecureURLSchemeRule{},
-	&rule.UnusedReceiverRule{},
-	&rule.UseAnyRule{},
-	&rule.UseErrorsNewRule{},
-	&rule.UseFmtPrintRule{},
-	&rule.UselessBreak{},
-	&rule.UselessFallthroughRule{},
-	&rule.UseSlicesSort{},
-	&rule.UseWaitGroupGoRule{},
-	&rule.WaitGroupByValueRule{},
-}, defaultRules...)
-
-const defaultConfidence = 0.8
-
-// This element is not exported by revive, so we need copy the code.
-// Extracted from https://github.com/mgechev/revive/blob/v1.13.0/config/config.go#L209
 func normalizeConfig(cfg *lint.Config) {
 	// NOTE(ldez): this custom section for golangci-lint should be kept.
 	// ---
-	cfg.Confidence = cmp.Or(cfg.Confidence, defaultConfidence)
+	cfg.Confidence = cmp.Or(cfg.Confidence, reviveConfig.DefaultConfidence)
 	cfg.Severity = cmp.Or(cfg.Severity, lint.SeverityWarning)
 	// ---
 
-	if len(cfg.Rules) == 0 {
-		cfg.Rules = map[string]lint.RuleConfig{}
-	}
-
-	addRules := func(config *lint.Config, rules []lint.Rule) {
-		for _, r := range rules {
-			ruleName := r.Name()
-			if _, ok := config.Rules[ruleName]; !ok {
-				config.Rules[ruleName] = lint.RuleConfig{}
-			}
-		}
-	}
-
-	if cfg.EnableAllRules {
-		addRules(cfg, allRules)
-	} else if cfg.EnableDefaultRules {
-		addRules(cfg, defaultRules)
-	}
-
-	severity := cfg.Severity
-	if severity != "" {
-		for k, v := range cfg.Rules {
-			if v.Severity == "" {
-				v.Severity = severity
-			}
-			cfg.Rules[k] = v
-		}
-		for k, v := range cfg.Directives {
-			if v.Severity == "" {
-				v.Severity = severity
-			}
-			cfg.Directives[k] = v
-		}
-	}
-}
-
-// This element is not exported by revive, so we need copy the code.
-// Extracted from https://github.com/mgechev/revive/blob/v1.13.0/config/config.go#L280
-func defaultConfig() *lint.Config {
-	defaultConfig := lint.Config{
-		Confidence: defaultConfidence,
-		Severity:   lint.SeverityWarning,
-		Rules:      map[string]lint.RuleConfig{},
-	}
-	for _, r := range defaultRules {
-		defaultConfig.Rules[r.Name()] = lint.RuleConfig{}
-	}
-	return &defaultConfig
+	reviveConfig.Normalize(cfg)
 }
 
 func displayRules(conf *lint.Config) {
@@ -449,42 +288,13 @@ func displayRules(conf *lint.Config) {
 		return
 	}
 
-	var enabledRules []string
-	for k, r := range conf.Rules {
-		if !r.Disabled {
-			enabledRules = append(enabledRules, k)
-		}
-	}
+	allRules := reviveConfig.AllRuleNames()
+	defaultRules := reviveConfig.DefaultRuleNames()
+	enabledRules := reviveConfig.EnabledRuleNames(conf)
 
-	slices.Sort(enabledRules)
-
-	debugf("All available rules (%d): %s.", len(allRules), strings.Join(extractRulesName(allRules), ", "))
-	debugf("Default rules (%d): %s.", len(defaultRules), strings.Join(extractRulesName(defaultRules), ", "))
+	debugf("All available rules (%d): %s.", len(allRules), strings.Join(allRules, ", "))
+	debugf("Default rules (%d): %s.", len(defaultRules), strings.Join(defaultRules, ", "))
 	debugf("Enabled by config rules (%d): %s.", len(enabledRules), strings.Join(enabledRules, ", "))
 
 	debugf("revive configuration: %#v", conf)
-}
-
-func extractRulesName(rules []lint.Rule) []string {
-	var names []string
-
-	for _, r := range rules {
-		names = append(names, r.Name())
-	}
-
-	slices.Sort(names)
-
-	return names
-}
-
-// Extracted from https://github.com/mgechev/revive/blob/v1.13.0/formatter/severity.go
-// Modified to use pointers (related to hugeParam rule).
-func severity(cfg *lint.Config, failure *lint.Failure) lint.Severity {
-	if cfg, ok := cfg.Rules[failure.RuleName]; ok && cfg.Severity == lint.SeverityError {
-		return lint.SeverityError
-	}
-	if cfg, ok := cfg.Directives[failure.RuleName]; ok && cfg.Severity == lint.SeverityError {
-		return lint.SeverityError
-	}
-	return lint.SeverityWarning
 }
