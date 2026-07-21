@@ -13,7 +13,7 @@ func New(settings *config.GoFumptSettings) *goanalysis.Linter {
 		NewLinterFromAnalyzer(
 			goformatters.NewAnalyzer(
 				internal.LinterLogger.Child(gofumptbase.Name),
-				"Check if code and import statements are formatted, with additional rules.",
+				"Enforce a stricter format than gofmt, while being backwards compatible.",
 				gofumptbase.New(settings, settings.LangVersion),
 			),
 		).
