@@ -2,7 +2,9 @@
 package internal
 
 import (
+	"go/ast"
 	"go/token"
+	"os"
 	"regexp"
 	"strings"
 
@@ -57,8 +59,21 @@ var (
 //nolint:funlen,gocyclo // the function is going to be refactored in the future
 func (l Linter) Run(pass *analysis.Pass) ([]*goanalysis.Issue, error) {
 	var issues []*goanalysis.Issue
+	fileBytesMap := make(map[string][]byte)
 
 	for _, file := range pass.Files {
+		filePath := pass.Fset.Position(file.Pos()).Filename
+		var fileBytes []byte
+		if filePath != "" {
+			if b, ok := fileBytesMap[filePath]; ok {
+				fileBytes = b
+			} else {
+				b, _ := os.ReadFile(filePath)
+				fileBytesMap[filePath] = b
+				fileBytes = b
+			}
+		}
+
 		for _, c := range file.Comments {
 			for _, comment := range c.List {
 				if !commentPattern.MatchString(comment.Text) {
@@ -82,7 +97,6 @@ func (l Linter) Run(pass *analysis.Pass) ([]*goanalysis.Issue, error) {
 				directiveWithOptionalLeadingSpace += strings.TrimSpace(split[1])
 
 				pos := pass.Fset.Position(comment.Pos())
-				end := pass.Fset.Position(comment.End())
 
 				// check for, report and eliminate leading spaces, so we can check for other issues
 				if leadingSpace != "" {
@@ -162,10 +176,11 @@ func (l Linter) Run(pass *analysis.Pass) ([]*goanalysis.Issue, error) {
 
 				// when detecting unused directives, we send all the directives through and filter them out in the nolint processor
 				if (l.needs & NeedsUnused) != 0 {
+					remStart, remEnd := getRemovalRange(pass, comment, fileBytes)
 					removeNolintCompletely := []analysis.SuggestedFix{{
 						TextEdits: []analysis.TextEdit{{
-							Pos:     token.Pos(pos.Offset),
-							End:     token.Pos(end.Offset),
+							Pos:     remStart,
+							End:     remEnd,
 							NewText: nil,
 						}},
 					}}
@@ -229,4 +244,70 @@ func (l Linter) Run(pass *analysis.Pass) ([]*goanalysis.Issue, error) {
 	}
 
 	return issues, nil
+}
+
+func getRemovalRange(pass *analysis.Pass, comment *ast.Comment, fileBytes []byte) (token.Pos, token.Pos) {
+	pos := pass.Fset.Position(comment.Pos())
+	end := pass.Fset.Position(comment.End())
+
+	startPos := token.Pos(pos.Offset)
+	endPos := token.Pos(end.Offset)
+
+	f := pass.Fset.File(comment.Pos())
+	if f == nil || len(fileBytes) == 0 {
+		return startPos, endPos
+	}
+
+	line := f.Line(comment.Pos())
+	lineStartPos := f.LineStart(line)
+	lineStartOffset := f.Offset(lineStartPos)
+	commentPosOffset := f.Offset(comment.Pos())
+	commentEndOffset := f.Offset(comment.End())
+
+	var nextLineStartPos token.Pos
+	var nextLineStartOffset int
+	if line < f.LineCount() {
+		nextLineStartPos = f.LineStart(line + 1)
+		nextLineStartOffset = f.Offset(nextLineStartPos)
+	}
+
+	// Validate all offsets against fileBytes
+	if lineStartOffset >= 0 &&
+		lineStartOffset <= commentPosOffset &&
+		commentPosOffset <= commentEndOffset &&
+		commentEndOffset <= len(fileBytes) {
+
+		// Check if everything before comment on this line is whitespace
+		isLeadingWhitespace := true
+		for _, b := range fileBytes[lineStartOffset:commentPosOffset] {
+			if b != ' ' && b != '\t' {
+				isLeadingWhitespace = false
+				break
+			}
+		}
+
+		// Check if everything after comment on this line up to newline is whitespace
+		isTrailingWhitespace := true
+		endCheckOffset := nextLineStartOffset
+		if endCheckOffset == 0 || endCheckOffset > len(fileBytes) {
+			endCheckOffset = len(fileBytes)
+		}
+		if commentEndOffset <= endCheckOffset {
+			for _, b := range fileBytes[commentEndOffset:endCheckOffset] {
+				if b == '\n' {
+					break
+				}
+				if b != ' ' && b != '\t' && b != '\r' {
+					isTrailingWhitespace = false
+					break
+				}
+			}
+		}
+
+		if isLeadingWhitespace && isTrailingWhitespace && nextLineStartPos != token.NoPos {
+			return token.Pos(lineStartOffset), token.Pos(nextLineStartOffset)
+		}
+	}
+
+	return startPos, endPos
 }
