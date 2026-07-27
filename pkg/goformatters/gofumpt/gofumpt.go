@@ -30,6 +30,7 @@ func New(settings *config.GoFumptSettings, goVersion string) *Formatter {
 			Extra: gofumpt.Extra{
 				GroupParams:   settings.Extra.GroupParams,
 				ClotheReturns: settings.Extra.ClotheReturns,
+				BalanceCalls:  settings.Extra.BalanceCalls,
 			},
 		}
 	}

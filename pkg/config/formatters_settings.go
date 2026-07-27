@@ -54,6 +54,7 @@ type GoFumptSettings struct {
 type GoFumptExtra struct {
 	GroupParams   bool `mapstructure:"group-params"`
 	ClotheReturns bool `mapstructure:"clothe-returns"`
+	BalanceCalls  bool `mapstructure:"balance-calls"`
 }
 
 type GoImportsSettings struct {

@@ -2252,6 +2252,10 @@
                 "clothe-returns": {
                   "type": "boolean",
                   "default": false
+                },
+                "balance-calls": {
+                  "type": "boolean",
+                  "default": false
                 }
               }
             }

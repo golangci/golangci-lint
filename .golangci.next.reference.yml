@@ -4764,6 +4764,9 @@ formatters:
         # Clothes naked returns in functions with named results.
         # Default: false
         clothe-returns: true
+        # Multi-line function calls with the opening parenthesis at the end of a line should place the closing parenthesis at the start of a line.
+        # Default: false
+        balance-calls: true
 
       # Deprecated: use `extra` instead.
       # Choose whether to use the extra rules.
