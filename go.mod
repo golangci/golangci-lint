@@ -150,7 +150,7 @@ require (
 	go-simpler.org/sloglint v0.12.0
 	go.augendre.info/arangolint v0.4.0
 	go.augendre.info/fatcontext v0.10.0
-	go.yaml.in/yaml/v3 v3.0.4
+	go.yaml.in/yaml/v3 v3.0.5
 	golang.org/x/exp v0.0.0-20250620022241-b7579e27df2b
 	golang.org/x/mod v0.38.0
 	golang.org/x/sync v0.22.0
