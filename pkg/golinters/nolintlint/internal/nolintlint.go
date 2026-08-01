@@ -2,7 +2,6 @@
 package internal
 
 import (
-	"go/token"
 	"regexp"
 	"strings"
 
@@ -86,11 +85,12 @@ func (l Linter) Run(pass *analysis.Pass) ([]*goanalysis.Issue, error) {
 
 				// check for, report and eliminate leading spaces, so we can check for other issues
 				if leadingSpace != "" {
-					removeWhitespace := []analysis.SuggestedFix{{
-						TextEdits: []analysis.TextEdit{{
-							Pos:     token.Pos(pos.Offset),
-							End:     token.Pos(pos.Offset + len(commentMark) + len(leadingSpace)),
-							NewText: []byte(commentMark),
+					removeWhitespace := []result.SuggestedFix{{
+						TextEdits: []result.TextEdit{{
+							Filename: pos.Filename,
+							Pos:      pos.Offset,
+							End:      pos.Offset + len(commentMark) + len(leadingSpace),
+							NewText:  []byte(commentMark),
 						}},
 					}}
 
@@ -162,11 +162,12 @@ func (l Linter) Run(pass *analysis.Pass) ([]*goanalysis.Issue, error) {
 
 				// when detecting unused directives, we send all the directives through and filter them out in the nolint processor
 				if (l.needs & NeedsUnused) != 0 {
-					removeNolintCompletely := []analysis.SuggestedFix{{
-						TextEdits: []analysis.TextEdit{{
-							Pos:     token.Pos(pos.Offset),
-							End:     token.Pos(end.Offset),
-							NewText: nil,
+					removeNolintCompletely := []result.SuggestedFix{{
+						TextEdits: []result.TextEdit{{
+							Filename: pos.Filename,
+							Pos:      pos.Offset,
+							End:      end.Offset,
+							NewText:  nil,
 						}},
 					}}
 

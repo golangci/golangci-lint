@@ -5,12 +5,30 @@ import (
 	"fmt"
 	"go/token"
 
-	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/packages"
 )
 
 type Range struct {
 	From, To int
+}
+
+// TextEdit is a replacement of a portion of a file.
+// Pos and End are byte offsets inside Filename.
+type TextEdit struct {
+	// Filename is the path of the file the edit applies to.
+	// It is internal data (e.g. used by the fixer) and is not part of the JSON output.
+	Filename string `json:"-"`
+
+	Pos     int
+	End     int
+	NewText []byte
+}
+
+// A SuggestedFix is a code change associated with an Issue that a user
+// can choose to apply to their code.
+type SuggestedFix struct {
+	Message   string
+	TextEdits []TextEdit
 }
 
 type Issue struct {
@@ -33,7 +51,7 @@ type Issue struct {
 	HunkPos int `json:",omitempty"`
 
 	// If we know how to fix the issue, we can provide replacement lines
-	SuggestedFixes []analysis.SuggestedFix `json:",omitempty"`
+	SuggestedFixes []SuggestedFix `json:",omitempty"`
 
 	// If we are expecting a nolint (because this is from nolintlint), record the expected linter
 	ExpectNoLint         bool

@@ -153,10 +153,20 @@ func (w *wrapper) toIssue(pass *analysis.Pass, failure *lint.Failure) *goanalysi
 
 		// Skip cgo files because the positions are wrong.
 		if failure.Filename() == f.Name() {
-			issue.SuggestedFixes = []analysis.SuggestedFix{{
-				TextEdits: []analysis.TextEdit{{
-					Pos: f.LineStart(failure.Position.Start.Line),
-					End: goanalysis.EndOfLinePos(f, failure.Position.End.Line),
+			// EndOfLinePos points at the newline character ending the line
+			// (or at the end of the file when there is no trailing newline).
+			// The newline must be part of the replaced segment because the
+			// replacement is a full line (ReplacementLine includes the indentation).
+			end := goanalysis.EndOfLinePos(f, failure.Position.End.Line)
+			if failure.Position.End.Line < f.LineCount() {
+				end++
+			}
+
+			issue.SuggestedFixes = []result.SuggestedFix{{
+				TextEdits: []result.TextEdit{{
+					Filename: f.Name(),
+					Pos:      f.Offset(f.LineStart(failure.Position.Start.Line)),
+					End:      f.Offset(end),
 					// ReplacementLine doesn't contain the full line (missing newline), so we have to add a newline.
 					// Also `failure.Position.End.Offset` is at the end of the node but not the line.
 					NewText: []byte(failure.ReplacementLine + "\n"),

@@ -101,23 +101,28 @@ func (p Fixer) process(issues []*result.Issue) ([]*result.Issue, error) {
 
 		for _, sf := range issue.SuggestedFixes {
 			for _, edit := range sf.TextEdits {
-				start, end := edit.Pos, edit.End
-				if start > end {
+				if edit.Pos > edit.End {
 					return nil, fmt.Errorf("%q suggests invalid fix: pos (%v) > end (%v)",
 						issue.FromLinter, edit.Pos, edit.End)
 				}
 
-				edit := diff.Edit{
-					Start: int(start),
-					End:   int(end),
+				// The edits of a suggested fix can be spread over several files.
+				// Fallback on the issue file for suggested fixes built without file information
+				// (e.g. by custom/external linters).
+				path := edit.Filename
+				if path == "" {
+					path = issue.FilePath()
+				}
+
+				if _, ok := editsByLinter[path]; !ok {
+					editsByLinter[path] = make(map[string][]diff.Edit)
+				}
+
+				editsByLinter[path][issue.FromLinter] = append(editsByLinter[path][issue.FromLinter], diff.Edit{
+					Start: edit.Pos,
+					End:   edit.End,
 					New:   string(edit.NewText),
-				}
-
-				if _, ok := editsByLinter[issue.FilePath()]; !ok {
-					editsByLinter[issue.FilePath()] = make(map[string][]diff.Edit)
-				}
-
-				editsByLinter[issue.FilePath()][issue.FromLinter] = append(editsByLinter[issue.FilePath()][issue.FromLinter], edit)
+				})
 			}
 		}
 	}

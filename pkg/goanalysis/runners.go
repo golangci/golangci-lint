@@ -2,7 +2,6 @@ package goanalysis
 
 import (
 	"fmt"
-	"go/token"
 	"slices"
 	"strings"
 
@@ -96,7 +95,7 @@ func buildIssues(diags []*Diagnostic, linterNameBuilder func(diag *Diagnostic) s
 			text = fmt.Sprintf("%s: %s", diag.Analyzer.Name, diag.Message)
 		}
 
-		var suggestedFixes []analysis.SuggestedFix
+		var suggestedFixes []result.SuggestedFix
 
 		for _, sf := range diag.SuggestedFixes {
 			// Skip suggested fixes on cgo files.
@@ -106,7 +105,11 @@ func buildIssues(diags []*Diagnostic, linterNameBuilder func(diag *Diagnostic) s
 				continue
 			}
 
-			nsf := analysis.SuggestedFix{Message: sf.Message}
+			nsf := result.SuggestedFix{Message: sf.Message}
+
+			// The edits of a suggested fix can be spread over several files of the package
+			// (e.g. modernize/atomictype), so each edit must be resolved against its own file.
+			valid := true
 
 			for _, edit := range sf.TextEdits {
 				end := edit.End
@@ -115,16 +118,27 @@ func buildIssues(diags []*Diagnostic, linterNameBuilder func(diag *Diagnostic) s
 					end = edit.Pos
 				}
 
+				file := diag.Pkg.Fset.File(edit.Pos)
+				if file == nil || diag.Pkg.Fset.File(end) != file {
+					// A suggested fix must be applied as a whole:
+					// an edit that cannot be resolved to a single file invalidates the whole fix.
+					valid = false
+					break
+				}
+
 				// To be applied the positions need to be "adjusted" based on the file.
 				// This is the difference between the "displayed" positions and "effective" positions.
-				nsf.TextEdits = append(nsf.TextEdits, analysis.TextEdit{
-					Pos:     token.Pos(diag.File.Offset(edit.Pos)),
-					End:     token.Pos(diag.File.Offset(end)),
-					NewText: edit.NewText,
+				nsf.TextEdits = append(nsf.TextEdits, result.TextEdit{
+					Filename: file.Name(),
+					Pos:      file.Offset(edit.Pos),
+					End:      file.Offset(end),
+					NewText:  edit.NewText,
 				})
 			}
 
-			suggestedFixes = append(suggestedFixes, nsf)
+			if valid {
+				suggestedFixes = append(suggestedFixes, nsf)
+			}
 		}
 
 		issues = append(issues, &result.Issue{

@@ -125,11 +125,12 @@ func foo() {
 					FromLinter: "nolintlint",
 					Text:       "directive `// nolint` should be written without leading space as `//nolint`",
 					Pos:        token.Position{Filename: "testing.go", Offset: 34, Line: 4, Column: 9},
-					SuggestedFixes: []analysis.SuggestedFix{{
-						TextEdits: []analysis.TextEdit{{
-							Pos:     34,
-							End:     37,
-							NewText: []byte(commentMark),
+					SuggestedFixes: []result.SuggestedFix{{
+						TextEdits: []result.TextEdit{{
+							Filename: "testing.go",
+							Pos:      34,
+							End:      37,
+							NewText:  []byte(commentMark),
 						}},
 					}},
 				},
@@ -137,11 +138,12 @@ func foo() {
 					FromLinter: "nolintlint",
 					Text:       "directive `//   nolint` should be written without leading space as `//nolint`",
 					Pos:        token.Position{Filename: "testing.go", Offset: 52, Line: 5, Column: 9},
-					SuggestedFixes: []analysis.SuggestedFix{{
-						TextEdits: []analysis.TextEdit{{
-							Pos:     52,
-							End:     57,
-							NewText: []byte(commentMark),
+					SuggestedFixes: []result.SuggestedFix{{
+						TextEdits: []result.TextEdit{{
+							Filename: "testing.go",
+							Pos:      52,
+							End:      57,
+							NewText:  []byte(commentMark),
 						}},
 					}},
 				},
@@ -187,10 +189,11 @@ func foo() {
 				FromLinter: "nolintlint",
 				Text:       "directive `//nolint` is unused",
 				Pos:        token.Position{Filename: "testing.go", Offset: 34, Line: 4, Column: 9},
-				SuggestedFixes: []analysis.SuggestedFix{{
-					TextEdits: []analysis.TextEdit{{
-						Pos: 34,
-						End: 42,
+				SuggestedFixes: []result.SuggestedFix{{
+					TextEdits: []result.TextEdit{{
+						Filename: "testing.go",
+						Pos:      34,
+						End:      42,
 					}},
 				}},
 				ExpectNoLint: true,
@@ -209,10 +212,11 @@ func foo() {
 				FromLinter: "nolintlint",
 				Text:       "directive `//nolint:somelinter` is unused for linter \"somelinter\"",
 				Pos:        token.Position{Filename: "testing.go", Offset: 34, Line: 4, Column: 9},
-				SuggestedFixes: []analysis.SuggestedFix{{
-					TextEdits: []analysis.TextEdit{{
-						Pos: 34,
-						End: 53,
+				SuggestedFixes: []result.SuggestedFix{{
+					TextEdits: []result.TextEdit{{
+						Filename: "testing.go",
+						Pos:      34,
+						End:      53,
 					}},
 				}},
 				ExpectNoLint:         true,
@@ -233,10 +237,11 @@ func foo() {
 				FromLinter: "nolintlint",
 				Text:       "directive `//nolint:somelinter` is unused for linter \"somelinter\"",
 				Pos:        token.Position{Filename: "testing.go", Offset: 13, Line: 3, Column: 1},
-				SuggestedFixes: []analysis.SuggestedFix{{
-					TextEdits: []analysis.TextEdit{{
-						Pos: 13,
-						End: 32,
+				SuggestedFixes: []result.SuggestedFix{{
+					TextEdits: []result.TextEdit{{
+						Filename: "testing.go",
+						Pos:      13,
+						End:      32,
 					}},
 				}},
 				ExpectNoLint:         true,

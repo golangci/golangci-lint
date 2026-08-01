@@ -26,7 +26,7 @@ type EncodingIssue struct {
 	Severity             string
 	Pos                  token.Position
 	LineRange            *result.Range
-	SuggestedFixes       []analysis.SuggestedFix
+	SuggestedFixes       []result.SuggestedFix
 	ExpectNoLint         bool
 	ExpectedNoLintLinter string
 }
