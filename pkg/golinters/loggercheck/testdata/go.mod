@@ -4,7 +4,7 @@ go 1.25.0
 
 require (
 	github.com/go-kit/log v0.2.1
-	github.com/go-logr/logr v1.4.3
+	github.com/go-logr/logr v1.4.4
 	go.uber.org/zap v1.28.0
 	k8s.io/klog/v2 v2.140.0
 )
