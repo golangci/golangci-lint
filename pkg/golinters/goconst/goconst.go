@@ -62,6 +62,7 @@ func runGoconst(pass *analysis.Pass, settings *config.GoConstSettings) ([]*goana
 		FindDuplicates:       settings.FindDuplicates,
 		EvalConstExpressions: settings.EvalConstExpressions,
 		IgnoreFunctions:      settings.IgnoreFunctions,
+		IgnoreMapKeys:        settings.IgnoreMapKeys,
 	}
 
 	// There is no deprecation log for `IgnoreCalls` because the default is true.
