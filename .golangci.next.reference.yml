@@ -817,12 +817,15 @@ linters:
       # Ignore strings from test files.
       # Default: false
       ignore-tests: true
-      # Ignore string literals in calls to these functions
+      # Ignore string literals in calls to these functions.
       # Default: empty list
       ignore-functions:
         - log.Info
         - slog.Warn
         - fmt.Errorf
+      # Ignore string literals used as map keys.
+      # Default: false
+      ignore-map-keys: true
 
     gocritic:
       # Disable all checks.

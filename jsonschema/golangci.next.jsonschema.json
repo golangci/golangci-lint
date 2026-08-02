@@ -1837,6 +1837,10 @@
               "items": {
                 "type": "string"
               }
+            },
+            "ignore-map-keys": {
+              "description": "Ignore string literals used as map keys",
+              "type": "boolean"
             }
           }
         },
