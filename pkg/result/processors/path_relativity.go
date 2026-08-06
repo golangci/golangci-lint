@@ -27,7 +27,7 @@ func NewPathRelativity(log logutils.Log, basePath string) (*PathRelativity, erro
 
 	return &PathRelativity{
 		log:              log.Child(logutils.DebugKeyPathRelativity),
-		basePath:         basePath,
+		basePath:         evalSymlinks(basePath),
 		workingDirectory: wd,
 	}, nil
 }
@@ -40,14 +40,16 @@ func (p *PathRelativity) Process(issues []*result.Issue) ([]*result.Issue, error
 	return transformIssues(issues, func(issue *result.Issue) *result.Issue {
 		newIssue := *issue
 
+		filePath := evalSymlinks(issue.FilePath())
+
 		var err error
-		newIssue.RelativePath, err = filepath.Rel(p.basePath, issue.FilePath())
+		newIssue.RelativePath, err = filepath.Rel(p.basePath, filePath)
 		if err != nil {
 			p.log.Warnf("Getting relative path (basepath): %v", err)
 			return nil
 		}
 
-		newIssue.WorkingDirectoryRelativePath, err = filepath.Rel(p.workingDirectory, issue.FilePath())
+		newIssue.WorkingDirectoryRelativePath, err = filepath.Rel(p.workingDirectory, filePath)
 		if err != nil {
 			p.log.Warnf("Getting relative path (wd): %v", err)
 			return nil
@@ -58,3 +60,26 @@ func (p *PathRelativity) Process(issues []*result.Issue) ([]*result.Issue, error
 }
 
 func (*PathRelativity) Finish() {}
+
+// evalSymlinks resolves symlinks on a best-effort basis.
+//
+// The base path and the issue paths can reach the same directory through different spellings:
+// [fsutils.Getwd] resolves symlinks, and `git rev-parse --show-toplevel` returns a resolved path too,
+// while the file names reported by the linters keep the spelling used by the Go toolchain.
+// Resolving both sides prevents [filepath.Rel] from comparing two spellings of the same directory,
+// which produced paths leaving the base path and coming back into it.
+//
+// Paths that cannot be resolved are returned unchanged: they may simply not exist on disk,
+// and that is not a reason to drop the issue.
+func evalSymlinks(path string) string {
+	if path == "" {
+		return path
+	}
+
+	resolved, err := fsutils.EvalSymlinks(path)
+	if err != nil {
+		return path
+	}
+
+	return resolved
+}
