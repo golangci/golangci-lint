@@ -111,7 +111,7 @@ require (
 	github.com/pelletier/go-toml/v2 v2.4.3
 	github.com/quasilyte/go-ruleguard/dsl v0.3.23
 	github.com/raeperd/recvcheck v0.3.0
-	github.com/rogpeppe/go-internal v1.15.0
+	github.com/rogpeppe/go-internal v1.16.0
 	github.com/ryancurrah/gomodguard v1.4.1
 	github.com/ryancurrah/gomodguard/v2 v2.1.3
 	github.com/ryanrolds/sqlclosecheck v0.6.0
