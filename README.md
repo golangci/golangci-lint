@@ -64,7 +64,3 @@ This project exists thanks to all the people who contribute. [How to contribute]
     </picture>
   </a>
 </p>
-
-## Stargazers over time
-
-[![Stargazers over time](https://starchart.cc/golangci/golangci-lint.svg?variant=adaptive)](https://starchart.cc/golangci/golangci-lint)
