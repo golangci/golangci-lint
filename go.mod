@@ -158,7 +158,7 @@ require (
 	golang.org/x/tools v0.48.0
 	honnef.co/go/tools v0.7.0
 	mvdan.cc/gofumpt v0.11.0
-	mvdan.cc/unparam v0.0.0-20251027182757-5beb8c8f8f15
+	mvdan.cc/unparam v0.0.0-20260808221440-2dd26e23affb
 )
 
 require (
