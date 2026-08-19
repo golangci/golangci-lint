@@ -45,6 +45,7 @@ linters:
     - errorlint
     - exhaustive
     - exhaustruct
+    - exhaustruct_v5
     - exptostd
     - fatcontext
     - forbidigo
@@ -162,6 +163,7 @@ linters:
     - errorlint
     - exhaustive
     - exhaustruct
+    - exhaustruct_v5
     - exptostd
     - fatcontext
     - forbidigo
@@ -411,6 +413,9 @@ linters:
       # Checks only comments, skip strings.
       # Default: false
       comments-only: true
+      # Skip raw string literals (backtick-delimited) from duplicate word checking.
+      # Default: false
+      skip-raw-strings: true
 
     embeddedstructfieldcheck:
       # Checks that there is an empty space between the embedded fields and regular fields.
@@ -563,11 +568,68 @@ linters:
       # Default: false
       allow-empty-declarations: true
 
+    exhaustruct_v5:
+      # List of regular expressions to match type names that should be checked.
+      # Anonymous structs can be matched by '<anonymous>' alias.
+      #
+      # Each regular expression must match the full type name, including package path.
+      # For example, to match type `net/http.Cookie` regular expression should be `.*/http\.Cookie`,
+      # but not `http\.Cookie`.
+      # Default: []
+      enforce-patterns:
+        - '.+\.Test'
+        - 'example\.com/package\.ExampleStruct[\d]{1,2}'
+      # List of regular expressions to match type names that should be skipped from checking.
+      # Anonymous structs can be matched by '<anonymous>' alias.
+      # Has precedence over `include`.
+      # Each regular expression must match the full type name, including package path.
+      # For example, to match type `net/http.Cookie` regular expression should be `.*/http\.Cookie`,
+      # but not `http\.Cookie`.
+      # Default: []
+      ignore-patterns:
+        - '.+/cobra\.Command$'
+      # List of regular expressions to match type names where
+      # all fields are treated as optional. Anonymous structs can be matched by
+      # '<anonymous>' alias.
+      #
+      # Each regular expression must match the full type name, including package path.
+      # For example, to match type `net/http.Cookie` regular expression should be
+      # `.*/http\.Cookie`, but not `http\.Cookie`.
+      # Default: []
+      optional-patterns:
+        - '.+Foo'
+      # Allows empty structures, effectively excluding them from the check.
+      # Default: false
+      allow-empty: true
+      # List of regular expressions to match type names that should be allowed to be empty.
+      # Anonymous structs can be matched by '<anonymous>' alias.
+      # Each regular expression must match the full type name, including package path.
+      # For example, to match type `net/http.Cookie` regular expression should be `.*/http\.Cookie`,
+      # but not `http\.Cookie`.
+      # Default: []
+      allow-empty-patterns:
+        - '.*/http\.Cookie'
+      # Allows empty structures in return statements.
+      # Default: false
+      allow-empty-returns: true
+      # Allows empty structures in variable declarations.
+      # Default: false
+      allow-empty-declarations: true
+      # When true, only types marked with //exhaustruct:enforce directive or matching enforce-rx patterns are checked.
+      # Default: false
+      explicit-mode: true
+
     fatcontext:
       # Check for potential fat contexts in struct pointers.
       # May generate false positives.
       # Default: false
       check-struct-pointers: true
+      # Disable detection of fat contexts in loops.
+      # Default: true
+      check-loops: false
+      # Disable detection of fat contexts in function literals.
+      # Default: true
+      check-function-literals: false
 
     forbidigo:
       # Forbid the following identifiers (list of regexp).
@@ -720,6 +782,28 @@ linters:
       # Ignore when constant is not used as function argument.
       # Default: true
       ignore-calls: false
+      # Ignore constants from specific types.
+      # Default: [Call]
+      exclude-types:
+        # Represents a string in an assignment context.
+        # (e.g., x := "foo")
+        - Assignment
+        # Represents a string in a binary expression.
+        # (e.g., x == "foo")
+        - Binary
+        # Represents a string in a case clause.
+        # (e.g., case "foo":)
+        - Case
+        # Represents a string in a return statement.
+        # (e.g., return "foo")
+        - Return
+        # Represents a string passed as an argument to a function call.
+        # (e.g., f("foo"))
+        - Call
+        # Represents a string inside a composite literal.
+        # (e.g., []string{"foo"}, map[string]string{"k": "v" }, MyStruct{Field: "foo" })
+        - CompositeLit
+
       # Exclude strings matching the given regular expression.
       # Default: ""
       ignore-string-values:
@@ -733,12 +817,15 @@ linters:
       # Ignore strings from test files.
       # Default: false
       ignore-tests: true
-      # Ignore string literals in calls to these functions
+      # Ignore string literals in calls to these functions.
       # Default: empty list
       ignore-functions:
         - log.Info
         - slog.Warn
         - fmt.Errorf
+      # Ignore string literals used as map keys.
+      # Default: false
+      ignore-map-keys: true
 
     gocritic:
       # Disable all checks.
@@ -1455,6 +1542,9 @@ linters:
       # Default: []
       replace-allow-list:
         - launchpad.net/gocheck
+      # Allow all `replace` directives.
+      # Default: false
+      replace-allow-all: true
       # Allow to not explain why the version has been retracted in the `retract` directives.
       # Default: false
       retract-allow-no-explanation: true
@@ -2018,15 +2108,21 @@ linters:
       var-require-grouping: true
 
     iface:
-      # List of analyzers.
+      # List of analyzers to enable.
       # Default: ["identical"]
       enable:
         - identical # Identifies interfaces in the same package that have identical method sets.
         - unused # Identifies interfaces that are not used anywhere in the same package where the interface is defined.
         - opaque # Identifies functions that return interfaces, but the actual returned value is always a single concrete implementation.
         - unexported # Identifies interfaces that are not exported but are used in exported functions or methods.
+        - unusedmethod # Detects interface methods that are never used anywhere in the same package where they are defined.
       settings:
         unused:
+          # List of packages path to exclude from the check.
+          # Default: []
+          exclude:
+            - github.com/example/log
+        unusedmethod:
           # List of packages path to exclude from the check.
           # Default: []
           exclude:
@@ -2225,10 +2321,16 @@ linters:
       disable:
         # Replace interface{} with any.
         - any
-        # Replace []byte(fmt.Sprintf) with fmt.Appendf.
-        - fmtappendf
+        # Replace basic types in sync/atomic calls with atomic types.
+        - atomictypes
+        # Simplify references to embedded fields in composite literals.
+        - embedlit
+        # Replace errors.As with errors.AsType[T].
+        - errorsastype
         # Remove redundant re-declaration of loop variables.
         - forvar
+        # Remove obsolete comments specifying canonical import path.
+        - importcomment
         # Replace explicit loops over maps with calls to maps package.
         - mapsloop
         # Replace if/else statements with calls to min or max.
@@ -2241,8 +2343,14 @@ linters:
         - plusbuild
         # Replace 3-clause for loops with for-range over integers.
         - rangeint
+        # Replace v.Interface().(T) with reflect.TypeAssert[T](v).
+        - reflecttypeassert
         # Replace reflect.TypeOf(x) with TypeFor[T]().
         - reflecttypefor
+        # Replace backward loops over slices with slices.Backward.
+        - slicesbackward
+        # Replace three-index slice expressions with slices.Clip.
+        - slicesclip
         # Replace loops with slices.Contains or slices.ContainsFunc.
         - slicescontains
         # Replace sort.Slice with slices.Sort for basic types.
@@ -2262,7 +2370,7 @@ linters:
         # Replace unsafe pointer arithmetic with function calls.
         - unsafefuncs
         # Replace wg.Add(1)/go/wg.Done() with wg.Go.
-        - waitgroup
+        - waitgroupgo
 
     musttag:
       # A set of custom functions to check in addition to the builtin ones.
@@ -2329,6 +2437,9 @@ linters:
       # Report named error if it is assigned inside defer.
       # Default: false
       report-error-in-defer: true
+      # Allow named returns in the signature but report them if referenced in the body or used by a naked return.
+      # Default: false
+      allow-unused-named-returns: true
 
     paralleltest:
       # Ignore missing calls to `t.Parallel()` and only report incorrect uses of it.
@@ -4652,6 +4763,19 @@ formatters:
       # Default: ""
       module-path: github.com/org/project
 
+      # Extra formatting rules.
+      extra:
+        # Groups function parameters with repeated types.
+        # Default: false
+        group-params: true
+        # Clothes naked returns in functions with named results.
+        # Default: false
+        clothe-returns: true
+        # Multi-line function calls with the opening parenthesis at the end of a line should place the closing parenthesis at the start of a line.
+        # Default: false
+        balance-calls: true
+
+      # Deprecated: use `extra` instead.
       # Choose whether to use the extra rules.
       # Default: false
       extra-rules: true

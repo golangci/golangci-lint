@@ -716,7 +716,8 @@
         "identical",
         "unused",
         "opaque",
-        "unexported"
+        "unexported",
+        "unusedmethod"
       ]
     },
     "tagliatelle-cases": {
@@ -739,15 +740,21 @@
     "modernize-analyzers": {
       "enum": [
         "any",
-        "fmtappendf",
+        "atomictypes",
+        "embedlit",
+        "errorsastype",
         "forvar",
+        "importcomment",
         "mapsloop",
         "minmax",
         "newexpr",
         "omitzero",
         "plusbuild",
         "rangeint",
+        "reflecttypeassert",
         "reflecttypefor",
+        "slicesbackward",
+        "slicesclip",
         "slicescontains",
         "slicessort",
         "stditerators",
@@ -757,7 +764,7 @@
         "stringsbuilder",
         "testingcontext",
         "unsafefuncs",
-        "waitgroup"
+        "waitgroupgo"
       ]
     },
     "wsl-checks": {
@@ -853,6 +860,7 @@
             "errorlint",
             "exhaustive",
             "exhaustruct",
+            "exhaustruct_v5",
             "exptostd",
             "fatcontext",
             "forbidigo",
@@ -987,6 +995,11 @@
             },
             "comments-only": {
               "description": "Checks only comments, skip strings.",
+              "type": "boolean",
+              "default": false
+            },
+            "skip-raw-strings": {
+              "description": "Skip raw string literals (backtick-delimited) from duplicate word checking.",
               "type": "boolean",
               "default": false
             }
@@ -1436,6 +1449,60 @@
             }
           }
         },
+        "exhaustructv5Settings": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enforce-patterns": {
+              "description": "List of regular expressions to match type names that should be checked.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "ignore-patterns":{
+              "description": "List of regular expressions to match type names that should be skipped from checking.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "optional-patterns": {
+              "description": "List of regular expressions to match type names where all fields are treated as optional.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "allow-empty":{
+              "description": "Allows empty structures, effectively excluding them from the check.",
+              "type": "boolean",
+              "default": false
+            },
+            "allow-empty-patterns": {
+              "description": "List of regular expressions to match type names that should be allowed to be empty.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "allow-empty-returns": {
+              "description": "Allows empty structures in return statements.",
+              "type": "boolean",
+              "default": false
+            },
+            "allow-empty-declarations": {
+              "description": "Allows empty structures in variable declarations.",
+              "type": "boolean",
+              "default": false
+            },
+            "explicit-mode":{
+              "description": "When true, only types marked with //exhaustruct:enforce directive or matching enforce-rx patterns are checked.",
+              "type": "boolean",
+              "default": false
+            }
+          }
+        },
         "fatcontextSettings": {
           "type": "object",
           "additionalProperties": false,
@@ -1444,6 +1511,16 @@
               "description": "Check for potential fat contexts in struct pointers.",
               "type": "boolean",
               "default": false
+            },
+            "check-loops": {
+              "description": "Disable detection of fat contexts in function literals.",
+              "type": "boolean",
+              "default": true
+            },
+            "check-function-literals": {
+              "description": "Disable detection of fat contexts in function literals.",
+              "type": "boolean",
+              "default": true
             }
           }
         },
@@ -1702,6 +1779,19 @@
               "type": "integer",
               "default": 3
             },
+            "exclude-types": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "Assignment",
+                  "Binary",
+                  "Case",
+                  "Return",
+                  "Call",
+                  "CompositeLit"
+                ]
+              }
+            },
             "ignore-calls": {
               "description": "Ignore when constant is not used as function argument",
               "type": "boolean",
@@ -1749,6 +1839,10 @@
               "items": {
                 "type": "string"
               }
+            },
+            "ignore-map-keys": {
+              "description": "Ignore string literals used as map keys",
+              "type": "boolean"
             }
           }
         },
@@ -2152,6 +2246,24 @@
             "module-path": {
               "description": " Module path which contains the source code being formatted.",
               "type": "string"
+            },
+            "extra": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "group-params": {
+                  "type": "boolean",
+                  "default": false
+                },
+                "clothe-returns": {
+                  "type": "boolean",
+                  "default": false
+                },
+                "balance-calls": {
+                  "type": "boolean",
+                  "default": false
+                }
+              }
             }
           }
         },
@@ -2243,6 +2355,11 @@
               "items": {
                 "type": "string"
               }
+            },
+            "replace-allow-all": {
+              "description": "Allow all `replace` directives.",
+              "type": "boolean",
+              "default": false
             },
             "retract-allow-no-explanation": {
               "description": "Allow to not explain why the version has been retracted in the `retract` directives.",
@@ -2601,6 +2718,18 @@
               "additionalProperties": false,
               "properties": {
                 "unused": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "exclude": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "unusedmethod": {
                   "type": "object",
                   "additionalProperties": false,
                   "properties": {
@@ -3064,6 +3193,11 @@
           "properties": {
             "report-error-in-defer": {
               "description": "Report named error if it is assigned inside defer.",
+              "type": "boolean",
+              "default": false
+            },
+            "allow-unused-named-returns": {
+              "description": "Allow named returns in the signature but report them if referenced in the body or used by a naked return.",
               "type": "boolean",
               "default": false
             }
@@ -4983,6 +5117,9 @@
             },
             "exhaustruct": {
               "$ref": "#/definitions/settings/definitions/exhaustructSettings"
+            },
+            "exhaustruct_v5": {
+              "$ref": "#/definitions/settings/definitions/exhaustructv5Settings"
             },
             "fatcontext": {
               "$ref": "#/definitions/settings/definitions/fatcontextSettings"

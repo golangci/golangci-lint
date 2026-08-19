@@ -568,14 +568,6 @@
     "avatar": "https://github.com/securego.png"
   },
   {
-    "name": "segmentio",
-    "linters": [
-      "golines"
-    ],
-    "profile": "https://github.com/sponsors/segmentio",
-    "avatar": "https://github.com/segmentio.png"
-  },
-  {
     "name": "sivchari",
     "linters": [
       "containedctx"
@@ -702,7 +694,8 @@
   {
     "name": "xobotyi",
     "linters": [
-      "exhaustruct"
+      "exhaustruct",
+      "exhaustruct_v5"
     ],
     "profile": "https://github.com/sponsors/xobotyi",
     "avatar": "https://github.com/xobotyi.png"
