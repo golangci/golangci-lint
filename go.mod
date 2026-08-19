@@ -155,7 +155,7 @@ require (
 	golang.org/x/mod v0.39.0
 	golang.org/x/sync v0.22.0
 	golang.org/x/sys v0.47.0
-	golang.org/x/tools v0.48.0
+	golang.org/x/tools v0.49.0
 	honnef.co/go/tools v0.7.0
 	mvdan.cc/gofumpt v0.11.0
 	mvdan.cc/unparam v0.0.0-20260808221440-2dd26e23affb
