@@ -2,6 +2,8 @@ version: 2
 updates:
   - package-ecosystem: gomod
     directory: "/"
+    cooldown:
+      default-days: 1
     schedule:
       interval: weekly
       day: "sunday"
