@@ -3,4 +3,4 @@ rules:
     disable: true
   dependabot-cooldown:
     ignore:
-      - dependabot.yml:3:5
+      - dependabot.yml:6:7
