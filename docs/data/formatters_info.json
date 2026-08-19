@@ -21,7 +21,7 @@
   },
   {
     "name": "gofumpt",
-    "desc": "Check if code and import statements are formatted, with additional rules.",
+    "desc": "Enforce a stricter format than gofmt, while being backwards compatible.",
     "loadMode": 8199,
     "originalURL": "https://github.com/mvdan/gofumpt",
     "internal": false,

@@ -220,7 +220,21 @@
     "originalURL": "https://github.com/GaijinEntertainment/go-exhaustruct",
     "internal": false,
     "isSlow": true,
-    "since": "v1.46.0"
+    "since": "v1.46.0",
+    "deprecation": {
+      "since": "v2.13.0",
+      "message": "new major version.",
+      "replacement": "exhaustruct_v5"
+    }
+  },
+  {
+    "name": "exhaustruct_v5",
+    "desc": "Checks if all structure fields are initialized",
+    "loadMode": 8767,
+    "originalURL": "https://github.com/GaijinEntertainment/go-exhaustruct",
+    "internal": false,
+    "isSlow": true,
+    "since": "v2.13.0"
   },
   {
     "name": "exptostd",
