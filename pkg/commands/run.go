@@ -250,8 +250,7 @@ func (c *runCommand) execute(_ *cobra.Command, _ []string) {
 	if err := c.runAndPrint(ctx); err != nil {
 		c.log.Errorf("Running error: %s", err)
 		if c.exitCode == exitcodes.Success {
-			var exitErr *exitcodes.ExitError
-			if errors.As(err, &exitErr) {
+			if exitErr, ok := errors.AsType[*exitcodes.ExitError](err); ok {
 				c.exitCode = exitErr.Code
 			} else {
 				c.exitCode = exitcodes.Failure

@@ -2,8 +2,6 @@ package versionone
 
 import (
 	"strings"
-
-	"github.com/golangci/golangci-lint/v2/pkg/commands/internal/migrate/ptr"
 )
 
 type Output struct {
@@ -28,8 +26,8 @@ func (p *OutputFormats) UnmarshalText(text []byte) error {
 		format, path, _ := strings.Cut(item, ":")
 
 		*p = append(*p, OutputFormat{
-			Path:   ptr.Pointer(path),
-			Format: ptr.Pointer(format),
+			Path:   new(path),
+			Format: new(format),
 		})
 	}
 

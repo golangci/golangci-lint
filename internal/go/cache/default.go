@@ -29,7 +29,10 @@ const cacheREADME = `This directory holds cached build artifacts from golangci-l
 // initDefaultCache does the work of finding the default cache
 // the first time Default is called.
 func initDefaultCache() Cache {
-	dir, _ := DefaultDir()
+	dir, _, err := DefaultDir()
+	if err != nil {
+		base.Fatalf("build cache is required, but could not be located: %v", err)
+	}
 	if dir == "off" {
 		if defaultDirErr != nil {
 			base.Fatalf("build cache is required, but could not be located: %v", defaultDirErr)
@@ -66,16 +69,27 @@ var (
 // DefaultDir returns the effective GOLANGCI_LINT_CACHE setting.
 // It returns "off" if the cache is disabled,
 // and reports whether the effective value differs from GOLANGCI_LINT_CACHE.
-func DefaultDir() (string, bool) {
+func DefaultDir() (string, bool, error) {
 	// Save the result of the first call to DefaultDir for later use in
 	// initDefaultCache. cmd/go/main.go explicitly sets GOLANGCI_LINT_CACHE so that
 	// subprocesses will inherit it, but that means initDefaultCache can't
 	// otherwise distinguish between an explicit "off" and a UserCacheDir error.
 
 	defaultDirOnce.Do(func() {
-		defaultDir = os.Getenv(envGolangciLintCache)
-		if defaultDir != "" {
-			defaultDirChanged = true
+		// Compute default location.
+		dir, err := os.UserCacheDir()
+		if err != nil {
+			defaultDir = "off"
+			defaultDirErr = fmt.Errorf("%s is not defined and %v", envGolangciLintCache, err)
+		} else {
+			defaultDir = filepath.Join(dir, "golangci-lint")
+		}
+
+		newDir := os.Getenv(envGolangciLintCache)
+		if newDir != "" {
+			defaultDirErr = nil
+			defaultDirChanged = newDir != defaultDir
+			defaultDir = newDir
 			if filepath.IsAbs(defaultDir) || defaultDir == "off" {
 				return
 			}
@@ -83,17 +97,7 @@ func DefaultDir() (string, bool) {
 			defaultDirErr = fmt.Errorf("%s is not an absolute path", envGolangciLintCache)
 			return
 		}
-
-		// Compute default location.
-		dir, err := os.UserCacheDir()
-		if err != nil {
-			defaultDir = "off"
-			defaultDirChanged = true
-			defaultDirErr = fmt.Errorf("%s is not defined and %w", envGolangciLintCache, err)
-			return
-		}
-		defaultDir = filepath.Join(dir, "golangci-lint")
 	})
 
-	return defaultDir, defaultDirChanged
+	return defaultDir, defaultDirChanged, defaultDirErr
 }

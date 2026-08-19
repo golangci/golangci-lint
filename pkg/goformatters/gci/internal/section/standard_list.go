@@ -1,6 +1,6 @@
 package section
 
-// Code generated based on go1.26.0 X:boringcrypto,arenas,jsonv2,runtimesecret. DO NOT EDIT.
+// Code generated based on go1.27.0 Thu May 28 17:10:42 2026 -0700 X:boringcrypto,arenas,runtimesecret. DO NOT EDIT.
 
 var standardPackages = map[string]struct{}{
 	"archive/tar":            {},
@@ -33,6 +33,7 @@ var standardPackages = map[string]struct{}{
 	"crypto/hmac":            {},
 	"crypto/hpke":            {},
 	"crypto/md5":             {},
+	"crypto/mldsa":           {},
 	"crypto/mlkem":           {},
 	"crypto/mlkem/mlkemtest": {},
 	"crypto/pbkdf2":          {},
@@ -185,5 +186,6 @@ var standardPackages = map[string]struct{}{
 	"unicode/utf8":           {},
 	"unique":                 {},
 	"unsafe":                 {},
+	"uuid":                   {},
 	"weak":                   {},
 }

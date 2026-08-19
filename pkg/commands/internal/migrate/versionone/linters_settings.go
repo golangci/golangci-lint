@@ -246,7 +246,7 @@ type ForbidigoPattern struct {
 
 func (p *ForbidigoPattern) UnmarshalText(text []byte) error {
 	// Validation happens when instantiating forbidigo.
-	p.patternString = ptr.Pointer(string(text))
+	p.patternString = new(string(text))
 	return nil
 }
 

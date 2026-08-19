@@ -21,7 +21,7 @@ func toExclusions(old *versionone.Config) versiontwo.LinterExclusions {
 
 func toExclusionGenerated(excludeGenerated *string) *string {
 	if excludeGenerated == nil || ptr.Deref(excludeGenerated) == "" {
-		return ptr.Pointer("lax")
+		return new("lax")
 	}
 
 	if ptr.Deref(excludeGenerated) == "strict" {
@@ -83,8 +83,8 @@ func toExclusionRules(old *versionone.Config) []versiontwo.ExcludeRule {
 	for _, pattern := range old.Issues.ExcludePatterns {
 		results = append(results, versiontwo.ExcludeRule{
 			BaseRule: versiontwo.BaseRule{
-				Path: ptr.Pointer(`(.+)\.go$`),
-				Text: addPrefix(old.Issues, ptr.Pointer(pattern)),
+				Path: new(`(.+)\.go$`),
+				Text: addPrefix(old.Issues, new(pattern)),
 			},
 		})
 	}
@@ -102,7 +102,7 @@ func addPrefix(old versionone.Issues, s *string) *string {
 		prefix = "(?i)"
 	}
 
-	return ptr.Pointer(prefix + ptr.Deref(s))
+	return new(prefix + ptr.Deref(s))
 }
 
 func linterTestExclusions(old versionone.LintersSettings) []versiontwo.ExcludeRule {
@@ -128,7 +128,7 @@ func linterTestExclusions(old versionone.LintersSettings) []versiontwo.ExcludeRu
 	return []versiontwo.ExcludeRule{{
 		BaseRule: versiontwo.BaseRule{
 			Linters: excludedTestLinters,
-			Path:    ptr.Pointer(`(.+)_test\.go`),
+			Path:    new(`(.+)_test\.go`),
 		},
 	}}
 }
