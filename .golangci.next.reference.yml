@@ -2343,10 +2343,14 @@ linters:
         - plusbuild
         # Replace 3-clause for loops with for-range over integers.
         - rangeint
+        # Replace v.Interface().(T) with reflect.TypeAssert[T](v).
+        - reflecttypeassert
         # Replace reflect.TypeOf(x) with TypeFor[T]().
         - reflecttypefor
         # Replace backward loops over slices with slices.Backward.
         - slicesbackward
+        # Replace three-index slice expressions with slices.Clip.
+        - slicesclip
         # Replace loops with slices.Contains or slices.ContainsFunc.
         - slicescontains
         # Replace sort.Slice with slices.Sort for basic types.
