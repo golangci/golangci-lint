@@ -32,8 +32,7 @@ _Released on 2026-08-19_
    * `exhaustruct_v5`: from 4.0.0 to 5.0.2 (new configuration)
    * `exhaustruct`: deprecated and replaced by `exhaustruct_v5`
    * `fatcontext`: from 0.9.0 to 0.10.0 (new options: `check-loops`, `check-function-literals`)
-   * `goconst`: add option `exclude-
-   * `goconst`: from 1.10.0 to 1.11.0 (new option: `ignore-map-keys`)
+   * `goconst`: from 1.10.0 to 1.11.0 (new options: `ignore-map-keys`, `exclude-types`)
    * `gofumpt`: from 0.9.2 to 0.11.0 (new options: `extra.group-params`, `extra.clothe-returns`, `extra.balance-calls`)
    * `gomoddirectives`: from 0.8.0 to 0.9.0 (new option: `replace-allow-all`)
    * `gosec`: from 2.26.1 to 2.27.1
