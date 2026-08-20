@@ -3,7 +3,11 @@ updates:
   - package-ecosystem: gomod
     directory: "/"
     cooldown:
-      default-days: 1
+      # Disable cooldown to get the linter's updates as soon as possible.
+      # Note: I don't know if the value 0 works:
+      # - There is no documentation about disabling the cooldown.
+      # - The JSONSchema says that 0 is not valid, but this schema is community maintained and not by GitHub.
+      default-days: 0
     schedule:
       interval: weekly
       day: "sunday"
