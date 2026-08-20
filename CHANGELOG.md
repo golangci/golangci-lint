@@ -8,6 +8,16 @@ If you value it, consider supporting us, we appreciate it!
 
 <!-- START --->
 
+### v2.13.1
+
+_Released on 2026-08-20_
+
+1. Linters bug fixes
+   * `ginkgolinter`: from 0.23.1 to 0.24.0
+   * `gofmt`: from d62b90e6713d to e84e05053792
+   * `staticcheck`: from 0.8.0-rc.1 to 0.8.0
+   * `wsl_v5`: from 5.8.0 to 5.9.0
+
 ### v2.13.0
 
 _Released on 2026-08-19_
