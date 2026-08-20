@@ -990,8 +990,8 @@ honnef.co/go/tools v0.0.0-20190523083050-ea95bdfd59fc/go.mod h1:rf3lG4BRIbNafJWh
 honnef.co/go/tools v0.0.1-2019.2.3/go.mod h1:a3bituU0lyd329TUQxRnasdCoJDkEUEAqEt0JzvZhAg=
 honnef.co/go/tools v0.0.1-2020.1.3/go.mod h1:X/FiERA/W4tHapMX5mGpAtMSVEeEUOyHaw9vFzvIQ3k=
 honnef.co/go/tools v0.0.1-2020.1.4/go.mod h1:X/FiERA/W4tHapMX5mGpAtMSVEeEUOyHaw9vFzvIQ3k=
-honnef.co/go/tools v0.8.0-rc.1 h1:wqMm2kjcEXMOr+6yau+pdKqJKe6l2N1aKPkpini+Kzk=
-honnef.co/go/tools v0.8.0-rc.1/go.mod h1:XA+OnlRA9EDh/ukGvXMNSZNKGwFQJ+5dER0ioUkOxks=
+honnef.co/go/tools v0.8.0 h1:UacpzPr7D6i5BAjTkA7sNVcx4kIbhAZcQ4zYtKiXx68=
+honnef.co/go/tools v0.8.0/go.mod h1:XA+OnlRA9EDh/ukGvXMNSZNKGwFQJ+5dER0ioUkOxks=
 mvdan.cc/gofumpt v0.11.0 h1:0H01XB95PnN2QgCSR9ELdZyTlJqNZ7181B0BTMh5VZc=
 mvdan.cc/gofumpt v0.11.0/go.mod h1:BeT5wCsOJt6J9zT2MZIOGszjUHzFkn1/l9g6xAzqsXo=
 mvdan.cc/unparam v0.0.0-20260818115549-3f964bcb5673 h1:dEE6li4OPIE54oojY2qaayFS1fSp17G14si0gXRxl0U=
