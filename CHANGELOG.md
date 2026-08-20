@@ -40,8 +40,8 @@ _Released on 2026-08-19_
    * `iface`: from 1.4.3 to 1.5.0 (new analyzer: `unusedmethod`)
    * `noinlineerr`: from 1.0.5 to 1.0.6
    * `nonamedreturns`: from 1.0.6 to 1.0.8 (new option: `allow-unused-named-returns`)
-   * `recvcheck`: from 0.2.0 to 0.3.0 (new default exclusions) types`
-   * `unparam`: from 2dd26e23affb to 2dd26e23affb
+   * `recvcheck`: from 0.2.0 to 0.3.0 (new default exclusions)
+   * `unparam`: from 5beb8c8f8f15 to 3f964bcb5673
 4. Linters bug fixes
    * `clickhouse-go-linter`: from 1.2.0 to 1.2.1
    * `errname`: from 1.1.1 to 1.1.2
