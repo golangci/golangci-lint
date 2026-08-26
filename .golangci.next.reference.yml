@@ -2621,6 +2621,8 @@ linters:
       directives:
         - name: specify-disable-reason
           severity: error
+        - name: specify-disable-rule
+          severity: error
 
       # Sets the default failure confidence.
       # This means that linting errors with less than 0.8 confidence will be ignored.
@@ -2980,7 +2982,14 @@ linters:
           severity: warning
           disabled: false
           exclude: [""]
-          arguments: [ 80 ]
+          arguments:
+            - max: 80
+              excludes: ['//https?://']
+        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#marshal-receiver
+        - name: marshal-receiver
+          severity: warning
+          disabled: false
+          exclude: [""]
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#max-control-nesting
         - name: max-control-nesting
           severity: warning
@@ -3000,6 +3009,11 @@ linters:
           exclude: [""]
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#modifies-value-receiver
         - name: modifies-value-receiver
+          severity: warning
+          disabled: false
+          exclude: [""]
+        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#multiline-if-init
+        - name: multiline-if-init
           severity: warning
           disabled: false
           exclude: [""]
