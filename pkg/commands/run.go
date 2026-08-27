@@ -640,6 +640,7 @@ func initHashSalt(logger logutils.Log, version string, cfg *config.Config) error
 	}
 
 	b := bytes.NewBuffer(binSalt)
+	b.WriteString("golangci-lint-cache/v2")
 	b.Write(configSalt)
 	b.WriteString(goModSalt)
 
@@ -712,7 +713,8 @@ func computeGoModSalt() (string, error) {
 		return "", fmt.Errorf("failed to read go.mod: %w", err)
 	}
 
-	sum, err := dirhash.Hash1([]string{goModPath}, func(string) (io.ReadCloser, error) {
+	// NOTE: the variable `goModPath` is not used here to ensure getting the same hash, independently of the location, for the same content.
+	sum, err := dirhash.Hash1([]string{"go.mod"}, func(string) (io.ReadCloser, error) {
 		return io.NopCloser(bytes.NewReader(data)), nil
 	})
 	if err != nil {
