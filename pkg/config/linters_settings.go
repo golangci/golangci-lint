@@ -12,6 +12,9 @@ var defaultLintersSettings = LintersSettings{
 	Asasalint: AsasalintSettings{
 		UseBuiltinExclusions: true,
 	},
+	CanonicalHeader: CanonicalHeaderSettings{
+		UseDefaultExclusions: true,
+	},
 	Decorder: DecorderSettings{
 		DecOrder:                  []string{"type", "const", "var", "func"},
 		DisableDecNumCheck:        true,
@@ -252,6 +255,7 @@ type LintersSettings struct {
 	Asasalint                AsasalintSettings                `mapstructure:"asasalint"`
 	BiDiChk                  BiDiChkSettings                  `mapstructure:"bidichk"`
 	BodyClose                BodyCloseSettings                `mapstructure:"bodyclose"`
+	CanonicalHeader          CanonicalHeaderSettings          `mapstructure:"canonicalheader"`
 	CopyLoopVar              CopyLoopVarSettings              `mapstructure:"copyloopvar"`
 	Cyclop                   CyclopSettings                   `mapstructure:"cyclop"`
 	Decorder                 DecorderSettings                 `mapstructure:"decorder"`
@@ -374,6 +378,11 @@ type BiDiChkSettings struct {
 
 type BodyCloseSettings struct {
 	CheckConsumption bool `mapstructure:"check-consumption"`
+}
+
+type CanonicalHeaderSettings struct {
+	Exclusions           []string `mapstructure:"exclusions"`
+	UseDefaultExclusions bool     `mapstructure:"use-default-exclusions"`
 }
 
 type CopyLoopVarSettings struct {

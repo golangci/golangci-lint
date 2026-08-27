@@ -288,6 +288,16 @@ linters:
       # Default: false
       check-consumption: true
 
+    canonicalheader:
+      # Use default excluded header names
+      # Default: true
+      use-default-exclusions: false
+      # List of excluded header names.
+      # Default: []
+      exclusions:
+        - Foo
+        - Bar
+
     copyloopvar:
       # Check all assigning the loop variable to another variable.
       # Default: false
