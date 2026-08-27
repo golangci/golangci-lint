@@ -1,7 +1,7 @@
 package canonicalheader
 
 import (
-	"github.com/lasiar/canonicalheader"
+	"github.com/golangci/canonicalheader"
 
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
 )

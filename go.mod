@@ -63,6 +63,7 @@ require (
 	github.com/godoc-lint/godoc-lint v0.11.2
 	github.com/gofrs/flock v0.13.0
 	github.com/golangci/asciicheck v0.5.0
+	github.com/golangci/canonicalheader v0.0.0-20260827115959-a25c71c521f6
 	github.com/golangci/dupl v0.0.0-20260401084720-c99c5cf5c202
 	github.com/golangci/go-printf-func-name v0.1.1
 	github.com/golangci/gofmt v0.0.0-20260820135601-e84e05053792
@@ -85,7 +86,6 @@ require (
 	github.com/kkHAIKE/contextcheck v1.1.6
 	github.com/kulti/thelper v0.7.1
 	github.com/kunwardeep/paralleltest v1.0.15
-	github.com/lasiar/canonicalheader v1.1.2
 	github.com/ldez/exptostd v0.4.5
 	github.com/ldez/gomoddirectives v0.9.0
 	github.com/ldez/grignotin v0.10.1
