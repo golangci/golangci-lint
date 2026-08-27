@@ -1087,6 +1087,23 @@
             }
           }
         },
+        "canonicalheaderSettings": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "use-default-exclusions": {
+              "type": "boolean",
+               "default": true
+            },
+            "exclusions": {
+              "additionalProperties": false,
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
         "cyclopSettings": {
           "type": "object",
           "additionalProperties": false,
@@ -5084,6 +5101,9 @@
             },
             "bodyclose": {
               "$ref": "#/definitions/settings/definitions/bodycloseSettings"
+            },
+            "canonicalheader": {
+              "$ref": "#/definitions/settings/definitions/canonicalheaderSettings"
             },
             "cyclop": {
               "$ref": "#/definitions/settings/definitions/cyclopSettings"

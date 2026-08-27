@@ -167,7 +167,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/timakin/bodyclose"),
 
-		linter.NewConfig(canonicalheader.New()).
+		linter.NewConfig(canonicalheader.New(&cfg.Linters.Settings.CanonicalHeader)).
 			WithSince("v1.58.0").
 			WithLoadForGoAnalysis().
 			WithAutoFix().
