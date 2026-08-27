@@ -34,7 +34,7 @@ func toRelativePath(mod *packages.Module, filename string) (string, bool) {
 
 	rel = filepath.ToSlash(rel)
 
-	if rel == ".." || strings.HasPrefix(rel, "../") || filepath.IsAbs(rel) {
+	if rel == ".." || strings.HasPrefix(rel, "../") {
 		return filename, false
 	}
 
