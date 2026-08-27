@@ -8,6 +8,18 @@ If you value it, consider supporting us, we appreciate it!
 
 <!-- START --->
 
+### v2.13.2
+
+_Released on 2026-08-28_
+
+1. Bug fixes
+   * Decrease cache entropy
+2. Linters bug fixes
+   * `iface`: from 1.5.0 to 1.5.1
+   * `staticcheck`: from 0.8.0 to 0.8.1
+   * `unparam`: from 3f964bcb5673 to 2fa3d841b0c8
+   * `canonicalheader`: from v1.1.2 to a temporary fork
+
 ### v2.13.1
 
 _Released on 2026-08-20_
