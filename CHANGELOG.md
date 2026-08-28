@@ -8,6 +8,33 @@ If you value it, consider supporting us, we appreciate it!
 
 <!-- START --->
 
+### v2.14.0
+
+_Released on 2026-09-23_
+
+1. Bug fixes
+   * fix: cache of facts reloading
+2. Linters new features or changes
+   * `exhaustive`: from 0.12.0 to 0.13.0
+   * `exhaustruct`: from 5.0.3 to 5.2.0 (new option: `allow-empty-blank-assignments`)
+   * `go-check-sumtype`: from 0.3.1 to ae6904d28606
+   * `gocritic`: from 0.14.4 to 0.15.0
+   * `gofumpt`: from v0.11.1 to 0.12.0
+   * `gomoddirectives`: from 0.9.0 to 0.10.0
+   * `gosec`: from 2.28.0 to 2.29.0 (re-enable G407)
+   * `govet-modernize`: from 0.49.0 to 0.50.0
+   * `loggercheck`: from 0.11.0 to 0.12.0
+   * `revive`: from 1.15.0 to 1.17.0 (new rule: `use-slices-concat`)
+   * `tagliatelle`: from 0.7.2 to 0.8.0
+3. Linters bug fixes
+   * `fatcontext`: from 0.10.0 to 0.10.1
+   * `flock`: from 0.13.0 to 0.13.1
+   * `godoclint`: from 0.11.2 to 0.11.4
+   * `protogetter`: from 0.3.21 to 1.0.0
+   * `protogetter`: from 1.0.0 to 1.0.1
+   * `recvcheck`: from 0.3.0 to 0.3.1
+   * `tagalign`: from 1.4.3 to 1.4.4
+
 ### v2.13.2
 
 _Released on 2026-08-28_

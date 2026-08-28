@@ -29,7 +29,7 @@ body:
           required: true
         - label: It must not be a duplicate or too close to an existing analyzer.
           required: true
-        - label: It must have a Go version inside the `go.mod` <= 1.25.0.
+        - label: It must have a Go version inside the `go.mod` <= 1.26.0.
           required: true
         - label: The dependencies must be minimal.
           required: true
