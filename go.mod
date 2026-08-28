@@ -3,7 +3,7 @@ module github.com/golangci/golangci-lint/v2
 // The minimum Go version must always be latest-1.
 // This version should never be changed outside of the PR to add the support of newer Go version.
 // Only golangci-lint maintainers are allowed to change it.
-go 1.26.0
+go 1.27.0
 
 ignore (
 	./assets
@@ -32,7 +32,7 @@ require (
 	github.com/MirrexOne/unqueryvet v1.5.4
 	github.com/OpenPeeDeeP/depguard/v2 v2.2.1
 	github.com/alecthomas/chroma/v2 v2.27.0
-	github.com/alecthomas/go-check-sumtype v0.3.1
+	github.com/alecthomas/go-check-sumtype v0.5.0
 	github.com/alexkohler/nakedret/v2 v2.0.6
 	github.com/alexkohler/prealloc v1.1.0
 	github.com/alingse/asasalint v0.0.11
