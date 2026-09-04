@@ -42,8 +42,8 @@ codeberg.org/polyfloyd/go-errorlint v1.9.0 h1:VkdEEmA1VBpH6ecQoMR4LdphVI3fA4RrCh
 codeberg.org/polyfloyd/go-errorlint v1.9.0/go.mod h1:GPRRu2LzVijNn4YkrZYJfatQIdS+TrcK8rL5Xs24qw8=
 dev.gaijin.team/go/exhaustruct/v4 v4.0.0 h1:873r7aNneqoBB3IaFIzhvt2RFYTuHgmMjoKfwODoI1Y=
 dev.gaijin.team/go/exhaustruct/v4 v4.0.0/go.mod h1:aZ/k2o4Y05aMJtiux15x8iXaumE88YdiB0Ai4fXOzPI=
-dev.gaijin.team/go/exhaustruct/v5 v5.0.3 h1:yOeA7DNjlT8y4yfmN6nWWYYggA13N523YAj9/TXbuTM=
-dev.gaijin.team/go/exhaustruct/v5 v5.0.3/go.mod h1:KwtBsX8nHHH1YxhxkpiBq6bfsmw5WnazWpNvJPHgY9Y=
+dev.gaijin.team/go/exhaustruct/v5 v5.1.0 h1:SzQ0CyDhwGKVui+JvfuH/BhywR52PLqkcpmxDJgGj5g=
+dev.gaijin.team/go/exhaustruct/v5 v5.1.0/go.mod h1:5IshpqhgGdKIrF8lBmi3M6YKmI7T3hMzAL9nrflko88=
 dev.gaijin.team/go/golib v0.8.1 h1:JYju4x9BSo+QD/AYeHULVDcvEhiFg8wOi6pT0IaZF5E=
 dev.gaijin.team/go/golib v0.8.1/go.mod h1:c5fu7t1RSGMxSQgcUYO1sODbzsYnOCXJLmHeNG1Eb+0=
 dmitri.shuralyov.com/gpu/mtl v0.0.0-20190408044501-666a987793e9/go.mod h1:H6x//7gZCb22OMCxBHrMx7a5I7Hp++hsVxbQ4BYO7hU=
