@@ -102,7 +102,7 @@ func runMisspellOnFile(pass *analysis.Pass, file *ast.File, replacer *misspell.R
 	_, diffs := replace(string(fileContent))
 
 	for _, diff := range diffs {
-		text := fmt.Sprintf("`%s` is a misspelling of `%s`", diff.Original, diff.Corrected)
+		text := fmt.Sprintf("%#q is a misspelling of %#q", diff.Original, diff.Corrected)
 
 		start := f.LineStart(diff.Line) + token.Pos(diff.Column)
 		end := f.LineStart(diff.Line) + token.Pos(diff.Column+len(diff.Original))
