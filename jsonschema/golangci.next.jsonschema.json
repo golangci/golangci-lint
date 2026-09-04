@@ -663,10 +663,12 @@
         "indent-error-flow",
         "inefficient-map-lookup",
         "line-length-limit",
+        "marshal-receiver",
         "max-control-nesting",
         "max-public-structs",
         "modifies-parameter",
         "modifies-value-receiver",
+        "multiline-if-init",
         "nested-structs",
         "optimize-operands-order",
         "package-comments",
@@ -3453,7 +3455,7 @@
                 "properties": {
                   "name": {
                     "type": "string",
-                    "enum": ["specify-disable-reason"]
+                    "enum": ["specify-disable-reason", "specify-disable-rule"]
                   },
                   "severity": {
                     "type": "string",
