@@ -490,14 +490,15 @@ type ExhaustructSettings struct {
 }
 
 type ExhaustructV5Settings struct {
-	EnforcePatterns        []string `mapstructure:"enforce-patterns"`
-	IgnorePatterns         []string `mapstructure:"ignore-patterns"`
-	OptionalPatterns       []string `mapstructure:"optional-patterns"`
-	AllowEmpty             bool     `mapstructure:"allow-empty"`
-	AllowEmptyPatterns     []string `mapstructure:"allow-empty-patterns"`
-	AllowEmptyReturns      bool     `mapstructure:"allow-empty-returns"`
-	AllowEmptyDeclarations bool     `mapstructure:"allow-empty-declarations"`
-	ExplicitMode           bool     `mapstructure:"explicit-mode"`
+	EnforcePatterns            []string `mapstructure:"enforce-patterns"`
+	IgnorePatterns             []string `mapstructure:"ignore-patterns"`
+	OptionalPatterns           []string `mapstructure:"optional-patterns"`
+	AllowEmpty                 bool     `mapstructure:"allow-empty"`
+	AllowEmptyPatterns         []string `mapstructure:"allow-empty-patterns"`
+	AllowEmptyReturns          bool     `mapstructure:"allow-empty-returns"`
+	AllowEmptyDeclarations     bool     `mapstructure:"allow-empty-declarations"`
+	AllowEmptyBlankAssignments bool     `mapstructure:"allow-empty-blank-assignments"`
+	ExplicitMode               bool     `mapstructure:"explicit-mode"`
 }
 
 type FatcontextSettings struct {
