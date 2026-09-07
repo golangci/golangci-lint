@@ -1,6 +1,7 @@
 version: 2
 updates:
   - package-ecosystem: gomod
+    open-pull-requests-limit: 50
     directory: "/"
     cooldown:
       # Disable cooldown to get the linter's updates as soon as possible.
