@@ -152,7 +152,7 @@ require (
 	golang.org/x/exp v0.0.0-20250620022241-b7579e27df2b
 	golang.org/x/mod v0.41.0
 	golang.org/x/sync v0.23.0
-	golang.org/x/sys v0.47.0
+	golang.org/x/sys v0.48.0
 	golang.org/x/tools v0.49.0
 	honnef.co/go/tools v0.8.1
 	mvdan.cc/gofumpt v0.12.0
