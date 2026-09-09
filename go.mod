@@ -131,7 +131,7 @@ require (
 	github.com/stretchr/testify v1.12.1
 	github.com/tetafro/godot v1.5.6
 	github.com/timakin/bodyclose v0.0.0-20260129054331-73d1f95b84b4
-	github.com/timonwong/loggercheck v0.11.0
+	github.com/timonwong/loggercheck v0.12.0
 	github.com/tomarrell/wrapcheck/v2 v2.12.0
 	github.com/tommy-muehle/go-mnd/v2 v2.5.1
 	github.com/ultraware/funlen v0.2.0
