@@ -19,6 +19,7 @@ func NewV5(settings *config.ExhaustructV5Settings) *goanalysis.Linter {
 		cfg.AllowEmptyPatterns = settings.AllowEmptyPatterns
 		cfg.AllowEmptyReturns = settings.AllowEmptyReturns
 		cfg.AllowEmptyDeclarations = settings.AllowEmptyDeclarations
+		cfg.AllowEmptyBlankAssignments = settings.AllowEmptyBlankAssignments
 		cfg.ExplicitMode = settings.ExplicitMode
 	}
 

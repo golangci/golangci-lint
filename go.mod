@@ -17,7 +17,7 @@ require (
 	charm.land/lipgloss/v2 v2.0.6
 	codeberg.org/polyfloyd/go-errorlint v1.9.0
 	dev.gaijin.team/go/exhaustruct/v4 v4.0.0
-	dev.gaijin.team/go/exhaustruct/v5 v5.0.3
+	dev.gaijin.team/go/exhaustruct/v5 v5.2.0
 	github.com/4meepo/tagalign v1.4.4
 	github.com/Abirdcfly/dupword v0.1.8
 	github.com/AdminBenni/iota-mixing v1.0.0
