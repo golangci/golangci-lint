@@ -8,7 +8,7 @@ import (
 )
 
 func Test(t *testing.T) {
-	ctx := t.Context()
+	ctx := t.Context() // want "context.WithCancel can be modernized using t.Context"
 	_ = ctx
 
 	func() {
@@ -18,7 +18,8 @@ func Test(t *testing.T) {
 	}()
 
 	{
-		ctx := t.Context()
+		ctx, cancel := context.WithCancel(context.TODO()) // want "context.WithCancel can be modernized using t.Context"
+		defer cancel()
 		_ = ctx
 		var t int // not in scope of the call to WithCancel
 		_ = t
@@ -40,13 +41,13 @@ func Test(t *testing.T) {
 	}
 
 	t.Run("subtest", func(t2 *testing.T) {
-		ctx := t2.Context()
+		ctx := t2.Context() // want "context.WithCancel can be modernized using t2.Context"
 		_ = ctx
 	})
 }
 
 func TestAlt(t2 *testing.T) {
-	ctx := t2.Context()
+	ctx := t2.Context() // want "context.WithCancel can be modernized using t2.Context"
 	_ = ctx
 }
 
@@ -57,16 +58,16 @@ func Testnot(t *testing.T) {
 }
 
 func Benchmark(b *testing.B) {
-	ctx := b.Context()
+	ctx := b.Context() // want "context.WithCancel can be modernized using b.Context"
 	_ = ctx
 
 	b.Run("subtest", func(b2 *testing.B) {
-		ctx := b2.Context()
+		ctx := b2.Context() // want "context.WithCancel can be modernized using b2.Context"
 		_ = ctx
 	})
 }
 
 func Fuzz(f *testing.F) {
-	ctx := f.Context()
+	ctx := f.Context() // want "context.WithCancel can be modernized using f.Context"
 	_ = ctx
 }
