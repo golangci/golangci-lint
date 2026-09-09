@@ -250,6 +250,11 @@ linters:
         text: "SA1019: (.*).IgnoreCalls is deprecated: use ExcludeTypes instead."
         linters:
           - staticcheck
+      # TODO(ldez): must be changed before go1.29, but the replacement is not clear for now.
+      - path: pkg/goanalysis/runner_loadingpackage.go
+        text: "SA1019: (.*)gcexportdata.NewReader is deprecated"
+        linters:
+          - staticcheck
 
 formatters:
   enable:
