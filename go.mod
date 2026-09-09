@@ -147,7 +147,7 @@ require (
 	go-simpler.org/musttag v0.14.0
 	go-simpler.org/sloglint v0.12.0
 	go.augendre.info/arangolint v0.4.0
-	go.augendre.info/fatcontext v0.10.0
+	go.augendre.info/fatcontext v0.10.1
 	go.yaml.in/yaml/v3 v3.0.5
 	golang.org/x/exp v0.0.0-20250620022241-b7579e27df2b
 	golang.org/x/mod v0.40.0
