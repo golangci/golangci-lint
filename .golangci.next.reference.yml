@@ -625,6 +625,9 @@ linters:
       # Allows empty structures in variable declarations.
       # Default: false
       allow-empty-declarations: true
+      # Allow empty literals the blank identifier receives.
+      # Default: false
+      allow-empty-blank-assignments: true
       # When true, only types marked with //exhaustruct:enforce directive or matching enforce-rx patterns are checked.
       # Default: false
       explicit-mode: true

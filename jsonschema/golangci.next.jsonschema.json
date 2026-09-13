@@ -1513,6 +1513,11 @@
               "type": "boolean",
               "default": false
             },
+            "allow-empty-blank-assignments": {
+              "description": "Allow empty literals the blank identifier receives.",
+              "type": "boolean",
+              "default": false
+            },
             "explicit-mode":{
               "description": "When true, only types marked with //exhaustruct:enforce directive or matching enforce-rx patterns are checked.",
               "type": "boolean",
