@@ -1690,6 +1690,7 @@ linters:
         - G404 # Insecure random number source (rand)
         - G405 # Detect the usage of DES or RC4
         - G406 # Detect the usage of deprecated MD4 or RIPEMD160
+        - G407 # Use of hardcoded IV/nonce for encryption
         - G408 # Stateful misuse of ssh.PublicKeyCallback leading to auth bypass
         - G501 # Import blocklist: crypto/md5
         - G502 # Import blocklist: crypto/des
@@ -1755,6 +1756,7 @@ linters:
         - G404 # Insecure random number source (rand)
         - G405 # Detect the usage of DES or RC4
         - G406 # Detect the usage of deprecated MD4 or RIPEMD160
+        - G407 # Use of hardcoded IV/nonce for encryption
         - G408 # Stateful misuse of ssh.PublicKeyCallback leading to auth bypass
         - G501 # Import blocklist: crypto/md5
         - G502 # Import blocklist: crypto/des
