@@ -401,8 +401,8 @@ github.com/kunwardeep/paralleltest v1.0.15 h1:ZMk4Qt306tHIgKISHWFJAO1IDQJLc6uDyJ
 github.com/kunwardeep/paralleltest v1.0.15/go.mod h1:di4moFqtfz3ToSKxhNjhOZL+696QtJGCFe132CbBLGk=
 github.com/ldez/exptostd v0.4.5 h1:kv2ZGUVI6VwRfp/+bcQ6Nbx0ghFWcGIKInkG/oFn1aQ=
 github.com/ldez/exptostd v0.4.5/go.mod h1:QRjHRMXJrCTIm9WxVNH6VW7oN7KrGSht69bIRwvdFsM=
-github.com/ldez/gomoddirectives v0.9.0 h1:2YV/EX7nVlWL4jySusYTzBKHuE3D2fgcRsQuMa3yIoo=
-github.com/ldez/gomoddirectives v0.9.0/go.mod h1:DdZzfm9MdXCjn2/UGYXCFfo+tzrp2Ib4iD2Q0kIJkwE=
+github.com/ldez/gomoddirectives v0.10.0 h1:Zb23rfMMkG21B6pZ9OfESzemByP5Qr7YvWcXQZE/S3Q=
+github.com/ldez/gomoddirectives v0.10.0/go.mod h1:W9uh0721Vc7aaVoiMXTpKIveLmtHC9uaOSiHM4OK5a8=
 github.com/ldez/grignotin v0.10.1 h1:keYi9rYsgbvqAZGI1liek5c+jv9UUjbvdj3Tbn5fn4o=
 github.com/ldez/grignotin v0.10.1/go.mod h1:UlDbXFCARrXbWGNGP3S5vsysNXAPhnSuBufpTEbwOas=
 github.com/ldez/structtags v0.6.1 h1:bUooFLbXx41tW8SvkfwfFkkjPYvFFs59AAMgVg6DUBk=
