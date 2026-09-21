@@ -16,40 +16,49 @@ type Fact struct {
 	Fact analysis.Fact
 }
 
-func (act *action) loadCachedFacts() bool {
-	if act.loadCachedFactsDone { // can't be set in parallel
+func (act *action) loadActionCachedFacts(reload bool) bool {
+	if reload {
+		if !act.loadCachedFactsOk {
+			return act.loadCachedFactsOk
+		}
+	} else if act.loadCachedFactsDone { // can't be set in parallel
 		return act.loadCachedFactsOk
 	}
 
-	res := func() bool {
-		if act.isInitialPkg {
-			return true // load cached facts only for non-initial packages
-		}
-
-		if len(act.Analyzer.FactTypes) == 0 {
-			return true // no need to load facts
-		}
-
-		if !act.loadPersistedFacts() {
-			return false
-		}
-
-		// The cache only stores the facts a package produces about its own objects.
-		// The facts a package re-exports from its dependencies (see exportedFrom) are not persisted,
-		// to avoid duplicating them in every cache entry (which grows quadratically with the import graph).
-		// Instead, we rebuild them in memory here by inheriting from the dependencies,
-		// exactly like analyze() does for packages analyzed from source.
-		// This is safe because every dependency is fully analyzed (from cache or source)  before this package is loaded,
-		// so their facts are already available.
-		act.inheritFactsFromDeps()
-
-		return true
-	}()
-
+	act.loadCachedFactsOk = act.loadCacheFacts(reload)
 	act.loadCachedFactsDone = true
-	act.loadCachedFactsOk = res
 
-	return res
+	return act.loadCachedFactsOk
+}
+
+func (act *action) loadCacheFacts(reset bool) bool {
+	if act.isInitialPkg {
+		return true // load cached facts only for non-initial packages
+	}
+
+	if len(act.Analyzer.FactTypes) == 0 {
+		return true // no need to load facts
+	}
+
+	if reset {
+		act.objectFacts = make(map[objectFactKey]analysis.Fact)
+		act.packageFacts = make(map[packageFactKey]analysis.Fact)
+	}
+
+	if !act.loadPersistedFacts() {
+		return false
+	}
+
+	// The cache only stores the facts a package produces about its own objects.
+	// The facts a package re-exports from its dependencies (see exportedFrom) are not persisted,
+	// to avoid duplicating them in every cache entry (which grows quadratically with the import graph).
+	// Instead, we rebuild them in memory here by inheriting from the dependencies,
+	// exactly like analyze() does for packages analyzed from source.
+	// This is safe because every dependency is fully analyzed (from cache or source) before this package is loaded,
+	// so their facts are already available.
+	act.inheritFactsFromDeps()
+
+	return true
 }
 
 // inheritFactsFromDeps rebuilds, in memory,
