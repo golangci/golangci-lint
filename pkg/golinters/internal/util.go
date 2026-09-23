@@ -14,7 +14,7 @@ func FormatCode(code string) string {
 		return code // TODO: properly escape or remove
 	}
 
-	return fmt.Sprintf("`%s`", code)
+	return fmt.Sprintf("%#q", code)
 }
 
 func GetGoFileNames(pass *analysis.Pass) []string {
