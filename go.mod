@@ -99,7 +99,7 @@ require (
 	github.com/maratori/testpackage v1.1.2
 	github.com/matoous/godox v1.1.0
 	github.com/mattn/go-colorable v0.1.15
-	github.com/mgechev/revive v1.15.0
+	github.com/mgechev/revive v1.16.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/moricho/tparallel v0.3.2
 	github.com/nakabonne/nestif v0.3.1
@@ -160,7 +160,7 @@ require (
 )
 
 require (
-	codeberg.org/chavacava/garif v0.2.0 // indirect
+	codeberg.org/chavacava/garif v0.2.1 // indirect
 	dev.gaijin.team/go/golib v0.8.1 // indirect
 	github.com/alfatraining/structtag v1.0.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
@@ -203,7 +203,7 @@ require (
 	github.com/lucasb-eyer/go-colorful v1.4.1 // indirect
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
-	github.com/mattn/go-isatty v0.0.20 // indirect
+	github.com/mattn/go-isatty v0.0.22 // indirect
 	github.com/mattn/go-runewidth v0.0.24 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
