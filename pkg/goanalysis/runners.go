@@ -109,6 +109,14 @@ func buildIssues(diags []*Diagnostic, linterNameBuilder func(diag *Diagnostic) s
 			nsf := analysis.SuggestedFix{Message: sf.Message}
 
 			for _, edit := range sf.TextEdits {
+				if isOutsideFile(diag.File, edit.Pos) {
+					continue
+				}
+
+				if edit.End.IsValid() && isOutsideFile(diag.File, edit.End) {
+					continue
+				}
+
 				end := edit.End
 
 				if !end.IsValid() {
@@ -153,4 +161,8 @@ func buildIssues(diags []*Diagnostic, linterNameBuilder func(diag *Diagnostic) s
 		}
 	}
 	return issues
+}
+
+func isOutsideFile(f *token.File, p token.Pos) bool {
+	return int(p) < f.Base() || int(p) > f.Base()+f.Size()
 }
