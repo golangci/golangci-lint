@@ -444,14 +444,6 @@
     "avatar": "https://github.com/mdempsky.png"
   },
   {
-    "name": "mgechev",
-    "linters": [
-      "revive"
-    ],
-    "profile": "https://github.com/sponsors/mgechev",
-    "avatar": "https://github.com/mgechev.png"
-  },
-  {
     "name": "mibk",
     "linters": [
       "dupl"
@@ -524,6 +516,14 @@
     ],
     "profile": "https://github.com/sponsors/raeperd",
     "avatar": "https://github.com/raeperd.png"
+  },
+  {
+    "name": "revive-lint",
+    "linters": [
+      "revive"
+    ],
+    "profile": "https://github.com/sponsors/revive-lint",
+    "avatar": "https://github.com/revive-lint.png"
   },
   {
     "name": "ryancurrah",
