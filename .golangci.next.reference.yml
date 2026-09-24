@@ -2932,6 +2932,8 @@ linters:
           severity: warning
           disabled: false
           exclude: [""]
+          arguments:
+            - allow-identical-default: true
         # https://revive.run/r/#identical-switch-conditions
         - name: identical-switch-conditions
           severity: warning

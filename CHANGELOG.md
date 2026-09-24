@@ -24,7 +24,7 @@ _Released on 2026-09-23_
    * `gosec`: from 2.28.0 to 2.29.0 (re-enable G407)
    * `govet-modernize`: from 0.49.0 to 0.50.0
    * `loggercheck`: from 0.11.0 to 0.12.0
-   * `revive`: from 1.15.0 to 1.17.0 (new rule: `use-slices-concat`)
+   * `revive`: from 1.15.0 to 1.17.0 (new rules: `marshal-receiver`, `multiline-if-init`, `use-slices-concat`; new options: `identical-switch-branches.allow-identical-default`, `line-length-limit.excludes`)
    * `tagliatelle`: from 0.7.2 to 0.8.0
 3. Linters bug fixes
    * `fatcontext`: from 0.10.0 to 0.10.1
