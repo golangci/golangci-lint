@@ -533,6 +533,7 @@
         "G404",
         "G405",
         "G406",
+        "G407",
         "G408",
         "G501",
         "G502",
@@ -663,18 +664,20 @@
         "indent-error-flow",
         "inefficient-map-lookup",
         "line-length-limit",
+        "marshal-receiver",
         "max-control-nesting",
         "max-public-structs",
         "modifies-parameter",
         "modifies-value-receiver",
+        "multiline-if-init",
         "nested-structs",
         "optimize-operands-order",
         "package-comments",
-        "package-naming",
         "package-directory-mismatch",
+        "package-naming",
+        "range",
         "range-val-address",
         "range-val-in-closure",
-        "range",
         "receiver-naming",
         "redefines-builtin-id",
         "redundant-build-tag",
@@ -702,6 +705,7 @@
         "use-any",
         "use-errors-new",
         "use-fmt-print",
+        "use-slices-concat",
         "use-slices-sort",
         "use-waitgroup-go",
         "useless-break",
@@ -1510,6 +1514,11 @@
             },
             "allow-empty-declarations": {
               "description": "Allows empty structures in variable declarations.",
+              "type": "boolean",
+              "default": false
+            },
+            "allow-empty-blank-assignments": {
+              "description": "Allow empty literals the blank identifier receives.",
               "type": "boolean",
               "default": false
             },
@@ -3453,7 +3462,7 @@
                 "properties": {
                   "name": {
                     "type": "string",
-                    "enum": ["specify-disable-reason"]
+                    "enum": ["specify-disable-reason", "specify-disable-rule"]
                   },
                   "severity": {
                     "type": "string",

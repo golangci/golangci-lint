@@ -625,6 +625,9 @@ linters:
       # Allows empty structures in variable declarations.
       # Default: false
       allow-empty-declarations: true
+      # Allow empty literals the blank identifier receives.
+      # Default: false
+      allow-empty-blank-assignments: true
       # When true, only types marked with //exhaustruct:enforce directive or matching enforce-rx patterns are checked.
       # Default: false
       explicit-mode: true
@@ -1690,6 +1693,7 @@ linters:
         - G404 # Insecure random number source (rand)
         - G405 # Detect the usage of DES or RC4
         - G406 # Detect the usage of deprecated MD4 or RIPEMD160
+        - G407 # Use of hardcoded IV/nonce for encryption
         - G408 # Stateful misuse of ssh.PublicKeyCallback leading to auth bypass
         - G501 # Import blocklist: crypto/md5
         - G502 # Import blocklist: crypto/des
@@ -1755,6 +1759,7 @@ linters:
         - G404 # Insecure random number source (rand)
         - G405 # Detect the usage of DES or RC4
         - G406 # Detect the usage of deprecated MD4 or RIPEMD160
+        - G407 # Use of hardcoded IV/nonce for encryption
         - G408 # Stateful misuse of ssh.PublicKeyCallback leading to auth bypass
         - G501 # Import blocklist: crypto/md5
         - G502 # Import blocklist: crypto/des
@@ -2597,12 +2602,12 @@ linters:
 
     revive:
       # Maximum number of open files at the same time.
-      # See https://github.com/mgechev/revive#command-line-flags
+      # See https://revive.run/docs/#command-line-flags
       # Defaults to unlimited.
       max-open-files: 2048
 
       # Sets the default severity.
-      # See https://github.com/mgechev/revive#configuration
+      # See https://revive.run/docs/#configuration
       # Default: warning
       severity: error
 
@@ -2617,9 +2622,11 @@ linters:
       enable-default-rules: true
 
       # Enable validation of comment directives.
-      # See https://github.com/mgechev/revive#comment-directives
+      # See https://revive.run/docs/#comment-directives
       directives:
         - name: specify-disable-reason
+          severity: error
+        - name: specify-disable-rule
           severity: error
 
       # Sets the default failure confidence.
@@ -2631,7 +2638,7 @@ linters:
       # - If there is at least one explicit rule, the default rules are not used, unless `enable-default-rules` is `true`.
       # Run `GL_DEBUG=revive golangci-lint run --enable-only=revive` to see default, all available rules, and enabled rules.
       rules:
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#add-constant
+        # https://revive.run/r/#add-constant
         - name: add-constant
           severity: warning
           disabled: false
@@ -2641,50 +2648,50 @@ linters:
               allow-strs: '""'
               allow-ints: "0,1,2"
               allow-floats: "0.0,0.,1.0,1.,2.0,2."
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#argument-limit
+        # https://revive.run/r/#argument-limit
         - name: argument-limit
           severity: warning
           disabled: false
           exclude: [""]
           arguments: [ 4 ]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#atomic
+        # https://revive.run/r/#atomic
         - name: atomic
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#banned-characters
+        # https://revive.run/r/#banned-characters
         - name: banned-characters
           severity: warning
           disabled: false
           exclude: [""]
           arguments: [ "Ω","Σ","σ", "7" ]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#bare-return
+        # https://revive.run/r/#bare-return
         - name: bare-return
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#blank-imports
+        # https://revive.run/r/#blank-imports
         - name: blank-imports
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#bool-literal-in-expr
+        # https://revive.run/r/#bool-literal-in-expr
         - name: bool-literal-in-expr
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#call-to-gc
+        # https://revive.run/r/#call-to-gc
         - name: call-to-gc
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#cognitive-complexity
+        # https://revive.run/r/#cognitive-complexity
         - name: cognitive-complexity
           severity: warning
           disabled: false
           exclude: [""]
           arguments: [ 7 ]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#comment-spacings
+        # https://revive.run/r/#comment-spacings
         - name: comment-spacings
           severity: warning
           disabled: false
@@ -2692,56 +2699,56 @@ linters:
           arguments:
             - mypragma
             - otherpragma
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#comments-density
+        # https://revive.run/r/#comments-density
         - name: comments-density
           severity: warning
           disabled: false
           exclude: [""]
           arguments: [ 15 ]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#confusing-naming
+        # https://revive.run/r/#confusing-naming
         - name: confusing-naming
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#confusing-results
+        # https://revive.run/r/#confusing-results
         - name: confusing-results
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#constant-logical-expr
+        # https://revive.run/r/#constant-logical-expr
         - name: constant-logical-expr
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#context-as-argument
+        # https://revive.run/r/#context-as-argument
         - name: context-as-argument
           severity: warning
           disabled: false
           exclude: [""]
           arguments:
             - allow-types-before: "*testing.T,*github.com/user/repo/testing.Harness"
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#context-keys-type
+        # https://revive.run/r/#context-keys-type
         - name: context-keys-type
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#cyclomatic
+        # https://revive.run/r/#cyclomatic
         - name: cyclomatic
           severity: warning
           disabled: false
           exclude: [""]
           arguments: [ 3 ]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#datarace
+        # https://revive.run/r/#datarace
         - name: datarace
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#deep-exit
+        # https://revive.run/r/#deep-exit
         - name: deep-exit
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#defer
+        # https://revive.run/r/#defer
         - name: defer
           severity: warning
           disabled: false
@@ -2753,19 +2760,19 @@ linters:
             - "recover"
             - "immediate-recover"
             - "return"
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#dot-imports
+        # https://revive.run/r/#dot-imports
         - name: dot-imports
           severity: warning
           disabled: false
           exclude: [""]
           arguments:
             - allowed-packages: ["github.com/onsi/ginkgo/v2", "github.com/onsi/gomega"]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#duplicated-imports
+        # https://revive.run/r/#duplicated-imports
         - name: duplicated-imports
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#early-return
+        # https://revive.run/r/#early-return
         - name: early-return
           severity: warning
           disabled: false
@@ -2773,24 +2780,24 @@ linters:
           arguments:
             - "preserve-scope"
             - "allow-jump"
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#empty-block
+        # https://revive.run/r/#empty-block
         - name: empty-block
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#empty-lines
+        # https://revive.run/r/#empty-lines
         - name: empty-lines
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#enforce-map-style
+        # https://revive.run/r/#enforce-map-style
         - name: enforce-map-style
           severity: warning
           disabled: false
           exclude: [""]
           arguments:
             - "make"
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#enforce-repeated-arg-type-style
+        # https://revive.run/r/#enforce-repeated-arg-type-style
         - name: enforce-repeated-arg-type-style
           severity: warning
           disabled: false
@@ -2800,47 +2807,47 @@ linters:
             # Or this parameter:
             - func-arg-style: "full"
               func-ret-val-style: "short"
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#enforce-slice-style
+        # https://revive.run/r/#enforce-slice-style
         - name: enforce-slice-style
           severity: warning
           disabled: false
           exclude: [""]
           arguments:
             - "make"
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#enforce-switch-style
+        # https://revive.run/r/#enforce-switch-style
         - name: enforce-switch-style
           severity: warning
           disabled: false
           exclude: [""]
           arguments: [ "allowNoDefault" ]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#epoch-naming
+        # https://revive.run/r/#epoch-naming
         - name: epoch-naming
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#error-naming
+        # https://revive.run/r/#error-naming
         - name: error-naming
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#error-return
+        # https://revive.run/r/#error-return
         - name: error-return
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#error-strings
+        # https://revive.run/r/#error-strings
         - name: error-strings
           severity: warning
           disabled: false
           exclude: [""]
           arguments:
             - "xerrors.New"
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#errorf
+        # https://revive.run/r/#errorf
         - name: errorf
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#exported
+        # https://revive.run/r/#exported
         - name: exported
           severity: warning
           disabled: false
@@ -2855,14 +2862,14 @@ linters:
             - "disable-checks-on-methods"
             - "disable-checks-on-types"
             - "disable-checks-on-variables"
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#file-header
+        # https://revive.run/r/#file-header
         - name: file-header
           severity: warning
           disabled: false
           exclude: [""]
           arguments:
             - This is the text that must appear at the top of source files.
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#file-length-limit
+        # https://revive.run/r/#file-length-limit
         - name: file-length-limit
           severity: warning
           disabled: false
@@ -2871,71 +2878,71 @@ linters:
             - max: 100
               skip-comments: true
               skip-blank-lines: true
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#filename-format
+        # https://revive.run/r/#filename-format
         - name: filename-format
           severity: warning
           disabled: false
           exclude: [""]
           arguments:
             - "^[_a-z][_a-z0-9]*\\.go$"
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#flag-parameter
+        # https://revive.run/r/#flag-parameter
         - name: flag-parameter
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#forbidden-call-in-wg-go
+        # https://revive.run/r/#forbidden-call-in-wg-go
         - name: forbidden-call-in-wg-go
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#function-length
+        # https://revive.run/r/#function-length
         - name: function-length
           severity: warning
           disabled: false
           exclude: [""]
           arguments: [ 10, 0 ]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#function-result-limit
+        # https://revive.run/r/#function-result-limit
         - name: function-result-limit
           severity: warning
           disabled: false
           exclude: [""]
           arguments: [ 3 ]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#get-return
+        # https://revive.run/r/#get-return
         - name: get-return
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#identical-branches
+        # https://revive.run/r/#identical-branches
         - name: identical-branches
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#identical-ifelseif-branches
+        # https://revive.run/r/#identical-ifelseif-branches
         - name: identical-ifelseif-branches
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#identical-ifelseif-conditions
+        # https://revive.run/r/#identical-ifelseif-conditions
         - name: identical-ifelseif-conditions
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#identical-switch-branches
+        # https://revive.run/r/#identical-switch-branches
         - name: identical-switch-branches
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#identical-switch-conditions
+        # https://revive.run/r/#identical-switch-conditions
         - name: identical-switch-conditions
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#if-return
+        # https://revive.run/r/#if-return
         - name: if-return
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#import-alias-naming
+        # https://revive.run/r/#import-alias-naming
         - name: import-alias-naming
           severity: warning
           disabled: false
@@ -2945,12 +2952,12 @@ linters:
             # Or this parameter:
             - allow-regex: "^[a-z][a-z0-9]{0,}$"
               deny-regex: '^v\d+$'
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#import-shadowing
+        # https://revive.run/r/#import-shadowing
         - name: import-shadowing
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#imports-blocklist
+        # https://revive.run/r/#imports-blocklist
         - name: imports-blocklist
           severity: warning
           disabled: false
@@ -2958,74 +2965,86 @@ linters:
           arguments:
             - "crypto/md5"
             - "crypto/sha1"
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#increment-decrement
+        # https://revive.run/r/#increment-decrement
         - name: increment-decrement
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#indent-error-flow
+        # https://revive.run/r/#indent-error-flow
         - name: indent-error-flow
           severity: warning
           disabled: false
           exclude: [""]
           arguments:
             - "preserve-scope"
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#inefficient-map-lookup
+        # https://revive.run/r/#inefficient-map-lookup
         - name: inefficient-map-lookup
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#line-length-limit
+        # https://revive.run/r/#line-length-limit
         - name: line-length-limit
           severity: warning
           disabled: false
           exclude: [""]
-          arguments: [ 80 ]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#max-control-nesting
+          arguments:
+            - max: 80
+              excludes: ['//https?://']
+        # https://revive.run/r/#marshal-receiver
+        - name: marshal-receiver
+          severity: warning
+          disabled: false
+          exclude: [""]
+        # https://revive.run/r/#max-control-nesting
         - name: max-control-nesting
           severity: warning
           disabled: false
           exclude: [""]
           arguments: [ 3 ]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#max-public-structs
+        # https://revive.run/r/#max-public-structs
         - name: max-public-structs
           severity: warning
           disabled: false
           exclude: [""]
           arguments: [ 3 ]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#modifies-parameter
+        # https://revive.run/r/#modifies-parameter
         - name: modifies-parameter
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#modifies-value-receiver
+        # https://revive.run/r/#modifies-value-receiver
         - name: modifies-value-receiver
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#nested-structs
+        # https://revive.run/r/#multiline-if-init
+        - name: multiline-if-init
+          severity: warning
+          disabled: false
+          exclude: [""]
+        # https://revive.run/r/#nested-structs
         - name: nested-structs
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#optimize-operands-order
+        # https://revive.run/r/#optimize-operands-order
         - name: optimize-operands-order
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#package-comments
+        # https://revive.run/r/#package-comments
         - name: package-comments
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#package-directory-mismatch
+        # https://revive.run/r/#package-directory-mismatch
         - name: package-directory-mismatch
           severity: warning
           disabled: false
           exclude: [""]
           arguments:
             - ignore-directories: ["testcases", "testinfo"]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#package-naming
+        # https://revive.run/r/#package-naming
         - name: package-naming
           severity: warning
           disabled: false
@@ -3041,49 +3060,49 @@ linters:
                 - bar
               skip-collision-with-common-std: true
               check-collision-with-all-std: true
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#range
+        # https://revive.run/r/#range
         - name: range
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#range-val-address
+        # https://revive.run/r/#range-val-address
         - name: range-val-address
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#range-val-in-closure
+        # https://revive.run/r/#range-val-in-closure
         - name: range-val-in-closure
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#receiver-naming
+        # https://revive.run/r/#receiver-naming
         - name: receiver-naming
           severity: warning
           disabled: false
           exclude: [""]
           arguments:
             - max-length: 2
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#redefines-builtin-id
+        # https://revive.run/r/#redefines-builtin-id
         - name: redefines-builtin-id
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#redundant-build-tag
+        # https://revive.run/r/#redundant-build-tag
         - name: redundant-build-tag
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#redundant-import-alias
+        # https://revive.run/r/#redundant-import-alias
         - name: redundant-import-alias
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#redundant-test-main-exit
+        # https://revive.run/r/#redundant-test-main-exit
         - name: redundant-test-main-exit
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#string-format
+        # https://revive.run/r/#string-format
         - name: string-format
           severity: warning
           disabled: false
@@ -3098,12 +3117,12 @@ linters:
             - - panic
               - '/^[^\n]*$/'
               - must not contain line breaks
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#string-of-int
+        # https://revive.run/r/#string-of-int
         - name: string-of-int
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#struct-tag
+        # https://revive.run/r/#struct-tag
         - name: struct-tag
           severity: warning
           disabled: false
@@ -3112,51 +3131,51 @@ linters:
             - "!validate"
             - "json,inline"
             - "bson,outline,gnu"
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#superfluous-else
+        # https://revive.run/r/#superfluous-else
         - name: superfluous-else
           severity: warning
           disabled: false
           exclude: [""]
           arguments:
             - "preserve-scope"
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#time-date
+        # https://revive.run/r/#time-date
         - name: time-date
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#time-equal
+        # https://revive.run/r/#time-equal
         - name: time-equal
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#time-naming
+        # https://revive.run/r/#time-naming
         - name: time-naming
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#unchecked-type-assertion
+        # https://revive.run/r/#unchecked-type-assertion
         - name: unchecked-type-assertion
           severity: warning
           disabled: false
           exclude: [""]
           arguments:
             - accept-ignored-assertion-result: true
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#unconditional-recursion
+        # https://revive.run/r/#unconditional-recursion
         - name: unconditional-recursion
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#unexported-naming
+        # https://revive.run/r/#unexported-naming
         - name: unexported-naming
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#unexported-return
+        # https://revive.run/r/#unexported-return
         - name: unexported-return
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#unhandled-error
+        # https://revive.run/r/#unhandled-error
         - name: unhandled-error
           severity: warning
           disabled: false
@@ -3164,91 +3183,96 @@ linters:
           arguments:
             - "^fmt.Printf"
             - "myFunction"
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#unnecessary-format
+        # https://revive.run/r/#unnecessary-format
         - name: unnecessary-format
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#unnecessary-if
+        # https://revive.run/r/#unnecessary-if
         - name: unnecessary-if
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#unnecessary-stmt
+        # https://revive.run/r/#unnecessary-stmt
         - name: unnecessary-stmt
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#unreachable-code
+        # https://revive.run/r/#unreachable-code
         - name: unreachable-code
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#use-slices-sort
+        # https://revive.run/r/#use-slices-sort
         - name: use-slices-sort
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#unsecure-url-scheme
+        # https://revive.run/r/#unsecure-url-scheme
         - name: unsecure-url-scheme
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#unused-parameter
+        # https://revive.run/r/#unused-parameter
         - name: unused-parameter
           severity: warning
           disabled: false
           exclude: [""]
           arguments:
             - allow-regex: "^_"
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#unused-receiver
+        # https://revive.run/r/#unused-receiver
         - name: unused-receiver
           severity: warning
           disabled: false
           exclude: [""]
           arguments:
             - allow-regex: "^_"
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#use-any
+        # https://revive.run/r/#use-any
         - name: use-any
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#use-errors-new
+        # https://revive.run/r/#use-errors-new
         - name: use-errors-new
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#use-fmt-print
+        # https://revive.run/r/#use-fmt-print
         - name: use-fmt-print
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#use-slices-sort
+        # https://revive.run/r/#use-slices-concat
+        - name: use-slices-concat
+          severity: warning
+          disabled: false
+          exclude: [""]
+        # https://revive.run/r/#use-slices-sort
         - name: use-slices-sort
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#use-waitgroup-go
+        # https://revive.run/r/#use-waitgroup-go
         - name: use-waitgroup-go
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#useless-break
+        # https://revive.run/r/#useless-break
         - name: useless-break
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#useless-fallthrough
+        # https://revive.run/r/#useless-fallthrough
         - name: useless-fallthrough
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#var-declaration
+        # https://revive.run/r/#var-declaration
         - name: var-declaration
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#var-naming
+        # https://revive.run/r/#var-naming
         - name: var-naming
           severity: warning
           disabled: false
@@ -3258,7 +3282,7 @@ linters:
             - [ "VM" ] # DenyList
             - - skip-initialism-name-checks: true
                 upper-case-const: true
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#waitgroup-by-value
+        # https://revive.run/r/#waitgroup-by-value
         - name: waitgroup-by-value
           severity: warning
           disabled: false

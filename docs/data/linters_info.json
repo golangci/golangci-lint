@@ -330,7 +330,7 @@
   },
   {
     "name": "gochecksumtype",
-    "desc": "Run exhaustiveness checks on Go \"sum types\"",
+    "desc": "check exhaustiveness of sum type switch statements",
     "loadMode": 8767,
     "originalURL": "https://github.com/alecthomas/go-check-sumtype",
     "internal": false,
@@ -835,7 +835,7 @@
     "name": "revive",
     "desc": "Fast, configurable, extensible, flexible, and beautiful linter for Go. Drop-in replacement of golint.",
     "loadMode": 8199,
-    "originalURL": "https://github.com/mgechev/revive",
+    "originalURL": "https://github.com/revive-lint/revive",
     "internal": false,
     "canAutoFix": true,
     "isSlow": true,
