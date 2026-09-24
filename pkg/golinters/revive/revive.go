@@ -171,8 +171,8 @@ func (w *wrapper) toIssue(pass *analysis.Pass, failure *lint.Failure) *goanalysi
 // This function mimics the GetConfig function of revive.
 // This allows to get default values and right types.
 // https://github.com/golangci/golangci-lint/issues/1745
-// https://github.com/mgechev/revive/blob/v1.16.0/config/config.go#L333
-// https://github.com/mgechev/revive/blob/v1.16.0/config/config.go#L255-L261
+// https://github.com/revive-lint/revive/blob/v1.16.0/config/config.go#L333
+// https://github.com/revive-lint/revive/blob/v1.16.0/config/config.go#L255-L261
 func getConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
 	conf := reviveConfig.Default()
 
