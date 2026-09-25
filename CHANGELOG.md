@@ -10,18 +10,19 @@ If you value it, consider supporting us, we appreciate it!
 
 ### v2.14.0
 
-_Released on 2026-09-23_
+_Released on 2026-09-24_
 
 1. Bug fixes
    * fix: cache of facts reloading
 2. Linters new features or changes
+   * `bodyclose`: from 73d1f95b84b4 to 857993a2939c (new directive `handled`)
    * `exhaustive`: from 0.12.0 to 0.13.0
-   * `exhaustruct`: from 5.0.3 to 5.2.0 (new option: `allow-empty-blank-assignments`)
+   * `exhaustruct_v5`: from 5.0.3 to 5.2.0 (new option: `allow-empty-blank-assignments`)
    * `go-check-sumtype`: from 0.3.1 to ae6904d28606
    * `gocritic`: from 0.14.4 to 0.15.0
-   * `gofumpt`: from v0.11.1 to 0.12.0
+   * `gofumpt`: from 0.11.0 to 0.12.0
    * `gomoddirectives`: from 0.9.0 to 0.10.0
-   * `gosec`: from 2.28.0 to 2.29.0 (re-enable G407)
+   * `gosec`: from 2.28.0 to 2.29.0 (re-enable `G407`)
    * `govet-modernize`: from 0.49.0 to 0.50.0
    * `loggercheck`: from 0.11.0 to 0.12.0
    * `revive`: from 1.15.0 to 1.17.0 (new rules: `marshal-receiver`, `multiline-if-init`, `use-slices-concat`)
@@ -30,8 +31,7 @@ _Released on 2026-09-23_
    * `fatcontext`: from 0.10.0 to 0.10.1
    * `flock`: from 0.13.0 to 0.13.1
    * `godoclint`: from 0.11.2 to 0.11.4
-   * `protogetter`: from 0.3.21 to 1.0.0
-   * `protogetter`: from 1.0.0 to 1.0.1
+   * `protogetter`: from 0.3.21 to 1.0.1
    * `recvcheck`: from 0.3.0 to 0.3.1
    * `tagalign`: from 1.4.3 to 1.4.4
 
@@ -84,7 +84,7 @@ _Released on 2026-08-19_
 4. Linters bug fixes
    * `clickhouse-go-linter`: from 1.2.0 to 1.2.1
    * `errname`: from 1.1.1 to 1.1.2
-   * `exhaustruct`: from 5.0.2 to 5.0.3
+   * `exhaustruct_v5`: from 5.0.2 to 5.0.3
    * `funcorder`: add missing `Function` field
    * `ginkgolinter`: from 0.23.0 to 0.23.1
    * `gocheckcompilerdirectives`: from 1.3.0 to 1.4.0
