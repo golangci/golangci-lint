@@ -255,6 +255,8 @@ func (b Builder) createVersion(orig string) (string, error) {
 
 	for _, plugin := range b.cfg.Plugins {
 		if plugin.Path == "" {
+			hash.Write([]byte(plugin.Module + "@" + plugin.Version))
+
 			continue
 		}
 
