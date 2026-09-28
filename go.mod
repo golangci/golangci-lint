@@ -63,7 +63,7 @@ require (
 	github.com/godoc-lint/godoc-lint v0.11.4
 	github.com/gofrs/flock v0.13.1
 	github.com/golangci/asciicheck v0.5.0
-	github.com/golangci/canonicalheader v0.0.0-20260827115959-a25c71c521f6
+	github.com/golangci/canonicalheader v0.0.0-20260928145534-e18e5c5a078f
 	github.com/golangci/dupl v0.0.0-20260401084720-c99c5cf5c202
 	github.com/golangci/go-printf-func-name v0.1.1
 	github.com/golangci/gofmt v0.0.0-20260820135601-e84e05053792
