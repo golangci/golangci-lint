@@ -20,7 +20,8 @@ func New(settings *config.GoFumptSettings, goVersion string) *Formatter {
 
 	if settings != nil {
 		if settings.ExtraRules {
-			internal.FormatterLogger.Warnf("gofumpt: `extra-rules` is deprecated, please use `extra.group-params` instead.")
+			internal.FormatterLogger.Warnf("gofumpt: `extra-rules` is deprecated, " +
+				"please use `extra.group-params` and  `extra.clothe-returns` instead.")
 		}
 
 		options = gofumpt.Options{
