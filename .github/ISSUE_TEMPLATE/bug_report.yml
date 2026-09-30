@@ -134,9 +134,14 @@ body:
           required: true
 
   - type: checkboxes
-    id: supporter
+    id: value-affirmation
     attributes:
-      label: Supporter
+      label: 🌱 Supporting the Maintainers
       description: If you find golangci-lint valuable, consider [sponsoring the project](https://donate.golangci.org) to help sustain its development. 💛
       options:
-        - label: I am a [sponsor/backer](https://donate.golangci.org) of this project.
+        - label: "❤️ Yes, I find this project useful, and I appreciate the work done by the maintainers."
+          required: false
+        - label: "⭐ Yes, I have [starred](https://github.com/golangci/golangci-lint) this repository."
+          required: false
+        - label: "💖 Yes, I have [sponsored](https://donate.golangci.org) this project to keep the project stable and maintained."
+          required: false
