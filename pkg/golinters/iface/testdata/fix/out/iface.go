@@ -1,11 +1,19 @@
 //golangcitest:args -Eiface
 //golangcitest:config_path testdata/iface_fix.yml
-//golangcitest:expected_exitcode 0
+//golangcitest:expected_exitcode 1
 package testdata
 
 import "fmt"
 
 // identical
+
+type Pinger interface { // want "unused: interface 'Pinger' is declared but not used within the package"
+	Ping() error
+}
+
+type Healthcheck interface { // want "unused: interface 'Healthcheck' is declared but not used within the package"
+	Ping() error
+}
 
 // opaque
 
@@ -30,6 +38,10 @@ func NewServer(addr string) *server {
 type User struct {
 	ID   string
 	Name string
+}
+
+type UserRepository interface { // want "unused: interface 'UserRepository' is declared but not used within the package"
+	UserOf(id string) (*User, error)
 }
 
 type UserRepositorySQL struct {
