@@ -5,7 +5,7 @@ package testdata
 func hello() {
 	var real int
 	a := A{}
-	copy := Clone(a) // want "variable copy has same name as predeclared identifier"
+	copy := Clone(a) // want "copy: same name as predeclared identifier"
 
 	// suppress any "declared but not used" errors
 	_ = real
@@ -14,7 +14,7 @@ func hello() {
 }
 
 type A struct {
-	true bool // want "field true has same name as predeclared identifier"
+	true bool // want "true: same name as predeclared identifier"
 	foo  int
 }
 
@@ -26,3 +26,8 @@ func Clone(a A) A {
 }
 
 func recover() {}
+
+type t1 byte
+
+func (byte *t1) m1() {} // want "byte: same name as predeclared identifier"
+func (t *t1) byte()  {} // want "byte: same name as predeclared identifier"
