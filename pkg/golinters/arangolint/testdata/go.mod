@@ -2,7 +2,7 @@ module arangolint
 
 go 1.26.0
 
-require github.com/arangodb/go-driver/v2 v2.3.1
+require github.com/arangodb/go-driver/v2 v2.4.1
 
 require (
 	github.com/arangodb/go-velocypack v0.0.0-20200318135517-5af53c29c67e // indirect
@@ -13,7 +13,7 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/rs/zerolog v1.35.1 // indirect
-	golang.org/x/net v0.46.0 // indirect
-	golang.org/x/sys v0.37.0 // indirect
-	golang.org/x/text v0.30.0 // indirect
+	golang.org/x/net v0.55.0 // indirect
+	golang.org/x/sys v0.45.0 // indirect
+	golang.org/x/text v0.37.0 // indirect
 )
