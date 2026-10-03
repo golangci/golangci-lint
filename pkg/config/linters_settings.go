@@ -470,13 +470,22 @@ type ErrorLintAllowPair struct {
 
 type ExhaustiveSettings struct {
 	Check                      []string `mapstructure:"check"`
+	ExplicitExhaustive         bool     `mapstructure:"explicit-exhaustive"`
+	OnlyTypes                  []string `mapstructure:"only-types"`
+	IgnoreTypes                []string `mapstructure:"ignore-types"`
+	IgnoreConstants            []string `mapstructure:"ignore-constants"`
 	DefaultSignifiesExhaustive bool     `mapstructure:"default-signifies-exhaustive"`
-	IgnoreEnumMembers          string   `mapstructure:"ignore-enum-members"`
-	IgnoreEnumTypes            string   `mapstructure:"ignore-enum-types"`
-	PackageScopeOnly           bool     `mapstructure:"package-scope-only"`
-	ExplicitExhaustiveMap      bool     `mapstructure:"explicit-exhaustive-map"`
-	ExplicitExhaustiveSwitch   bool     `mapstructure:"explicit-exhaustive-switch"`
 	DefaultCaseRequired        bool     `mapstructure:"default-case-required"`
+	PackageScopeOnly           bool     `mapstructure:"package-scope-only"`
+
+	// Deprecated: use IgnoreConstants instead.
+	IgnoreEnumMembers string `mapstructure:"ignore-enum-members"`
+	// Deprecated: use IgnoreTypes instead.
+	IgnoreEnumTypes string `mapstructure:"ignore-enum-types"`
+	// Deprecated: use ExplicitExhaustive instead.
+	ExplicitExhaustiveMap bool `mapstructure:"explicit-exhaustive-map"`
+	// Deprecated: use ExplicitExhaustive instead.
+	ExplicitExhaustiveSwitch bool `mapstructure:"explicit-exhaustive-switch"`
 }
 
 // Deprecated: use ExhaustructV5Settings instead.

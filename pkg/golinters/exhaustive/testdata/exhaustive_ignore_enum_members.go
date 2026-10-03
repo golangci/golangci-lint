@@ -9,13 +9,14 @@ const (
 	East
 	South
 	West
+	Zero
 )
 
 // Should only report East as missing because the enum member West is ignored
 // using the ignore-enum-members setting.
 
 func processDirectionIgnoreEnumMembers(d Direction) {
-	switch d { // want "missing cases in switch of type testdata.Direction: testdata.East"
+	switch d { // want "switch not exhaustive: missing cases: East$"
 	case North, South:
 	}
 }
