@@ -140,6 +140,13 @@ func (lnt *Linter) allAnalyzerNames() []string {
 
 func (*Linter) configureAnalyzer(a *analysis.Analyzer, cfg map[string]any) error {
 	for k, v := range cfg {
+		// Allow to handle repeated flags.
+		// The flag name must have the suffix `-X$`,
+		// where `X` is any number or string.
+		if len(k) > 3 && k[len(k)-1] == '$' {
+			k = k[:strings.LastIndex(k, "-")]
+		}
+
 		f := a.Flags.Lookup(k)
 		if f == nil {
 			validFlagNames := allFlagNames(&a.Flags)
