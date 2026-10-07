@@ -608,8 +608,8 @@ github.com/ultraware/funlen v0.2.0 h1:gCHmCn+d2/1SemTdYMiKLAHFYxTYz7z9VIDRaTGyLk
 github.com/ultraware/funlen v0.2.0/go.mod h1:ZE0q4TsJ8T1SQcjmkhN/w+MceuatI6pBFSxxyteHIJA=
 github.com/ultraware/whitespace v0.2.0 h1:TYowo2m9Nfj1baEQBjuHzvMRbp19i+RCcRYrSWoFa+g=
 github.com/ultraware/whitespace v0.2.0/go.mod h1:XcP1RLD81eV4BW8UhQlpaR+SDc2givTvyI8a586WjW8=
-github.com/uudashr/gocognit v1.2.1 h1:CSJynt5txTnORn/DkhiB4mZjwPuifyASC8/6Q0I/QS4=
-github.com/uudashr/gocognit v1.2.1/go.mod h1:acaubQc6xYlXFEMb9nWX2dYBzJ/bIjEkc1zzvyIZg5Q=
+github.com/uudashr/gocognit v1.3.0 h1:Xdw5JwAoYmX3WAB+wsXY3nxEwdw7+MWAnM0wCAAv7A4=
+github.com/uudashr/gocognit v1.3.0/go.mod h1:acaubQc6xYlXFEMb9nWX2dYBzJ/bIjEkc1zzvyIZg5Q=
 github.com/uudashr/iface v1.5.3 h1:N61bzr11L7BHP6Rct+C6zQePHjSTMeyVBq+s03uB/Ds=
 github.com/uudashr/iface v1.5.3/go.mod h1:5UWoT6SvTdTww/KToRj6clO+n4Kg3/NrAQvgOB+5Ggw=
 github.com/valyala/bytebufferpool v1.0.0 h1:GqA5TC/0021Y/b9FG4Oi9Mr3q7XYx6KllzawFIhcdPw=
