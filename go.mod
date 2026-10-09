@@ -43,7 +43,7 @@ require (
 	github.com/blizzy78/varnamelen v0.8.0
 	github.com/bombsimon/wsl/v4 v4.7.0
 	github.com/bombsimon/wsl/v5 v5.9.0
-	github.com/breml/bidichk v0.3.3
+	github.com/breml/bidichk v0.3.4
 	github.com/breml/errchkjson v0.4.1
 	github.com/butuzov/ireturn v0.4.1
 	github.com/butuzov/mirror v1.3.3
@@ -153,7 +153,7 @@ require (
 	golang.org/x/mod v0.41.0
 	golang.org/x/sync v0.23.0
 	golang.org/x/sys v0.48.0
-	golang.org/x/tools v0.50.0
+	golang.org/x/tools v0.51.0
 	honnef.co/go/tools v0.8.1
 	mvdan.cc/gofumpt v0.12.0
 	mvdan.cc/unparam v0.0.0-20260823230713-2fa3d841b0c8
