@@ -1383,21 +1383,15 @@
           "additionalProperties": false,
           "properties": {
             "check": {
-              "description": "Program elements to check for exhaustiveness.",
+              "description": "Specify the syntax tree elements that the analysis should check.",
               "type": "array",
               "uniqueItems": true,
               "items": {
-                "type": "string",
-                "examples": ["switch", "map"]
+                "enum": ["switch", "mapliteral"]
               }
             },
-            "explicit-exhaustive-switch": {
-              "description": "Only run exhaustive check on switches with \"//exhaustive:enforce\" comment.",
-              "type": "boolean",
-              "default": false
-            },
-            "explicit-exhaustive-map": {
-              "description": "Only run exhaustive check on map literals with \"//exhaustive:enforce\" comment.",
+            "explicit-exhaustive": {
+              "description": "Check only if it has '//exhaustive:enforce' comment.",
               "type": "boolean",
               "default": false
             },
@@ -1411,13 +1405,29 @@
               "type": "boolean",
               "default": false
             },
-            "ignore-enum-members": {
-              "description": "Enum members matching `regex` do not have to be listed in switch statements to satisfy exhaustiveness",
-              "type": "string"
+            "ignore-constants": {
+              "description": "Constant names matched by `regexp` do not have to be included in case expressions.",
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
             },
-            "ignore-enum-types": {
-              "description": "Enum types matching the supplied regex do not have to be listed in switch statements to satisfy exhaustiveness.",
-              "type": "string"
+            "ignore-types": {
+              "description": "Switch statements in which the type name is matched by `regexp` are not checked.",
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
+            },
+            "only-types": {
+              "description": "Only switch statements in which the type name is matched by `regexp` are checked.",
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
             },
             "package-scope-only": {
               "description": "Consider enums only in package scopes, not in inner scopes.",
