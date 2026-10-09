@@ -131,7 +131,7 @@ require (
 	github.com/stretchr/testify v1.12.1
 	github.com/tetafro/godot v1.5.6
 	github.com/timakin/bodyclose v0.0.0-20260723120731-857993a2939c
-	github.com/timonwong/loggercheck v0.12.1
+	github.com/timonwong/loggercheck v0.13.0
 	github.com/tomarrell/wrapcheck/v2 v2.12.0
 	github.com/tommy-muehle/go-mnd/v2 v2.5.1
 	github.com/ultraware/funlen v0.2.0
@@ -153,7 +153,7 @@ require (
 	golang.org/x/mod v0.41.0
 	golang.org/x/sync v0.23.0
 	golang.org/x/sys v0.48.0
-	golang.org/x/tools v0.50.0
+	golang.org/x/tools v0.51.0
 	honnef.co/go/tools v0.8.1
 	mvdan.cc/gofumpt v0.12.0
 	mvdan.cc/unparam v0.0.0-20260823230713-2fa3d841b0c8
