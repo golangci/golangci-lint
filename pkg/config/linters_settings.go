@@ -88,7 +88,7 @@ var defaultLintersSettings = LintersSettings{
 		Period: true,
 	},
 	Gosec: GoSecSettings{
-		Concurrency: runtime.NumCPU(),
+		Concurrency: runtime.GOMAXPROCS(0),
 	},
 	Gosmopolitan: GosmopolitanSettings{
 		AllowTimeLocal:  false,
