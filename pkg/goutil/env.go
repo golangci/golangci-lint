@@ -25,7 +25,7 @@ func NewEnv(log logutils.Log) *Env {
 	}
 }
 
-func (e Env) Discover(ctx context.Context) error {
+func (e *Env) Discover(ctx context.Context) error {
 	startedAt := time.Now()
 
 	var err error
@@ -39,7 +39,7 @@ func (e Env) Discover(ctx context.Context) error {
 	return nil
 }
 
-func (e Env) Get(k EnvKey) string {
+func (e *Env) Get(k EnvKey) string {
 	envValue := os.Getenv(string(k))
 	if envValue != "" {
 		return envValue
