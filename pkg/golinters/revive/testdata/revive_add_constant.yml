@@ -1,0 +1,12 @@
+version: "2"
+
+linters:
+  settings:
+    revive:
+      rules:
+        - name: add-constant
+          arguments:
+            - maxLitCount: "2"
+              allowStrs: '""'
+              allowInts: "0,1"
+              allowFloats: "0.0,1.0"
