@@ -85,7 +85,7 @@ require (
 	github.com/kisielk/errcheck v1.20.0
 	github.com/kkHAIKE/contextcheck v1.1.6
 	github.com/kulti/thelper v0.7.1
-	github.com/kunwardeep/paralleltest v1.0.15
+	github.com/kunwardeep/paralleltest v1.0.16
 	github.com/ldez/exptostd v0.4.5
 	github.com/ldez/gomoddirectives v0.10.0
 	github.com/ldez/grignotin v0.10.1
