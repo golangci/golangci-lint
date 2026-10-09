@@ -238,7 +238,7 @@ func createConfigMap(cfg *config.ReviveSettings) map[string]any {
 	for _, s := range cfg.Rules {
 		rawRules[s.Name] = map[string]any{
 			severity:    s.Severity,
-			"arguments": safeTomlSlice(s.Arguments),
+			"arguments": s.Arguments,
 			"disabled":  s.Disabled,
 			"exclude":   s.Exclude,
 		}
@@ -249,28 +249,6 @@ func createConfigMap(cfg *config.ReviveSettings) map[string]any {
 	}
 
 	return rawRoot
-}
-
-func safeTomlSlice(r []any) []any {
-	if len(r) == 0 {
-		return nil
-	}
-
-	if _, ok := r[0].(map[any]any); !ok {
-		return r
-	}
-
-	var typed []any
-	for _, elt := range r {
-		item := map[string]any{}
-		for k, v := range elt.(map[any]any) {
-			item[k.(string)] = v
-		}
-
-		typed = append(typed, item)
-	}
-
-	return typed
 }
 
 func normalizeConfig(cfg *lint.Config) {
