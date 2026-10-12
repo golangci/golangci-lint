@@ -11,7 +11,7 @@ const (
 )
 
 func processDirection(d Direction) {
-	switch d { // want "missing cases in switch of type testdata.Direction: testdata.East, testdata.West"
+	switch d { // want "switch not exhaustive: missing cases: East, West"
 	case North, South:
 	}
 }
