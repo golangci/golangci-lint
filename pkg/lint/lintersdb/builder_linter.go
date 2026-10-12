@@ -582,6 +582,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 
 		linter.NewConfig(predeclared.New(&cfg.Linters.Settings.Predeclared)).
 			WithSince("v1.35.0").
+			WithLoadForGoAnalysis().
 			WithURL("https://github.com/nishanths/predeclared"),
 
 		linter.NewConfig(promlinter.New(&cfg.Linters.Settings.Promlinter)).

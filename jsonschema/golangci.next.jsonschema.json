@@ -3353,6 +3353,12 @@
               "description": "Include method names and field names in checks.",
               "type": "boolean",
               "default": false
+            },
+            "mode": {
+              "type": "array",
+              "items": {
+                "enum": ["shadow", "declare"]
+              }
             }
           }
         },

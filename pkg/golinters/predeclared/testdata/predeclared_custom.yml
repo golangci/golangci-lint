@@ -7,3 +7,6 @@ linters:
         - real
         - recover
       qualified-name: true
+      mode:
+        - shadow
+        - declare

@@ -2,9 +2,9 @@
 package testdata
 
 func hello() {
-	var real int // want "variable real has same name as predeclared identifier"
+	var real int // want "real: shadows predeclared identifier"
 	a := A{}
-	copy := Clone(a) // want "variable copy has same name as predeclared identifier"
+	copy := Clone(a) // want "copy: shadows predeclared identifier"
 
 	// suppress any "declared but not used" errors
 	_ = real
@@ -24,4 +24,9 @@ func Clone(a A) A {
 	}
 }
 
-func recover() {} // want "function recover has same name as predeclared identifier"
+func recover() {} // want "recover: shadows predeclared identifier"
+
+type t1 byte
+
+func (byte *t1) m1() {} // want "byte: shadows predeclared identifier$"
+func (t *t1) byte()  {}

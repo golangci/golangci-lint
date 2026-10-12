@@ -149,6 +149,7 @@ var defaultLintersSettings = LintersSettings{
 	},
 	Predeclared: PredeclaredSettings{
 		Qualified: false,
+		Mode:      []string{"shadow"},
 	},
 	Sloglint: SloglintSettings{
 		NoGlobal:       "",
@@ -907,6 +908,7 @@ type PreallocSettings struct {
 type PredeclaredSettings struct {
 	Ignore    []string `mapstructure:"ignore"`
 	Qualified bool     `mapstructure:"qualified-name"`
+	Mode      []string `mapstructure:"mode"`
 }
 
 type PromlinterSettings struct {
