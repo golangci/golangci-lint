@@ -43,7 +43,7 @@ require (
 	github.com/blizzy78/varnamelen v0.8.0
 	github.com/bombsimon/wsl/v4 v4.7.0
 	github.com/bombsimon/wsl/v5 v5.9.0
-	github.com/breml/bidichk v0.3.3
+	github.com/breml/bidichk v0.3.4
 	github.com/breml/errchkjson v0.4.1
 	github.com/butuzov/ireturn v0.4.1
 	github.com/butuzov/mirror v1.3.3
