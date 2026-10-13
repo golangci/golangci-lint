@@ -1387,7 +1387,7 @@
               "type": "array",
               "uniqueItems": true,
               "items": {
-                "enum": ["switch", "mapliteral"]
+                "enum": ["switch", "mapliteral", "typeswitch"]
               }
             },
             "explicit-exhaustive": {

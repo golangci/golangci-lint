@@ -16,7 +16,7 @@ const (
 // using the ignore-enum-members setting.
 
 func processDirectionIgnoreEnumMembers(d Direction) {
-	switch d { // want "switch not exhaustive: missing cases: East$"
+	switch d { // want "missing cases in expression switch: East$"
 	case North, South:
 	}
 }

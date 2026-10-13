@@ -515,6 +515,7 @@ linters:
       check:
         - switch
         - mapliteral
+        - typeswitch
       # Presence of "default" case in switch statements satisfies exhaustiveness,
       # even if all enum members are not listed.
       # Default: false
