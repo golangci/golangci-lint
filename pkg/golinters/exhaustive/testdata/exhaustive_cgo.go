@@ -31,7 +31,7 @@ const (
 )
 
 func processDirection(d Direction) {
-	switch d { // want "switch not exhaustive: missing cases: East, West"
+	switch d { // want "missing cases in expression switch: East, West"
 	case North, South:
 	}
 }
