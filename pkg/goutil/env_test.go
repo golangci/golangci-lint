@@ -29,9 +29,9 @@ func TestEnv_Get(t *testing.T) {
 
 	t.Setenv(key, "foo")
 
-	assert.Equal(t, "foo", env.Get(EnvKey(key)))
+	assert.Equal(t, "foo", env.Get(key))
 
 	_ = os.Unsetenv(key)
 
-	assert.Equal(t, "bar", env.Get(EnvKey(key)))
+	assert.Equal(t, "bar", env.Get(key))
 }

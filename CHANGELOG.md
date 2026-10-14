@@ -8,6 +8,43 @@ If you value it, consider supporting us, we appreciate it!
 
 <!-- START --->
 
+### v2.15.0
+
+_Released on 2026-10-16_
+
+1. Linters new features or changes
+   * `errcheck`: from 1.20.0 to 1.30.0
+   * `exhaustive`: from 0.13.0 to 0.15.0 (⚠️ changes)
+   * `gocognit`: from 1.2.1 to 1.3.0
+   * `golines`: from 0.15.0 to 0.16.0
+   * `govet-modernize`: from 0.50.0 to 0.52.0
+   * `loggercheck`: from 0.12.0 to 0.13.0
+   * `predeclared`: from 0.2.2 to 0.3.0
+   * `wrapcheck`: from 2.12.0 to 2.13.0
+2. Linters bug fixes
+   * `bidichk`: from 0.3.3 to 0.3.4
+   * `canonicalheader`: from a25c71c521f6 to e18e5c5a078f
+   * `gofumpt`: improve deprecation logs
+   * `gosec`: improve concurrency default value
+   * `iface`: from 1.5.1 to 1.5.3
+   * `paralleltest`: from 1.0.15 to 1.0.16
+   * `revive`: from 1.17.0 to 1.17.1
+   * `revive`: the rules `context-keys-type`, `errorf`, `modifies-value-receiver`, `range-val-address`, `string-of-int`, `time-equal`, `time-naming`, `unexported-return`, `unhandled-error`, `var-declaration` are working (less randomly).
+   * `rowserrcheck`: from c5f79b8a11ba to e0740d52dee8
+   * `staticcheck`: from 0.8.1 to 0.8.2
+3. Bug fixes
+   * fix: compute custom version hash with module versions
+   * fix: env vars loading (related to `revive`)
+
+⚠️ Changes of the `exhaustive` linter:
+- The replaced options still exists, and partially works, but they are deprecated.
+- The options `explicit-exhaustive-switch` and `explicit-exhaustive-map` have been replaced by `explicit-exhaustive`.
+- The `check` the value `map` has been replaced by `mapliteral`.
+- The option `ignore-enum-members` (string) has been replaced by `ignore-constants` (slice).
+- The option `ignore-enum-types` (string) has been replaced by `ignore-types` (slice).
+- New report messages.
+- The linter is a now a "slow" linter.
+
 ### v2.14.0
 
 _Released on 2026-09-24_

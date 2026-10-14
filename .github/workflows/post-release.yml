@@ -17,8 +17,7 @@ env:
   # - 1.18rc1 -> 1.18.0-rc.1
   GO_VERSION: '1.27.0'
 
-permissions:
-  contents: read
+permissions: {}
 
 jobs:
   update-gha-assets:

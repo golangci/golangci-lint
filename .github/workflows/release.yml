@@ -4,11 +4,7 @@ on:
     tags:
       - v*
 
-permissions:
-  contents: write
-  # Allow the workflow to write attestations.
-  id-token: write
-  attestations: write
+permissions: {}
 
 jobs:
   release:
@@ -20,6 +16,11 @@ jobs:
       # - 1.18rc1 -> 1.18.0-rc.1
       GO_VERSION: '1.27.0'
       CHOCOLATEY_VERSION: 2.2.0
+    permissions:
+      contents: write
+      # Allow the workflow to write attestations.
+      id-token: write
+      attestations: write
     steps:
       # temporary workaround for an error in free disk space action
       # https://github.com/jlumbroso/free-disk-space/issues/14
