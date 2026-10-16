@@ -64,7 +64,7 @@ func newLoader(log logutils.Log, v *viper.Viper, fs *pflag.FlagSet, opts LoaderO
 	}
 }
 
-func (l *Loader) Load(opts LoadOptions) error {
+func (l *Loader) Load(opts LoadOptions) error { //nolint:gocyclo // it's not too complex
 	err := l.BaseLoader.Load()
 	if err != nil {
 		return err
@@ -115,6 +115,11 @@ func (l *Loader) Load(opts LoadOptions) error {
 	}
 
 	err = l.handleEnableOnlyOption()
+	if err != nil {
+		return err
+	}
+
+	err = l.handleClearConfigOutputs()
 	if err != nil {
 		return err
 	}
@@ -222,6 +227,98 @@ func (l *Loader) handleEnableOnlyOption() error {
 
 		l.cfg.Formatters = Formatters{}
 	}
+
+	return nil
+}
+
+func (l *Loader) handleClearConfigOutputs() error { //nolint:gocyclo // just having to check all the flags, it's fine.
+	if l.fs == nil {
+		return nil
+	}
+
+	// Check if the flag is defined (it's only defined for the run command)
+	flag := l.fs.Lookup("clear-config-outputs")
+	if flag == nil {
+		return nil
+	}
+
+	clearConfigOutputs, err := l.fs.GetBool("clear-config-outputs")
+	if err != nil {
+		return err
+	}
+
+	if !clearConfigOutputs {
+		return nil
+	}
+
+	// Save CLI-provided output format settings by checking which flags were explicitly set
+	cliFormats := Formats{}
+
+	// Text format
+	if l.fs.Changed("output.text.path") {
+		cliFormats.Text.Path, _ = l.fs.GetString("output.text.path")
+	}
+	if l.fs.Changed("output.text.print-linter-name") {
+		cliFormats.Text.PrintLinterName, _ = l.fs.GetBool("output.text.print-linter-name")
+	}
+	if l.fs.Changed("output.text.print-issued-lines") {
+		cliFormats.Text.PrintIssuedLine, _ = l.fs.GetBool("output.text.print-issued-lines")
+	}
+	if l.fs.Changed("output.text.colors") {
+		cliFormats.Text.Colors, _ = l.fs.GetBool("output.text.colors")
+	}
+
+	// JSON format
+	if l.fs.Changed("output.json.path") {
+		cliFormats.JSON.Path, _ = l.fs.GetString("output.json.path")
+	}
+
+	// Tab format
+	if l.fs.Changed("output.tab.path") {
+		cliFormats.Tab.Path, _ = l.fs.GetString("output.tab.path")
+	}
+	if l.fs.Changed("output.tab.print-linter-name") {
+		cliFormats.Tab.PrintLinterName, _ = l.fs.GetBool("output.tab.print-linter-name")
+	}
+	if l.fs.Changed("output.tab.colors") {
+		cliFormats.Tab.Colors, _ = l.fs.GetBool("output.tab.colors")
+	}
+
+	// HTML format
+	if l.fs.Changed("output.html.path") {
+		cliFormats.HTML.Path, _ = l.fs.GetString("output.html.path")
+	}
+
+	// Checkstyle format
+	if l.fs.Changed("output.checkstyle.path") {
+		cliFormats.Checkstyle.Path, _ = l.fs.GetString("output.checkstyle.path")
+	}
+
+	// Code Climate format
+	if l.fs.Changed("output.code-climate.path") {
+		cliFormats.CodeClimate.Path, _ = l.fs.GetString("output.code-climate.path")
+	}
+
+	// JUnit XML format
+	if l.fs.Changed("output.junit-xml.path") {
+		cliFormats.JUnitXML.Path, _ = l.fs.GetString("output.junit-xml.path")
+	}
+	if l.fs.Changed("output.junit-xml.extended") {
+		cliFormats.JUnitXML.Extended, _ = l.fs.GetBool("output.junit-xml.extended")
+	}
+
+	// TeamCity format
+	if l.fs.Changed("output.teamcity.path") {
+		cliFormats.TeamCity.Path, _ = l.fs.GetString("output.teamcity.path")
+	}
+
+	// SARIF format
+	if l.fs.Changed("output.sarif.path") {
+		cliFormats.Sarif.Path, _ = l.fs.GetString("output.sarif.path")
+	}
+
+	// Replace the config's output formats with only the CLI-provided ones
+	l.cfg.Output.Formats = cliFormats
 
 	return nil
 }
