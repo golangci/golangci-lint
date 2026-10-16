@@ -206,7 +206,7 @@
   },
   {
     "name": "exhaustive",
-    "desc": "check exhaustiveness of enum switch statements",
+    "desc": "check that expression switches and type switches are exhaustive",
     "loadMode": 8767,
     "originalURL": "https://github.com/nishanths/exhaustive",
     "internal": false,
@@ -787,11 +787,11 @@
   },
   {
     "name": "predeclared",
-    "desc": "find code that shadows one of Go's predeclared identifiers",
-    "loadMode": 8199,
+    "desc": "find declarations that shadow Go's predeclared identifiers",
+    "loadMode": 8767,
     "originalURL": "https://github.com/nishanths/predeclared",
     "internal": false,
-    "isSlow": false,
+    "isSlow": true,
     "since": "v1.35.0"
   },
   {
