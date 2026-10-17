@@ -67,6 +67,17 @@ func TestTeamCity_Print(t *testing.T) {
 				Column:   11,
 			},
 		},
+		{
+			FromLinter: "linter-e",
+			Severity:   "WARNING",
+			Text:       "warning issue [foo]",
+			Pos: token.Position{
+				Filename: "path/to/file[e].go",
+				Offset:   2,
+				Line:     10,
+				Column:   4,
+			},
+		},
 	}
 
 	buf := new(bytes.Buffer)
@@ -86,6 +97,8 @@ func TestTeamCity_Print(t *testing.T) {
 ##teamcity[inspection typeId='linter-c' message='without severity' file='path/to/filec.go' line='300' SEVERITY='ERROR']
 ##teamcity[inspectionType id='linter-d' name='linter-d' description='linter-d' category='Golangci-lint reports']
 ##teamcity[inspection typeId='linter-d' message='unknown severity' file='path/to/filed.go' line='300' SEVERITY='ERROR']
+##teamcity[inspectionType id='linter-e' name='linter-e' description='linter-e' category='Golangci-lint reports']
+##teamcity[inspection typeId='linter-e' message='warning issue |[foo|]' file='path/to/file|[e|].go' line='10' SEVERITY='WARNING']
 `
 
 	assert.Equal(t, expected, buf.String())

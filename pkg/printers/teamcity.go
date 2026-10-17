@@ -121,7 +121,7 @@ func (i InspectionInstance) Print(w io.Writer, replacer *strings.Replacer) (int,
 	return fmt.Fprintf(w, "##teamcity[inspection typeId='%s' message='%s' file='%s' line='%d' SEVERITY='%s']\n",
 		cutVal(i.typeID, smallLimit),
 		cutVal(replacer.Replace(i.message), largeLimit),
-		cutVal(i.file, largeLimit),
+		cutVal(replacer.Replace(i.file), largeLimit),
 		i.line, i.severity)
 }
 
