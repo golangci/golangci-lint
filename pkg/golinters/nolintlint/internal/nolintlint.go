@@ -162,10 +162,19 @@ func (l Linter) Run(pass *analysis.Pass) ([]*goanalysis.Issue, error) {
 
 				// when detecting unused directives, we send all the directives through and filter them out in the nolint processor
 				if (l.needs & NeedsUnused) != 0 {
+					effectiveEnd := end.Offset
+
+					// The column 1 is the beginning of the line,
+					// so the directive is not preceded by code.
+					if pos.Column == 1 {
+						// Drop new line.
+						effectiveEnd = end.Offset + 1
+					}
+
 					removeNolintCompletely := []analysis.SuggestedFix{{
 						TextEdits: []analysis.TextEdit{{
 							Pos:     token.Pos(pos.Offset),
-							End:     token.Pos(end.Offset),
+							End:     token.Pos(effectiveEnd),
 							NewText: nil,
 						}},
 					}}

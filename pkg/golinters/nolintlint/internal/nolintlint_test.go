@@ -236,7 +236,7 @@ func foo() {
 				SuggestedFixes: []analysis.SuggestedFix{{
 					TextEdits: []analysis.TextEdit{{
 						Pos: 13,
-						End: 32,
+						End: 33,
 					}},
 				}},
 				ExpectNoLint:         true,
