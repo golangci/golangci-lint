@@ -3,7 +3,7 @@ package canonicalheader
 import (
 	"strings"
 
-	"github.com/golangci/canonicalheader"
+	"github.com/lasiar/canonicalheader"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
