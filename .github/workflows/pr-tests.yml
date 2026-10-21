@@ -12,7 +12,7 @@ env:
   # ex:
   # - 1.18beta1 -> 1.18.0-beta.1
   # - 1.18rc1 -> 1.18.0-rc.1
-  GO_VERSION: '1.27.0'
+  GO_VERSION: '1.27'
 
 jobs:
   # Check if there is any dirty change for go mod tidy
@@ -45,9 +45,8 @@ jobs:
           # ex:
           # - 1.18beta1 -> 1.18.0-beta.1
           # - 1.18rc1 -> 1.18.0-rc.1
-          # TODO(ldez) must be changed after the first release of golangci-lint with go1.27
-          # go-version: ${{ env.GO_VERSION }}
-          go-version: '1.26'
+          # NOTE(ldez): must always use the previous version of Go before a Go release.
+           go-version: ${{ env.GO_VERSION }}
       - name: lint
         uses: golangci/golangci-lint-action@ba0d7d2ec06a0ea1cb5fa41b2e4a3ab91d21278a # v9.3.0
         with:
