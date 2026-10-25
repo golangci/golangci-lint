@@ -201,6 +201,10 @@ linters:
         linters: [gosec]
         text: "G306: Expect WriteFile permissions to be 0600 or less"
 
+      - path: pkg/result/processors/fixer.go
+        linters: [gosec]
+        text: "G306: Expect WriteFile permissions to be 0600 or less"
+
       # For compatibility with previous versions.
       # Also, those reports are not relevant.
       - linters: [gosec]
