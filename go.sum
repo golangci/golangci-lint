@@ -461,8 +461,8 @@ github.com/nakabonne/nestif v0.3.1 h1:wm28nZjhQY5HyYPx+weN3Q65k6ilSBxDb8v5S81B81
 github.com/nakabonne/nestif v0.3.1/go.mod h1:9EtoZochLn5iUprVDmDjqGKPofoUEBL8U4Ngq6aY7OE=
 github.com/nishanths/exhaustive v0.15.0 h1:uFjiO/WvrwQG+ojSZ+vtl/jAFbqA2oAtfpUWK/iKQ8M=
 github.com/nishanths/exhaustive v0.15.0/go.mod h1:2by9rYmg9FnsnLQC4Ixig4fQaWxRsY7RluxJuAu9sa0=
-github.com/nishanths/predeclared v0.3.0 h1:W3i3JK/DZS5h7QwsEIyU8ler4Z2vwEwQSxNrZzhnlfk=
-github.com/nishanths/predeclared v0.3.0/go.mod h1:gN4uryPExDME/zmZdqkKIPSAqcfprj316ZDI6UTqz70=
+github.com/nishanths/predeclared v0.3.1 h1:qb/HpkPb0bF0drRBFkTyKY1ZRWcilc6gtxaBZGgn8H8=
+github.com/nishanths/predeclared v0.3.1/go.mod h1:Tsd/DNUrOSU4nGhDSYOXexypmCMpi2nXII8oiDVEzmU=
 github.com/nunnatsa/ginkgolinter v0.24.0 h1:Mp0EagluLFP98JatP6nqp/gGEoljNG97uf9AcxcBVy8=
 github.com/nunnatsa/ginkgolinter v0.24.0/go.mod h1:2ZMRuzX6+3XXyY6UZOwb6n+MCocVGbkIsDBC4vuWz5c=
 github.com/onsi/ginkgo/v2 v2.32.1 h1:6tlvcDm/3sE8lGJbZ4+d4mO3RLy24/tQWOFzVSQNIfw=
