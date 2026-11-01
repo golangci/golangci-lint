@@ -1433,6 +1433,16 @@
               "description": "Consider enums only in package scopes, not in inner scopes.",
               "type": "boolean",
               "default": false
+            },
+            "only-iota-constants": {
+              "description": "Only consider enumerated constants declared using iota.",
+              "type": "boolean",
+              "default": false
+            },
+            "disregard-constants-bitwise": {
+              "description": "Disregard enumerated constants that are declared using bitwise operators (& | ^ &^ << >>) in their values.",
+              "type": "boolean",
+              "default": false
             }
           }
         },
