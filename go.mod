@@ -56,7 +56,7 @@ require (
 	github.com/fatih/color v1.19.0
 	github.com/firefart/nonamedreturns v1.0.8
 	github.com/fzipp/gocyclo v0.6.0
-	github.com/ghostiam/protogetter v1.0.1
+	github.com/ghostiam/protogetter v1.0.2-0.20261002155919-c1c4343d6558
 	github.com/go-critic/go-critic v0.15.0
 	github.com/go-viper/mapstructure/v2 v2.5.0
 	github.com/go-xmlfmt/xmlfmt v1.1.3

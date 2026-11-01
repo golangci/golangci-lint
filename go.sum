@@ -194,8 +194,8 @@ github.com/fsnotify/fsnotify v1.9.0 h1:2Ml+OJNzbYCTzsxtv8vKSFD9PbJjmhYF14k/jKC7S
 github.com/fsnotify/fsnotify v1.9.0/go.mod h1:8jBTzvmWwFyi3Pb8djgCCO5IBqzKJ/Jwo8TRcHyHii0=
 github.com/fzipp/gocyclo v0.6.0 h1:lsblElZG7d3ALtGMx9fmxeTKZaLLpU8mET09yN4BBLo=
 github.com/fzipp/gocyclo v0.6.0/go.mod h1:rXPyn8fnlpa0R2csP/31uerbiVBugk5whMdlyaLkLoA=
-github.com/ghostiam/protogetter v1.0.1 h1:q4LLTx2KJHJpxrfO3BniUDWoFkoqWD/UlHhClBlUlLM=
-github.com/ghostiam/protogetter v1.0.1/go.mod h1:50Fh5yZfs6SFGrd1FlmT04NcguyEOxyjNK5zGD6/EvM=
+github.com/ghostiam/protogetter v1.0.2-0.20261002155919-c1c4343d6558 h1:+41EC/MaFI4ZDSRgAN1AFkwxlw9uFXXrRmh/Kac/Duc=
+github.com/ghostiam/protogetter v1.0.2-0.20261002155919-c1c4343d6558/go.mod h1:m/nMpC841v/KHpw7J3+R6h4aEStoeOPsGyU/HeNoPYY=
 github.com/go-critic/go-critic v0.15.0 h1:MDUZIQKytIl+vPEc0Igw51m4uLTdi1ZGz2jatEqNs1g=
 github.com/go-critic/go-critic v0.15.0/go.mod h1:3BPrw8nHATGm3o2n37cssOmJzpySGKCdY8JWkCzxgKQ=
 github.com/go-gl/glfw v0.0.0-20190409004039-e6da0acd62b1/go.mod h1:vR7hzQXu2zJy9AVAgeJqvqgH9Q5CA+iKCZ2gyEVpxRU=
