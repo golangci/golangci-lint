@@ -126,9 +126,23 @@ func (i InspectionInstance) Print(w io.Writer, replacer *strings.Replacer) (int,
 }
 
 func cutVal(s string, limit int) string {
-	runes := []rune(s)
-	if len(runes) > limit {
-		return string(runes[:limit])
+	if limit <= 0 {
+		return ""
 	}
-	return s
+
+	runes := []rune(s)
+	if len(runes) <= limit {
+		return s
+	}
+
+	var count int
+	for i := limit - 1; i >= 0 && runes[i] == '|'; i-- {
+		count++
+	}
+
+	if count%2 == 1 {
+		limit--
+	}
+
+	return string(runes[:limit])
 }

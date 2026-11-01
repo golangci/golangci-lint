@@ -108,36 +108,86 @@ func TestTeamCity_cutVal(t *testing.T) {
 	tests := []struct {
 		input    string
 		max      int
+		length   int
 		expected string
 	}{
 		{
 			input:    "golangci-lint",
 			max:      0,
+			length:   0,
 			expected: "",
 		},
 		{
 			input:    "golangci-lint",
 			max:      8,
+			length:   8,
 			expected: "golangci",
 		},
 		{
 			input:    "golangci-lint",
 			max:      13,
+			length:   13,
 			expected: "golangci-lint",
+		},
+		{
+			input:    "golangci-lint|n",
+			max:      14,
+			length:   13,
+			expected: "golangci-lint",
+		},
+		{
+			input:    "golangci-lint||",
+			max:      14,
+			length:   13,
+			expected: "golangci-lint",
+		},
+		{
+			input:    "golangci||lint|n",
+			max:      14,
+			length:   14,
+			expected: "golangci||lint",
+		},
+		{
+			input:    "golangci||lint||",
+			max:      14,
+			length:   14,
+			expected: "golangci||lint",
+		},
+		{
+			input:    "||",
+			max:      1,
+			length:   0,
+			expected: "",
+		},
+		{
+			input:    "|||n",
+			max:      2,
+			length:   2,
+			expected: "||",
 		},
 		{
 			input:    "golangci-lint",
 			max:      15,
+			length:   13,
 			expected: "golangci-lint",
 		},
 		{
 			input:    "こんにちは",
 			max:      3,
+			length:   3,
 			expected: "こんに",
 		},
 	}
 
-	for _, tc := range tests {
-		require.Equal(t, tc.expected, cutVal(tc.input, tc.max))
+	for _, test := range tests {
+		t.Run(test.input, func(t *testing.T) {
+			t.Parallel()
+
+			val := cutVal(test.input, test.max)
+
+			assert.Lenf(t, []rune(val), test.length, "value: %s", val)
+
+			require.Equal(t, test.expected, val)
+		})
 	}
 }
