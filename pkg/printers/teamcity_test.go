@@ -106,72 +106,91 @@ func TestTeamCity_Print(t *testing.T) {
 
 func TestTeamCity_cutVal(t *testing.T) {
 	tests := []struct {
+		desc     string
 		input    string
 		max      int
 		length   int
 		expected string
 	}{
 		{
+			desc:     "zero as max",
 			input:    "golangci-lint",
 			max:      0,
 			length:   0,
 			expected: "",
 		},
 		{
+			desc:     "simple cut",
 			input:    "golangci-lint",
 			max:      8,
 			length:   8,
 			expected: "golangci",
 		},
 		{
+			desc:     "exact length",
 			input:    "golangci-lint",
 			max:      13,
 			length:   13,
 			expected: "golangci-lint",
 		},
 		{
+			desc:     "cut on escaped character",
 			input:    "golangci-lint|n",
 			max:      14,
 			length:   13,
 			expected: "golangci-lint",
 		},
 		{
+			desc:     "cut on escaped pipe",
 			input:    "golangci-lint||",
 			max:      14,
 			length:   13,
 			expected: "golangci-lint",
 		},
 		{
+			desc:     "cut on escaped character with multiple escaped sequences with double pipes",
 			input:    "golangci||lint|n",
 			max:      14,
 			length:   14,
 			expected: "golangci||lint",
 		},
 		{
+			desc:     "cut on escaped character with multiple escaped sequences",
+			input:    "golangci|nlint|n",
+			max:      14,
+			length:   14,
+			expected: "golangci|nlint",
+		},
+		{
+			desc:     "cut on escaped character with multiple escaped sequences with only double pipes",
 			input:    "golangci||lint||",
 			max:      14,
 			length:   14,
 			expected: "golangci||lint",
 		},
 		{
+			desc:     "only pipes",
 			input:    "||",
 			max:      1,
 			length:   0,
 			expected: "",
 		},
 		{
+			desc:     "only escaped characters",
 			input:    "|||n",
 			max:      2,
 			length:   2,
 			expected: "||",
 		},
 		{
+			desc:     "max greater than length",
 			input:    "golangci-lint",
 			max:      15,
 			length:   13,
 			expected: "golangci-lint",
 		},
 		{
+			desc:     "cut on Unicode characters",
 			input:    "こんにちは",
 			max:      3,
 			length:   3,
@@ -180,7 +199,7 @@ func TestTeamCity_cutVal(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		t.Run(test.input, func(t *testing.T) {
+		t.Run(test.desc, func(t *testing.T) {
 			t.Parallel()
 
 			val := cutVal(test.input, test.max)
