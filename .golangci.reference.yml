@@ -3981,8 +3981,8 @@ linters:
             # - `goKebab`
             # - `goSnake`
             # - `header`
+            # - `upper`
             # - `lower`
-            # - `header`
             #
             # Required
             case: camel
@@ -4201,7 +4201,7 @@ linters:
       # Default: false
       time-date-month: true
       # Suggest the use of time.Weekday.String().
-      # Default: true
+      # Default: false
       time-weekday: true
       # Suggest the use of time.Month.String().
       # Default: false
