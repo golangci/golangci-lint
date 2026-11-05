@@ -2592,12 +2592,12 @@ linters:
 
     recvcheck:
       # Disables the built-in method exclusions:
-      # - `MarshalText`
-      # - `MarshalJSON`
-      # - `MarshalYAML`
-      # - `MarshalXML`
-      # - `MarshalBinary`
-      # - `GobEncode`
+      # - `UnmarshalText`
+      # - `UnmarshalJSON`
+      # - `UnmarshalYAML`
+      # - `UnmarshalXML`
+      # - `UnmarshalBinary`
+      # - `GobDecode`
       # Default: false
       disable-builtin: true
       # User-defined method exclusions.
