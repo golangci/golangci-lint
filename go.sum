@@ -73,8 +73,8 @@ github.com/Masterminds/semver/v3 v3.5.0 h1:kQceYJfbupGfZOKZQg0kou0DgAKhzDg2NZPAw
 github.com/Masterminds/semver/v3 v3.5.0/go.mod h1:4V+yj/TJE1HU9XfppCwVMZq3I84lprf4nC11bSS5beM=
 github.com/MirrexOne/unqueryvet v1.5.4 h1:38QOxShO7JmMWT+eCdDMbcUgGCOeJphVkzzRgyLJgsQ=
 github.com/MirrexOne/unqueryvet v1.5.4/go.mod h1:fs9Zq6eh1LRIhsDIsxf9PONVUjYdFHdtkHIgZdJnyPU=
-github.com/OpenPeeDeeP/depguard/v2 v2.2.1 h1:vckeWVESWp6Qog7UZSARNqfu/cZqvki8zsuj3piCMx4=
-github.com/OpenPeeDeeP/depguard/v2 v2.2.1/go.mod h1:q4DKzC4UcVaAvcfd41CZh0PWpGgzrVxUYBlgKNGquUo=
+github.com/OpenPeeDeeP/depguard/v2 v2.3.0 h1:AzcyrJSVScO5DztG8NB5XSKNeuxqgFsLQf+sTXEbF8w=
+github.com/OpenPeeDeeP/depguard/v2 v2.3.0/go.mod h1:s0C87mbhDHS0xxt0K9kkxb+w+W1mdvgUyajfFs4AcfI=
 github.com/alecthomas/assert/v2 v2.11.0 h1:2Q9r3ki8+JYXvGsDyBXwH3LcJ+WK5D0gc5E8vS6K3D0=
 github.com/alecthomas/assert/v2 v2.11.0/go.mod h1:Bze95FyfUr7x34QZrjL+XP+0qgp/zg8yS+TtBj1WA3k=
 github.com/alecthomas/chroma/v2 v2.27.0 h1:FodwmyOBgJULFYmDqibcp9pvfDLWdtPRh9v/r5BXYZs=
@@ -194,8 +194,8 @@ github.com/fsnotify/fsnotify v1.9.0 h1:2Ml+OJNzbYCTzsxtv8vKSFD9PbJjmhYF14k/jKC7S
 github.com/fsnotify/fsnotify v1.9.0/go.mod h1:8jBTzvmWwFyi3Pb8djgCCO5IBqzKJ/Jwo8TRcHyHii0=
 github.com/fzipp/gocyclo v0.6.0 h1:lsblElZG7d3ALtGMx9fmxeTKZaLLpU8mET09yN4BBLo=
 github.com/fzipp/gocyclo v0.6.0/go.mod h1:rXPyn8fnlpa0R2csP/31uerbiVBugk5whMdlyaLkLoA=
-github.com/ghostiam/protogetter v1.0.1 h1:q4LLTx2KJHJpxrfO3BniUDWoFkoqWD/UlHhClBlUlLM=
-github.com/ghostiam/protogetter v1.0.1/go.mod h1:50Fh5yZfs6SFGrd1FlmT04NcguyEOxyjNK5zGD6/EvM=
+github.com/ghostiam/protogetter v1.0.2-0.20261002155919-c1c4343d6558 h1:+41EC/MaFI4ZDSRgAN1AFkwxlw9uFXXrRmh/Kac/Duc=
+github.com/ghostiam/protogetter v1.0.2-0.20261002155919-c1c4343d6558/go.mod h1:m/nMpC841v/KHpw7J3+R6h4aEStoeOPsGyU/HeNoPYY=
 github.com/go-critic/go-critic v0.15.0 h1:MDUZIQKytIl+vPEc0Igw51m4uLTdi1ZGz2jatEqNs1g=
 github.com/go-critic/go-critic v0.15.0/go.mod h1:3BPrw8nHATGm3o2n37cssOmJzpySGKCdY8JWkCzxgKQ=
 github.com/go-gl/glfw v0.0.0-20190409004039-e6da0acd62b1/go.mod h1:vR7hzQXu2zJy9AVAgeJqvqgH9Q5CA+iKCZ2gyEVpxRU=
@@ -239,8 +239,8 @@ github.com/go-viper/mapstructure/v2 v2.5.0 h1:vM5IJoUAy3d7zRSVtIwQgBj7BiWtMPfmPE
 github.com/go-viper/mapstructure/v2 v2.5.0/go.mod h1:oJDH3BJKyqBA2TXFhDsKDGDTlndYOZ6rGS0BRZIxGhM=
 github.com/go-xmlfmt/xmlfmt v1.1.3 h1:t8Ey3Uy7jDSEisW2K3somuMKIpzktkWptA0iFCnRUWY=
 github.com/go-xmlfmt/xmlfmt v1.1.3/go.mod h1:aUCEOzzezBEjDBbFBoSiya/gduyIiWYRP6CnSFIV8AM=
-github.com/gobwas/glob v0.2.3 h1:A4xDbljILXROh+kObIiy5kIaPYD8e96x1tgBhUI5J+Y=
-github.com/gobwas/glob v0.2.3/go.mod h1:d3Ez4x06l9bZtSvzIay5+Yzi0fmZzPgnTbPcKjJAkT8=
+github.com/gobwas/glob v1.0.0 h1:p+FKbLEIsK1yZ39/OINwFvqNb5oyPY4H8xcy6uYu8dg=
+github.com/gobwas/glob v1.0.0/go.mod h1:oWCdo522i2P1n/hMXGNWs7yoV4wy/ciZuUIbvKj5rkc=
 github.com/godoc-lint/godoc-lint v0.11.4 h1:N9zUYVJ/OkznBbrBsU/zODvua64EUplMBLQWStO3+1M=
 github.com/godoc-lint/godoc-lint v0.11.4/go.mod h1:7usTXoxS0QYIi5usTSCPwR0w/6xLjcz450shXjLn3t4=
 github.com/gofrs/flock v0.13.1 h1:jjREztyBeSKBZYAC+mgc1laB+xsgy4kYMf3FbKF2UBo=
