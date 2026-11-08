@@ -61,7 +61,7 @@ require (
 	github.com/go-viper/mapstructure/v2 v2.5.0
 	github.com/go-xmlfmt/xmlfmt v1.1.3
 	github.com/godoc-lint/godoc-lint v0.11.4
-	github.com/gofrs/flock v0.13.1
+	github.com/gofrs/flock v0.13.2
 	github.com/golangci/asciicheck v0.5.0
 	github.com/golangci/dupl v0.0.0-20260401084720-c99c5cf5c202
 	github.com/golangci/go-printf-func-name v0.1.1
