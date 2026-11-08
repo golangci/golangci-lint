@@ -2594,6 +2594,7 @@ linters:
       # Disables the built-in method exclusions:
       # - `UnmarshalText`
       # - `UnmarshalJSON`
+      # - `UnmarshalJSONFrom`
       # - `UnmarshalYAML`
       # - `UnmarshalXML`
       # - `UnmarshalBinary`
