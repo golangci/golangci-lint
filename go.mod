@@ -66,7 +66,7 @@ require (
 	github.com/golangci/dupl v0.0.0-20260401084720-c99c5cf5c202
 	github.com/golangci/go-printf-func-name v0.1.1
 	github.com/golangci/gofmt v0.0.0-20260820135601-e84e05053792
-	github.com/golangci/golines v0.16.0
+	github.com/golangci/golines v0.16.1
 	github.com/golangci/misspell v0.8.0
 	github.com/golangci/plugin-module-register v0.1.2
 	github.com/golangci/revgrep v0.8.0
@@ -199,7 +199,7 @@ require (
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/hexops/gotextdiff v1.0.3 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
-	github.com/ldez/structtags v0.6.1 // indirect
+	github.com/ldez/structtags v0.6.2 // indirect
 	github.com/lucasb-eyer/go-colorful v1.4.1 // indirect
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect

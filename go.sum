@@ -283,8 +283,8 @@ github.com/golangci/go-printf-func-name v0.1.1 h1:hIYTFJqAGp1iwoIfsNTpoq1xZAarog
 github.com/golangci/go-printf-func-name v0.1.1/go.mod h1:Es64MpWEZbh0UBtTAICOZiB+miW53w/K9Or/4QogJss=
 github.com/golangci/gofmt v0.0.0-20260820135601-e84e05053792 h1:WL8YKrt3UbOBqSRU7GpP5BTtQTMWtVtj+mfPijgZeIg=
 github.com/golangci/gofmt v0.0.0-20260820135601-e84e05053792/go.mod h1:te5hX0dW4C5r6YbXs+6ysNr8Q5UTmdIqGbb+mlFiYmA=
-github.com/golangci/golines v0.16.0 h1:xKdwzRvwzLd7V131B/dv90vUiEoTA0vQybdeqperPOg=
-github.com/golangci/golines v0.16.0/go.mod h1:mCMgRQHiCvuALJOeaNtylu09zbzvS9Ka01dfvLLJios=
+github.com/golangci/golines v0.16.1 h1:LjI+R8vBMh7XLQ42qF3lxf0bh7GZd/0ExD5biGp9yHM=
+github.com/golangci/golines v0.16.1/go.mod h1:I0JN16r8kpa1/U5N327nV8Rx434LGeltyNxiH1q7g1o=
 github.com/golangci/misspell v0.8.0 h1:qvxQhiE2/5z+BVRo1kwYA8yGz+lOlu5Jfvtx2b04Jbg=
 github.com/golangci/misspell v0.8.0/go.mod h1:WZyyI2P3hxPY2UVHs3cS8YcllAeyfquQcKfdeE9AFVg=
 github.com/golangci/plugin-module-register v0.1.2 h1:e5WM6PO6NIAEcij3B053CohVp3HIYbzSuP53UAYgOpg=
@@ -404,8 +404,8 @@ github.com/ldez/gomoddirectives v0.10.0 h1:Zb23rfMMkG21B6pZ9OfESzemByP5Qr7YvWcXQ
 github.com/ldez/gomoddirectives v0.10.0/go.mod h1:W9uh0721Vc7aaVoiMXTpKIveLmtHC9uaOSiHM4OK5a8=
 github.com/ldez/grignotin v0.10.1 h1:keYi9rYsgbvqAZGI1liek5c+jv9UUjbvdj3Tbn5fn4o=
 github.com/ldez/grignotin v0.10.1/go.mod h1:UlDbXFCARrXbWGNGP3S5vsysNXAPhnSuBufpTEbwOas=
-github.com/ldez/structtags v0.6.1 h1:bUooFLbXx41tW8SvkfwfFkkjPYvFFs59AAMgVg6DUBk=
-github.com/ldez/structtags v0.6.1/go.mod h1:YDxVSgDy/MON6ariaxLF2X09bh19qL7MtGBN5MrvbdY=
+github.com/ldez/structtags v0.6.2 h1:1KJCfTjNMFTD6IICI5U8VIur6Fs1nm43wAGYL4zqJEw=
+github.com/ldez/structtags v0.6.2/go.mod h1:arTakDbLbIbYBEKq+0ds2UB8OBd2zMeYLwI1cH5Yv78=
 github.com/ldez/tagliatelle v0.8.0 h1:QczqVPa22JdT40p3m5JTTVmPMv5wDORqdomJn6/Pnn0=
 github.com/ldez/tagliatelle v0.8.0/go.mod h1:K9n83Wv0wyVq3JYF9WI28BX8xXhDBVP3thHJ0ENuiEs=
 github.com/ldez/usetesting v0.5.0 h1:3/QtzZObBKLy1F4F8jLuKJiKBjjVFi1IavpoWbmqLwc=
