@@ -15,7 +15,7 @@ require (
 	4d63.com/gocheckcompilerdirectives v1.4.0
 	4d63.com/gochecknoglobals v0.2.2
 	charm.land/lipgloss/v2 v2.0.6
-	codeberg.org/polyfloyd/go-errorlint v1.9.0
+	codeberg.org/polyfloyd/go-errorlint v1.9.1
 	dev.gaijin.team/go/exhaustruct/v4 v4.0.0
 	dev.gaijin.team/go/exhaustruct/v5 v5.2.0
 	github.com/4meepo/tagalign v1.4.4
