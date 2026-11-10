@@ -93,7 +93,7 @@ func TestCache_buildKey(t *testing.T) {
 	actionID, err := pkgCache.buildKey(pkg, HashModeNeedAllDeps, "")
 	require.NoError(t, err)
 
-	assert.Equal(t, "f32bf1bf010aa9b570e081c64ec9e22e17aafa1e822990ba952905ec5fdf8d9d", fmt.Sprintf("%x", actionID))
+	assert.Equal(t, "4b048b43c3506df16209043a08cdd4498b471590cddd14d89de39907a87e9d1d", fmt.Sprintf("%x", actionID))
 }
 
 func TestCache_pkgActionID(t *testing.T) {
@@ -104,7 +104,7 @@ func TestCache_pkgActionID(t *testing.T) {
 	actionID, err := pkgCache.pkgActionID(pkg, HashModeNeedAllDeps)
 	require.NoError(t, err)
 
-	assert.Equal(t, "f690f05acd1024386ae912d9ad9c04080523b9a899f6afe56ab3108d88215c1d", fmt.Sprintf("%x", actionID))
+	assert.Equal(t, "cd892bf2556f11d7eb91626f5e228859646a001a9bd489f3d267ef687879ccf2", fmt.Sprintf("%x", actionID))
 }
 
 func TestCache_packageHash_load(t *testing.T) {
@@ -128,7 +128,7 @@ func TestCache_packageHash_store(t *testing.T) {
 	hash, err := pkgCache.packageHash(pkg, HashModeNeedAllDeps)
 	require.NoError(t, err)
 
-	assert.Equal(t, "9c602ef861197b6807e82c99caa7c4042eb03c1a92886303fb02893744355131", hash)
+	assert.Equal(t, "9114847c7d8ad5ee2e3f04f989a069fcdd91f762f220b8b16cad72de68df3530", hash)
 
 	results, ok := pkgCache.pkgHashes.Load(pkg)
 	require.True(t, ok)
@@ -137,22 +137,73 @@ func TestCache_packageHash_store(t *testing.T) {
 
 	require.Len(t, hashRes, 3)
 
-	assert.Equal(t, "8978e3d76c6f99e9663558d7147a7790f229a676804d1fde706a611898547b74", hashRes[HashModeNeedOnlySelf])
-	assert.Equal(t, "b1aef902a0619b5cbfc2d6e2e91a73dd58dd448e58274b2d7a5ff8efd97aefa4", hashRes[HashModeNeedDirectDeps])
-	assert.Equal(t, "9c602ef861197b6807e82c99caa7c4042eb03c1a92886303fb02893744355131", hashRes[HashModeNeedAllDeps])
+	assert.Equal(t, "3699dbf7b96814ac7f486053ce9de0409a360f3b6990a417e656fd7452043dc3", hashRes[HashModeNeedOnlySelf])
+	assert.Equal(t, "3a1961cdd38edf42038087ec5e6b44176c8d40b8c04598ef4599f38e21801ad6", hashRes[HashModeNeedDirectDeps])
+	assert.Equal(t, "9114847c7d8ad5ee2e3f04f989a069fcdd91f762f220b8b16cad72de68df3530", hashRes[HashModeNeedAllDeps])
 }
 
 func TestCache_computeHash(t *testing.T) {
 	pkgCache := setupCache(t)
 
-	pkg := fakePackage()
+	testCases := []struct {
+		desc string
+		pkg  func() *packages.Package
 
-	results, err := pkgCache.computePkgHash(pkg)
-	require.NoError(t, err)
+		expectedHashModeNeedOnlySelf   string
+		expectedHashModeNeedDirectDeps string
+		expectedHashModeNeedAllDeps    string
+	}{
+		{
+			desc: "case a",
+			pkg: func() *packages.Package {
+				pkg := fakePackage()
 
-	require.Len(t, results, 3)
+				pkg.CompiledGoFiles = []string{
+					"./testdata/hello.go",
+					"./testdata/world.go",
+				}
 
-	assert.Equal(t, "8978e3d76c6f99e9663558d7147a7790f229a676804d1fde706a611898547b74", results[HashModeNeedOnlySelf])
-	assert.Equal(t, "b1aef902a0619b5cbfc2d6e2e91a73dd58dd448e58274b2d7a5ff8efd97aefa4", results[HashModeNeedDirectDeps])
-	assert.Equal(t, "9c602ef861197b6807e82c99caa7c4042eb03c1a92886303fb02893744355131", results[HashModeNeedAllDeps])
+				pkg.IgnoredFiles = []string{}
+
+				return pkg
+			},
+			expectedHashModeNeedOnlySelf:   "3aa2ecfb2d98dbc96766d158663942aa72ff354e388b9df61f008726fbf8af94",
+			expectedHashModeNeedDirectDeps: "542a5cbc0c2d710b35a5ea07dadaa3d562010e7d191a91d0e0eb66421df17d05",
+			expectedHashModeNeedAllDeps:    "5d7d365ffb255000579a39d580ce0674d1bef7f2d3a4b70da01c92e4795ef0f8",
+		},
+		{
+			desc: "case b",
+			pkg: func() *packages.Package {
+				pkg := fakePackage()
+
+				pkg.CompiledGoFiles = []string{
+					"./testdata/hello.go",
+				}
+
+				pkg.IgnoredFiles = []string{
+					"./testdata/world.go",
+				}
+
+				return pkg
+			},
+			expectedHashModeNeedOnlySelf:   "ad81fd8c68683d7445ee55c8284041e4ad2f42be429ed35d0583f0da69c7f1ae",
+			expectedHashModeNeedDirectDeps: "48b3430ddb0300030cdd30d57390afde734adafe3e4d09b70f97614f9826c5e5",
+			expectedHashModeNeedAllDeps:    "ffa6661e52a4fcdab4c1c378677f8ff9b89cdb92712cf0d7fb3658df7147d3de",
+		},
+	}
+
+	for _, test := range testCases {
+		t.Run(test.desc, func(t *testing.T) {
+			t.Parallel()
+
+			results, err := pkgCache.computePkgHash(test.pkg())
+			require.NoError(t, err)
+
+			require.Len(t, results, 3)
+
+			assert.Equal(t, test.expectedHashModeNeedOnlySelf, results[HashModeNeedOnlySelf])
+			assert.Equal(t, test.expectedHashModeNeedDirectDeps, results[HashModeNeedDirectDeps])
+			assert.Equal(t, test.expectedHashModeNeedAllDeps, results[HashModeNeedAllDeps])
+		})
+	}
 }

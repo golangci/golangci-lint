@@ -121,8 +121,8 @@ func (c *Cache) pkgActionID(pkg *packages.Package, mode HashMode) (cache.ActionI
 		return cache.ActionID{}, fmt.Errorf("failed to make a hash: %w", err)
 	}
 
-	fmt.Fprintf(key, "pkgpath %s\n", pkg.PkgPath)
-	fmt.Fprintf(key, "pkghash %s\n", hash)
+	_, _ = fmt.Fprintf(key, "pkgpath %s\n", pkg.PkgPath)
+	_, _ = fmt.Fprintf(key, "pkghash %s\n", hash)
 
 	return key.Sum(), nil
 }
@@ -164,19 +164,16 @@ func (c *Cache) computePkgHash(pkg *packages.Package) (hashResults, error) {
 
 	hashRes := hashResults{}
 
-	fmt.Fprintf(key, "pkgpath %s\n", pkg.PkgPath)
+	_, _ = fmt.Fprintf(key, "pkgpath %s\n", pkg.PkgPath)
 
-	for _, f := range slices.Concat(pkg.CompiledGoFiles, pkg.IgnoredFiles) {
-		h, fErr := c.fileHash(f)
-		if fErr != nil {
-			return nil, fmt.Errorf("failed to calculate file %s hash: %w", f, fErr)
-		}
+	err = c.computeFilesHash("CompiledGoFiles", pkg.CompiledGoFiles, pkg, key)
+	if err != nil {
+		return nil, err
+	}
 
-		if rel, ok := toRelativePath(pkg.Module, f); ok {
-			f = pkg.Module.Path + "/" + rel
-		}
-
-		fmt.Fprintf(key, "file %s %x\n", f, h)
+	err = c.computeFilesHash("IgnoredFiles", pkg.IgnoredFiles, pkg, key)
+	if err != nil {
+		return nil, err
 	}
 
 	curSum := key.Sum()
@@ -203,6 +200,23 @@ func (c *Cache) computePkgHash(pkg *packages.Package) (hashResults, error) {
 	return hashRes, nil
 }
 
+func (c *Cache) computeFilesHash(src string, files []string, pkg *packages.Package, key *cache.Hash) error {
+	for _, f := range files {
+		h, fErr := c.fileHash(f)
+		if fErr != nil {
+			return fmt.Errorf("failed to calculate file %s hash: %w", f, fErr)
+		}
+
+		if rel, ok := toRelativePath(pkg.Module, f); ok {
+			f = pkg.Module.Path + "/" + rel
+		}
+
+		_, _ = fmt.Fprintf(key, "%s=%s %x\n", src, f, h)
+	}
+
+	return nil
+}
+
 func (c *Cache) computeDepsHash(depMode HashMode, imps []*packages.Package, key *cache.Hash) error {
 	for _, dep := range imps {
 		if dep.PkgPath == "unsafe" {
@@ -214,7 +228,7 @@ func (c *Cache) computeDepsHash(depMode HashMode, imps []*packages.Package, key 
 			return fmt.Errorf("failed to calculate hash for dependency %s with mode %d: %w", dep.Name, depMode, err)
 		}
 
-		fmt.Fprintf(key, "import %s %s\n", dep.PkgPath, depHash)
+		_, _ = fmt.Fprintf(key, "import %s %s\n", dep.PkgPath, depHash)
 	}
 
 	return nil
