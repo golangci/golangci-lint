@@ -202,9 +202,9 @@ func (c *Cache) computePkgHash(pkg *packages.Package) (hashResults, error) {
 
 func (c *Cache) computeFilesHash(src string, files []string, pkg *packages.Package, key *cache.Hash) error {
 	for _, f := range files {
-		h, fErr := c.fileHash(f)
-		if fErr != nil {
-			return fmt.Errorf("failed to calculate file %s hash: %w", f, fErr)
+		h, err := c.fileHash(f)
+		if err != nil {
+			return fmt.Errorf("failed to calculate file %s hash: %w", f, err)
 		}
 
 		if rel, ok := toRelativePath(pkg.Module, f); ok {
