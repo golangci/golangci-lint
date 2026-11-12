@@ -478,6 +478,8 @@ type ExhaustiveSettings struct {
 	DefaultSignifiesExhaustive bool     `mapstructure:"default-signifies-exhaustive"`
 	DefaultCaseRequired        bool     `mapstructure:"default-case-required"`
 	PackageScopeOnly           bool     `mapstructure:"package-scope-only"`
+	OnlyIotaConstants          bool     `mapstructure:"only-iota-constants"`
+	DisregardConstantsBitwise  bool     `mapstructure:"disregard-constants-bitwise"`
 
 	// Deprecated: use IgnoreConstants instead.
 	IgnoreEnumMembers string `mapstructure:"ignore-enum-members"`
