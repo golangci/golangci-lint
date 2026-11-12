@@ -633,6 +633,11 @@ func initHashSalt(logger logutils.Log, version string, cfg *config.Config) error
 		return fmt.Errorf("failed to calculate config salt: %w", err)
 	}
 
+	goEnvSalt, err := computeGoEnvSalt()
+	if err != nil {
+		logger.Warnf("Failed to calculate Go env salt: %v", err)
+	}
+
 	goModSalt, err := computeGoModSalt()
 	if err != nil {
 		// NOTE: missing go.mod must be ignored.
@@ -642,6 +647,7 @@ func initHashSalt(logger logutils.Log, version string, cfg *config.Config) error
 	b := bytes.NewBuffer(binSalt)
 	b.WriteString("golangci-lint-cache/v2")
 	b.Write(configSalt)
+	b.Write(goEnvSalt)
 	b.WriteString(goModSalt)
 
 	cache.SetSalt(b)
@@ -722,4 +728,19 @@ func computeGoModSalt() (string, error) {
 	}
 
 	return sum, nil
+}
+
+func computeGoEnvSalt() ([]byte, error) {
+	values, err := goenv.Get(context.Background(), goenv.GOOS, goenv.GOARCH, goenv.CGO_ENABLED)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get goenv: %w", err)
+	}
+
+	h := sha256.New()
+
+	for _, k := range []string{goenv.GOOS, goenv.GOARCH, goenv.CGO_ENABLED} {
+		_, _ = fmt.Fprintf(h, "%s=%q\n", k, values[k])
+	}
+
+	return h.Sum(nil), nil
 }
