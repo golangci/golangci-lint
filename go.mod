@@ -150,7 +150,7 @@ require (
 	go.augendre.info/fatcontext v0.10.1
 	go.yaml.in/yaml/v3 v3.0.6
 	golang.org/x/exp v0.0.0-20250620022241-b7579e27df2b
-	golang.org/x/mod v0.42.0
+	golang.org/x/mod v0.43.0
 	golang.org/x/sync v0.25.0
 	golang.org/x/sys v0.49.0
 	golang.org/x/tools v0.52.0
