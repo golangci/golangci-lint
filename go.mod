@@ -56,7 +56,7 @@ require (
 	github.com/fatih/color v1.19.0
 	github.com/firefart/nonamedreturns v1.0.8
 	github.com/fzipp/gocyclo v0.6.0
-	github.com/ghostiam/protogetter v1.0.1
+	github.com/ghostiam/protogetter v1.0.2
 	github.com/go-critic/go-critic v0.15.0
 	github.com/go-viper/mapstructure/v2 v2.5.0
 	github.com/go-xmlfmt/xmlfmt v1.1.3
@@ -189,7 +189,7 @@ require (
 	github.com/go-toolsmith/astp v1.1.0 // indirect
 	github.com/go-toolsmith/strparse v1.1.0 // indirect
 	github.com/go-toolsmith/typep v1.1.0 // indirect
-	github.com/gobwas/glob v0.2.3 // indirect
+	github.com/gobwas/glob v1.0.0 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/gostaticanalysis/analysisutil v0.7.1 // indirect
