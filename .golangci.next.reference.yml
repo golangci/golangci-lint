@@ -541,6 +541,12 @@ linters:
       # Switch statement requires default case even if exhaustive.
       # Default: false
       default-case-required: true
+      # Only consider enumerated constants declared using iota.
+      # Default: false
+      only-iota-constants: true
+      # Disregard enumerated constants that are declared using bitwise operators (& | ^ &^ << >>) in their values.
+      # Default: false
+      disregard-constants-bitwise: true
 
     exhaustruct:
       # List of regular expressions to match type names that should be processed.

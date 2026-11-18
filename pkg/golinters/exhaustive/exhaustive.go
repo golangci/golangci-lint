@@ -72,6 +72,8 @@ func New(settings *config.ExhaustiveSettings) *goanalysis.Linter {
 
 		enuCfg = map[string]any{
 			"p": settings.PackageScopeOnly,
+			"i": settings.OnlyIotaConstants,
+			"B": settings.DisregardConstantsBitwise,
 		}
 	}
 
