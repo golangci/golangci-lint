@@ -129,7 +129,9 @@ func (act *action) analyze() {
 	// 	}
 	// }
 
-	factsDebugf("%s: Inherited facts in %s", act, time.Since(t0))
+	if isFactsDebug {
+		factsDebugf("%s: Inherited facts in %s", act, time.Since(t0))
+	}
 
 	module := &analysis.Module{} // possibly empty (non nil) in go/analysis drivers.
 	if mod := act.Package.Module; mod != nil {
@@ -226,7 +228,9 @@ func inheritFacts(act, dep *action) {
 		// that are irrelevant downstream
 		// (equivalently: not in the compiler export data).
 		if !exportedFrom(key.obj, dep.Package.Types) {
-			factsInheritDebugf("%v: discarding %T fact from %s for %s: %s", act, fact, dep, key.obj, fact)
+			if isFactsInheritDebug {
+				factsInheritDebugf("%v: discarding %T fact from %s for %s: %s", act, fact, dep, key.obj, fact)
+			}
 			continue
 		}
 
@@ -240,7 +244,9 @@ func inheritFacts(act, dep *action) {
 			fact = encodedFact
 		}
 
-		factsInheritDebugf("%v: inherited %T fact for %s: %s", act, fact, key.obj, fact)
+		if isFactsInheritDebug {
+			factsInheritDebugf("%v: inherited %T fact for %s: %s", act, fact, key.obj, fact)
+		}
 
 		act.objectFacts[key] = fact
 	}
@@ -273,7 +279,9 @@ func inheritFacts(act, dep *action) {
 			fact = encodedFact
 		}
 
-		factsInheritDebugf("%v: inherited %T fact for %s: %s", act, fact, key.pkg.Path(), fact)
+		if isFactsInheritDebug {
+			factsInheritDebugf("%v: inherited %T fact for %s: %s", act, fact, key.pkg.Path(), fact)
+		}
 
 		act.packageFacts[key] = fact
 	}
@@ -417,8 +425,10 @@ func (act *action) exportPackageFact(fact analysis.Fact) {
 	key := packageFactKey{act.pass.Pkg, act.factType(fact)}
 	act.packageFacts[key] = fact // clobber any existing entry
 
-	factsDebugf("%s: package %s has fact %s\n",
-		act.Package.Fset.Position(act.pass.Files[0].Pos()), act.pass.Pkg.Path(), fact)
+	if isFactsDebug {
+		factsDebugf("%s: package %s has fact %s\n",
+			act.Package.Fset.Position(act.pass.Files[0].Pos()), act.pass.Pkg.Path(), fact)
+	}
 }
 
 // NOTE(ldez) altered: add receiver to handle logs.
