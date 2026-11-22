@@ -122,7 +122,9 @@ func (act *action) persistFactsToCache() error {
 		})
 	}
 
-	factsCacheDebugf("Caching %d facts for package %q and analyzer %s", len(facts), act.Package.Name, act.Analyzer.Name)
+	if isFactsCacheDebug {
+		factsCacheDebugf("Caching %d facts for package %q and analyzer %s", len(facts), act.Package.Name, act.Analyzer.Name)
+	}
 
 	return act.runner.pkgCache.Put(act.Package, cache.HashModeNeedAllDeps, factCacheKey(analyzer), facts)
 }
@@ -136,12 +138,16 @@ func (act *action) loadPersistedFacts() bool {
 			act.runner.log.Warnf("Failed to get persisted facts: %s", err)
 		}
 
-		factsCacheDebugf("No cached facts for package %q and analyzer %s", act.Package.Name, act.Analyzer.Name)
+		if isFactsCacheDebug {
+			factsCacheDebugf("No cached facts for package %q and analyzer %s", act.Package.Name, act.Analyzer.Name)
+		}
 
 		return false
 	}
 
-	factsCacheDebugf("Loaded %d cached facts for package %q and analyzer %s", len(facts), act.Package.Name, act.Analyzer.Name)
+	if isFactsCacheDebug {
+		factsCacheDebugf("Loaded %d cached facts for package %q and analyzer %s", len(facts), act.Package.Name, act.Analyzer.Name)
+	}
 
 	for _, f := range facts {
 		if f.Path == "" { // this is a package fact

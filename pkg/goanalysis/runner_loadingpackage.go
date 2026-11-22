@@ -299,7 +299,9 @@ func (lp *loadingPackage) loadWithFacts(loadMode LoadMode) error {
 			if !act.loadActionCachedFacts(false) {
 				// Cached facts loading failed: analyze later the action from source.
 				act.needAnalyzeSource = true
-				factsCacheDebugf("Loading of facts for already loaded %s failed, analyze it from source later", act)
+				if isFactsCacheDebug {
+					factsCacheDebugf("Loading of facts for already loaded %s failed, analyze it from source later", act)
+				}
 				act.markDepsForAnalyzingSource()
 			}
 		}
@@ -354,7 +356,9 @@ func (lp *loadingPackage) loadImportedPackageWithFacts(loadMode LoadMode) error 
 		}
 
 		// Cached facts loading failed: analyze later the action from source.
-		factsCacheDebugf("Loading of facts for %s failed, analyze it from source later", act)
+		if isFactsCacheDebug {
+			factsCacheDebugf("Loading of facts for %s failed, analyze it from source later", act)
+		}
 		act.needAnalyzeSource = true // can't be set in parallel
 		needLoadFromSource = true
 
@@ -390,7 +394,9 @@ func (lp *loadingPackage) loadImportedPackageWithFacts(loadMode LoadMode) error 
 
 				// This should not happen because the facts has been already successfully loaded in the initial facts loading.
 				// But it can happen if the cache is corrupted.
-				factsCacheDebugf("Reloading of facts for %s failed, analyze it from source later", act)
+				if isFactsCacheDebug {
+					factsCacheDebugf("Reloading of facts for %s failed, analyze it from source later", act)
+				}
 				act.needAnalyzeSource = true
 				act.markDepsForAnalyzingSource()
 			}

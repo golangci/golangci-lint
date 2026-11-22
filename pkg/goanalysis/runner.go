@@ -31,11 +31,14 @@ var (
 	isMemoryDebug     = logutils.HaveDebugTag(logutils.DebugKeyGoAnalysisMemory)
 	issuesCacheDebugf = logutils.Debug(logutils.DebugKeyGoAnalysisIssuesCache)
 
-	factsDebugf        = logutils.Debug(logutils.DebugKeyGoAnalysisFacts)
-	factsCacheDebugf   = logutils.Debug(logutils.DebugKeyGoAnalysisFactsCache)
-	factsInheritDebugf = logutils.Debug(logutils.DebugKeyGoAnalysisFactsInherit)
-	factsExportDebugf  = logutils.Debug(logutils.DebugKeyGoAnalysisFacts)
-	isFactsExportDebug = logutils.HaveDebugTag(logutils.DebugKeyGoAnalysisFactsExport)
+	factsDebugf         = logutils.Debug(logutils.DebugKeyGoAnalysisFacts)
+	isFactsDebug        = logutils.HaveDebugTag(logutils.DebugKeyGoAnalysisFacts)
+	factsCacheDebugf    = logutils.Debug(logutils.DebugKeyGoAnalysisFactsCache)
+	isFactsCacheDebug   = logutils.HaveDebugTag(logutils.DebugKeyGoAnalysisFactsCache)
+	factsInheritDebugf  = logutils.Debug(logutils.DebugKeyGoAnalysisFactsInherit)
+	isFactsInheritDebug = logutils.HaveDebugTag(logutils.DebugKeyGoAnalysisFactsInherit)
+	factsExportDebugf   = logutils.Debug(logutils.DebugKeyGoAnalysisFacts)
+	isFactsExportDebug  = logutils.HaveDebugTag(logutils.DebugKeyGoAnalysisFactsExport)
 )
 
 type Diagnostic struct {
