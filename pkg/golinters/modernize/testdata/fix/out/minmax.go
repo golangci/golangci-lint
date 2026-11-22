@@ -136,6 +136,14 @@ func fix72727(a, b int) {
 		a-42,
 		// want "if statement can be modernized using max"
 		b)
+	print(o)
+}
+
+func nopeUnusedVar(a, b int) {
+	o := a - 42
+	if o < b { // silent: o is not used after the if statement
+		o = b
+	}
 }
 
 type myfloat float64
