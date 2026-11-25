@@ -878,6 +878,7 @@
             "gochecknoinits",
             "gochecksumtype",
             "gocognit",
+            "goconcurrencylint",
             "goconst",
             "gocritic",
             "gocyclo",
